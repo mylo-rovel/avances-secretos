@@ -1,23 +1,27 @@
 <script lang="ts">
 export default {
   name: 'SubmitButtonComponent',
+  props: ["textbutton"]
 }
+// LA IDEA ES QUE ESTE COMPONENTE RECIBA ESTILOS COMO PROPS
+// PARA HACERLO MÁS CUSTOMIZABLE
+
 
 
 </script>
 
 <template>
-    <article class="submit-button-container">
-        <input class="submit-button" type="button">
-    </article>
+    <button class="submit-button-component">{{textbutton}}</button>
 </template>
 
 <style>
 
-.submit-button-container {
-    width: 3rem;
-    height: 1rem;
-    background-color: rgb(255, 0, 0);
+.submit-button-component {
+    background-color: rgb(195, 152, 236);
+    padding: 0.8rem 5rem;
+    border-radius: 5rem;
+    border:0;
+    font-size: 1.15rem;
 }
 
 </style>

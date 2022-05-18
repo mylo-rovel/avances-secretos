@@ -1,31 +1,25 @@
 <script lang="ts">
-// imagine this is the login panel
+// ESTE ES LA PAGINA LOGIN
 import Vue from 'vue'
 import SubmitButton from '../components/SubmitButton.vue'
 
-interface buttonPropsType {
-  buttonValue: string;
-  buttonFunction: (email:string, password:string) => void; 
-}
-
-const buttonProps: buttonPropsType = {
-  buttonValue: "ENTRAR",
-  buttonFunction: async () => {
-
-  }
-}
 
 export default Vue.extend({
     name: "IndexPage",
-    components: { SubmitButton }
+    components: { SubmitButton },
+    data() {
+      return {
+        emailInputText: "email",
+        passwordInputText: "contraseña",
+        loginButtonText: "INGRESAR"
+      }
+    }
 })
 </script>
 
 
 <template>
-  <section>
-    <!-- <NuxtLink to="/main"> to main_page AL ABORDAJE</NuxtLink> -->
-    <article class="main-login-container">
+    <section class="main-login-container">
       <article class="img-left-side">
         <img id="left-login-img" src="~/assets/img/mockup_login_img.png" alt="login-image"/>
       </article>
@@ -34,7 +28,7 @@ export default Vue.extend({
         <div class="right-side-header">
 
           <article class="login-header-logo">
-            <img id="conicyt-logo" src="~/assets/img/conicyt_logo.jpg" alt="conicyt-logo">
+            <img id="anid-logo" src="~/assets/img/anid-logo.png" alt="conicyt-logo">
             <div class="login-header-logo-text">
               <p>FONDEF</p>
               <p>Fondo de Fomento al Desarrollo</p>
@@ -49,12 +43,17 @@ export default Vue.extend({
       
         </div>
         <div class="right-side-body">
-          <SubmitButton :buttonProps="buttonProps"  />
-
+          <article class="right-side-body-inputs">
+            <InputBox :textinput="emailInputText"/>
+            <InputBox :textinput="passwordInputText"/>
+          </article>
+          <article class="right-side-body-buttons">
+            <NuxtLink to="/operador/main-operador"><SubmitButton :textbutton="loginButtonText"/></NuxtLink>
+            <p>¿Contraseña olvidada?</p>
+          </article>
         </div>
       </article>
-    </article>
-  </section>
+    </section>
 </template>
 
 <style>
@@ -112,7 +111,7 @@ export default Vue.extend({
   font-size: 1.2rem;
 }
 
-#conicyt-logo { 
+#anid-logo { 
   height:159.8px; 
   width:auto 
 }
@@ -123,7 +122,35 @@ export default Vue.extend({
   margin: 2rem 13% 0rem 0rem;
 }
 
+/* contenedor del cuerpo => formulario y boton */
+/* FORMULARIO */
+.right-side-body {
+  display: grid;
+  grid-template-rows: auto 38%;
+}
 
+.right-side-body-inputs .input-box-component:first-child{
+  border-bottom: 0;
+}
+
+.right-side-body-inputs {
+  width: 30rem;
+  margin: 0 auto;
+  padding-top: 4.5rem;
+}
+
+/* BOTON Y CONTRASEÑA OLVIDADA */
+.right-side-body-buttons {
+  text-align: center;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.right-side-body-buttons .submit-button-component:hover{
+  background-color: black;
+  color: white;
+  transition: 0.2s;
+}
 
 
 #header-welcome-mssg {
