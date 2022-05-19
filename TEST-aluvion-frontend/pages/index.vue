@@ -44,8 +44,8 @@ export default Vue.extend({
         </div>
         <div class="right-side-body">
           <article class="right-side-body-inputs">
-            <InputBox :textinput="emailInputText"/>
-            <InputBox :textinput="passwordInputText"/>
+            <InputBox :textoTransparente="emailInputText"/>
+            <InputBox :textoTransparente="passwordInputText"/>
           </article>
           <article class="right-side-body-buttons">
             <NuxtLink to="/operador/main-operador"><SubmitButton :textbutton="loginButtonText"/></NuxtLink>

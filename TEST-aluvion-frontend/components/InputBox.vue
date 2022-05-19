@@ -1,7 +1,7 @@
 <script lang="ts">
 export default {
   name: 'InputBoxComponent',
-  props:["textinput"],
+  props:["textoTransparente"],
   data() {
       return {
           message:"hello"
@@ -12,7 +12,7 @@ export default {
 </script>
 
 <template>
-    <input class="input-box-component" :placeholder="textinput" type="text">
+    <input class="input-box-component" :placeholder="textoTransparente" type="text">
 </template>
 
 <style>
