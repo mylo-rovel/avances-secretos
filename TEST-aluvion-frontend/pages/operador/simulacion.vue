@@ -26,7 +26,7 @@ export default Vue.extend({
       <NuxtLink to="/operador/simulacion"><button class="common-menu-button">Programar simulación</button></NuxtLink>
       <button class="common-menu-button">Ver simulación</button>
       <button class="common-menu-button">Historial de simulaciones</button>
-      <button class="common-menu-button atras-button">Atrás</button>
+      <NuxtLink to="/operador/main-operador"><button class="common-menu-button atras-button">Atrás</button></NuxtLink>
     </article>
   </section>
 </template>
