@@ -23,8 +23,9 @@ export default Vue.extend({
         <PageHeader :headerTitle="headerTitle"/>
     </article>
     <article class="container-body-button-menu">
-      <NuxtLink to="/operador/sec-lluv-menu"> <button class="common-menu-button">Secuencias de lluvia</button> </NuxtLink>
-      <button class="common-menu-button">Simulacion</button>
+      <NuxtLink to="/operador/secuencia"> <button class="common-menu-button">Secuencias de lluvia</button> </NuxtLink>
+      <NuxtLink to="/operador/simulacion"> <button class="common-menu-button">Simulación</button></NuxtLink>
+      
     </article>
   </section>
 </template>

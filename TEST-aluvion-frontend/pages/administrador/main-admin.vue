@@ -22,9 +22,7 @@ export default Vue.extend({
 
         </div>
         <div class="container-body-button-menu">
-            <NuxtLink to="administrador/agregar-usuario">
-                <button class ="common-menu-button">Agregar usuario</button>
-            </NuxtLink>
+            <NuxtLink to="/administrador/agregar-usuario"><button class ="common-menu-button">Agregar usuario</button></NuxtLink>
             <button class="common-menu-button">Editar usuario</button>
             <button class="common-menu-button">Inhabilitar usuario</button>
             <button class="common-menu-button">Usuarios</button>

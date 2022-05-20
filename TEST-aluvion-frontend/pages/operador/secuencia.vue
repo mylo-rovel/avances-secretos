@@ -23,7 +23,7 @@ export default Vue.extend({
         <PageHeader :headerTitle="headerTitle"/>
     </article>
     <article class="container-body-button-menu">
-      <NuxtLink to="/operador/sec-lluv-menu"><button class="common-menu-button">Agregar secuencia</button></NuxtLink>
+      <NuxtLink to="/operador/secuencia"><button class="common-menu-button">Agregar secuencia</button></NuxtLink>
       <button class="common-menu-button">Editar secuencia</button>
       <button class="common-menu-button">Listado de secuencias</button>
       <button class="common-menu-button atras-button">Atrás</button>
