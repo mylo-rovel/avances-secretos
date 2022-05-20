@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
 // ESTE ES LA PAGINA LOGIN
 import Vue from 'vue'
 import SubmitButton from '../components/SubmitButton.vue'
@@ -50,6 +50,7 @@ export default Vue.extend({
           <article class="right-side-body-buttons">
             <NuxtLink to="/operador/main-operador"><SubmitButton :textbutton="loginButtonText"/></NuxtLink>
             <p>¿Contraseña olvidada?</p>
+            <button class="btn btn-primary">hello bois bustrap</button>
           </article>
         </div>
       </article>

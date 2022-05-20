@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
 // ESTE ES LA PAGINA LOGIN
 import Vue from 'vue'
 import PageHeader from '~/components/PageHeader.vue'
