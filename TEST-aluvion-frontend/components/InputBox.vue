@@ -1,18 +1,18 @@
-<script lang="ts">
+<script>
 export default {
   name: 'InputBoxComponent',
-  props:["textoTransparente"],
+  props:["textoTransparente", "idValue"],
   data() {
       return {
-          message:"hello"
+          inputValue : "",
       }
-  }
+  },
 }
 
 </script>
 
 <template>
-    <input class="input-box-component" :placeholder="textoTransparente" type="text">
+    <input class="input-box-component" :placeholder="textoTransparente" type="text" :id="idValue">
 </template>
 
 <style>

@@ -7,13 +7,60 @@ import SubmitButton from '../components/SubmitButton.vue'
 export default Vue.extend({
     name: "IndexPage",
     components: { SubmitButton },
+    // async asyncData({ $axios }) {
+
+    // },
     data() {
       return {
         emailInputText: "email",
         passwordInputText: "contraseña",
-        loginButtonText: "INGRESAR"
+        loginButtonText: "INGRESAR",
+
+        apiURL: "http://localhost:3001/api",
+
+        userEmailField: "",
+        userPasswordField: ""
+    }},
+    methods: {
+       getCredentialsToSend() {
+         return {
+           userEmail: document.getElementById("loginEmailField").value, 
+           userPassword: document.getElementById("loginPasswordField").value
+           };
+       },
+       displayCurrentCredentials() {
+         alert(`Email: ${document.getElementById("loginEmailField").value}\nPassword: ${document.getElementById("loginPasswordField").value}`)
+       },
+
+       async sendDataToAPI({$axios}) {
+         // esta función envía los valores del email y de la contraseña al servidor
+         // y desplegará con un cuadrito (la parte de alert()) lo que nos respondan
+          const serverPath = `${this.apiURL}/login/`;
+          // alert(serverPath);
+          const serverResponse = await $axios.$post(serverPath, this.getCredentialsToSend()).catch(() => "ay wey. error1");
+          alert(serverResponse);
+          return { serverResponse }
+          
+      },
+      async getValvulas({$axios}) {
+          // si se levanta el servidor con node, recibirás un array de 3 dimensiones
+          // cada elemento es una válvula que se representa con un array de eventos, en donde
+          // cada elemento es un par [intensidad, tiempo]
+          const serverPath = `${this.apiURL}/valvulas/`;
+          // alert(serverPath);
+          // return
+          const serverResponse = await $axios.$get(serverPath);
+          alert(serverResponse);
+          return { serverResponse };
+          
+      },
+      async testGETmethod({$axios}) {
+        const url = "https://jsonplaceholder.typicode.com/todos/1";
+        const serverResponse = await $axios.$get(url);     
+        return { serverResponse };
       }
     }
+
 })
 </script>
 
@@ -44,16 +91,25 @@ export default Vue.extend({
         </div>
         <div class="right-side-body">
           <article class="right-side-body-inputs">
-            <InputBox :textoTransparente="emailInputText"/>
-            <InputBox :textoTransparente="passwordInputText"/>
+            <InputBox idValue="loginEmailField"  :textoTransparente="emailInputText"/>
+            <InputBox idValue="loginPasswordField"   :textoTransparente="passwordInputText"/>
           </article>
           <article class="right-side-body-buttons">
             <NuxtLink to="/operador/main-operador"><SubmitButton :textbutton="loginButtonText"/></NuxtLink>
             <p>¿Contraseña olvidada?</p>
-            <button class="btn btn-primary">hello bois bustrap</button>
           </article>
         </div>
       </article>
+
+
+
+            <!-- POR ACÁ SE ENVÍAN LOS VALORES AL SERVER DEL HECTOR -->
+      <!-- LA SINTAXIS ES ASÍ DADO QUE SE OCUPA UN ARGUMENTO EN ESPECÍFICO -->
+      <button    @click="() => sendDataToAPI({$axios})"     class="btn btn-primary">ENVIAR EMAIL Y PASSWORD AL HECTOR</button>
+      <button    @click="() => getValvulas({$axios})"     class="btn btn-primary">OBTENER LAS VÁLVULAS (valores de prueba)</button>
+      <button    @click="() => displayCurrentCredentials()"     class="btn">CLICK ACÁ PARA SABER LOS VALORES DEL EMAIL Y PASSWORD A ENVIAR(tenés que escribir)</button>
+
+
     </section>
 </template>
 
