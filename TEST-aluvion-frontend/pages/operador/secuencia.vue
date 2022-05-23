@@ -25,7 +25,7 @@ export default Vue.extend({
     <article class="container-body-button-menu">
       <NuxtLink to="/operador/agregar-secuencia"><button class="common-menu-button">Agregar secuencia</button></NuxtLink>
       <button class="common-menu-button">Editar secuencia</button>
-      <button class="common-menu-button">Listado de secuencias</button>
+      <NuxtLink to= "/operador/lista-secuencia"><button class="common-menu-button">Listado de secuencias</button></NuxtLink>
       <NuxtLink to="/operador/main-operador"><button class="common-menu-button atras-button">Atrás</button></NuxtLink>
     </article>
   </section>

@@ -4,11 +4,11 @@ import Styles from '~/components/Styles.vue'
 import PageHeader from '~/components/PageHeader.vue'
 
 export default Vue.extend({
-    name: "main-admin",
+    name: "main-configurador",
     components: { PageHeader, Styles },
     data(){
         return {
-            "headerTitle": "Gestión de Cuentas de Usuarios"
+            "headerTitle": "Control de sistema automatico"
         };
     },
 })
@@ -22,10 +22,8 @@ export default Vue.extend({
 
         </div>
         <div class="container-body-button-menu">
-            <NuxtLink to="/administrador/agregar-usuario"><button class ="common-menu-button">Agregar usuario</button></NuxtLink>
-            <button class="common-menu-button">Editar usuario</button>
-            <button class="common-menu-button">Inhabilitar usuario</button>
-            <button class="common-menu-button">Usuarios</button>
+            <NuxtLink to="/configurador/agregar-simulador"><button class ="common-menu-button">Agregar simulador</button></NuxtLink>
+            <button class="common-menu-button">Inhabilitar simulador</button>
         </div>
     </section>
 </template>
