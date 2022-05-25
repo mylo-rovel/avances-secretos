@@ -30,7 +30,8 @@ app.use(morgan("combined"));
 
 //! ROUTING ENDPOINTS
 app.get('/api/', (req, res) => {
-    res.json("hola")
+  console.log("prendete lucesita")  
+  res.json("hola")
 });
 app.get('/api/valvulas', (req, res) => {
     console.log("valvulaaaas")
