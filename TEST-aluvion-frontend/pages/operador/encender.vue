@@ -10,10 +10,23 @@
         data() {
             return {
                 "headerTitle": "Encender lucesita",
-                "apiURL": "http://localhost:3001/api/"
+                "apiURL": "http://localhost:8080/api"
 
             };
         },
+        methods: {
+            async enviarOrdenEncender({$axios}) {
+                const serverPath = `${this.apiURL}/leddeldestino`;
+                const serverResponse = await $axios.$get(serverPath).catch(err => err);
+                if (serverResponse instanceof Error) {
+                    console.log(serverResponse);
+                    alert("ERROR. rayos :(")
+                    return false;
+                }
+                alert(serverResponse);
+                return true;
+            },
+        }
     })
 </script>
 
@@ -27,7 +40,7 @@
                 <div class="form-group row form-check form-switch">
                     <label for="encender_luz" class=" form-check-label col-sm-4 col-form-label">Lucesita</label>
                     <div class="col-sm-6">
-                        <button type="button" class="btn btn-primary">prender</button>
+                        <button @click="() => enviarOrdenEncender({$axios})" type="button" class="btn btn-primary">prender</button>
                     </div>
                 </div>
             </form>

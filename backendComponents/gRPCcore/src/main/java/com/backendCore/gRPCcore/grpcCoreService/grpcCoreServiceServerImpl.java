@@ -8,22 +8,25 @@ import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @GrpcService
-
 public class grpcCoreServiceServerImpl extends LedManipulationServiceGrpc.LedManipulationServiceImplBase {
+
+    @Autowired
+    grpcCoreRaspiClient grpcCoreRaspiClientObject;
+
     @Override
     public void startLedPerformance(TextMessage request, StreamObserver<TextMessage> responseObserver) {
         grpcTextMessage mensajeRespuesta = new grpcTextMessage();
 
+        System.out.println("Peticion recibida: "+ request.getMessage());
         if (request.getMessage().equals("encenderLed")) {
-            mensajeRespuesta.setMessage("EXITO. ENVIANDO ORDEN AL RASPI");
+            String respuestaPython = grpcCoreRaspiClientObject.sendComandoLedToRaspi("encenderLed");
+            mensajeRespuesta.setMessage(respuestaPython);
         }else{
             mensajeRespuesta.setMessage("COMANDO INVALIDO");
         }
 
-        TextMessage grpcObjetoRetorno = TextMessage.newBuilder()
-                .setMessage(mensajeRespuesta.getMessage())
-                .build();
         System.out.println(mensajeRespuesta.getMessage());
+        TextMessage grpcObjetoRetorno = TextMessage.newBuilder().setMessage(mensajeRespuesta.getMessage()).build();
         responseObserver.onNext(grpcObjetoRetorno);
         responseObserver.onCompleted();
     }

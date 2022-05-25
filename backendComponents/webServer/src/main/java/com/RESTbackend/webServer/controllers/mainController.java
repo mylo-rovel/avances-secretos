@@ -16,7 +16,7 @@ public class mainController {
 
     @RequestMapping(value = "api/leddeldestino", method = RequestMethod.GET)
     public String handleLedRequest() {
-        System.out.println("Peticion recibida. Enviando orden");
+        System.out.println("Peticion del navegador recibida. Enviando orden al CORE");
         try {
             String serverResponse = grpcledcallerObject.sendComandoLed("encenderLed");
             System.out.println("respuesta server: " + serverResponse);
@@ -26,7 +26,5 @@ public class mainController {
             System.out.println(ex);
             return "ERROR";
         }
-
-        //return "ENVIANDO ORDEN AL BACKEND CORE";
     }
 }

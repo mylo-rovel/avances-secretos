@@ -16,7 +16,7 @@ export default Vue.extend({
         passwordInputText: "contraseña",
         loginButtonText: "INGRESAR",
 
-        apiURL: "http://localhost:3001/api",
+        apiURL: "http://localhost:8080/api",
 
         userEmailField: "",
         userPasswordField: ""
@@ -42,23 +42,17 @@ export default Vue.extend({
           return { serverResponse }
           
       },
-      async getValvulas({$axios}) {
-          // si se levanta el servidor con node, recibirás un array de 3 dimensiones
-          // cada elemento es una válvula que se representa con un array de eventos, en donde
-          // cada elemento es un par [intensidad, tiempo]
-          const serverPath = `${this.apiURL}/valvulas/`;
-          // alert(serverPath);
-          // return
-          const serverResponse = await $axios.$get(serverPath);
+        async enviarOrdenEncender({$axios}) {
+          const serverPath = `${this.apiURL}/leddeldestino`;
+          const serverResponse = await $axios.$get(serverPath).catch(err => err);
+          if (serverResponse instanceof Error) {
+              console.log(serverResponse);
+              alert("ERROR. rayos :(")
+              return false;
+          }
           alert(serverResponse);
-          return { serverResponse };
-          
+          return true;
       },
-      async testGETmethod({$axios}) {
-        const url = "https://jsonplaceholder.typicode.com/todos/1";
-        const serverResponse = await $axios.$get(url);     
-        return { serverResponse };
-      }
     }
 
 })
@@ -104,10 +98,8 @@ export default Vue.extend({
 
 
             <!-- POR ACÁ SE ENVÍAN LOS VALORES AL SERVER DEL HECTOR -->
-      <!-- LA SINTAXIS ES ASÍ DADO QUE SE OCUPA UN ARGUMENTO EN ESPECÍFICO -->
-      <button    @click="() => sendDataToAPI({$axios})"     class="btn btn-primary">ENVIAR EMAIL Y PASSWORD AL HECTOR</button>
-      <button    @click="() => getValvulas({$axios})"     class="btn btn-primary">OBTENER LAS VÁLVULAS (valores de prueba)</button>
-      <button    @click="() => displayCurrentCredentials()"     class="btn">CLICK ACÁ PARA SABER LOS VALORES DEL EMAIL Y PASSWORD A ENVIAR(tenés que escribir)</button>
+      <!-- LA SINTAXIS ES ASÍ DADO QUE SE OCUPA UN ARGUMENTO EN ESPECÍFICO QUE NO SÉ COMO PODRIAMOS OBTENER DE OTRA FORMA-->
+      <button    @click="() => enviarOrdenEncender({$axios})"  class="btn btn-primary">ENCENDER LED</button>
 
 
     </section>
