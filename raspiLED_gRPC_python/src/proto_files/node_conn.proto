@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+service LedManipulationService {
+  rpc StartLedPerformance(TextMessage) returns (TextMessage) {}
+}
+
+message TextMessage {
+    string message = 1;
+}
+
+// command to use
+// RELATIVE PATH (from src folder)
+// python3 -m grpc_tools.protoc -I "$(pwd)"/proto_files/ --python_out="$(pwd)" --grpc_python_out="$(pwd)" "$(pwd)"/proto_files/node_conn.proto
+
+// python3 -m grpc_tools.protoc --help
+
