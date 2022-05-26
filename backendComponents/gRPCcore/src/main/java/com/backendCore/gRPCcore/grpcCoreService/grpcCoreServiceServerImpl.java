@@ -15,10 +15,12 @@ public class grpcCoreServiceServerImpl extends LedManipulationServiceGrpc.LedMan
 
     @Override
     public void startLedPerformance(TextMessage request, StreamObserver<TextMessage> responseObserver) {
+        // RECEPCION DE PETICIONES => ROL ACTUAL: SERVER
         grpcTextMessage mensajeRespuesta = new grpcTextMessage();
 
-        System.out.println("Peticion recibida: "+ request.getMessage());
+        System.out.println("Peticion del 1er componente backend recibida: "+ request.getMessage());
         if (request.getMessage().equals("encenderLed")) {
+            // ENVIO DE PETICIONES => ROL ACTUAL: CLIENTE
             String respuestaPython = grpcCoreRaspiClientObject.sendComandoLedToRaspi("encenderLed");
             mensajeRespuesta.setMessage(respuestaPython);
         }else{

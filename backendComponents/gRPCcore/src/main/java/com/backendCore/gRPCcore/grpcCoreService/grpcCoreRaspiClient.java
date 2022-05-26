@@ -8,13 +8,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class grpcCoreRaspiClient {
+    private String channelTarget = "192.168.1.86:50051";
 
     public String sendComandoLedToRaspi (String comando) {
-        String grpcServerAddress = "localhost";
-        String channelTarget = String.format("dns:///%s:50051",grpcServerAddress);
         // crear el canal de comuncación
-        ManagedChannel channel = NettyChannelBuilder.forTarget(channelTarget).usePlaintext().build();
-
+        // "192.168.1.86:50051" => argumento de .forTarget()
+        ManagedChannel channel = NettyChannelBuilder.forTarget(this.channelTarget).usePlaintext().build();
+        System.out.println("yendo a " + this.channelTarget);
         // crear un stub (cliente) asociando el canal de comunicación
         LedManipulationServiceGrpc.LedManipulationServiceBlockingStub stub = LedManipulationServiceGrpc
                 .newBlockingStub(channel);

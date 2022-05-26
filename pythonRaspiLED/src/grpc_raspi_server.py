@@ -1,7 +1,7 @@
 from concurrent import futures
 import logging
 import datetime
-from dotenv import dotenv_values
+# from dotenv import dotenv_values
 
 import grpc
 import node_conn_pb2 as ReqResModule
@@ -9,7 +9,7 @@ import node_conn_pb2_grpc as ClientServerModule
 
 from ledRoutines import *
 
-venv_dict = dict(dotenv_values(".env"))
+venv_dict = {"PORT": "50051"}
 
 print(f'Iniciando servidor en puerto {venv_dict["PORT"]}')
 
@@ -26,7 +26,7 @@ class LedManipulationServiceServicer(ClientServerModule.LedManipulationServiceSe
         print(f'The received message is {messageReceived}')
 
         if (messageReceived == "encenderLed"):
-            responseMessage = "MENSAJE DESDE PYTHON \nORDEN RECIBIDA. ENCENDIENDO LED. POR FAVOR ESPERE"
+            responseMessage = "MENSAJE DESDE PYTHON \nORDEN RECIBIDA. LED PERFORMANCE REALIZADA"
         else:
             responseMessage = "MENSAJE DESDE PYTHON \nERROR. NO SE HA RECIBIDO UNA ORDEN DE ENCENDER LED"
         print(responseMessage)
@@ -36,7 +36,7 @@ class LedManipulationServiceServicer(ClientServerModule.LedManipulationServiceSe
         funcionLedUsar = self.encendidoDeLuces[indiceFuncion]
         
         # DESCOMENTAR SÓLO SI ESTAMOS USANDO LA RASPI
-        #funcionLedUsar()
+        funcionLedUsar()
 
         # SI NO SE RETORNA LA RESPUESTA gRPC, EL PROGRAMÁ ARROJARÁ UN ERROR
         return ReqResModule.TextMessage(

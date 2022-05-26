@@ -8,12 +8,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class grpcledcaller {
+    private String grpcServerAddress = "localhost";
+    private String channelTarget = String.format("dns:///%s:9090",grpcServerAddress);
 
     public String sendComandoLed (String comando) {
-        String grpcServerAddress = "localhost";
-        String channelTarget = String.format("dns:///%s:9090",grpcServerAddress);
         // crear el canal de comuncación
-        ManagedChannel channel = NettyChannelBuilder.forTarget(channelTarget).usePlaintext().build();
+        ManagedChannel channel = NettyChannelBuilder.forTarget(this.channelTarget).usePlaintext().build();
 
         // crear un stub (cliente) asociando el canal de comunicación
         LedManipulationServiceGrpc.LedManipulationServiceBlockingStub stub = LedManipulationServiceGrpc
