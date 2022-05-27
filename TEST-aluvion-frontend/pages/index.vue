@@ -46,8 +46,7 @@ export default Vue.extend({
           const serverPath = `${this.apiURL}/leddeldestino`;
           const serverResponse = await $axios.$get(serverPath).catch(err => err);
           if (serverResponse instanceof Error) {
-              console.log(serverResponse);
-              alert("ERROR. rayos :(")
+              alert("ERROR. rayos :(", serverResponse)
               return false;
           }
           alert(serverResponse);
