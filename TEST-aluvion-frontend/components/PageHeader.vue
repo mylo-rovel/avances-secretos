@@ -7,31 +7,25 @@ export default {
 
 <template>
   <section>
-    <article class="common-header-top-logo">
+    <div class="common-header-top-logo">
       <img class="common-anid-logo" src="~/assets/img/anid-logo.png" alt="conicyt-logo">
       <div class="common-header-top-logo-text">
         <p>FONDEF</p>
         <p>Fondo de Fomento al Desarrollo</p>
         <p>Cientifico y Tecnológico</p>
       </div>
-      <article class="common-header-top-options">
+      <div class="common-header-top-options">
       <!-- in this part goes the profile section -->
         <div class="common-header-top-profile-section">
           <img class="common-profile-logo" src="~/assets/img/profile-icon.png" alt="conicyt-logo">          
-          <p class="common-header-top-profile-word">Perfil</p>
+          <p class="common-header-top-profile-word">Usuario</p>
         </div>
-        <div class="common-header-top-options-section">
-          <p class="common-header-top-option-word">Soporte</p>
-          <p class="common-header-top-option-word">Dispositivos</p>
-          <p class="common-header-top-option-word">Opciones</p>
-        </div>
-      </article>
-    </article>
-
-    <article class="common-header-top-title-container">
+      </div>
+    </div>
+    <div class="common-header-top-title-container">
     <!-- this is the part where we put the title -->
       <p class="common-header-title">{{headerTitle}}</p>
-    </article>
+    </div>
   </section>
 </template>
 
@@ -57,8 +51,8 @@ export default {
   }
 
   .common-anid-logo { 
-    max-height:auto; 
-    max-width: 100px;
+    max-height:150px; 
+    max-width: 150px;
   }
 
 
@@ -66,7 +60,7 @@ export default {
 
   .common-header-top-options {
     margin-left: auto;
-    width: 35%;
+    width: auto;
     height: auto;
     display:flex;
     flex-direction: column;
@@ -75,7 +69,7 @@ export default {
 
   .common-header-top-profile-section {
     margin-left: auto;
-    padding-right: 5%;
+    padding-right: 10%;
     height: 50%;
     text-align: center;
   }
@@ -108,6 +102,10 @@ export default {
     font-weight: 300;
     padding: 10px;
     padding-top: 20px;
+  }
+  li{
+    font-family: 'Poppins', sans-serif;
+    color: black; 
   }
 
 </style>

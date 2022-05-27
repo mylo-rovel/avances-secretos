@@ -2,15 +2,17 @@
 // ESTE ES LA PAGINA LOGIN
 import Vue from 'vue'
 import PageHeader from '~/components/PageHeader.vue'
+import NavbarPag from '~/components/NavbarPag.vue'
 
 
 
 export default Vue.extend({
   name: "MainOperadorPage",
-  components: { PageHeader },
+  components: { PageHeader, NavbarPag },
   data() {
         return {
-          "headerTitle": "Simulación de eventos"
+          "headerTitle": "Simulación de eventos",
+          "tituloPag": "Secuencia"
         };
     },
 })
@@ -18,15 +20,19 @@ export default Vue.extend({
 
 
 <template>
-  <section class="main-operador-container">
-    <article class="container-header">
-        <PageHeader :headerTitle="headerTitle"/>
-    </article>
-    <article class="container-body-button-menu">
-      <NuxtLink to="/operador/secuencia"> <button class="common-menu-button">Secuencias de lluvia</button> </NuxtLink>
-      <NuxtLink to="/operador/simulacion"> <button class="common-menu-button">Simulación</button></NuxtLink>
-      
-    </article>
+  <section>
+    <div>
+      <NavbarPag :tituloPag="tituloPag"/>
+    </div>
+    <div class="main-operador-container" >
+      <div class="container-header">
+          <PageHeader :headerTitle="headerTitle"/>
+      </div>
+      <div class="container-body-button-menu">
+        <NuxtLink to="/operador/secuencia"> <button class="common-menu-button">Secuencias de lluvia</button> </NuxtLink>
+        <NuxtLink to="/operador/simulacion"> <button class="common-menu-button">Simulación</button></NuxtLink>
+      </div>
+    </div>
   </section>
 </template>
 
