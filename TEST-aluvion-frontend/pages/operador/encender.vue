@@ -57,7 +57,7 @@
                 </div>
             </div>
         </div>
-        -->
+        <!--
         <article class="header-section">
             <div class="header-logo-section">
                 <img class="common-anid-logo" src="~/assets/img/anid-logo.png" alt="conicyt-logo">
@@ -77,7 +77,7 @@
                 <p>Encender LED</p>
                 <button @click="() => enviarOrdenEncender({$axios})" >PRENDER</button>
             </div>
-        </article>
+        </article>-->
     </section>
 </template>
 
@@ -177,13 +177,6 @@
         width: fit-content;
         margin: 0 auto;
         font-size: 1.5rem;
-    }
-
-
-    .body-section {
-        margin: 0 auto;
-        margin-top: 2rem;
-        text-align: center;
     }
 
     .main-button-section p,

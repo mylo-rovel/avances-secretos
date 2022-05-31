@@ -6,7 +6,7 @@ export default {
 </script>
 <template>
     <div class="contenido-vista">
-        <br>
+        <br></br>
         <h3>{{tituloContenido}}</h3>
         </div>
     </div>
@@ -17,8 +17,6 @@ export default {
     margin: 0 auto;
     padding: 40px 20px 40px 20px;
     text-align: center;
-
-    
 }
 
 </style>

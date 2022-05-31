@@ -3,16 +3,17 @@
 import Vue from 'vue'
 import PageHeader from '~/components/PageHeader.vue'
 import NavbarPag from '~/components/NavbarPag.vue'
-
+//import SubmitButton from '~/components/SubmitButton.vue'
+import ContenidoVista from '~/components/Contenido.vue'
 
 
 export default Vue.extend({
   name: "MainOperadorPage",
-  components: { PageHeader, NavbarPag },
+  components: { PageHeader, NavbarPag, ContenidoVista },
   data() {
         return {
-          "headerTitle": "Simulación de eventos",
-          "tituloPag": "Secuencia"
+          "tituloPag": "Secuencia",
+          "tituloContenido": "Simulación de lluvias"
         };
     },
 })
@@ -21,16 +22,21 @@ export default Vue.extend({
 
 <template>
   <section>
-    <div>
+    <div class = "container-fluid">
       <NavbarPag :tituloPag="tituloPag"/>
     </div>
-    <div class="main-operador-container" >
-      <div class="container-header">
-          <PageHeader :headerTitle="headerTitle"/>
-      </div>
+    <div class = "container-fluid">
+      <PageHeader :headerTitle="headerTitle"/>
+    </div>
+    <div class = "container">
       <div class="container-body-button-menu">
-        <NuxtLink to="/operador/secuencia"> <button class="common-menu-button">Secuencias de lluvia</button> </NuxtLink>
-        <NuxtLink to="/operador/simulacion"> <button class="common-menu-button">Simulación</button></NuxtLink>
+        <ContenidoVista :tituloContenido="tituloContenido"/>
+        <div class="contenido-boton">
+          <NuxtLink to="/operador/secuencia"> <button class="common-menu-button">Secuencias de lluvia</button> </NuxtLink>
+        </div>
+        <div class="contenido-boton">
+          <NuxtLink to="/operador/simulacion"> <button class="common-menu-button">Simulación</button></NuxtLink>
+        </div>
       </div>
     </div>
   </section>
@@ -43,11 +49,9 @@ export default Vue.extend({
   margin:0;
   font-family: 'Poppins', sans-serif;
 }
-.main-operador-container {
-    width: 100vw;
-    height: 100vh;
-    display:grid;
-    grid-template-rows: 35% auto;
+.contenido-boton{
+  padding: 100px, 100px;
+  text-align: center;
 }
 
 .container-body-button-menu {
@@ -58,18 +62,18 @@ export default Vue.extend({
 }
 
 .common-menu-button {
-  background-color: white;
+  background: #6675df;
   border: 1px solid black;
-  border-radius: 50px;
-  padding: 1rem 3rem;
+  border-radius: 25px;
+  padding: 10px 30px;
+  /*padding: 1rem 3rem;*/
   margin: 20px 0;
-  font-size: 2rem;
-  font-weight: 300;
+  font-size: 10px;
+  font-weight: 100;
 }
-
 .common-menu-button:hover {
-  background-color: black;
-  color: white;
+  background: white;
+  color: #6675df;
   transform: scale(1.1);
 }
 

@@ -8,7 +8,7 @@ export default {
 <template>
   <section>
     <div class="common-header-top-logo">
-      <img class="common-anid-logo" src="~/assets/img/anid-logo.png" alt="conicyt-logo">
+      <img class="common-anid-logo" src="~/assets/img/anid-logo.png" alt="conicyt-logo" height="100" weight="100">
       <div class="common-header-top-logo-text">
         <p>FONDEF</p>
         <p>Fondo de Fomento al Desarrollo</p>
@@ -24,7 +24,7 @@ export default {
     </div>
     <div class="common-header-top-title-container">
     <!-- this is the part where we put the title -->
-      <p class="common-header-title">{{headerTitle}}</p>
+      <!--<p class="common-header-title">{{headerTitle}}</p>-->
     </div>
   </section>
 </template>
@@ -34,7 +34,7 @@ export default {
   /* TOP RIGHT PART OF THE HEADER */
   .common-header-top-logo {
       /* background-color: red; */
-      width: 96%;
+      width: 95%;
       margin: 0 auto;
       height: fit-content;
       margin-top: 1.5%;
@@ -51,8 +51,8 @@ export default {
   }
 
   .common-anid-logo { 
-    max-height:150px; 
-    max-width: 150px;
+    max-height: 120px; 
+    max-width: 120px;
   }
 
 
@@ -92,14 +92,14 @@ export default {
   /* BOTTOM PART OF THE HEADER */
 
   .common-header-top-title-container {
-    width: 93%;
+    width: 95%;
     margin: 0 auto;
     text-align: left;
     border-bottom: 1px solid black;
   }
   .common-header-title {
-    font-size: 2rem;
-    font-weight: 300;
+    font-size: 25px;
+    font-weight: 350;
     padding: 10px;
     padding-top: 20px;
   }
