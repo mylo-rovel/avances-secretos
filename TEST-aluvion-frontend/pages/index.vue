@@ -1,15 +1,12 @@
 <script>
 // ESTE ES LA PAGINA LOGIN
 import Vue from 'vue'
+import {mapState, mapMutations} from "vuex";
 import SubmitButton from '../components/SubmitButton.vue'
-
 
 export default Vue.extend({
     name: "IndexPage",
     components: { SubmitButton },
-    // async asyncData({ $axios }) {
-
-    // },
     data() {
       return {
         emailInputText: "email",
@@ -19,9 +16,11 @@ export default Vue.extend({
         apiURL: "http://localhost:8080/api",
 
         userEmailField: "",
-        userPasswordField: ""
+        userPasswordField: "",
     }},
+    computed: mapState(["counter"]),
     methods: {
+      ...mapMutations(["increase_counter"]),
        getCredentialsToSend() {
          return {
            userEmail: document.getElementById("loginEmailField").value, 
@@ -98,8 +97,11 @@ export default Vue.extend({
 
             <!-- POR ACÁ SE ENVÍAN LOS VALORES AL SERVER DEL HECTOR -->
       <!-- LA SINTAXIS ES ASÍ DADO QUE SE OCUPA UN ARGUMENTO EN ESPECÍFICO QUE NO SÉ COMO PODRIAMOS OBTENER DE OTRA FORMA-->
-      <button    @click="() => enviarOrdenEncender({$axios})"  class="btn btn-primary">ENCENDER LED</button>
-
+      <!-- <button    @click="() => enviarOrdenEncender({$axios})"  class="btn btn-primary">ENCENDER LED</button> -->
+      <h2>
+        {{counter}}
+      </h2>
+      <button @click="() => increase_counter(2)">press me</button>
 
     </section>
 </template>
