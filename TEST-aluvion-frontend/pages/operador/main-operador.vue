@@ -4,12 +4,12 @@ import Vue from 'vue'
 import PageHeader from '~/components/PageHeader.vue'
 import NavbarPag from '~/components/NavbarPag.vue'
 //import SubmitButton from '~/components/SubmitButton.vue'
-import ContenidoVista from '~/components/Contenido.vue'
+import TituloContenido from '~/components/TituloContenido.vue'
 
 
 export default Vue.extend({
   name: "MainOperadorPage",
-  components: { PageHeader, NavbarPag, ContenidoVista },
+  components: { PageHeader, NavbarPag, TituloContenido },
   data() {
         return {
           "tituloPag": "Secuencia",
@@ -30,7 +30,7 @@ export default Vue.extend({
     </div>
     <div class = "container">
       <div class="container-body-button-menu">
-        <ContenidoVista :tituloContenido="tituloContenido"/>
+        <TituloContenido :tituloContenido="tituloContenido"/>
         <div class="contenido-boton">
           <NuxtLink to="/operador/secuencia"> <button class="common-menu-button">Secuencias de lluvia</button> </NuxtLink>
         </div>

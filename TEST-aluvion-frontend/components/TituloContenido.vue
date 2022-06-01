@@ -1,6 +1,6 @@
 <script lang="ts">
 export default {
-  name: 'ContenidoVista',
+  name: 'TituloContenido',
   props: ["tituloContenido"]
 }
 </script>

@@ -2,7 +2,7 @@
 
     import Vue from 'vue'
     import PageHeader from '~/components/PageHeader.vue'
-    import Contenido from '~/components/Contenido.vue'
+    import TituloContenido from '~/components/TituloContenido.vue'
     import NavbarPag from '~/components/NavbarPag.vue'
 
     export default Vue.extend({
@@ -43,7 +43,7 @@
             <div class="container">
                 <div class="contenido1">
                     <div class="col">
-                        <Contenido :tituloContenido="tituloContenido"/>
+                        <TituloContenido :tituloContenido="tituloContenido"/>
                     </div>
                     <div class="col">
                         <div class="contenido-vista">

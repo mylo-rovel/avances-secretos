@@ -14,7 +14,7 @@ export default Vue.extend({
         return {
           "headerTitle": "Agregar secuencia",
           "cancelbutton": "cancelar",
-          "textbutton": "guardar"
+          "submitbutton": "guardar"
         };
     },
 })
@@ -60,25 +60,23 @@ export default Vue.extend({
                             <label for="add_descripcion" class="col-sm-4 col-form-label">Válvulas</label>
                             <div class="col-sm-6">
                                 <ul class="row">
-                                    <a class="dropdown-item" href="#">Válvula 1</a>
-                                    <a class="dropdown-item" href="#">Válvula 2</a>
-                                    <a class="dropdown-item" href="#">Válvula 3</a>
+                                    <a class="mb-3 dropdown-item" href="#">Válvula 1</a>
+                                    <a class="mb-3 dropdown-item" href="#">Válvula 2</a>
+                                    <a class="mb-3 dropdown-item" href="#">Válvula 3</a>
                                 </ul>
                             </div>
                         </div>
+                        <div class="contenido1">
+                            <div class = "row my-4">
+                                <div class= "col ">
+                                    <NuxtLink to="/operador/secuencia"><CancelButtom :cancelbutton = "cancelbutton"/></NuxtLink>
+                                </div>
+                                <div class="col">    
+                                    <NuxtLink to="/operador/secuencia"><SubmitButton :submitbutton = "submitbutton"/></NuxtLink>
+                                </div>
+                            </div>
+                        </div>
                     </form>
-                </div>
-            </div>
-        </div>
-        <div class= "container">
-            <div class="contenido1">
-                <div class = "row my-4">
-                    <div class= "col ">
-                        <NuxtLink to="/operador/secuencia"><CancelButtom :cancelbutton = "cancelbutton"/></NuxtLink>
-                    </div>
-                    <div class="col">    
-                        <NuxtLink to="/operador/secuencia"><SubmitButton :textbutton = "textbutton"/></NuxtLink>
-                    </div>
                 </div>
             </div>
         </div>
