@@ -1,4 +1,4 @@
-package com.backendCore.gRPCcore.models;
+package com.backendCore.gRPCcore.utilsClasses;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

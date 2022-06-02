@@ -1,6 +1,7 @@
 package com.backendCore.gRPCcore.grpcCoreService;
 
-import com.backendCore.gRPCcore.models.grpcTextMessage;
+
+import com.backendCore.gRPCcore.utilsClasses.grpcTextMessage;
 import com.grpcLEDservice.grpc.LedManipulationServiceGrpc;
 import com.grpcLEDservice.grpc.TextMessage;
 import io.grpc.stub.StreamObserver;

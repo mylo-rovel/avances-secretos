@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class grpcCoreRaspiClient {
-    private String channelTarget = "192.168.1.86:50051";
+    private String channelTarget = "192.168.43.181:50051";
 
     public String sendComandoLedToRaspi (String comando) {
         // crear el canal de comuncación
@@ -21,10 +21,18 @@ public class grpcCoreRaspiClient {
         // crear el objeto que será enviado al server gRPC
         TextMessage requestObject = TextMessage.newBuilder().setMessage(comando).build();
         // enviar la petición gRPC
-        TextMessage serverResponse = stub.startLedPerformance(requestObject);
+
+        String responseMessage = "";
+        try {
+            TextMessage serverResponse = stub.startLedPerformance(requestObject);
+            responseMessage = serverResponse.getMessage();
+        }
+        catch (Exception ex) {
+            responseMessage = "ERROR AT SENDING gRPC SPRING - RASPI call";
+        }
 
         //channel.shutdown();
-        return serverResponse.getMessage();
+        return responseMessage;
     }
 
 }
