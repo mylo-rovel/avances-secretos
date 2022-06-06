@@ -60,7 +60,7 @@ export default Vue.extend({
 <template>
     <section class="main-login-container">
       <article class="img-left-side">
-        <img id="left-login-img" src="~/assets/img/mockup_login_img.png" alt="login-image"/>
+        <img id="left-login-img" src="~/assets/img/cerro.png" alt="login-image"/>
       </article>
       
       <article class="text-right-side">
