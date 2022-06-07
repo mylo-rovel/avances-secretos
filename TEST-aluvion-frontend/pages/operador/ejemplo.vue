@@ -16,40 +16,167 @@ export default Vue.extend({
           "cancelbutton": "cancelar"
         };
     },
-    //methods:
-      //  function mostrar() {
-        //    document.getElementById("sidebar").style.width = "300px";
-          //  document.getElementById("contenido").style.marginLeft = "300px";
-            //document.getElementById("abrir").style.display = "none";
-            //document.getElementById("cerrar").style.display = "inline";
-    
+    methods:{
+        getMenu(){
+            return{
+                listElements: document.querySelectorAll('.list__button--click')
+            }; 
+        },
+        displayOpcions(){
+            listElements.forEach(listElement => {
+                listElement.addEventListener('click', ()=>{
+                    listElement.classList.toggle('arrow');
+                    let height = 0;
+                    let menu = listElement.nextElementSibling;
+                    if(menu.clientHeight == "0"){
+                        height=menu.scrollHeight;
+                    }
+                    menu.style.height = `${height}px`;
+                })
+            });
+        }
+    }
+
 })
 </script>
 <template>
-    <section class="container">
-        <div class="container-fluid">
-            <NavbarPag :tituloPag="tituloPag"/>
-        </div>
-        <div class="row my-5">
-            <div class="col">
-                <SubmitButton :submitbutton = "submitbutton"/>
-            </div>
-            <div class="col">
-                <CancelButtom :cancelbutton = "cancelbutton"/>
-            </div>
-        </div> 
-        <!--<div id="sidebar" class= "sidebar" style="width: 300px;">
-            <ul class="menu">
-                <li><a>Secuencia</a></li>
-                <li><a>Simulación</a></li>
-                <li><a>Perfil</a></li>
+    <section>
+        <nav class="nav">
+            <ul class="list">
+                <li class="list__item">
+                    <div class="list__button">
+                        <img src="assets/dashboard.svg" class="list__img">
+                        <a href="#" class="nav__link">Inicio</a>
+                   </div>
+                </li>
+                <li class="list__item list__item--click">
+                    <div class="list__button list__button--click">
+                        <img src="assets/docs.svg" class="list__img">
+                        <a href="#" class="nav__link">Servicios</a>
+                        <img src="assets/arrow.svg" class="list__arrow">
+                    </div>
+                    <ul class="list__show">
+                        <li class="list__inside">
+                            <a href="#" class="nav__link nav__link--inside">Estoy dentro</a>
+                        </li>
+                        <li class="list__inside">
+                            <a href="#" class="nav__link nav__link--inside">Estoy dentro</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="list__item">
+                    <div class="list__button">
+                        <img src="assets/stats.svg" class="list__img">
+                        <a href="#" class="nav__link">Estadisticas</a>
+                    </div>
+                </li>
+                <li class="list__item list__item--click">
+                    <div class="list__button list__button--click">
+                        <img src="assets/bell.svg" class="list__img">
+                        <a href="#" class="nav__link">Notificaciones</a>
+                        <img src="assets/arrow.svg" class="list__arrow">
+                    </div>
+                    <ul class="list__show">
+                        <li class="list__inside">
+                            <a href="#" class="nav__link nav__link--inside">Estoy dentro</a>
+                        </li>
+                        <li class="list__inside">
+                            <a href="#" class="nav__link nav__link--inside">Estoy dentro</a>
+                        </li>
+                        <li class="list__inside">
+                            <a href="#" class="nav__link nav__link--inside">Estoy dentro</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="list__item">
+                    <div class="list__button">
+                        <img src="assets/message.svg" class="list__img">
+                        <a href="#" class="nav__link">Contacto</a>
+                    </div>
+                </li>
             </ul>
-        </div>
-        <div>
-            <a id="abrir" class="abrir-cerrar" href="" onclick="mostrar()" style="display: none;">Abrir</a>
-        </div>-->
+        </nav>
     </section>
 </template>
 <style>
-    
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap');
+
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body{
+        background: #EAEBEF;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .nav{
+        width: 300px;
+    }
+
+    .nav__link{
+        color: #303440;
+        display: block;
+        padding: 15px 0;
+        text-decoration: none;
+    }
+
+    .nav__link--inside{
+        border-radius: 6px ;
+        padding-left: 20px;
+        text-align: left;
+    }
+
+    .nav__link--inside:hover{
+        background: #F6F8FA;
+    }
+
+    .list{
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        border-radius: 0 16px 16px 0;
+        background: #fff;
+    }
+
+    .list__item{
+        list-style: none;
+        width: 100%;
+        text-align: center;
+        overflow: hidden;
+    }
+
+    .list__item--click{
+        cursor: pointer;
+    }
+
+    .list__button{
+        display: flex;
+        align-items: center;
+        gap: 1em;
+        width: 70%;
+        margin: 0 auto;
+    }
+
+    .arrow .list__arrow{
+        transform: rotate(90deg);
+    }
+
+    .list__arrow{
+        margin-left: auto;
+        transition: transform .3s;
+    }
+
+    .list__show{
+        width: 80%;
+        margin-left: auto;
+        border-left: 2px solid #303440;
+        list-style: none;
+        transition: height .4s;
+        height: 0;
+    }
 </style>

@@ -8,7 +8,7 @@ import NavbarPag from '~/components/NavbarPag.vue'
 
 
 export default Vue.extend({
-  name: "MainOperadorPage",
+  name: "AgregarSecuencia",
   components: { PageHeader, CancelButtom, SubmitButton},
   data() {
         return {
@@ -29,7 +29,7 @@ export default Vue.extend({
             <PageHeader :headerTitle="headerTitle"/>
         </div>
         <div class= "container">
-            <div >
+            <div>
                 <div class="row my-4">
                     <h2>Agregar Secuencia</h2>
                 </div>

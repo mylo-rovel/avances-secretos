@@ -22,7 +22,7 @@ export default Vue.extend({
 
 <template>
   <section>
-    <div class = "container-fluid">
+    <div>
       <NavbarPag :tituloPag="tituloPag"/>
     </div>
     <div class = "container-fluid">
