@@ -39,66 +39,69 @@ export default Vue.extend({
 
 })
 </script>
+         
+
 <template>
-    <section>
-        <nav class="nav">
-            <ul class="list">
-                <li class="list__item">
-                    <div class="list__button">
-                        <img src="assets/dashboard.svg" class="list__img">
-                        <a href="#" class="nav__link">Inicio</a>
-                   </div>
-                </li>
-                <li class="list__item list__item--click">
-                    <div class="list__button list__button--click">
-                        <img src="assets/docs.svg" class="list__img">
-                        <a href="#" class="nav__link">Servicios</a>
-                        <img src="assets/arrow.svg" class="list__arrow">
-                    </div>
-                    <ul class="list__show">
-                        <li class="list__inside">
-                            <a href="#" class="nav__link nav__link--inside">Estoy dentro</a>
-                        </li>
-                        <li class="list__inside">
-                            <a href="#" class="nav__link nav__link--inside">Estoy dentro</a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="list__item">
-                    <div class="list__button">
-                        <img src="assets/stats.svg" class="list__img">
-                        <a href="#" class="nav__link">Estadisticas</a>
-                    </div>
-                </li>
-                <li class="list__item list__item--click">
-                    <div class="list__button list__button--click">
-                        <img src="assets/bell.svg" class="list__img">
-                        <a href="#" class="nav__link">Notificaciones</a>
-                        <img src="assets/arrow.svg" class="list__arrow">
-                    </div>
-                    <ul class="list__show">
-                        <li class="list__inside">
-                            <a href="#" class="nav__link nav__link--inside">Estoy dentro</a>
-                        </li>
-                        <li class="list__inside">
-                            <a href="#" class="nav__link nav__link--inside">Estoy dentro</a>
-                        </li>
-                        <li class="list__inside">
-                            <a href="#" class="nav__link nav__link--inside">Estoy dentro</a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="list__item">
-                    <div class="list__button">
-                        <img src="assets/message.svg" class="list__img">
-                        <a href="#" class="nav__link">Contacto</a>
-                    </div>
-                </li>
-            </ul>
-        </nav>
-    </section>
+    <nav class="nav">
+        <ul class="list">
+            <li class="list__item">
+                <div class="list__button">
+                    <img src="assets/dashboard.svg" class="list__img">
+                    <NuxtLink to="/operador/main-operador"><a class="nav__link">Inicio</a></NuxtLink>
+                </div>
+            </li>
+            <li class="list__item">
+                <div class="list__button">
+                    <img src="assets/stats.svg" class="list__img">
+                    <a href="#" class="nav__link">Perfil</a>
+                </div>
+            </li>
+            <li class="list__item list__item--click">
+                <div class="list__button list__button--click">
+                    <img src="assets/docs.svg" class="list__img">
+                    <a href="/operador/agregar-secuencia" class="nav__link">Secuencia</a>
+                    <img src="assets/arrow.svg" class="list__arrow">
+                </div>
+                <ul class="list__show">
+                    <li class="list__inside">
+                        <a href="/operador/agregar-secuencia" class="nav__link nav__link--inside">Crear Secuencia</a>
+                    </li>
+                    <li class="list__inside">
+                        <a href="#" class="nav__link nav__link--inside">Listado de Secuencias</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="list__item list__item--click">
+                <div class="list__button list__button--click">
+                    <img src="assets/bell.svg" class="list__img">
+                    <a href="#" class="nav__link">Simulación</a>
+                    <img src="assets/arrow.svg" class="list__arrow">
+                </div>
+                <ul class="list__show">
+                    <li class="list__inside">
+                        <a href="#" class="lala nav__link nav__link--inside">Iniciar Simulación</a>
+                    </li>
+                    <li class="list__inside">
+                        <a href="#" class="nav__link nav__link--inside">Ver Simulación</a>
+                    </li>
+                    <li class="list__inside">
+                        <a href="#" class="nav__link nav__link--inside">Historial de Simulaciones</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="list__item">
+                <div class="list__button">
+                    <img src="assets/message.svg" class="list__img">
+                    <a href="#" class="nav__link">Contacto</a>
+                </div>
+            </li>
+        </ul>
+    </nav>
 </template>
+
+
 <style>
+
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap');
 
     *{
@@ -178,5 +181,12 @@ export default Vue.extend({
         list-style: none;
         transition: height .4s;
         height: 0;
+    }
+
+        .list__show .list__inside a{
+        width: 2rem;
+        height:2rem;
+        background-color:red;
+        display:grid;
     }
 </style>
