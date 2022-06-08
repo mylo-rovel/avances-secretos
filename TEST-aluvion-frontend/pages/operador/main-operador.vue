@@ -12,33 +12,25 @@ export default Vue.extend({
   components: { PageHeader, NavbarPag, TituloContenido },
   data() {
         return {
-          "tituloPag": "Secuencia",
-          "tituloContenido": "Simulación de lluvias"
+          "tituloPag": "Simulación de Lluvias",
+          "tituloContenido": "Simulación de Lluvias"
         };
     },
 })
 </script>
 
-
 <template>
-  <section>
-    <div>
-      <NavbarPag :tituloPag="tituloPag"/>
-    </div>
-    <div class = "container-fluid">
-      <PageHeader :headerTitle="headerTitle"/>
-    </div>
-    <div class = "container">
-      <div class="container-body-button-menu">
-        <TituloContenido :tituloContenido="tituloContenido"/>
-        <div class="contenido-boton">
-          <NuxtLink to="/operador/secuencia"> <button class="common-menu-button">Secuencias de lluvia</button> </NuxtLink>
-        </div>
-        <div class="contenido-boton">
-          <NuxtLink to="/operador/simulacion"> <button class="common-menu-button">Simulación</button></NuxtLink>
-        </div>
-      </div>
-    </div>
+  <section class="main-operador-container">
+    <article class="container-header">
+        <PageHeader :headerTitle="headerTitle"/>
+    </article>
+    <article class="container-body-button-menu">
+      <NuxtLink to="/operador/registrar-simulacion"><button class="common-menu-button">Registrar Simulación</button></NuxtLink>
+      <NuxtLink to="/operador/iniciar-simulacion"><button class="common-menu-button">Iniciar Simulación</button></NuxtLink>
+      <NuxtLink to= "/operador/ver-simulacion"><button class="common-menu-button">Ver Simulación</button></NuxtLink>
+      <NuxtLink to= "/operador/lista-secuencia"><button class="common-menu-button">Historial de Simulaciones</button></NuxtLink>
+      
+    </article>
   </section>
 </template>
 
@@ -62,19 +54,33 @@ export default Vue.extend({
 }
 
 .common-menu-button {
-  background: #6675df;
+  background: white;
   border: 1px solid black;
-  border-radius: 25px;
-  padding: 10px 30px;
+  border-radius: 15px;
+  padding: 10px 20px;
   /*padding: 1rem 3rem;*/
   margin: 20px 0;
-  font-size: 10px;
+  font-size: 1rem;
   font-weight: 100;
 }
 .common-menu-button:hover {
   background: white;
-  color: #6675df;
+  color: black;
   transform: scale(1.1);
 }
+.main-operador-container {
+    width: 100vw;
+    height: 100vh;
+    display:grid;
+    grid-template-rows: 35% auto;
+}
+.container-body-button-menu {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+
 
 </style>
