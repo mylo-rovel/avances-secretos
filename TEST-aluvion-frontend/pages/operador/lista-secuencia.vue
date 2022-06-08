@@ -8,18 +8,22 @@ export default Vue.extend({
   components: { PageHeader },
   data() {
         return {
-          "headerTitle": "Listado de secuencias"
+          "headerTitle": "Listado de secuencias",
+          "tituloPag": "Sistema de Alerta Temprana Aluvional"
         };
     },
 })
 </script>
 
-<templete>
-  <section class="main-operador-container">
-    <div class="container-header">
+<template>
+  <section>
+    <div class="container-fluid">
+      <NavbarPag :tituloPag="tituloPag"/>
+    </div>
+    <div class="container">
         <PageHeader :headerTitle="headerTitle"/>
     </div>
-    <div class="col-12">
+    <div class="container">
       <div class="table-responsive">
         <table id="tabla-secuencias" class="table table-lifht table-bordered table-hover table-striped">
           <thead class="bg-dark text-white">
@@ -34,4 +38,4 @@ export default Vue.extend({
     </div>
   </section>
 
-</templete>
+</template>

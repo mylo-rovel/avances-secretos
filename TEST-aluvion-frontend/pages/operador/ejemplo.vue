@@ -4,10 +4,10 @@ import Vue from 'vue'
 
 import SubmitButton from '~/components/SubmitButton.vue'
 import CancelButton from '~/components/CancelButtom.vue'
-
+import NavbarPag from '~/components/NavbarPag.vue'
 
 export default Vue.extend({
-    name: "Ejemplo",
+    name: "ejemplo",
     components: { SubmitButton, CancelButton},
   
     data() {
@@ -27,6 +27,9 @@ export default Vue.extend({
 </script>
 <template>
     <section class="container">
+        <div class="container-fluid">
+            <NavbarPag :tituloPag="tituloPag"/>
+        </div>
         <div class="row my-5">
             <div class="col">
                 <SubmitButton :submitbutton = "submitbutton"/>

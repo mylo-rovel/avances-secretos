@@ -23,7 +23,7 @@ export default Vue.extend({
         <PageHeader :headerTitle="headerTitle"/>
     </article>
     <article class="container-body-button-menu">
-      <NuxtLink to="/operador/simulacion"><button class="common-menu-button">Programar simulación</button></NuxtLink>
+      <NuxtLink to="/operador/simulacion/iniciar-simulacion"><button class="common-menu-button">Programar simulación</button></NuxtLink>
       <button class="common-menu-button">Ver simulación</button>
       <button class="common-menu-button">Historial de simulaciones</button>
       <NuxtLink to="/operador/main-operador"><button class="common-menu-button atras-button">Atrás</button></NuxtLink>
