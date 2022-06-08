@@ -1,0 +1,7 @@
+1. Si se desea imprimir algún mensaje a pantalla se debe anotar la clase con @Slf4j y utilizar algún nivel (debug, info, warn, error), Ej: log.debug("Mensaje a Pantalla).
+2. El nombre de los paquetes es java siempre es es minúsculas.
+3. Si se desea comentar código para que no funcione utilizar el comentario de bloque: /* .. */
+4. Si el atributo de una clase tiene más de una anotación, cada una de ellas debe ir en su propia línea.
+5. Si el atributo de una clase tiene más de una palabra, se debe utilizar camelCase en su nombre.
+6. Toda clase debe tener javadoc de clase, atributo y método.
+7. Se sugiere instalar el plugin Checkstyle para definir un estilo de programación definido.

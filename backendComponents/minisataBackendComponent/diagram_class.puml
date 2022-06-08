@@ -1,0 +1,71 @@
+@startuml
+left to right direction
+skinparam handwritten true
+
+package cl.ucn.fondef.sata.mini.model {
+
+    class MessageLog {
+        - id: long
+        - message: String
+        - dateTime: ZonedDateTime
+        + MessageLog()
+        + MessageLog(...)
+        + getId(): Long
+        + getMessage(): String
+        + getDateTime(): ZonedDateTime
+    }
+
+}
+
+package org.springframework.data.repository {
+
+    interface CrudRepository<T, ID> {
+    }
+}
+
+package cl.ucn.fondef.sata.mini.dao {
+
+    interface MessageLogRepository<MessageLog, Long> {
+    }
+    MessageLogRepository --|> CrudRepository
+
+}
+
+package cl.ucn.fondef.sata.mini.services {
+
+    interface MiniSata {
+        + countMessageLog(): Long
+        + save(MessageLog): void
+    }
+
+    class MiniSataImpl {
+        + MiniSataImpl(MessageLogRepository)
+    }
+    MiniSata ..> MessageLog: <<use>>
+    MiniSataImpl ..|> MiniSata
+    MiniSataImpl --> "1" MessageLogRepository: -MessageLogRepository
+
+}
+
+package cl.ucn.fondef.sata.mini.grpc <<generated>> {
+
+    class MiniServiceGrpc {
+    }
+
+    class MiniServiceGrpcImpl {
+        + MiniServiceGrpcImpl(MiniSata)
+        + sayHello(HelloRequest, StreamObserver<HelloResponse>): void
+    }
+    MiniServiceGrpcImpl --> "1" MiniSata: -miniSata
+    MiniServiceGrpcImpl --|> MiniServiceGrpc
+}
+
+package cl.ucn.fondef.sata.mini.web {
+
+    class MiniRestController {
+        + hello(message): String
+    }
+    MiniRestController --> "1" MiniServiceGrpc: -miniServiceGrpc
+}
+
+@enduml

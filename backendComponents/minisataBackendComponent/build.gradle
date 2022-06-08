@@ -1,0 +1,131 @@
+buildscript {
+    ext {
+        protobufVersion = '3.20.0'
+        protobufPluginVersion = '0.8.18'
+        grpcVersion = '1.46.0'
+    }
+}
+
+plugins {
+    id 'org.springframework.boot' version '2.7.0'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id 'com.google.protobuf' version "${protobufPluginVersion}"
+    id 'idea'
+}
+
+group = 'cl.ucn.fondef.sata'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Google protocol buffers + gRPC
+    implementation 'io.grpc:grpc-bom:1.46.0'
+    // runtimeOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
+    // implementation "io.grpc:grpc-protobuf:${grpcVersion}"
+    // implementation "io.grpc:grpc-stub:${grpcVersion}"
+    // compileOnly 'jakarta.annotation:jakarta.annotation-api:1.3.5'
+
+    // Server + Client
+    implementation "net.devh:grpc-server-spring-boot-starter:2.13.1.RELEASE"
+    implementation "net.devh:grpc-client-spring-boot-starter:2.13.1.RELEASE"
+
+    // Spring boot development tools
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // JDBC: You write the SQL
+    // implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+    // JPA: Automatic SQL generation
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // Bean validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // Web specs
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    //implementation 'org.springframework.session:spring-session-core'
+
+    // Crypto library
+    implementation 'org.springframework.security:spring-security-crypto:5.6.3'
+    runtimeOnly 'org.bouncycastle:bcprov-jdk15on:1.70'
+    runtimeOnly 'org.springframework:spring-jcl:5.3.20'
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // Logger
+    implementation 'org.slf4j:slf4j-api:1.7.36'
+
+    // Databases:
+    // H2 SQL
+    runtimeOnly 'com.h2database:h2'
+    // SQLite SQL
+    runtimeOnly 'org.xerial:sqlite-jdbc:3.36.0.3'
+    runtimeOnly 'com.github.gwenn:sqlite-dialect:0.1.2'
+
+    // Commons Lang
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+
+    implementation 'org.springframework:spring-tx:5.2.10.RELEASE'
+    implementation 'javax.persistence:javax.persistence-api:2.2'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.5.2'
+    implementation 'mysql:mysql-connector-java:8.0.29'
+
+    // To hashing passwords
+    implementation group: 'de.mkammerer', name: 'argon2-jvm', version: '2.5'
+
+    // to create JWT
+    implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+}
+
+// Protobuf configuration
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:${protobufVersion}"
+    }
+    generatedFilesBaseDir = "$projectDir/src/generated"
+    clean {
+        delete generatedFilesBaseDir
+    }
+    plugins {
+        grpc {
+            artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
+        }
+    }
+    generateProtoTasks {
+        all()*.plugins {
+            grpc {}
+        }
+    }
+}
+
+// Inform IntelliJ  about the generated code.
+idea {
+    module {
+        sourceDirs += file("src/generated/main/java")
+        sourceDirs += file("src/generated/main/grpc")
+        generatedSourceDirs += file("src/generated/main/java")
+        generatedSourceDirs += file("src/generated/main/grpc")
+    }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+// Build all the project in the temporal directory
+allprojects {
+    buildDir = "${System.env.TEMP}\\gradle\\${project.name}"
+}
