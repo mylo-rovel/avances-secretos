@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class grpcledcaller {
     private String grpcServerAddress = "localhost";
-    private String channelTarget = String.format("dns:///%s:9090",grpcServerAddress);
+    private String channelTarget = String.format("dns:///%s:9090",this.grpcServerAddress);
 
     public String sendComandoLed (String comando) {
         // crear el canal de comuncación
@@ -19,7 +19,8 @@ public class grpcledcaller {
         LedManipulationServiceGrpc.LedManipulationServiceBlockingStub stub = LedManipulationServiceGrpc
                 .newBlockingStub(channel);
         // crear el objeto que será enviado al server gRPC
-        TextMessage requestObject = TextMessage.newBuilder().setMessage(comando).build();
+        System.out.println("paso 4");
+        var requestObject = TextMessage.newBuilder().setMessage("encenderLed").build();
         // enviar la petición gRPC
         TextMessage serverResponse = stub.startLedPerformance(requestObject);
 

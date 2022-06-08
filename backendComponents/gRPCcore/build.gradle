@@ -31,12 +31,6 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok:1.18.24'
 	testCompileOnly 'org.projectlombok:lombok:1.18.24'
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
-
-	implementation 'org.springframework:spring-tx:5.2.10.RELEASE'
-	implementation 'javax.persistence:javax.persistence-api:2.2'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.5.2'
-	implementation 'mysql:mysql-connector-java:8.0.29'
-
 }
 
 protobuf {
