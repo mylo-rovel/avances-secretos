@@ -14,7 +14,7 @@ export default Vue.extend({
     },
     computed: mapState(["listaEventos"]) ,
     methods: {
-        ...mapMutations(["addEvento", "removeEvento", "setNuevoValorEvento"]),
+        ...mapMutations(["addEvento", "removeEvento", "setNuevoValorEvento", "guardarListaEventos"]),
 
         updateDuracionTotalListaEventos() {
             this.duracionTotalListaEventos = this.listaEventos.reduce((acc, evento) => acc + evento.getDuracion(), 0);
@@ -58,7 +58,7 @@ export default Vue.extend({
     </article>
     <article class="bottom-ribbon">
         <div class="save-button">
-            <button>GUARDAR</button>
+            <button @click="guardarListaEventos">GUARDAR</button>
         </div>
         <div class="total-duration-container">
             <p class="total-duration-title">Duración total</p>
@@ -83,6 +83,7 @@ export default Vue.extend({
 .add-events-container {
     width: fit-content;
     margin: 0 auto;
+    background-color: red;
 }
 
 .events-table-container{

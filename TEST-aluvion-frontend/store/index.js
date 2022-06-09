@@ -1,71 +1,65 @@
-// import { Evento, Usuario, Secuencia, Simulador } from "~/utils/classes";
-import { Evento, Usuario } from "~/utils/classes";
+import { secuenciasStateMethods } from "~/store/secuenciasStateMethods.js";
 
+// El estado corresponde
 export const state = () => ({
-    counter:0, // just for knowing how to use this store xd
+    // solo para entender cómo funciona el store o 'estado global'
+    counter:0,
 
-    listaEventos: [], // => Evento []
+    // => Evento [] ====> CORRESPONDE A LA TABLA DE EVENTOS
+    // esta lista obtendrá una copia del array 'secuencias' usando el indice 'currentSecuencia' a través de un botón
+    // si guardamos la lista de eventos => secuencias[currentSecuencia] = [... listaEventos]
+    // importante pasar una COPIA para evitar el paso por referencia
+    // si el usuario no guarda y retrocede, no guardamos elementos
+    // si el usuario vuelve a entrar ya habiendo guardado una lista, este podrá ver nuevamente sus valores
+    listaEventos: [],
+
+    // => indice de la tabla evento a utilizar => usada para acceder a la válvula deseada: secuencias[currentSecuencia]
+    //! => su valor será modificado usando la funcion 'setSecuenciaModificar'
+    currentSecuencia: 0,
     
-    usuarioActual: new Usuario(""), // sólo por ahora
-    secuenciaSeleccionada: null,
-    simuladorSeleccionado: null,
-    listaUsuarios: [],
-    listaSecuencias: [],
-    listaSimuladores: [],
+    // Evento [][] => array de listaEventos. Cada elemento es una válvula
+    secuencias: [
+        [],[],[]
+    ],
 });
 
-
+// funciones asincronas
+// todo: obtener la cantidad de valvulas de un simulador para preparar la lista secuencias
+// todo: utilizar el indice 'currentSecuencia' para acceder a cada válvula (el boton de acceso a la
+// todo: tabla de eventos debe alterar este valor) de forma rápida
 export const actions = {
 
 }
 
 export const mutations = {
-    // just for knowing how to use this store xd
+    // solo para entender cómo funciona el store o 'estado global'
     increase_counter(state, increment = 1) {
         state.counter += increment;
     },
+    
+    // esta sintaxis indica que estamos entregando las funciones del objeto secuenciasStateMethods
+    // importado desde el archivo '~/store/secuenciasStateMethods.js' para ocuparlas dentro de este
+    // objeto que manipula el estado. así mantenemos separadas las funciones según su pertinencia
+    ... secuenciasStateMethods,
+    
+    // buscamos modificar el indice currentSecuencia para poder acceder a los eventos de cualquier valvula rapidamente
+    // ? OJO: buscamos utilizar esta función en los botones de la vista crear simulacion
+    setSecuenciaModificar(state, indiceValvula) {
+        if (typeof indiceValvula !== 'number') {return false;}
+        // si no es un número no podemos compararlo con 0
+        if (indiceValvula < 0 || indiceValvula >= secuencias.length) {return false;}
 
-
-    addEvento(state, indexToInsert) {
-        const arr = state.listaEventos; // pass by reference just to write less XD;
-        // const newIntensidad = Math.floor(Math.random()*100);
-        // const newDuracion = Math.floor(Math.random()*100);
-        // const newEvento = new Evento(newIntensidad, newDuracion);
-        const newEvento = new Evento(0, 0);
-        if (indexToInsert === 0){
-            state.listaEventos.unshift(newEvento);
-            return true;
-        }
-        const leftArr = arr.slice(0,indexToInsert);
-        const rightArr = arr.slice(indexToInsert);
-        state.listaEventos = [...leftArr, newEvento, ...rightArr];
+        state.currentSecuencia = indiceValvula;
+        // entregamos una copia del array guardado asociado a la válvula seccionada
+        state.listaEventos = [... state.secuencias[state.currentSecuencia]];
         return true;
     },
 
-    removeEvento(state, indexToRemove) {
-        const arr = state.listaEventos; // pass by reference just to write less XD;
-        if (indexToRemove === 0){
-            state.listaEventos.shift();
-            return true;
-        }
-        const leftArr = arr.slice(0,indexToRemove);
-        const rightArr = arr.slice(indexToRemove+1);
-        state.listaEventos = [...leftArr, ...rightArr];
-        return true;
-    },
 
-    setNuevoValorEvento(state, dataObject){
-        const {attriToModify, rowIndex} = dataObject;
-        let {newValue} = dataObject;
-        newValue = (newValue === "" || newValue === null) ? 0 : parseInt(newValue);
-        if (newValue < 0) { return false; }
-        
-        const arr = state.listaEventos;
-        if (attriToModify === "duracion") {
-            arr[rowIndex].setDuracion(newValue);
-            return true;
-        }
-        arr[rowIndex].setIntensidad(newValue);
-        return true;
-    }
+    // formatearSecuencias(state) {
+    //     const valvulas = [... state.secuencias];
+    //     for (let i=0; i < valvulas.length; i++) {
+    //         valvulas[i] = formatSecuencia
+    //     }
+    // }
 }
