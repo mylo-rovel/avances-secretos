@@ -129,7 +129,6 @@ p, a {
     color: blue;
 }
 
-
 .submenu-routes-menu p {
     --li-padding-bottom: 0.5rem;
     margin:0;
