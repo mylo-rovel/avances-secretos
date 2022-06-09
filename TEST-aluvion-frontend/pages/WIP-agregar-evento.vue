@@ -38,19 +38,19 @@ export default Vue.extend({
     <article class="events-table-container">
         <table>
             <tr class="table-head">
-                <div class="plus-button" @click="() => addEvento(0)">+</div>
+                <div class="plus-button" @click="() => {addEvento(0); updateDuracionTotalListaEventos(); updateIntensidadTotalListaEventos();}">+</div>
                 <th>Intensidad</th>
                 <th>Duracion</th>
 
             </tr>
 
             <tr v-for="(evento, rowIndex) in listaEventos" :key="`eventKey_${rowIndex}`" class="table-row">
-                <div class="plus-button" @click="() => addEvento(rowIndex+1)">+</div>
+                <div class="plus-button" @click="() => {addEvento(rowIndex+1); updateDuracionTotalListaEventos(); updateIntensidadTotalListaEventos();}">+</div>
                 <td class="event-element intensity-element">
-                    <input type="number"  :placeholder="evento.getIntensidad()"  @input="(e) => actualizarEvento(e, `intensidad`, rowIndex)"  ></td>
+                    <input type="number"  :placeholder="evento.getIntensidad()"  :value="evento.getIntensidad()"   @input="(e) => actualizarEvento(e, `intensidad`, rowIndex)" ></td>
                 <td class="event-element duration-element">
-                    <input type="number"  :placeholder="evento.getDuracion()"    @input="(e) => actualizarEvento(e, `duracion`, rowIndex)"    ></td>
-                <div class="minus-button" @click="() => removeEvento(rowIndex)">-</div>
+                    <input type="number"  :placeholder="evento.getDuracion()"    :value="evento.getDuracion()"     @input="(e) => actualizarEvento(e, `duracion`, rowIndex)"   ></td>
+                <div class="minus-button" @click="() => {removeEvento(rowIndex); updateDuracionTotalListaEventos(); updateIntensidadTotalListaEventos();}">-</div>
             </tr>
             
         </table>
