@@ -24,7 +24,7 @@ export default Vue.extend({
         <PageHeader :headerTitle="headerTitle"/>
     </div>
     <div class="container">
-      <div class="table-responsive">
+      <div class="my-4 table-responsive">
         <table id="tabla-secuencias" class="table table-lifht table-bordered table-hover table-striped">
           <thead class="bg-dark text-white">
             <th scope="row">Simulador</th>
