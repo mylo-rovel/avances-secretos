@@ -14,19 +14,26 @@
 
 <template>
   <section>
-    <button class=" btn submit-button">{{submitbutton}}</button>
+    <button class="submit-button">{{submitbutton}}</button>
   </section>
 </template>
 
 <style>
   .submit-button {
-    background: #6675df;
+    background: #025cfa;
     padding: 10px 20px 10px 20px;
     font-size: 20px;
     color: #fff;
     justify-content: center;
     text-transform: uppercase;
     font-weight: bold;
+    border-radius: 10px;
   }
+  .submit-button:hover {
+        background: white;
+        color: #025cfa;
+        border: 1px solid #025cfa;
+        transform: scale(1.1);
+    }
 
 </style>

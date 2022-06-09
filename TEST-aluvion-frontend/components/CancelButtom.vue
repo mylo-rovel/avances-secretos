@@ -19,6 +19,12 @@ export default {
       justify-content: center;
       text-transform: uppercase;
       font-weight: bold;
-      
+      border-radius: 10px;
   }
+  .cancel-button:hover {
+        background: white;
+        color: #C70039;
+        border: 1px solid #C70039;
+        transform: scale(1.1);
+    }
 </style>

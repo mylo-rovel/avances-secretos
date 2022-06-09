@@ -12,7 +12,6 @@ export default Vue.extend({
   components: { PageHeader, CancelButtom, SubmitButton},
   data() {
         return {
-          "headerTitle": "Agregar secuencia",
           "cancelbutton": "cancelar",
           "submitbutton": "iniciar"
         };
@@ -28,55 +27,43 @@ export default Vue.extend({
             <PageHeader :headerTitle="headerTitle"/>
         </div>
         <div class= "container">
-            <div >
+            <div class="card">
                 <div class="row my-4">
                     <h2>Iniciar Simulación</h2>
                 </div>
                 <div class="row">
                     <form>
-                        <div class="row">
-                            <div class="col">
+                        <div class="grid">
+                            <div class="g-col-6 g-col-md-4">
                                 <div class=" my-4 form-group">
-                                    <label for="sim_secuencia" class="col-form-label ">Seleccione un simulador</label>
-                                    <div class="col-sm-6">
+                                    <label for="sim_secuencia" class="col-form-label  ">Seleccione Equipo</label>
+                                    <div class="col-sm-6 center">
                                         <select id="sim_secuencia" name="simulador" class="form-select" aria-label="Simulador">
-                                            <option>Simulador 1</option>
-                                            <option>Simulador 2</option>
+                                            <option>Equipo simulador de lluvia</option>
+                                            <option>Equipo simulador 2.0</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col">
+                            <div class="g-col-6 g-col-md-4">
                                 <div class=" my-4 form-group">
-                                    <label for="sim_secuencia" class=" col-form-label ">Seleccione una secuencia</label>
-                                    <div class="col-sm-6">
+                                    <label for="sim_secuencia" class=" col-form-label ">Seleccione Simulación</label>
+                                    <div class="col-sm-6 center">
                                         <select id="sim_secuencia" name="simulador" class="form-select" aria-label="Simulador">
-                                            <option>Secuencia 1</option>
-                                            <option>Secuencia 2</option>
+                                            <option>Simulación 1</option>
+                                            <option>Simulación 2</option>
                                         </select>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="my-4 form-group">
-                                <label for="add_descripcion" class="col-sm-4 col-form-label">Válvulas</label>
-                                <div class="col-sm-6">
-                                    <ul class="row">
-                                        <a class="mb-3 dropdown-item" href="#">Válvula 1</a>
-                                        <a class="mb-3 dropdown-item" href="#">Válvula 2</a>
-                                        <a class="mb-3 dropdown-item" href="#">Válvula 3</a>
-                                    </ul>
                                 </div>
                             </div>
                         </div>
                         <div class="contenido1">
                             <div class = "row my-4">
                                 <div class= "col ">
-                                    <NuxtLink to="/operador/secuencia"><CancelButtom :cancelbutton = "cancelbutton"/></NuxtLink>
+                                    <NuxtLink to="/operador/main-operador"><CancelButtom :cancelbutton = "cancelbutton"/></NuxtLink>
                                 </div>
                                 <div class="col">    
-                                    <NuxtLink to="/operador/secuencia"><SubmitButton :submitbutton = "submitbutton"/></NuxtLink>
+                                    <NuxtLink to="/operador/iniciar-simulacion"><SubmitButton :submitbutton = "submitbutton"/></NuxtLink>
                                 </div>
                             </div>
                         </div>
