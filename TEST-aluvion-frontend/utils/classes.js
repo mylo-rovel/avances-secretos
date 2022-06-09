@@ -1,4 +1,4 @@
-export class Evento {
+export class NuevoEvento {
     #intensidad = 0;
     #duracion = 0;
 

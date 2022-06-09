@@ -1,4 +1,4 @@
-import { Evento } from "~/utils/classes";
+import { NuevoEvento } from '~/utils/classes.js';
 
 export const secuenciasStateMethods = {
     // añade una fila a la tabla
@@ -9,7 +9,7 @@ export const secuenciasStateMethods = {
         // arr => sólo para obtener los elementos rapidamente.
         // para guardar el estado hay que usar el objeto state y sus propiedades
         const arr = state.listaEventos;
-        const newEvento = new Evento(0, 0);
+        const newEvento = new NuevoEvento(0, 0);
         
         if (indexToInsert === 0){
             state.listaEventos.unshift(newEvento);
@@ -53,7 +53,7 @@ export const secuenciasStateMethods = {
         return true;
     },
 
-    guardarListaEventos(state) {
+    async guardarListaEventos (state) {
         state.secuencias[state.currentSecuencia] = [... state.listaEventos];
     }
 }

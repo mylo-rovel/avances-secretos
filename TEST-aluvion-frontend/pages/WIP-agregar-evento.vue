@@ -12,9 +12,9 @@ export default Vue.extend({
             intensidadTotalListaEventos: 0,
         }
     },
-    computed: mapState(["listaEventos"]) ,
+    computed: mapState(["listaEventos", "secuenciasFormateadas", "urlApi"]) ,
     methods: {
-        ...mapMutations(["addEvento", "removeEvento", "setNuevoValorEvento", "guardarListaEventos"]),
+        ...mapMutations(["addEvento", "removeEvento", "setNuevoValorEvento", "guardarListaEventos", "formatearSecuencias"]),
 
         updateDuracionTotalListaEventos() {
             this.duracionTotalListaEventos = this.listaEventos.reduce((acc, evento) => acc + evento.getDuracion(), 0);
@@ -28,6 +28,26 @@ export default Vue.extend({
             this.setNuevoValorEvento(dataObject);
             this.updateDuracionTotalListaEventos();
             this.updateIntensidadTotalListaEventos();
+        },
+
+        async enviarNuevaSimulacion({$axios}){
+            console.clear()
+            this.guardarListaEventos();
+            const serverPath = `${this.urlApi}/simulacion`;
+            const objectToSend = {
+                idSimulador: "1",
+                rutOperador: "10000000-0",
+                nombre: "simulacion1998",
+                descripcion: "prueba1 hola mundo",
+                secuencias: [... this.secuenciasFormateadas]
+            };
+            const serverResponse = await this.$axios.$post(serverPath, objectToSend).catch(err => err);
+            if (serverResponse instanceof Error) {
+                alert("ERROR. rayos :(", serverResponse)
+                return false;
+            }
+            alert(serverResponse);
+            return true;
         }
     }
 })
@@ -58,7 +78,7 @@ export default Vue.extend({
     </article>
     <article class="bottom-ribbon">
         <div class="save-button">
-            <button @click="guardarListaEventos">GUARDAR</button>
+            <button @click="enviarNuevaSimulacion">GUARDAR</button>
         </div>
         <div class="total-duration-container">
             <p class="total-duration-title">Duración total</p>
@@ -83,7 +103,6 @@ export default Vue.extend({
 .add-events-container {
     width: fit-content;
     margin: 0 auto;
-    background-color: red;
 }
 
 .events-table-container{
@@ -162,8 +181,6 @@ th {
     display: flex;
     margin-top: 2rem;
     font-size: 1.1rem;
-
-    /* background-color: red; */
 }
 
 .total-duration-container {
@@ -179,16 +196,11 @@ th {
     width: 12rem;
 }
 
-/* .total-duration-container{
-    background-color: orange;
-} */
+
 .total-duration-title{
-    /* background-color: violet; */
     width: 10rem;
 }
-/* .total-duration-time-row{
-    background-color: blue;
-} */
+
 .total-duration-number{
     border: 1px solid black;
     padding: 0.1rem 0.6rem;

@@ -2,6 +2,7 @@ import { secuenciasStateMethods } from "~/store/secuenciasStateMethods.js";
 
 // El estado corresponde
 export const state = () => ({
+    urlApi: "http://localhost:8081/api",
     // solo para entender cómo funciona el store o 'estado global'
     counter:0,
 
@@ -21,6 +22,8 @@ export const state = () => ({
     secuencias: [
         [],[],[]
     ],
+
+    secuenciasFormateadas: [],
 });
 
 // funciones asincronas
@@ -55,11 +58,26 @@ export const mutations = {
         return true;
     },
 
-
-    // formatearSecuencias(state) {
-    //     const valvulas = [... state.secuencias];
-    //     for (let i=0; i < valvulas.length; i++) {
-    //         valvulas[i] = formatSecuencia
-    //     }
-    // }
+    // obtenemos una estructura 3d de los eventos => 
+    // [   [ eventoArr1Val1, eventoArr2Val1, ...],          SECUENCIA 1
+    //     [ eventoArr1Val2, eventoArr2Val2, ...],          SECUENCIA 2
+    //     [ eventoArr1Val3, eventoArr2Val3, ...],          SECUENCIA 3
+    //]
+    // eventoArr1Val1 = [24, 34] => [intensidad, duracion]
+    // EL PORQUÉ DE ESTO RADICA EN QUE NO SE ME OCURRIÓ CÓMO ENVIAR LOS OBJETOS EVENTOS
+    // ASÍ TAL CUAL SE CREAN EN JS
+    formatearSecuencias(state) {
+        const valvulas = [];
+        for (let i=0; i < state.secuencias.length; i++) {        
+            let secFormateada = [];
+            for (let j=0; j < state.secuencias[i].length; j++){
+                // getValoresEventos: [int, int]
+                const eventoArr = state.secuencias[i][j].getValoresEvento();
+                secFormateada.push(eventoArr);
+            }
+            valvulas.push(secFormateada);
+        }
+        state.secuenciasFormateadas = [... valvulas];
+        return state.secuenciasFormateadas;
+    }
 }
