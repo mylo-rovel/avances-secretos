@@ -18,12 +18,15 @@ export const state = () => ({
     //! => su valor será modificado usando la funcion 'setSecuenciaModificar'
     currentSecuencia: 0,
     
-    // Evento [][] => array de listaEventos. Cada elemento es una válvula
+    // secuencias una estructura 3d de los eventos => 
+    // [   [ eventoArr1Val1, eventoArr2Val1, ...],          SECUENCIA 1
+    //     [ eventoArr1Val2, eventoArr2Val2, ...],          SECUENCIA 2
+    //     [ eventoArr1Val3, eventoArr2Val3, ...],          SECUENCIA 3
+    //]
+    // eventoArr1Val1 = [24, 34] => [intensidad, duracion]
     secuencias: [
         [],[],[]
     ],
-
-    secuenciasFormateadas: [],
 });
 
 // funciones asincronas
@@ -58,26 +61,4 @@ export const mutations = {
         return true;
     },
 
-    // obtenemos una estructura 3d de los eventos => 
-    // [   [ eventoArr1Val1, eventoArr2Val1, ...],          SECUENCIA 1
-    //     [ eventoArr1Val2, eventoArr2Val2, ...],          SECUENCIA 2
-    //     [ eventoArr1Val3, eventoArr2Val3, ...],          SECUENCIA 3
-    //]
-    // eventoArr1Val1 = [24, 34] => [intensidad, duracion]
-    // EL PORQUÉ DE ESTO RADICA EN QUE NO SE ME OCURRIÓ CÓMO ENVIAR LOS OBJETOS EVENTOS
-    // ASÍ TAL CUAL SE CREAN EN JS
-    formatearSecuencias(state) {
-        const valvulas = [];
-        for (let i=0; i < state.secuencias.length; i++) {        
-            let secFormateada = [];
-            for (let j=0; j < state.secuencias[i].length; j++){
-                // getValoresEventos: [int, int]
-                const eventoArr = state.secuencias[i][j].getValoresEvento();
-                secFormateada.push(eventoArr);
-            }
-            valvulas.push(secFormateada);
-        }
-        state.secuenciasFormateadas = [... valvulas];
-        return state.secuenciasFormateadas;
-    }
 }

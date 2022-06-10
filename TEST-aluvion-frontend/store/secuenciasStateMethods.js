@@ -3,13 +3,10 @@ import { NuevoEvento } from '~/utils/classes.js';
 export const secuenciasStateMethods = {
     // añade una fila a la tabla
     addEvento(state, indexToInsert) {
-
-        // let arrSecuencia = state.secuencias[state.currentSecuencia];
-
         // arr => sólo para obtener los elementos rapidamente.
         // para guardar el estado hay que usar el objeto state y sus propiedades
         const arr = state.listaEventos;
-        const newEvento = new NuevoEvento(0, 0);
+        const newEvento = [0,0];
         
         if (indexToInsert === 0){
             state.listaEventos.unshift(newEvento);
@@ -18,9 +15,6 @@ export const secuenciasStateMethods = {
         const leftArr = arr.slice(0,indexToInsert);
         const rightArr = arr.slice(indexToInsert);
         state.listaEventos = [...leftArr, newEvento, ...rightArr];
-        // const leftArr = arrSecuencia.slice(0,indexToInsert);
-        // const rightArr = arrSecuencia.slice(indexToInsert);
-        // arrSecuencia = [...leftArr, newEvento, ...rightArr];
         return true;
     },
 
@@ -46,14 +40,17 @@ export const secuenciasStateMethods = {
         if (newValue < 0) { return false; }
         
         if (attriToModify === "duracion") {
-            state.listaEventos[rowIndex].setDuracion(newValue);
+            if (newValue < 0 || newValue > 9999){ return false; }
+            state.listaEventos[rowIndex][1] = newValue;
             return true;
         }
-        state.listaEventos[rowIndex].setIntensidad(newValue);
+
+        if (newValue < 0 || newValue > 100){ return false; }
+        state.listaEventos[rowIndex][0] = newValue;
         return true;
     },
 
-    async guardarListaEventos (state) {
+    async setListaEventos (state) {
         state.secuencias[state.currentSecuencia] = [... state.listaEventos];
     }
 }

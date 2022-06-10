@@ -1,8 +1,6 @@
 <script>
 import Vue from 'vue'
 import {mapState, mapMutations} from "vuex";
-// import {addGlobalEventListener} from "~/utils/utility_functions.js";
-// addGlobalEventListener("click", ".plus-button", e => console.log("\n\n\naaaa\n\n\n",e))
 
 export default Vue.extend({
     name: "AddEventFrame",
@@ -12,17 +10,16 @@ export default Vue.extend({
             intensidadTotalListaEventos: 0,
         }
     },
-    computed: mapState(["listaEventos", "secuenciasFormateadas", "urlApi"]) ,
+    computed: mapState(["listaEventos", "secuencias", "urlApi"]) ,
     methods: {
-        ...mapMutations(["addEvento", "removeEvento", "setNuevoValorEvento", "guardarListaEventos", "formatearSecuencias"]),
+        ...mapMutations(["addEvento", "removeEvento", "setNuevoValorEvento", "setListaEventos"]),
 
-        updateDuracionTotalListaEventos() {
-            this.duracionTotalListaEventos = this.listaEventos.reduce((acc, evento) => acc + evento.getDuracion(), 0);
-        },
         updateIntensidadTotalListaEventos() {
-            this.intensidadTotalListaEventos = this.listaEventos.reduce((acc, evento) => acc + evento.getIntensidad(), 0);
+            this.intensidadTotalListaEventos = this.listaEventos.reduce((acc, evento) => acc + evento[0], 0);
         },
-
+        updateDuracionTotalListaEventos() {
+            this.duracionTotalListaEventos = this.listaEventos.reduce((acc, evento) => acc + evento[1], 0);
+        },
         actualizarEvento(eventObj, attriToModify, rowIndex){
             const dataObject = {newValue: eventObj.target.value, attriToModify, rowIndex};
             this.setNuevoValorEvento(dataObject);
@@ -30,24 +27,28 @@ export default Vue.extend({
             this.updateIntensidadTotalListaEventos();
         },
 
-        async enviarNuevaSimulacion({$axios}){
+        async guardarListaEventos({$axios}){
             console.clear()
-            this.guardarListaEventos();
+            this.setListaEventos();
+
+
             const serverPath = `${this.urlApi}/simulacion`;
-            const objectToSend = {
+            let objectToSend = {
                 idSimulador: "1",
                 rutOperador: "10000000-0",
                 nombre: "simulacion1998",
                 descripcion: "prueba1 hola mundo",
-                secuencias: [... this.secuenciasFormateadas]
+                secuencias: [... this.secuencias]
             };
-            const serverResponse = await this.$axios.$post(serverPath, objectToSend).catch(err => err);
-            if (serverResponse instanceof Error) {
-                alert("ERROR. rayos :(", serverResponse)
-                return false;
-            }
-            alert(serverResponse);
-            return true;
+            objectToSend = JSON.stringify(objectToSend);
+            console.log(objectToSend);
+            // const serverResponse = await this.$axios.$post(serverPath, objectToSend).catch(err => err);
+            // if (serverResponse instanceof Error) {
+            //     alert("ERROR. rayos :(", serverResponse)
+            //     return false;
+            // }
+            // alert(serverResponse);
+            // return true;
         }
     }
 })
@@ -67,9 +68,9 @@ export default Vue.extend({
             <tr v-for="(evento, rowIndex) in listaEventos" :key="`eventKey_${rowIndex}`" class="table-row">
                 <div class="plus-button" @click="() => {addEvento(rowIndex+1); updateDuracionTotalListaEventos(); updateIntensidadTotalListaEventos();}">+</div>
                 <td class="event-element intensity-element">
-                    <input type="number"  :placeholder="evento.getIntensidad()"  :value="evento.getIntensidad()"   @input="(e) => actualizarEvento(e, `intensidad`, rowIndex)" ></td>
+                    <input type="number"  :placeholder="evento[0]"  :value="evento[0]"   @input="(e) => actualizarEvento(e, `intensidad`, rowIndex)" ></td>
                 <td class="event-element duration-element">
-                    <input type="number"  :placeholder="evento.getDuracion()"    :value="evento.getDuracion()"     @input="(e) => actualizarEvento(e, `duracion`, rowIndex)"   ></td>
+                    <input type="number"  :placeholder="evento[1]"    :value="evento[1]"     @input="(e) => actualizarEvento(e, `duracion`, rowIndex)"   ></td>
                 <div class="minus-button" @click="() => {removeEvento(rowIndex); updateDuracionTotalListaEventos(); updateIntensidadTotalListaEventos();}">-</div>
             </tr>
             
@@ -78,7 +79,7 @@ export default Vue.extend({
     </article>
     <article class="bottom-ribbon">
         <div class="save-button">
-            <button @click="enviarNuevaSimulacion">GUARDAR</button>
+            <button @click="guardarListaEventos">GUARDAR</button>
         </div>
         <div class="total-duration-container">
             <p class="total-duration-title">Duración total</p>
