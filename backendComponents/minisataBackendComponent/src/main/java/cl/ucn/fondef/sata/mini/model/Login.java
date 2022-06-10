@@ -13,7 +13,8 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "login")
-@ToString @EqualsAndHashCode
+@ToString
+@EqualsAndHashCode
 public class Login {
 
     @Id

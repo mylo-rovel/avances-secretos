@@ -4,13 +4,10 @@
 
 package cl.ucn.fondef.sata.mini.coredao;
 
-
-import cl.ucn.fondef.sata.mini.model.Login;
-import cl.ucn.fondef.sata.mini.model.RegistroUsuarios;
 import cl.ucn.fondef.sata.mini.model.Usuario;
-import com.mysql.cj.log.Log;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
+import cl.ucn.fondef.sata.mini.model.Login;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,43 +23,32 @@ public class CoreDaoImpl implements CoreDao {
     private EntityManager entityManager;
 
     @Override
-    public boolean iniciarSesion(Login usuarioLogin) {
+    public boolean credencialesSonCorrectas(String correoUsuario, String contrasenaUsuario) {
         // Usuario => con mayuscula porque se refiere a la clase models/Usuario
         // dentro de las clases de models se señala qué tabla y campo es cada clase y atributo
         String sqlQuery = "FROM Login WHERE correo = :correo";
 
-        List <Login> listaResultado=  entityManager
-                .createQuery(sqlQuery)
-                .setParameter("correo", usuarioLogin.getCorreo())
-                .getResultList();
+        List <Login> listaResultado=  entityManager.createQuery(sqlQuery).setParameter("correo", correoUsuario).getResultList();
 
-        if (listaResultado.isEmpty()) {
-            return false;
-        }
+        if (listaResultado.isEmpty()) { return false; }
 
-        String contrasenaHashBaseDatos = listaResultado.get(0).getContrasena();
+        String contrasenaBaseDatos = listaResultado.get(0).getContrasena();
 
         // instanciar el objeto que nos permitirá comparar las contraseñas
         Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
 
         // si las contraseñas son equivalentes, entonces retornaremos true
-        return argon2.verify(contrasenaHashBaseDatos, usuarioLogin.getContrasena());
+        return argon2.verify(contrasenaBaseDatos, contrasenaUsuario);
     }
 
     @Override
-    public void registrarUsuario(Usuario usuario) {
-
-    }
-
-    @Override
-    public List<RegistroUsuarios> obtenerAdmins() {
+    public Usuario obtenerUsuarioPorCorreo(String correoUsuario) {
         // Usuario => con mayuscula porque se refiere a la clase models/Usuario
-        String sqlQuery = "FROM RegistroUsuarios WHERE rutAdministrador = :rutAdministrador ";
-
-        // dentro de las clases de models hay que señalar que se refieren a las tablas de la db
-        return entityManager
-                .createQuery(sqlQuery)
-                .setParameter("rutAdministrador", "12345678-0")
-                .getResultList();
+        // dentro de las clases de models se señala qué tabla y campo es cada clase y atributo
+        String sqlQuery = "FROM Usuario WHERE correo = :correo";
+        List <Usuario> listaResultado=  entityManager.createQuery(sqlQuery).setParameter("correo", correoUsuario).getResultList();
+        if (listaResultado.isEmpty()) { return null; }
+        return listaResultado.get(0);
     }
+
 }

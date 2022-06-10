@@ -13,8 +13,8 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "simulador")
-@ToString @EqualsAndHashCode
-
+@ToString
+@EqualsAndHashCode
 public class SimuladorTEMPORAL {
 
     @Id

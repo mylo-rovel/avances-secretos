@@ -4,54 +4,35 @@
 
 package cl.ucn.fondef.sata.mini.web;
 
-import cl.ucn.fondef.sata.mini.coredao.CoreDao;
-import cl.ucn.fondef.sata.mini.grpc.CoreClientGrpcImpl;
-import cl.ucn.fondef.sata.mini.model.Login;
-import cl.ucn.fondef.sata.mini.model.RegistroUsuarios;
-import cl.ucn.fondef.sata.mini.utilities.JwtUtil;
-import cl.ucn.fondef.sata.mini.utilities.ObjetoSesion;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import cl.ucn.fondef.sata.mini.grpc.WebCoreClientGrpcImpl;
+import cl.ucn.fondef.sata.mini.grpcobjects.GrpcCredenciales;
+import cl.ucn.fondef.sata.mini.grpcobjects.GrpcObjetoSesion;
+import cl.ucn.fondef.sata.mini.grpcobjects.GrpcParametrosInicioSimulacion;
+import cl.ucn.fondef.sata.mini.utilities.JwtUtil;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
-/**
- * The MiniRest Controller.
- *
- * @author Diego Urrutia-Astorga.
- */
-@RestController
 @Slf4j
+@RestController
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 public class WebController {
-    // este servidor se conecta con nuxt
-    @Autowired
-    CoreClientGrpcImpl coreClientGrpcImpl;
+    // ESTE SERVIDOR ES EL PUENTE ENTRE EL WEBBROWSER Y EL "CENTRAL CORE"
 
     @Autowired
-    CoreDao coreDao;
-
-    @Autowired
-    private JwtUtil jwtUtil;
-/*
-    // parte encender led por grpc
-    @RequestMapping(value = "api/leddeldestino", method = RequestMethod.GET)
-    public String handleLedRequest() {
-        return coreClientGrpcImpl.sendReqWebToCore("encenderLed");
-    }*/
+    private WebCoreClientGrpcImpl webCoreClientGrpc;
 
     @RequestMapping(value = "api/login", method = RequestMethod.POST)
-    public String handleLedRequest(@RequestBody Login login) {
-        // si las credenciales son correctas
-        if (coreDao.iniciarSesion(login)) {
-            return jwtUtil.create(login.getCorreo(), "Operador");
-        }
-        return "credenciales incorrectas";
+    public GrpcObjetoSesion handleLedRequest(@RequestBody GrpcCredenciales grpcCredenciales) {
+        // acá se podrían checkear los campos entregados por el navegador
+        return webCoreClientGrpc.loginUsuario(grpcCredenciales);
     }
 
-    @RequestMapping(value = "api/usuario", method = RequestMethod.GET)
-    public List<RegistroUsuarios> getAdmins() {
-        return coreDao.obtenerAdmins();
+    @RequestMapping(value = "api/simulacion", method = RequestMethod.POST)
+    public boolean displaySimulacionEnviada(@RequestBody GrpcParametrosInicioSimulacion parametrosInicioSimulacion) {
+        System.out.println("nuevaSimulacion = " + parametrosInicioSimulacion);
+        return true;
     }
 
 }

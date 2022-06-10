@@ -30,7 +30,7 @@ service WebCoreCommuService {
     rpc getSimulaciones(Empty) returns (ListaSimulacionesAcotada){}
     rpc getSimulacionEspecifica(IdElemento) returns (SimulacionEspecifica){}
 
-    // el cliente nuxt enviará la petición de inicio y la recibirá el "Backend App". Luego, 
+    // el cliente nuxt enviará la petición de inicio y la recibirá el "Backend App". Luego,
     // este ejecutará la función de abajo para enviarle al "Central Core" los "ParametrosSimulacion".
     // El "Central Core", como server, recibirá los valores para redirigirlos ejecutando (1).
     rpc sendValoresInicioSimulacion(ParametrosInicioSimulacion) returns (MensajeResultadoOperacion){}
@@ -39,7 +39,7 @@ service WebCoreCommuService {
     // esta funcion busca preguntarle al Raspberry qué simulador y simulación está corriendo
     // va de la mano con la funcion (2)      OJO  bool simulacionIniciada
     rpc getSimulacionEjecutandose(Empty) returns (SimulacionEjecutandose){}
-    // si no hay simulacion iniciada, los valores string deben ser "" y el atributo 
+    // si no hay simulacion iniciada, los valores string deben ser "" y el atributo
     // simulacionIniciada = false
 
     // esta funcion va de la mano con (3) y busca obtener los valores obtenidos de los sensores
@@ -77,7 +77,6 @@ message Credenciales {
 message ObjetoSesion {
     bool sesion_iniciada = 1;
     string Json_Web_Token = 2;
-    string rol_usuario = 3;
 }
 
 message MensajeResultadoOperacion {
@@ -178,10 +177,9 @@ message SimulacionEspecifica {
 message ParametrosInicioSimulacion {
     int32 id_simulador = 1;
     string rut_operador = 2;
-    string id_simulador = 3;
-    string nombre_simulacion = 4;
-    string descripcion_simulacion = 5;
-    repeated Secuencia secuencia_valvula = 6;
+    string nombre_simulacion = 3;
+    string descripcion_simulacion = 4;
+    repeated Secuencia secuencia_valvula = 5;
 }
 
 message ResultadoInicioSimulacion {

@@ -11,9 +11,7 @@ import cl.ucn.fondef.sata.mini.model.Usuario;
 import java.util.List;
 
 public interface CoreDao {
-    boolean iniciarSesion(Login usuarioLogin);
+    boolean credencialesSonCorrectas(String correoUsuario, String contrasenaUsuario);
 
-    void registrarUsuario(Usuario usuario);
-
-    List<RegistroUsuarios> obtenerAdmins ();
+    Usuario obtenerUsuarioPorCorreo(String correoUsuario);
 }

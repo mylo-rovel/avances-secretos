@@ -77,7 +77,6 @@ message Credenciales {
 message ObjetoSesion {
   bool sesion_iniciada = 1;
   string Json_Web_Token = 2;
-  string rol_usuario = 3;
 }
 
 message MensajeResultadoOperacion {
