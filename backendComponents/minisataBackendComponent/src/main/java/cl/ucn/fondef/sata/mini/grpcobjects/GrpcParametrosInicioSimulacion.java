@@ -11,7 +11,7 @@ message ParametrosInicioSimulacion {
     string rut_operador = 2;
     string nombre_simulacion = 3;
     string descripcion_simulacion = 4;
-    repeated Secuencia secuencia_valvula = 5;
+    repeated Secuencia lista_secuencias = 5;
 }
 */
 @ToString
@@ -35,5 +35,5 @@ public class GrpcParametrosInicioSimulacion {
 
     @Getter
     @Setter
-    private int[][][] secuenciaValvula;
+    private GrpcSecuencia[] listaSecuencias;
 }

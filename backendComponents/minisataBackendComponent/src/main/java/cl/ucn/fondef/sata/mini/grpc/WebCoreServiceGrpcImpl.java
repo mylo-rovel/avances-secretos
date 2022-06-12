@@ -1,6 +1,8 @@
 package cl.ucn.fondef.sata.mini.grpc;
 
 import cl.ucn.fondef.sata.mini.coredao.CoreDao;
+import cl.ucn.fondef.sata.mini.grpcobjects.GrpcUsuario;
+import cl.ucn.fondef.sata.mini.grpcobjects.GrpcUsuarioNuevo;
 import cl.ucn.fondef.sata.mini.model.Usuario;
 import cl.ucn.fondef.sata.mini.utilities.JwtUtil;
 import io.grpc.stub.StreamObserver;
@@ -41,6 +43,26 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         ObjetoSesion grpcResponse = ObjetoSesion.newBuilder()
                 .setSesionIniciada(credencialesCorrectas)
                 .setJsonWebToken(jwtUsuario)
+                .build();
+
+        // 2do: Enviar el objeto construido al cliente
+        responseObserver.onNext(grpcResponse);
+
+        // 3ro: Terminar el proceso
+        responseObserver.onCompleted();
+    }
+
+    public void agregarUsuario(UsuarioNuevo reqUsuarioNuevo, StreamObserver<MensajeResultadoOperacion> responseObserver){
+        GrpcUsuario datosUsuario = new GrpcUsuario();
+        GrpcUsuarioNuevo usuarioNuevo = new GrpcUsuarioNuevo();
+
+//        datosUsuario.setNombre(reqUsuarioNuevo.get);
+//        coreDao.
+
+        // PROCESO DE ENVÍO DE RESPUESTA GRPC
+        // 1ro: Construir el objeto que almacenará la información a devolver al cliente
+        MensajeResultadoOperacion grpcResponse = MensajeResultadoOperacion.newBuilder()
+                .setMensajeTexto("A")
                 .build();
 
         // 2do: Enviar el objeto construido al cliente

@@ -28,11 +28,12 @@ public class CoreDaoImpl implements CoreDao {
         // dentro de las clases de models se señala qué tabla y campo es cada clase y atributo
         String sqlQuery = "FROM Login WHERE correo = :correo";
 
-        List <Login> listaResultado=  entityManager.createQuery(sqlQuery).setParameter("correo", correoUsuario).getResultList();
+        List listaResultado=  entityManager.createQuery(sqlQuery).setParameter("correo", correoUsuario).getResultList();
 
         if (listaResultado.isEmpty()) { return false; }
 
-        String contrasenaBaseDatos = listaResultado.get(0).getContrasena();
+        Login usuarioLogin = (Login) listaResultado.get(0);
+        String contrasenaBaseDatos = usuarioLogin.getContrasena();
 
         // instanciar el objeto que nos permitirá comparar las contraseñas
         Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
@@ -46,9 +47,9 @@ public class CoreDaoImpl implements CoreDao {
         // Usuario => con mayuscula porque se refiere a la clase models/Usuario
         // dentro de las clases de models se señala qué tabla y campo es cada clase y atributo
         String sqlQuery = "FROM Usuario WHERE correo = :correo";
-        List <Usuario> listaResultado=  entityManager.createQuery(sqlQuery).setParameter("correo", correoUsuario).getResultList();
+        List listaResultado=  entityManager.createQuery(sqlQuery).setParameter("correo", correoUsuario).getResultList();
         if (listaResultado.isEmpty()) { return null; }
-        return listaResultado.get(0);
+        return (Usuario) listaResultado.get(0);
     }
 
 }

@@ -15,10 +15,10 @@ export default Vue.extend({
         ...mapMutations(["addEvento", "removeEvento", "setNuevoValorEvento", "setListaEventos"]),
 
         updateIntensidadTotalListaEventos() {
-            this.intensidadTotalListaEventos = this.listaEventos.reduce((acc, evento) => acc + evento[0], 0);
+            this.intensidadTotalListaEventos = this.listaEventos.reduce((acc, evento) => acc + evento['intensidad'], 0);
         },
         updateDuracionTotalListaEventos() {
-            this.duracionTotalListaEventos = this.listaEventos.reduce((acc, evento) => acc + evento[1], 0);
+            this.duracionTotalListaEventos = this.listaEventos.reduce((acc, evento) => acc + evento['duracion'], 0);
         },
         actualizarEvento(eventObj, attriToModify, rowIndex){
             const dataObject = {newValue: eventObj.target.value, attriToModify, rowIndex};
@@ -30,25 +30,33 @@ export default Vue.extend({
         async guardarListaEventos({$axios}){
             console.clear()
             this.setListaEventos();
+            // const serverPath = `${this.urlApi}/simulacion`;
+            const serverPath ='http://localhost:8081/api/simulaciones';
 
-
-            const serverPath = `${this.urlApi}/simulacion`;
             let objectToSend = {
                 idSimulador: "1",
                 rutOperador: "10000000-0",
                 nombre: "simulacion1998",
                 descripcion: "prueba1 hola mundo",
-                secuencias: [... this.secuencias]
+                listaSecuencias: [... this.secuencias]
             };
             objectToSend = JSON.stringify(objectToSend);
             console.log(objectToSend);
-            // const serverResponse = await this.$axios.$post(serverPath, objectToSend).catch(err => err);
-            // if (serverResponse instanceof Error) {
-            //     alert("ERROR. rayos :(", serverResponse)
-            //     return false;
-            // }
-            // alert(serverResponse);
-            // return true;
+
+            const otherHeaders = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJjb3JyZW90ZXN0ZW8yQGpvdG1haWwuY29tIiwiaWF0IjoxNjU1MDU1MjAyLCJzdWIiOiJPcGVyYWRvciIsImlzcyI6Ik1haW4iLCJleHAiOjE2NTUxNDE2MDJ9.woGqMNxHLqywEZw9W_RBqf6dRECPMaDtNkQ0gg91bw8',
+                }
+            }
+    
+            const serverResponse = await this.$axios.$post(serverPath, objectToSend, otherHeaders).catch(err => err);
+            if (serverResponse instanceof Error) {
+                alert("ERROR. rayos :(", serverResponse)
+                return false;
+            }
+            alert(serverResponse);
+            return true;
         }
     }
 })
@@ -68,9 +76,9 @@ export default Vue.extend({
             <tr v-for="(evento, rowIndex) in listaEventos" :key="`eventKey_${rowIndex}`" class="table-row">
                 <div class="plus-button" @click="() => {addEvento(rowIndex+1); updateDuracionTotalListaEventos(); updateIntensidadTotalListaEventos();}">+</div>
                 <td class="event-element intensity-element">
-                    <input type="number"  :placeholder="evento[0]"  :value="evento[0]"   @input="(e) => actualizarEvento(e, `intensidad`, rowIndex)" ></td>
+                    <input type="number"  :placeholder="evento['intensidad']"  :value="evento['intensidad']"   @input="(e) => actualizarEvento(e, `intensidad`, rowIndex)" ></td>
                 <td class="event-element duration-element">
-                    <input type="number"  :placeholder="evento[1]"    :value="evento[1]"     @input="(e) => actualizarEvento(e, `duracion`, rowIndex)"   ></td>
+                    <input type="number"  :placeholder="evento['duracion']"    :value="evento['duracion']"     @input="(e) => actualizarEvento(e, `duracion`, rowIndex)"   ></td>
                 <div class="minus-button" @click="() => {removeEvento(rowIndex); updateDuracionTotalListaEventos(); updateIntensidadTotalListaEventos();}">-</div>
             </tr>
             

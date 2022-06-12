@@ -66,7 +66,7 @@ service CoreRaspiCommuService {
 message Empty {}
 
 message IdElemento {
-  int32 id = 1;
+  int64 id = 1;
 }
 
 message Credenciales {
@@ -103,11 +103,11 @@ message Rut {
 }
 
 message ListaUsuarios {
-  repeated Usuario usuario = 1;
+  repeated Usuario lista_usuarios = 1;
 }
 
 message CompFisico {
-  int32 id = 1;
+  int64 id = 1;
   string descripcion = 2;
   int32 pin = 3;
   bool estado = 4;
@@ -119,9 +119,9 @@ message Simulador {
   string descripcion = 2;
   string enlace_repo = 3;
   repeated bytes imagen = 4;
-  repeated CompFisico valvulas = 5;
-  repeated CompFisico sensores = 6;
-  repeated CompFisico camaras = 7;
+  repeated CompFisico lista_valvulas = 5;
+  repeated CompFisico lista_sensores = 6;
+  repeated CompFisico lista_camaras = 7;
   bool estado = 8;
   string rut_configurador = 9;
 }
@@ -129,26 +129,26 @@ message Simulador {
 // esto corresponde a una fila de la tabla display simuladores
 // tambien sirve para las listas desplegables
 message SimuladorAcotado {
-  int32 id = 1;
+  int64 id = 1;
   string nombre = 2;
   bool estado = 3;
 }
 
 message ListaSimuladoresAcotado {
-  repeated SimuladorAcotado simuladorAcotado = 1;
+  repeated SimuladorAcotado lista_simuladores_acotado = 1;
 }
 
 // esto corresponde a una fila de la tabla display simulaciones
 // tambien sirve para las listas desplegables
 message SimulacionAcotada {
-  int32 id_simulacion = 1;
+  int64 id_simulacion = 1;
   string nombre_simulador = 2;
   string fecha_simulacion = 3;
-  int32 agua_caida = 4;
+  double agua_caida = 4;
 }
 
 message ListaSimulacionesAcotada {
-  repeated SimulacionAcotada listaSimulacionesAcotada = 1;
+  repeated SimulacionAcotada lista_simulaciones_acotada = 1;
 }
 
 // cada Evento es una fila de la tabla generador de eventos
@@ -160,26 +160,24 @@ message Evento {
 // una secuencia es el conjunto de eventos en una válvula
 // una secuencia es cada tabla de eventos
 message Secuencia {
-  int32 id_simulador = 1;
-  string nombre = 2;
-  repeated Evento lista_eventos = 3;
+  repeated Evento lista_eventos = 1;
 }
 
 message SimulacionEspecifica {
-  int32 id_simulacion = 1;
+  int64 id_simulacion = 1;
   string fecha_simulacion = 2;
   string nombre_simulador = 3;
   string descripcion_simulador = 4;
-  repeated Secuencia secuencia_valvula = 5;
-  int32 agua_caida = 6;
+  repeated Secuencia lista_secuencias = 5;
+  double agua_caida = 6;
 }
 
 message ParametrosInicioSimulacion {
-  int32 id_simulador = 1;
+  int64 id_simulador = 1;
   string rut_operador = 2;
   string nombre_simulacion = 3;
   string descripcion_simulacion = 4;
-  repeated Secuencia secuencia_valvula = 5;
+  repeated Secuencia lista_secuencias = 5;
 }
 
 message ResultadoInicioSimulacion {
@@ -190,12 +188,12 @@ message ResultadoInicioSimulacion {
 
 message SimulacionEjecutandose {
   bool simulacion_ejecutandose = 1;
-  int32 id_simulacion = 2;
-  int32 id_simulador = 3;
+  int64 id_simulacion = 2;
+  int64 id_simulador = 3;
 }
 
 message LecturaSensores {
-  int32 id_simulador = 1;
-  int32 flujo_medido = 2;
-  float tiempo_transcurrido = 3;
+  int64 id_simulador = 1;
+  double flujo_medido = 2;
+  double tiempo_transcurrido = 3;
 }
