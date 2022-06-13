@@ -1,109 +1,97 @@
 <script>
+    import Vue from 'vue'
+    // import {mapState, mapMutations} from "vuex";
+    // import {addGlobalEventListener} from "~/utils/utility_functions.js";
+    // addGlobalEventListener("click", ".plus-button", e => console.log("\n\n\naaaa\n\n\n",e))
 
-import Vue from 'vue'
-
-import SubmitButton from '~/components/SubmitButton.vue'
-import CancelButton from '~/components/CancelButtom.vue'
-import NavbarPag from '~/components/NavbarPag.vue'
-
-export default Vue.extend({
-    name: "ejemplo",
-    components: { SubmitButton, CancelButton},
-  
-    data() {
-        return {
-          "submitbutton": "enviar",
-          "cancelbutton": "cancelar"
-        };
-    },
-    methods:{
-        getMenu(){
-            return{
-                listElements: document.querySelectorAll('.list__button--click')
-            }; 
+    export default Vue.extend({
+        name: "ejemplo",
+        data() {
+            return {
+                elementsObj : {
+                    // Inicio: {esDesplegable:false},
+                    // Perfil: {esDesplegable:false},
+                    // Simulacion: {esDesplegable:false},
+                    // Contacto: {esDesplegable:false},
+                    Inicio: false,
+                    Perfil:  false,
+                    Simulacion:  false,
+                    Contacto: false,
+                }
+            }
         },
-        displayOpcions(){
-            listElements.forEach(listElement => {
-                listElement.addEventListener('click', ()=>{
-                    listElement.classList.toggle('arrow');
-                    let height = 0;
-                    let menu = listElement.nextElementSibling;
-                    if(menu.clientHeight == "0"){
-                        height=menu.scrollHeight;
-                    }
-                    menu.style.height = `${height}px`;
-                })
-            });
+        methods: {
+            abrirMenu(eventObj){
+                const idRouteTitle = eventObj.currentTarget.id.toString().split("_key")[0];
+                console.log(idRouteTitle)
+                // this.elementsObj[idRouteTitle].esDesplegable = !this.elementsObj[idRouteTitle].esDesplegable;
+                this.elementsObj[idRouteTitle] = !this.elementsObj[idRouteTitle];
+            }
         }
-    }
-
-})
+    })
 </script>
-         
 
 <template>
-    <nav class="nav">
-        <ul class="list">
-            <li class="list__item">
+    <nav class="nav ">
+        <ul class=" list ">
+            <!-- <p v-for="element in Object.entries(elementsObj)" :key="`${element[0]}_key`"> 
+                <span :id="`${element[0]}_key`" @click="(e) => abrirMenu(e)"> 
+                    <span class="menu-routes-element">
+                        {{element[0]}}
+                    </span>
+                    <ul v-if="element[1].esDesplegable && element[0]==='Simulación'" class="submenu-routes-menu">
+                        <p ><NuxtLink to="/operador/">Registrar simulacion</NuxtLink></p>
+                        <p ><NuxtLink to="/operador/">Iniciar simulacion</NuxtLink></p>
+                        <p ><NuxtLink to="/operador/">Ver simulacion</NuxtLink></p>
+                        <p ><NuxtLink to="/operador/">Historial de simulaciones</NuxtLink></p>
+                    </ul>
+                </span>
+            </p> -->
+            <li class="list__item" :id="`Inicio_key`" @click="(e) => {}">
                 <div class="list__button">
-                    <img src="assets/dashboard.svg" class="list__img">
-                    <NuxtLink to="/operador/main-operador"><a class="nav__link">Inicio</a></NuxtLink>
+                    <img src="~/assets/home.svg" class="img-icono">
+                    <NuxtLink to="/operador/">Inicio</NuxtLink>
                 </div>
             </li>
-            <li class="list__item">
-                <div class="list__button">
-                    <img src="assets/stats.svg" class="list__img">
-                    <a href="#" class="nav__link">Perfil</a>
-                </div>
+            <li class="list__item" :id="`Perfil_key`" @click="(e) => {}">
+                    <div class="list__button">    
+                        <img src="~/assets/profile.svg" class="img-icono">
+                        <NuxtLink to="/operador/">Perfil</NuxtLink>
+                    </div>
             </li>
-            <li class="list__item list__item--click">
+            <li class="list__item list__item--click" :id="`Simulacion_key`" @click="(e) => abrirMenu(e)" >
                 <div class="list__button list__button--click">
-                    <img src="assets/docs.svg" class="list__img">
-                    <a href="/operador/agregar-secuencia" class="nav__link">Secuencia</a>
-                    <img src="assets/arrow.svg" class="list__arrow">
+                    <img src="~/assets/stats.svg" class="img-icono">
+                    <span class="menu-routes-element">Simulación</span>
+                    <img src="~/assets/arrow.svg" class="list__arrow">
                 </div>
-                <ul class="list__show">
+                <ul v-if="elementsObj['Simulacion']" class="list__show">
                     <li class="list__inside">
-                        <a href="/operador/agregar-secuencia" class="nav__link nav__link--inside">Crear Secuencia</a>
+                        <NuxtLink to="/operador/registrar-simulacion">Registrar simulacion</NuxtLink>
                     </li>
                     <li class="list__inside">
-                        <a href="#" class="nav__link nav__link--inside">Listado de Secuencias</a>
+                        <NuxtLink to="/operador/iniciar-simulacion">Iniciar simulacion</NuxtLink>
+                    </li>
+                    <li class="list__inside">
+                        <NuxtLink to="/operador/ver-simulacion">Ver simulacion</NuxtLink>
+                    </li>
+                    <li class="list__inside">
+                        <NuxtLink to="/operador/lista-secuencia">Historial de simulaciones</NuxtLink>
                     </li>
                 </ul>
             </li>
-            <li class="list__item list__item--click">
-                <div class="list__button list__button--click">
-                    <img src="assets/bell.svg" class="list__img">
-                    <a href="#" class="nav__link">Simulación</a>
-                    <img src="assets/arrow.svg" class="list__arrow">
-                </div>
-                <ul class="list__show">
-                    <li class="list__inside">
-                        <a href="#" class="lala nav__link nav__link--inside">Iniciar Simulación</a>
-                    </li>
-                    <li class="list__inside">
-                        <a href="#" class="nav__link nav__link--inside">Ver Simulación</a>
-                    </li>
-                    <li class="list__inside">
-                        <a href="#" class="nav__link nav__link--inside">Historial de Simulaciones</a>
-                    </li>
-                </ul>
-            </li>
-            <li class="list__item">
+            <li class="list__item" :id="`Contacto_key`" @click="(e) => {}">
                 <div class="list__button">
-                    <img src="assets/message.svg" class="list__img">
-                    <a href="#" class="nav__link">Contacto</a>
+                    <img src="~/assets/message.svg" class="img-icono">
+                    <NuxtLink to="/operador/">Contacto</NuxtLink>
                 </div>
             </li>
         </ul>
     </nav>
 </template>
 
-
 <style>
-
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap');
-
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500&display=swap');
     *{
         margin: 0;
         padding: 0;
@@ -145,7 +133,6 @@ export default Vue.extend({
         border-radius: 0 16px 16px 0;
         background: #fff;
     }
-
     .list__item{
         list-style: none;
         width: 100%;
@@ -182,11 +169,38 @@ export default Vue.extend({
         transition: height .4s;
         height: 0;
     }
-
-        .list__show .list__inside a{
-        width: 2rem;
-        height:2rem;
-        background-color:red;
-        display:grid;
+    .list__inside{
+        box-sizing: border-box;
+        display: list__item;
+        float: none;
+        line-height: normal;
+        position: static;
+        z-index: auto;
     }
+
+    .img-icono{
+        box-sizing: border-box;
+        margin:0;
+        padding:0;
+        display: block;
+        float: none;
+        line-height: normal;
+        position:static;
+        z-index: auto;
+    }
+    .flecha .flecha-inv{
+    transform: rotate(90deg);
+}
+
+    .flecha-inv{
+        margin-left: auto;
+        transition: transform .3s;
+    }
+    .lista-items{
+        list-style: none;
+        width: 100%;
+        text-align: center;
+        overflow: hidden;
+    }
+
 </style>
