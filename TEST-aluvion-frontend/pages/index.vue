@@ -61,7 +61,9 @@ export default Vue.extend({
 						</div>
 					</div>
 					<div class="container-login100-form-btn">
-						<button @click="(e) => enviarOrdenEncender({$axios,e})" class="login100-form-btn">INGRESAR</button>
+						<button @click="(e) => enviarOrdenEncender({$axios,e})" class="login100-form-btn">
+                            <NuxtLink class="beautyButton" to="#">INGRESAR</NuxtLink>
+                        </button>
 					</div>
 				</form>
 				<!--<img class="login100-more" src='~/assets/img/cerro.png'/>-->
@@ -81,6 +83,7 @@ export default Vue.extend({
         width: 100%;
         margin: 0 auto;
     }
+
     .container-login100 {
         width: 100%;  
         min-height: 100vh;
@@ -437,6 +440,12 @@ export default Vue.extend({
     .alert-validate:hover:before {
     visibility: visible;
     opacity: 1;
+    }
+
+    .beautyButton,
+    .beautyButton:hover {
+        text-decoration: none;
+        color: white;
     }
 
     @media (max-width: 992px) {
