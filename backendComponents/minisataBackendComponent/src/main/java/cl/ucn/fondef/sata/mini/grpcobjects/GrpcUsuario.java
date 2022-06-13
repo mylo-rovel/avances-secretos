@@ -22,7 +22,7 @@ public class GrpcUsuario {
 
     @Getter
     @Setter
-    private boolean nombre;
+    private String nombre;
 
     @Getter
     @Setter
