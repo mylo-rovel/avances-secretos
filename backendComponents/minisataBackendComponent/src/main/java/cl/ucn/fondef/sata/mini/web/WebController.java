@@ -45,6 +45,7 @@ public class WebController {
         //if (!tokenEsValido(jwt)){
         //    return "No hay permisos";
         //}
+        System.out.println("usuarioNuevo = " + usuarioNuevo);
         return webCoreClientGrpc.agregarUsuario(usuarioNuevo);
     }
 
