@@ -11,23 +11,18 @@ import lombok.ToString;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "simulador")
 @ToString
 @EqualsAndHashCode
-public class SimuladorTEMPORAL {
+@Entity
+@Table(name = "compFisico")
+public class CompFisico {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Getter
     @Setter
     @Column(name = "id")
-    private Long id;
-
-    @Getter
-    @Setter
-    @Column(name = "nombre")
-    private String nombre;
+    private int id;
 
     @Getter
     @Setter
@@ -36,17 +31,11 @@ public class SimuladorTEMPORAL {
 
     @Getter
     @Setter
-    @Column(name = "enlace_repo")
-    private String enlaceRepo;
+    @Column(name = "pin")
+    private int pin;
 
     @Getter
     @Setter
     @Column(name = "estado")
     private boolean estado;
-
-    @Getter
-    @Setter
-    @Column(name = "rut_configurador")
-    private String rutConfigurador;
-
 }
