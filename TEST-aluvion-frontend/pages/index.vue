@@ -2,18 +2,16 @@
 
 // ESTE ES LA PAGINA LOGIN
 import Vue from 'vue'
-import SubmitButton from '../components/SubmitButton.vue'
 import {mapState} from "vuex";
 
 
 export default Vue.extend({
     name: "IndexPage",
-    components: { SubmitButton },
     data() {
+        return {}
     },
-    computed: ["urlApi"],
+    computed: mapState(["urlApi"]),
     methods: {
-
        getCredentialsToSend() {
          return {
            correo: document.getElementById("loginCorreo").value, 
@@ -21,16 +19,18 @@ export default Vue.extend({
            };
        },
 
-        async enviarOrdenEncender({$axios}) {
-          const serverPath = `${this.urlApi}/login`;
-          const serverResponse = await $axios.$post(serverPath, getCredentialsToSend()).catch(err => err);
-          if (serverResponse instanceof Error) {
-              alert("ERROR. rayos :(", serverResponse)
-              return false;
-          }
-          alert(serverResponse);
-          return true;
-      },
+        async enviarOrdenEncender({$axios, e}) {
+            e.preventDefault();
+            const serverPath = `${this.urlApi}/login`;
+            const serverResponse = await $axios.$post(serverPath, this.getCredentialsToSend()).catch(err => err);
+            if (serverResponse instanceof Error || !serverResponse['sesionIniciada']) {
+                alert("ERROR. rayos :(", serverResponse)
+                return false;
+            }
+            console.log(serverResponse)
+            window.localStorage.setItem("token", serverResponse['jsonWebToken']);
+            return true;
+      }
     }
 
 })
@@ -61,7 +61,7 @@ export default Vue.extend({
 						</div>
 					</div>
 					<div class="container-login100-form-btn">
-						<button class="login100-form-btn">INGRESAR</button>
+						<button @click="(e) => enviarOrdenEncender({$axios,e})" class="login100-form-btn">INGRESAR</button>
 					</div>
 				</form>
 				<!--<img class="login100-more" src='~/assets/img/cerro.png'/>-->
