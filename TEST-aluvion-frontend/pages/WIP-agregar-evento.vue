@@ -86,15 +86,15 @@ export default Vue.extend({
         {{intensidadTotalListaEventos}}
     </article>
     <article class="bottom-ribbon">
-        <div class="save-button">
-            <button @click="guardarListaEventos">GUARDAR</button>
+        <div class="back-button">
+            <NuxtLink to= "/operador/registrar-simulacion"><button>ATRÁS</button></NuxtLink>
         </div>
         <div class="total-duration-container">
             <p class="total-duration-title">Duración total</p>
             <p class="total-duration-time-row"><span class="total-duration-number">{{duracionTotalListaEventos}}</span>minutos</p>
         </div>
-        <div class="back-button">
-            <button>ATRÁS</button>
+        <div class="save-button">
+            <button @click="guardarListaEventos">GUARDAR</button>
         </div>
     </article>
 </section>

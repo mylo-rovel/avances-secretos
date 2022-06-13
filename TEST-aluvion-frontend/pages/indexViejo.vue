@@ -11,7 +11,7 @@ export default Vue.extend({
       return {
         emailInputText: "email",
         passwordInputText: "contraseña",
-        SubmitButton: "INGRESAR",
+        submitbutton: "INGRESAR",
 
         apiURL: "http://localhost:8080/api",
 
@@ -87,7 +87,7 @@ export default Vue.extend({
             <InputBox idValue="loginPasswordField"   :textoTransparente="passwordInputText"/>
           </article>
           <article class="right-side-body-buttons">
-            <NuxtLink to="/operador/main-operador"><SubmitButton :SubmitButton="SubmitButton"/></NuxtLink>
+            <NuxtLink to="/menu-operador"><SubmitButton :submitbutton="submitbutton"/></NuxtLink>
             <p>¿Contraseña olvidada?</p>
           </article>
         </div>
