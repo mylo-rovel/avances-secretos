@@ -4,8 +4,9 @@ import { secuenciasStateMethods } from "~/store/secuenciasStateMethods.js";
 export const state = () => ({
     // solo para entender cómo funciona el store o 'estado global'
     counter:0,
-    
     urlApi: "http://localhost:3000/api",
+
+    
 
     // EL PROPOSITO DE ESTE ARRAY ES FACILITAR EL GUARDADO DE LAS FILAS SIMPLEMENTE USANDO 1 ARRAY A LA VEZ
     // esta lista obtendrá una copia del contenido del array secuencias en el indice 'currentSecuencia'

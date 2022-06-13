@@ -147,6 +147,7 @@ export default Vue.extend({
         margin: 0 auto;
         
     }
+
     .container-login100 {
         width: 100%;  
         min-height: 100vh;
@@ -499,6 +500,12 @@ export default Vue.extend({
     .alert-validate:hover:before {
         visibility: visible;
         opacity: 1;
+    }
+
+    .beautyButton,
+    .beautyButton:hover {
+        text-decoration: none;
+        color: white;
     }
 
     @media (max-width: 992px) {

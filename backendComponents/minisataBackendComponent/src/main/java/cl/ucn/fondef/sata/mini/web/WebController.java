@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600, methods = {RequestMethod.GET, RequestMethod.POST} )
+//@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600, methods = {RequestMethod.GET, RequestMethod.POST} )
+@CrossOrigin(origins = "*", maxAge = 3600, methods = {RequestMethod.GET, RequestMethod.POST} )
 public class WebController {
     // ESTE SERVIDOR ES EL PUENTE ENTRE EL WEBBROWSER Y EL "CENTRAL CORE"
 
@@ -32,6 +33,7 @@ public class WebController {
 
     @RequestMapping(value = "api/login", method = RequestMethod.POST)
     public GrpcObjetoSesion loginUsuario(@RequestBody GrpcCredenciales grpcCredenciales) {
+        System.out.println("AAAAgrpcCredenciales = " + grpcCredenciales);
         return webCoreClientGrpc.loginUsuario(grpcCredenciales);
     }
 
@@ -43,6 +45,7 @@ public class WebController {
         //if (!tokenEsValido(jwt)){
         //    return "No hay permisos";
         //}
+        System.out.println("usuarioNuevo = " + usuarioNuevo);
         return webCoreClientGrpc.agregarUsuario(usuarioNuevo);
     }
 
