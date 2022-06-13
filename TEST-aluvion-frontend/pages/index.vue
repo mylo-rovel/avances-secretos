@@ -1,49 +1,26 @@
 <script>
+
 // ESTE ES LA PAGINA LOGIN
 import Vue from 'vue'
-import {mapState, mapMutations} from "vuex";
 import SubmitButton from '../components/SubmitButton.vue'
 
 export default Vue.extend({
     name: "IndexPage",
     components: { SubmitButton },
     data() {
-      return {
-        emailInputText: "email",
-        passwordInputText: "contraseña",
-        SubmitButton: "INGRESAR",
-
-        apiURL: "http://localhost:8080/api",
-
-        userEmailField: "",
-        userPasswordField: "",
     }},
-    computed: mapState(["counter"]),
     methods: {
-      ...mapMutations(["increase_counter"]),
+
        getCredentialsToSend() {
          return {
-           userEmail: document.getElementById("loginEmailField").value, 
-           userPassword: document.getElementById("loginPasswordField").value
+           correo: document.getElementById("loginCorreo").value, 
+           contrasena: document.getElementById("loginContrasena").value
            };
        },
-       displayCurrentCredentials() {
-         alert(`Email: ${document.getElementById("loginEmailField").value}\nPassword: ${document.getElementById("loginPasswordField").value}`)
-       },
 
-       async sendDataToAPI({$axios}) {
-         // esta función envía los valores del email y de la contraseña al servidor
-         // y desplegará con un cuadrito (la parte de alert()) lo que nos respondan
-          const serverPath = `${this.apiURL}/login/`;
-          // alert(serverPath);
-          const serverResponse = await $axios.$post(serverPath, this.getCredentialsToSend()).catch(() => "ay wey. error1");
-          alert(serverResponse);
-          return { serverResponse }
-          
-      },
         async enviarOrdenEncender({$axios}) {
-          const serverPath = `${this.apiURL}/leddeldestino`;
-          const serverResponse = await $axios.$get(serverPath).catch(err => err);
+          const serverPath = `${this.apiURL}/login`;
+          const serverResponse = await $axios.$post(serverPath, getCredentialsToSend()).catch(err => err);
           if (serverResponse instanceof Error) {
               alert("ERROR. rayos :(", serverResponse)
               return false;
@@ -54,163 +31,416 @@ export default Vue.extend({
     }
 
 })
+
 </script>
 
-
 <template>
-    <section class="main-login-container">
-      <article class="img-left-side">
-        <img id="left-login-img" src="~/assets/img/cerro.png" alt="login-image"/>
-      </article>
-      
-      <article class="text-right-side">
-        <div class="right-side-header">
-
-          <article class="login-header-logo">
-            <img id="anid-logo" src="~/assets/img/anid-logo.png" alt="conicyt-logo">
-            <div class="login-header-logo-text">
-              <p>FONDEF</p>
-              <p>Fondo de Fomento al Desarrollo</p>
-              <p>Cientifico y Tecnológico</p>
+    <section>
+        <div class="limiter">
+            <div class="container-login100">
+                <form class="login100-form validate-form">
+					<span class="login100-form-title p-b-43">Iniciar Sesión</span>
+					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+						<input id="loginCorreo" class="input100" type="text" name="email">
+						<span class="focus-input100"></span>
+						<span class="label-input100">Correo electrónico</span>
+					</div>					
+					<div class="wrap-input100 validate-input" data-validate="Password is required">
+						<input id="loginContrasena" class="input100" type="password" name="pass">
+						<span class="focus-input100"></span>
+						<span class="label-input100">Contraseña</span>
+					</div>
+					<div class="flex-sb-m w-full p-t-3 p-b-32">
+						<div>
+							<a href="#" class="txt1">
+								¿Olvidaste tu contraseña?
+							</a>
+						</div>
+					</div>
+					<div class="container-login100-form-btn">
+						<button class="login100-form-btn">INGRESAR</button>
+					</div>
+				</form>
+				<!--<img class="login100-more" src='~/assets/img/cerro.png'/>-->
+                <div class="login100-more" >
+				</div>
             </div>
-          </article> 
-
-          <article class="login-header-welcome">
-            <h2 id="header-welcome-mssg">Welcome!</h2>
-            <h2 id="header-project-name">Proyecto Aluvión</h2>
-          </article> 
-      
         </div>
-        <div class="right-side-body">
-          <article class="right-side-body-inputs">
-            <InputBox idValue="loginEmailField"  :textoTransparente="emailInputText"/>
-            <InputBox idValue="loginPasswordField"   :textoTransparente="passwordInputText"/>
-          </article>
-          <article class="right-side-body-buttons">
-            <NuxtLink to="/operador/main-operador"><SubmitButton :SubmitButton="SubmitButton"/></NuxtLink>
-            <p>¿Contraseña olvidada?</p>
-          </article>
-        </div>
-      </article>
-
-
-
-            <!-- POR ACÁ SE ENVÍAN LOS VALORES AL SERVER DEL HECTOR -->
-      <!-- LA SINTAXIS ES ASÍ DADO QUE SE OCUPA UN ARGUMENTO EN ESPECÍFICO QUE NO SÉ COMO PODRIAMOS OBTENER DE OTRA FORMA-->
-      <!-- <button    @click="() => enviarOrdenEncender({$axios})"  class="btn btn-primary">ENCENDER LED</button> -->
-      <h2>
-        {{counter}}
-      </h2>
-      <button @click="() => increase_counter(2)">press me</button>
-
     </section>
 </template>
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500&display=swap');
 
-  * {
-    margin:0;
-    font-family: 'Poppins', sans-serif;
-  }
-  .main-login-container {
-    border: 1px solid black;
-    width: 70rem;
-    height: 27rem;
-    margin: 13.5vh auto;
-    display:grid;
-    grid-template-columns: 27% auto;
-  }
+     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500&display=swap');
+     @import url('https://fonts.googleapis.com/css2?family=Lora:wght@700&family=Montserrat&family=Poppins&display=swap');
+     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
+    .limiter {
+        width: 100%;
+        margin: 0 auto;
+    }
+    .container-login100 {
+        width: 100%;  
+        min-height: 100vh;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -moz-box;
+        display: -ms-flexbox;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        background: #f2f2f2;
+    }
+    .wrap-login100 {
+        width: 100%;
+        background: #fff;
+        overflow: hidden;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -moz-box;
+        display: -ms-flexbox;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: stretch;
+        flex-direction: row-reverse;
+    }
 
-  .img-left-side {
-    overflow: hidden;
-    border-right: 1px solid black;;
-  }
+    .login100-form {
+    width: 560px;
+    min-height: 100vh;
+    display: block;
+    background-color: #f7f7f7;
+    padding: 173px 55px 55px 55px;
+    }
 
-  #left-login-img {
-    height: 100%;
-    object-fit: cover;
-    object-position: -6.8rem 0rem;
-  }
-
-
-  /* este es el contenedor principal */
-  .text-right-side {
-    display: grid;
-    grid-template-rows: 37% auto;
-  }
-
-  /* este es el fragmento que tiene el 37% del alto del conteneor */
-  .right-side-header {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  /* contenedor del logo y el texto de fondef */
-  .login-header-logo {
-      height: 100%;
-      display: flex;
-  }
-  .login-header-logo-text{
-    width: fit-content;
-    margin-top: auto;
-    margin-left: 0.7rem;
-  }
-  .login-header-logo-text p:first-child {
-    font-size: 1.2rem;
-  }
-
-  #anid-logo { 
-    height:159.8px; 
-    width:auto 
-  }
-
-  /* contenedor del mensaje de la derecha arriba */
-  .login-header-welcome {
-    width: fit-content;
-    margin: 2rem 13% 0rem 0rem;
-  }
-
-  /* contenedor del cuerpo => formulario y boton */
-  /* FORMULARIO */
-  .right-side-body {
-    display: grid;
-    grid-template-rows: auto 38%;
-  }
-
-  .right-side-body-inputs .input-box-component:first-child{
-    border-bottom: 0;
-  }
-
-  .right-side-body-inputs {
-    width: 30rem;
-    margin: 0 auto;
-    padding-top: 4.5rem;
-  }
-
-  /* BOTON Y CONTRASEÑA OLVIDADA */
-  .right-side-body-buttons {
+    .login100-form-title {
+    width: 100%;
+    display: block;
+    font-family: Poppins;
+    font-size: 30px;
+    color: #333333;
+    line-height: 1.2;
     text-align: center;
-    width: fit-content;
-    margin: 0 auto;
-  }
-
-  .right-side-body-buttons .submit-button-component:hover{
-    background-color: black;
-    color: white;
-    transition: 0.2s;
-  }
+    }
 
 
-  #header-welcome-mssg {
-    font-size: 2rem;
-    font-weight: 400;
-  }
+    .wrap-input100 {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    width: 100%;
+    height: 80px;
+    position: relative;
+    border: 1px solid #e6e6e6;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    }
 
-  #header-project-name {
-    font-size: 1.2rem;
-    font-weight: 400;
-  }
+    .label-input100 {
+    font-family: Montserrat;
+    font-size: 18px;
+    color: #999999;
+    line-height: 1.2;
 
-    
+    display: block;
+    position: absolute;
+    pointer-events: none;
+    width: 100%;
+    padding-left: 24px;
+    left: 0;
+    top: 30px;
+
+    -webkit-transition: all 0.4s;
+    -o-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    transition: all 0.4s;
+    }
+
+    .input100 {
+    display: block;
+    width: 100%;
+    background: transparent;
+    font-family: Montserrat-Regular;
+    font-size: 18px;
+    color: #555555;
+    line-height: 1.2;
+    padding: 0 26px;
+    }
+
+    input.input100 {
+    height: 100%;
+    -webkit-transition: all 0.4s;
+    -o-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    transition: all 0.4s;
+    }
+
+
+
+    .focus-input100 {
+    position: absolute;
+    display: block;
+    width: calc(100% + 2px);
+    height: calc(100% + 2px);
+    top: -1px;
+    left: -1px;
+    pointer-events: none;
+    border: 1px solid #6675df;
+    border-radius: 10px;
+
+    visibility: hidden;
+    opacity: 0;
+
+    -webkit-transition: all 0.4s;
+    -o-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    transition: all 0.4s;
+
+    -webkit-transform: scaleX(1.1) scaleY(1.3);
+    -moz-transform: scaleX(1.1) scaleY(1.3);
+    -ms-transform: scaleX(1.1) scaleY(1.3);
+    -o-transform: scaleX(1.1) scaleY(1.3);
+    transform: scaleX(1.1) scaleY(1.3);
+    }
+
+    .input100:focus + .focus-input100 {
+    visibility: visible;
+    opacity: 1;
+
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -o-transform: scale(1);
+    transform: scale(1);
+    }
+
+    .eff-focus-selection {
+    visibility: visible;
+    opacity: 1;
+
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -o-transform: scale(1);
+    transform: scale(1);
+    }
+
+    .input100:focus {
+    height: 48px;
+    }
+
+    .input100:focus + .focus-input100 + .label-input100 {
+    top: 14px;
+    font-size: 13px;
+    }
+
+    .has-val {
+    height: 48px !important;
+    }
+
+    .has-val + .focus-input100 + .label-input100 {
+    top: 14px;
+    font-size: 13px;
+    }
+
+    /*==================================================================
+    [ Restyle Checkbox ]*/
+
+    .input-checkbox100 {
+    display: none;
+    }
+
+    .label-checkbox100 {
+    font-family: Poppins-Regular;
+    font-size: 13px;
+    color: #999999;
+    line-height: 1.4;
+
+    display: block;
+    position: relative;
+    padding-left: 26px;
+    cursor: pointer;
+    }
+
+    .label-checkbox100::before {
+    content: "\f00c";
+    font-family: FontAwesome;
+    font-size: 13px;
+    color: transparent;
+
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-radius: 2px;
+    background: #fff;
+    border: 1px solid #6675df;
+    left: 0;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    }
+
+    .input-checkbox100:checked + .label-checkbox100::before {
+    color: #6675df;
+    }
+    /*------------------------------------------------------------------
+    [ Button ]*/
+    .container-login100-form-btn {
+    width: 100%;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    }
+
+    .login100-form-btn {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+    width: 100%;
+    height: 50px;
+    border-radius: 10px;
+    background: #6675df;
+
+    font-family: Montserrat;
+    font-size: 12px;
+    color: #fff;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+
+    -webkit-transition: all 0.4s;
+    -o-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    transition: all 0.4s;
+    }
+
+    .login100-form-btn:hover {
+    background: #333333;
+    }
+
+    /*------------------------------------------------------------------
+    [ Responsive ]*/
+
+    @media (max-width: 992px) {
+        .login100-form {
+            width: 50%;
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+        .login100-more {
+            width: 50%;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .login100-form {
+            width: 100%;
+        }
+        .login100-more {
+            display: none;
+            background-image: url('../assets/img/cerro.png');
+        }
+    }
+
+    @media (max-width: 576px) {
+        .login100-form {
+            padding-left: 15px;
+            padding-right: 15px;
+            padding-top: 70px;
+        }
+    }
+
+
+    /*------------------------------------------------------------------
+    [ Alert validate ]*/
+
+    .validate-input {
+    position: relative;
+    }
+
+    .alert-validate::before {
+    content: attr(data-validate);
+    position: absolute;
+    z-index: 100;
+    max-width: 70%;
+    background-color: #fff;
+    border: 1px solid #c80000;
+    border-radius: 2px;
+    padding: 4px 25px 4px 10px;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    right: 12px;
+    pointer-events: none;
+
+    font-family: Poppins-Regular;
+    color: #c80000;
+    font-size: 13px;
+    line-height: 1.4;
+    text-align: left;
+
+    visibility: hidden;
+    opacity: 0;
+
+    -webkit-transition: opacity 0.4s;
+    -o-transition: opacity 0.4s;
+    -moz-transition: opacity 0.4s;
+    transition: opacity 0.4s;
+    }
+
+    .alert-validate::after {
+    content: "\f12a";
+    font-family: FontAwesome;
+    display: block;
+    position: absolute;
+    z-index: 110;
+    color: #c80000;
+    font-size: 16px;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    right: 18px;
+    }
+
+    .alert-validate:hover:before {
+    visibility: visible;
+    opacity: 1;
+    }
+
+    @media (max-width: 992px) {
+        .alert-validate::before {
+            visibility: visible;
+            opacity: 1;
+        }
+    }
+
 </style>
