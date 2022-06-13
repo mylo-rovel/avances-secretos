@@ -3,12 +3,15 @@
 // ESTE ES LA PAGINA LOGIN
 import Vue from 'vue'
 import SubmitButton from '../components/SubmitButton.vue'
+import {mapState} from "vuex";
+
 
 export default Vue.extend({
     name: "IndexPage",
     components: { SubmitButton },
     data() {
-    }},
+    },
+    computed: ["urlApi"],
     methods: {
 
        getCredentialsToSend() {
@@ -19,7 +22,7 @@ export default Vue.extend({
        },
 
         async enviarOrdenEncender({$axios}) {
-          const serverPath = `${this.apiURL}/login`;
+          const serverPath = `${this.urlApi}/login`;
           const serverResponse = await $axios.$post(serverPath, getCredentialsToSend()).catch(err => err);
           if (serverResponse instanceof Error) {
               alert("ERROR. rayos :(", serverResponse)
