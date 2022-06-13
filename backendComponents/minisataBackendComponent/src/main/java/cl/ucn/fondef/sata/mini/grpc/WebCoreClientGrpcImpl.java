@@ -1,7 +1,9 @@
 package cl.ucn.fondef.sata.mini.grpc;
 
 import cl.ucn.fondef.sata.mini.grpcobjects.GrpcCredenciales;
+import cl.ucn.fondef.sata.mini.grpcobjects.GrpcMensajeResultadoOperacion;
 import cl.ucn.fondef.sata.mini.grpcobjects.GrpcObjetoSesion;
+import cl.ucn.fondef.sata.mini.grpcobjects.GrpcUsuarioNuevo;
 import io.grpc.ManagedChannel;
 import io.grpc.netty.shaded.io.grpc.netty.NettyChannelBuilder;
 import org.springframework.stereotype.Service;
@@ -41,4 +43,26 @@ public class WebCoreClientGrpcImpl {
 
         return objetoSesion;
     }
+
+    public GrpcMensajeResultadoOperacion agregarUsuario (GrpcUsuarioNuevo grpcUsuarioNuevo){
+        Usuario requestObject = Usuario.newBuilder()
+                .setRut(grpcUsuarioNuevo.getUsuarioNuevo().getRut())
+                .setNombre(grpcUsuarioNuevo.getUsuarioNuevo().getNombre())
+                .setApellido(grpcUsuarioNuevo.getUsuarioNuevo().getApellido())
+                .setCorreo(grpcUsuarioNuevo.getUsuarioNuevo().getCorreo())
+                .setContrasena(grpcUsuarioNuevo.getUsuarioNuevo().getContrasena())
+                .setRol(grpcUsuarioNuevo.getUsuarioNuevo().getRol())
+                .setEstado(grpcUsuarioNuevo.getUsuarioNuevo().isEstado())
+                .build();
+        UsuarioNuevo requestObject2 = UsuarioNuevo.newBuilder()
+                .setRutAdministrador(grpcUsuarioNuevo.getRutAdministrador())
+                .setUsuarioNuevo(requestObject)
+                .build();
+
+        MensajeResultadoOperacion serverResponse = this.stub.agregarUsuario(requestObject2);
+        GrpcMensajeResultadoOperacion objetoResultadoOperacion = new GrpcMensajeResultadoOperacion();
+        objetoResultadoOperacion.setMensajeTexto("Usuario Agregado Exitosamente");
+        return objetoResultadoOperacion;
+    }
+
 }

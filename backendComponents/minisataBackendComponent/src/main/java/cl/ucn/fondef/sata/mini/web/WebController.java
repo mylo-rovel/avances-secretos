@@ -4,13 +4,10 @@
 
 package cl.ucn.fondef.sata.mini.web;
 
-import cl.ucn.fondef.sata.mini.grpcobjects.GrpcUsuarioNuevo;
+import cl.ucn.fondef.sata.mini.grpcobjects.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import cl.ucn.fondef.sata.mini.grpc.WebCoreClientGrpcImpl;
-import cl.ucn.fondef.sata.mini.grpcobjects.GrpcCredenciales;
-import cl.ucn.fondef.sata.mini.grpcobjects.GrpcObjetoSesion;
-import cl.ucn.fondef.sata.mini.grpcobjects.GrpcParametrosInicioSimulacion;
 import cl.ucn.fondef.sata.mini.utilities.JwtUtil;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,14 +37,15 @@ public class WebController {
         return webCoreClientGrpc.loginUsuario(grpcCredenciales);
     }
 
-    @RequestMapping(value = "api/usuarios", method = RequestMethod.GET)
+    @RequestMapping(value = "api/usuarios", method = RequestMethod.POST)
 //    public String registrarUsuario(@RequestHeader(value="Authorization") String jwt, @RequestBody GrpcUsuarioNuevo grpcUsuarioNuevo) {
-    public String registrarUsuario(@RequestHeader(value="Authorization") String jwt) {
-        System.out.println("jwt = " + jwt);
-        if (!tokenEsValido(jwt)){
-            return "No hay permisos";
-        }
-        return "";
+    //public String registrarUsuario(@RequestHeader(value="Authorization") String jwt) {
+      public GrpcMensajeResultadoOperacion registrarUsuario(@RequestBody GrpcUsuarioNuevo usuarioNuevo){
+        //System.out.println("jwt = " + jwt);
+        //if (!tokenEsValido(jwt)){
+        //    return "No hay permisos";
+        //}
+        return webCoreClientGrpc.agregarUsuario(usuarioNuevo);
     }
 
     @RequestMapping(value = "api/simulaciones", method = RequestMethod.POST)
@@ -56,5 +54,6 @@ public class WebController {
         System.out.println("nuevaSimulacion = " + parametrosInicioSimulacion);
         return tokenEsValido(jwt);
     }
+
 
 }

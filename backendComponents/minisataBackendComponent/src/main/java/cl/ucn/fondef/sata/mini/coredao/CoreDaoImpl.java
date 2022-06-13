@@ -4,6 +4,8 @@
 
 package cl.ucn.fondef.sata.mini.coredao;
 
+import cl.ucn.fondef.sata.mini.grpcobjects.GrpcUsuario;
+import cl.ucn.fondef.sata.mini.grpcobjects.GrpcUsuarioNuevo;
 import cl.ucn.fondef.sata.mini.model.Usuario;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
@@ -52,4 +54,26 @@ public class CoreDaoImpl implements CoreDao {
         return (Usuario) listaResultado.get(0);
     }
 
+    @Override
+    public String anadirUsuario(String rutAdmin, GrpcUsuario usuarioNuevo) {
+
+        String mensaje;
+        GrpcUsuario existe = entityManager.find(GrpcUsuario.class, usuarioNuevo.getRut());
+        if(existe == null){
+            GrpcUsuarioNuevo usuarioAgregar = new GrpcUsuarioNuevo();
+            usuarioAgregar.setRutAdministrador(rutAdmin);
+            usuarioAgregar.setUsuarioNuevo(usuarioNuevo);
+
+            entityManager.getTransaction().begin();
+            entityManager.persist(usuarioAgregar);
+            entityManager.getTransaction().commit();
+            entityManager.close();
+
+            mensaje = "El usuario ha sido ingresado existosamente";
+        }else{
+            mensaje = "El usuario ya existe";
+        }
+
+        return mensaje;
+    }
 }

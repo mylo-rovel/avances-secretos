@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+// Then the compiler also creates a separate .java file for each top-level message,
+// enumeration, and service declared in the .proto file.
+option java_multiple_files = true;
+option java_package = "cl.ucn.fondef.sata.mini.grpc";
+
+service LedManipulationService {
+  rpc StartLedPerformance(TextMessage) returns (TextMessage) {}
+}
+
+message TextMessage {
+  string message = 1;
+}
