@@ -131,11 +131,6 @@ message Equipo {
   string rut_configurador = 9;
 }
 
-message ImagenesEquipo {
-  string nombre_equipo = 1;
-  repeated bytes imagen = 2;
-}
-
 // esto corresponde a una fila de la tabla display equipos
 // tambien sirve para las listas desplegables
 message EquipoAcotado {
