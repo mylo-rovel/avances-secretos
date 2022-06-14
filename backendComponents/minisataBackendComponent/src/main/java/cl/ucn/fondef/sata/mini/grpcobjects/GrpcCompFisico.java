@@ -12,15 +12,19 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 public class GrpcCompFisico {
+
     @Getter
     @Setter
     private int id;
+
     @Getter
     @Setter
     private String descripcion;
+
     @Getter
     @Setter
     private int pin;
+
     @Getter
     @Setter
     private boolean estado;

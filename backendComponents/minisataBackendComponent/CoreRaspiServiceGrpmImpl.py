@@ -1,13 +1,11 @@
 from concurrent import futures
 import logging
-import datetime
 # from dotenv import dotenv_values
 
 import grpc
 import node_conn_pb2 as ReqResModule
 import node_conn_pb2_grpc as ClientServerModule
 
-from ledRoutines import *
 
 venv_dict = {"PORT": "50051"}
 
@@ -15,10 +13,6 @@ print(f'Iniciando servidor en puerto {venv_dict["PORT"]}')
 
 class LedManipulationServiceServicer(ClientServerModule.LedManipulationServiceServicer):
     counter = -1
-    encendidoDeLuces = [
-        rutina_secuencia1, rutina_secuencia2, rutina_secuencia3
-    ]
-
     """Provides methods that implement functionality of testing server."""
     def StartLedPerformance(self, request, context):    
         messageReceived = request.message
@@ -32,11 +26,7 @@ class LedManipulationServiceServicer(ClientServerModule.LedManipulationServiceSe
         print(responseMessage)
 
         self.counter += 1
-        indiceFuncion = (self.counter%3)
-        funcionLedUsar = self.encendidoDeLuces[indiceFuncion]
-        
-        # DESCOMENTAR SÓLO SI ESTAMOS USANDO LA RASPI
-        #funcionLedUsar()
+
 
         # SI NO SE RETORNA LA RESPUESTA gRPC, EL PROGRAMÁ ARROJARÁ UN ERROR
         return ReqResModule.TextMessage(

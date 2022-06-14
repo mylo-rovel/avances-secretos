@@ -2,18 +2,13 @@ package cl.ucn.fondef.sata.mini.grpc;
 
 import cl.ucn.fondef.sata.mini.coredao.CoreDao;
 import cl.ucn.fondef.sata.mini.grpcobjects.GrpcCompFisico;
-import cl.ucn.fondef.sata.mini.grpcobjects.GrpcSimulador;
+import cl.ucn.fondef.sata.mini.grpcobjects.GrpcEquipo;
 import cl.ucn.fondef.sata.mini.grpcobjects.GrpcUsuario;
-import cl.ucn.fondef.sata.mini.grpcobjects.GrpcUsuarioNuevo;
-import cl.ucn.fondef.sata.mini.model.SimuladorTEMPORAL;
 import cl.ucn.fondef.sata.mini.model.Usuario;
 import cl.ucn.fondef.sata.mini.utilities.JwtUtil;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @GrpcService
 // SERVIDOR gRPC "Central Core"
@@ -39,7 +34,7 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
 
         // Por si se registró en la tabla 'login' pero no en 'usuario'
         String jwtUsuario = (credencialesCorrectas && (usuarioLogeado != null )) ?
-                jwtUtil.create(usuarioLogeado.getCorreo(), usuarioLogeado.getRol())
+                jwtUtil.create(usuarioLogeado.getRut(), usuarioLogeado.getRol())
                 : "";
 
         // PROCESO DE ENVÍO DE RESPUESTA GRPC
@@ -59,7 +54,7 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
     public void agregarUsuario(UsuarioNuevo reqUsuarioNuevo, StreamObserver<MensajeResultadoOperacion> responseObserver){
         GrpcUsuario datosUsuario = new GrpcUsuario();
 
-        // Guardando nuevamente
+        // Creando un objeto que puede ser facilmente manipulado al DAO
         datosUsuario.setNombre(reqUsuarioNuevo.getUsuarioNuevo().getNombre());
         datosUsuario.setApellido(reqUsuarioNuevo.getUsuarioNuevo().getApellido());
         datosUsuario.setRut(reqUsuarioNuevo.getUsuarioNuevo().getRut());
@@ -83,22 +78,23 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         responseObserver.onCompleted();
     }
 
-    public void crearSimulador(SimuladorTEMPORAL reqSimulador, StreamObserver<MensajeResultadoOperacion> responseObserver){
-        GrpcSimulador simulador = new GrpcSimulador();
-        simulador.setId(reqSimulador.getId());
-        simulador.setNombre(reqSimulador.getNombre());
-        simulador.setDescripcion(reqSimulador.getDescripcion());
-        simulador.setEnlace_repo(reqSimulador.getEnlaceRepo());
-        simulador.setEstado(reqSimulador.isEstado());
+    public void crearEquipo(Equipo reqEquipo, StreamObserver<MensajeResultadoOperacion> responseObserver){
+        GrpcEquipo equipo = new GrpcEquipo();
+
+        equipo.setNombre(reqEquipo.getNombre());
+        equipo.setDescripcion(reqEquipo.getDescripcion());
+        equipo.setEnlaceRepo(reqEquipo.getEnlaceRepo());
+
         //List<GrpcCompFisico> listaVacia = new ArrayList<GrpcCompFisico>();
         GrpcCompFisico[] listaVacia = new GrpcCompFisico[0];
-        simulador.setListaValvulas(listaVacia);
-        simulador.setListaSensores(listaVacia);
-        simulador.setListaCamaras(listaVacia);
-        simulador.setRutConfigurador(reqSimulador.getRutConfigurador());
+        equipo.setListaValvulas(listaVacia);
+        equipo.setListaSensores(listaVacia);
+        equipo.setListaCamaras(listaVacia);
+        equipo.setRutConfigurador(reqEquipo.getRutConfigurador());
 
-        String mensaje = coreDao.anadirSimulador(reqSimulador.getRutConfigurador(),simulador);
+        String mensaje = coreDao.anadirEquipo(reqEquipo.getRutConfigurador(),equipo);
 
+        // GRPC parte
         MensajeResultadoOperacion grpcResponse = MensajeResultadoOperacion.newBuilder()
                 .setMensajeTexto(mensaje)
                 .build();

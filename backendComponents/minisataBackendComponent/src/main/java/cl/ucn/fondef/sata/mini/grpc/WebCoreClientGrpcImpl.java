@@ -5,6 +5,9 @@ import io.grpc.ManagedChannel;
 import io.grpc.netty.shaded.io.grpc.netty.NettyChannelBuilder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 // CLIENTE gRPC "Backend Application"
 // Esta clase se usa para ENVIAR peticiones desde "Backend Application" hasta el "Central Core"
@@ -64,22 +67,50 @@ public class WebCoreClientGrpcImpl {
         return objetoResultadoOperacion;
     }
 
-    public GrpcMensajeResultadoOperacion crearSimulador (GrpcSimulador grpcSimulador){
-        GrpcCompFisico[] listaVacia = new GrpcCompFisico[0];
-        Simulador requestObject = Simulador.newBuilder()
-                .setNombre(grpcSimulador.getNombre())
-                .setDescripcion(grpcSimulador.getDescripcion())
-                .setEnlaceRepo(grpcSimulador.getEnlace_repo())
-                .setEstado(grpcSimulador.isEstado())
-                //.setListaValvulas(listaVacia)
-                //.setListaSensores(listaVacia)
-                //.setListaCamaras(listaVacia)
-                .setRutConfigurador(grpcSimulador.getRutConfigurador())
-                .build();
+    public GrpcMensajeResultadoOperacion crearEquipo (GrpcEquipo grpcEquipo){
 
-        MensajeResultadoOperacion serverResponse = this.stub.crearSimulador(requestObject);
+        // GUARDAMOS LOS COMPONENTES DE TIPO "GrpcCompFisico" RECIBIDOS PARA PODER ITERAR Y CREAR
+        // OTRA LISTA DE OBJETOS DE TIPO "CompFisico" LA CUAL ES LA QUE EFECTIVAMENTE SE ENVIARÁ
+        List<GrpcCompFisico[]> componentesReq = new ArrayList<GrpcCompFisico[]>();
+        componentesReq.add(grpcEquipo.getListaValvulas());
+        componentesReq.add(grpcEquipo.getListaSensores());
+        componentesReq.add(grpcEquipo.getListaCamaras());
+
+        List<List<CompFisico>> componentesEnviar = new ArrayList<>();
+
+        for (int i = 0; i < componentesReq.size(); i ++){
+            List<CompFisico> listaAux = new ArrayList<CompFisico>();
+            for (int j = 0; j < componentesReq.get(i).length; j ++){
+                CompFisico compGrpcGuardar = CompFisico.newBuilder()
+                        .setDescripcion(componentesReq.get(i)[j].getDescripcion())
+                        .setEstado(componentesReq.get(i)[j].isEstado())
+                        .setPin(componentesReq.get(i)[j].getPin())
+                        .build();
+                listaAux.add(compGrpcGuardar);
+            }
+            componentesEnviar.add(listaAux);
+        }
+        System.out.println("componentesEnviar = " + componentesEnviar +'\n');
+        System.out.println("valvulas = " + componentesEnviar.get(0) +'\n');
+        System.out.println("sensores = " + componentesEnviar.get(1) +'\n');
+        System.out.println("camaras  = " + componentesEnviar.get(2) +'\n');
+
+
+//        Equipo requestObject = Equipo.newBuilder()
+//                .setNombre(grpcEquipo.getNombre())
+//                .setDescripcion(grpcEquipo.getDescripcion())
+//                .setEnlaceRepo(grpcEquipo.getEnlaceRepo())
+//                .setEstado(grpcEquipo.isEstado())
+//                .setListaValvulas(componentesEnviar[0])
+//                .setListaSensores(componentesEnviar[1])
+//                .setListaCamaras(componentesEnviar[2])
+//                .setRutConfigurador(grpcEquipo.getRutConfigurador())
+//                .build();
+//
+//        MensajeResultadoOperacion serverResponse = this.stub.crearEquipo(requestObject);
+
         GrpcMensajeResultadoOperacion objetoResultadoOperacion = new GrpcMensajeResultadoOperacion();
-        objetoResultadoOperacion.setMensajeTexto("Simulador creado exitosamente");
+        objetoResultadoOperacion.setMensajeTexto("Equipo creado exitosamente");
         return objetoResultadoOperacion;
     }
 }

@@ -47,15 +47,20 @@ public class WebController {
     }
 
     @RequestMapping(value = "api/simulaciones", method = RequestMethod.POST)
-    public boolean displaySimulacionEnviada(@RequestHeader(value="Authorization") String jwt,
+    public GrpcParametrosInicioSimulacion displaySimulacionEnviada(@RequestHeader(value="Authorization") String jwt,
                                             @RequestBody GrpcParametrosInicioSimulacion parametrosInicioSimulacion) {
         System.out.println("nuevaSimulacion = " + parametrosInicioSimulacion);
-        return tokenEsValido(jwt);
+//        return tokenEsValido(jwt);
+        return parametrosInicioSimulacion;
     }
 
-    @RequestMapping(value = "api/simulador", method = RequestMethod.POST)
-      public GrpcMensajeResultadoOperacion registrarSimulador(@RequestBody GrpcSimulador simulador){
-      return webCoreClientGrpc.crearSimulador(simulador);
+    @RequestMapping(value = "api/equipos", method = RequestMethod.POST)
+    //recordar añadir lo de jwt: @RequestHeader(value="Authorization") String jwt,
+    public GrpcMensajeResultadoOperacion registrarEquipo(@RequestBody GrpcEquipo equipo){
+        System.out.println("equipo = " + equipo);
+        var a = webCoreClientGrpc.crearEquipo(equipo);
+        return new GrpcMensajeResultadoOperacion();
+//        return webCoreClientGrpc.crearEquipo(equipo);
     }
 
 }

@@ -19,7 +19,7 @@ message ParametrosInicioSimulacion {
 public class GrpcParametrosInicioSimulacion {
     @Getter
     @Setter
-    private int idSimulador;
+    private int idEquipo;
 
     @Getter
     @Setter

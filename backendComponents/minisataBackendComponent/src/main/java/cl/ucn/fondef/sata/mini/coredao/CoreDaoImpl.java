@@ -4,9 +4,8 @@
 
 package cl.ucn.fondef.sata.mini.coredao;
 
-import cl.ucn.fondef.sata.mini.grpcobjects.GrpcSimulador;
+import cl.ucn.fondef.sata.mini.grpcobjects.GrpcEquipo;
 import cl.ucn.fondef.sata.mini.grpcobjects.GrpcUsuario;
-import cl.ucn.fondef.sata.mini.grpcobjects.GrpcUsuarioNuevo;
 import cl.ucn.fondef.sata.mini.model.RegistroUsuarios;
 import cl.ucn.fondef.sata.mini.model.Usuario;
 import de.mkammerer.argon2.Argon2;
@@ -114,10 +113,10 @@ public class CoreDaoImpl implements CoreDao {
     }
 
     @Override
-    public String anadirSimulador(String rutConfigurador, GrpcSimulador simulador) {
+    public String anadirEquipo(String rutConfigurador, GrpcEquipo equipo) {
 
         String mensaje = "";
-        //no se me ocurre como podria saber si el simulador ya existe
+        //no se me ocurre como podria saber si el equipo ya existe
 
         return mensaje;
     }
