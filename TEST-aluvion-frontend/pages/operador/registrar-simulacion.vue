@@ -35,11 +35,11 @@ export default Vue.extend({
                 <div class="row">
                     <form>
                         <div class="my-4 form-group row">
-                            <label for="simulador" class="col-sm-4 col-form-label ">Seleccione un simulador</label>
+                            <label for="simulador" class="col-sm-4 col-form-label ">Seleccione un equipo</label>
                             <div class="col-sm-6">
                                 <select id="simulador" name="simulador" class="form-select" aria-label="Simulador">
-                                    <option>Simulador 1</option>
-                                    <option>Simulador 2</option>
+                                    <option>Equipo simulador de lluvia</option>
+                                    <option>Simulador 2.0</option>
                                 </select>
                             </div>
                         </div>
@@ -79,11 +79,11 @@ export default Vue.extend({
                                 <input id="add_descripcion" type="text" class="form-control" aria-describedby="addon-wrapping">
                             </div>
                         </div>
-                        <div class = "row my-4 conf-secuencias btn-opciones">
-                            <div class= "col">
+                        <div class = "row my-4">
+                            <div class= "col-12 contenido-botones my-4">
                                 <NuxtLink to="/menu-operador"><CancelButtom :cancelbutton = "cancelbutton"/></NuxtLink>
                             </div>                            
-                            <div class="col">    
+                            <div class="col-12 contenido-botones my-4">    
                                 <NuxtLink to="/operador/registrar-simulacion"><SubmitButton :submitbutton = "submitbutton"/></NuxtLink>
                             </div>
                         </div>
@@ -94,18 +94,16 @@ export default Vue.extend({
     </section>
 </template>
 <style>
-    .contenido1{
-        width: 700px;
-        margin: 0 auto;
-        padding: 20px 20px 20px 20px;
+    .contenido-botones{
+        width: fit-content;
+        margin: auto ;
     }
+    
     .conf-secuencias{
         margin: 0 auto;
         padding-left: 4rem;
     }
-    .btn-opciones{
-        width: fit-content;
-    }
+    
     .btn-secuencias{
         background-color: #ecf0f1;
         border: 1px solid #d0d3d4;

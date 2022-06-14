@@ -21,8 +21,8 @@
 <style>
   .submit-button {
     background: #025cfa;
-    padding: 10px 20px 10px 20px;
-    font-size: 20px;
+    padding: 1rem 1.5rem 1rem 1.5rem;
+    font-size: 1rem;
     color: #fff;
     justify-content: center;
     text-transform: uppercase;
