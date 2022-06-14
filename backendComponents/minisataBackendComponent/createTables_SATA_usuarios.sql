@@ -37,7 +37,7 @@ CREATE TABLE equipo
     url_repo            varchar(100)    NOT NULL UNIQUE,
     estado              tinyint(3)      NOT NULL,
     rut_configurador    varchar(10)     NOT NULL,
-    fecha_creacion      date            NOT NULL,
+    fecha_creacion      date            NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     FOREIGN KEY (rut_configurador) REFERENCES usuario (rut)
 );
@@ -46,12 +46,12 @@ CREATE TABLE simulacion
 (
     id                  int(11)         NOT NULL AUTO_INCREMENT,
     rut_operador        varchar(10)     NOT NULL,
-    id_equipo        int(11)         NOT NULL,
+    id_equipo           int(11)         NOT NULL,
     nombre              varchar(20)     NOT NULL UNIQUE,
     descripcion         varchar(100)    NOT NULL,
-    fecha_creacion      date            NOT NULL,
+    fecha_creacion      date            NOT NULL DEFAULT CURRENT_TIMESTAMP,
     agua_caida          double          NOT NULL,
-    fecha_ejecucion     date            NOT NULL,
+    fecha_ejecucion     date            NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     FOREIGN KEY (rut_operador) REFERENCES usuario (rut),
     FOREIGN KEY (id_equipo) REFERENCES equipo (id)
@@ -68,7 +68,7 @@ CREATE TABLE componentefisico
 (
     id                  int(11)         NOT NULL AUTO_INCREMENT,
     id_tipo_compo       int(11)         NOT NULL,
-    id_equipo        int(11)         NOT NULL,
+    id_equipo           int(11)         NOT NULL,
     descripcion         varchar(100)    NOT NULL,
     pin                 tinyint(3)      NOT NULL,
     estado              tinyint(3)      NOT NULL,
@@ -100,7 +100,7 @@ CREATE TABLE evento
 CREATE TABLE imgequipo
 (
     id                  int(11)         NOT NULL AUTO_INCREMENT,
-    id_equipo        int(11)         NOT NULL,
+    id_equipo           int(11)         NOT NULL,
     imagen              blob            NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (id_equipo) REFERENCES equipo (id)
