@@ -113,4 +113,7 @@ public class WebCoreClientGrpcImpl {
         objetoResultadoOperacion.setMensajeTexto("Equipo creado exitosamente");
         return objetoResultadoOperacion;
     }
+
+//    getSimulaciones
+
 }
