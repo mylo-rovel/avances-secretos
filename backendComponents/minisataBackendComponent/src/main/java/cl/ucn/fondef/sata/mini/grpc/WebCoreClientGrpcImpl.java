@@ -1,8 +1,10 @@
 package cl.ucn.fondef.sata.mini.grpc;
 
 import cl.ucn.fondef.sata.mini.grpcobjects.*;
+import cl.ucn.fondef.sata.mini.model.Simulacion;
 import io.grpc.ManagedChannel;
 import io.grpc.netty.shaded.io.grpc.netty.NettyChannelBuilder;
+import net.bytebuddy.matcher.FilterableList;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -112,6 +114,29 @@ public class WebCoreClientGrpcImpl {
         GrpcMensajeResultadoOperacion objetoResultadoOperacion = new GrpcMensajeResultadoOperacion();
         objetoResultadoOperacion.setMensajeTexto("Equipo creado exitosamente");
         return objetoResultadoOperacion;
+    }
+
+    public GrpcListaSimulacionesAcotada getSimulaciones(){
+        Empty empty = Empty.newBuilder().build();
+        ListaSimulacionesAcotada listaSimulacionesAcotada = this.stub.getSimulaciones(empty);
+        List<GrpcSimulacionAcotada> listaRellenar = new ArrayList<>();
+        for(SimulacionAcotada  simulacionAcotada : listaSimulacionesAcotada.getSimulacionAcotadaList()){
+            GrpcSimulacionAcotada simAcoBuilder = new GrpcSimulacionAcotada();
+            simAcoBuilder.setIdSimulacion(
+                    Math.toIntExact(
+                            simulacionAcotada.getIdSimulacion()
+                    )
+            );
+            simAcoBuilder.setNombreEquipo(simulacionAcotada.getNombreEquipo());
+            simAcoBuilder.setFechaSimulacion(simulacionAcotada.getFechaSimulacion());
+            simAcoBuilder.setAguaCaida(simulacionAcotada.getAguaCaida());
+        }
+
+
+        GrpcListaSimulacionesAcotada listaEnviar = new GrpcListaSimulacionesAcotada();
+        listaEnviar.setListaSimulacionAcotada(listaRellenar);
+
+        return listaEnviar;
     }
 
 

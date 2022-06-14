@@ -63,4 +63,9 @@ public class WebController {
 //        return webCoreClientGrpc.crearEquipo(equipo);
     }
 
+    @RequestMapping(value = "api/simulaciones/lista", method = RequestMethod.GET)
+    public GrpcListaSimulacionesAcotada mostrarSimulaciones(){
+        return webCoreClientGrpc.getSimulaciones();
+    }
+
 }
