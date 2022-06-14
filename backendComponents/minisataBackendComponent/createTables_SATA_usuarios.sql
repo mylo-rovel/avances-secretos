@@ -32,7 +32,7 @@ CREATE TABLE usuario
 CREATE TABLE equipo
 (
     id                  int(11)         NOT NULL AUTO_INCREMENT,
-    nombre              varchar(30)     NOT NULL,
+    nombre              varchar(30)     NOT NULL UNIQUE,
     descripcion         varchar(255)    NOT NULL,
     url_repo            varchar(100)    NOT NULL UNIQUE,
     estado              tinyint(3)      NOT NULL,

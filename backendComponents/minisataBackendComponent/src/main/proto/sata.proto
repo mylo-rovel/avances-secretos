@@ -23,6 +23,7 @@ service WebCoreCommuService {
   // Usuario Configurador y Operador
   // agregarEquipo y setEquipo tienen la keyword "stream" para enviar las fotos como stream
   rpc crearEquipo(Equipo) returns (MensajeResultadoOperacion){}
+  rpc subirImagenesEquipo(stream ImagenesEquipo) returns (MensajeResultadoOperacion){}
   rpc getEquipos(Empty) returns (ListaEquiposAcotado) {}
   rpc getEquipo(IdElemento) returns (Equipo) {}
   rpc setEquipo(Equipo) returns (MensajeResultadoOperacion){}
@@ -113,15 +114,19 @@ message CompFisico {
   bool estado = 4;
 }
 
-// la palabra "repeated" quiere decir que aceptaremos una lista de eso
+message ImagenesEquipo {
+  string nombre_equipo = 1;
+  repeated bytes imagen = 2;
+}
+
+
 message Equipo {
   string nombre = 1;
   string descripcion = 2;
   string enlace_repo = 3;
-  repeated bytes imagen = 4;
-  repeated CompFisico lista_valvulas = 5;
-  repeated CompFisico lista_sensores = 6;
-  repeated CompFisico lista_camaras = 7;
+  repeated CompFisico valvula = 5;
+  repeated CompFisico sensor = 6;
+  repeated CompFisico camara = 7;
   bool estado = 8;
   string rut_configurador = 9;
 }
@@ -135,7 +140,7 @@ message EquipoAcotado {
 }
 
 message ListaEquiposAcotado {
-  repeated EquipoAcotado lista_equipos_acotado = 1;
+  repeated EquipoAcotado equipo_acotado = 1;
 }
 
 // esto corresponde a una fila de la tabla display simulaciones
@@ -148,7 +153,7 @@ message SimulacionAcotada {
 }
 
 message ListaSimulacionesAcotada {
-  repeated SimulacionAcotada lista_simulaciones_acotada = 1;
+  repeated SimulacionAcotada simulacion_acotada = 1;
 }
 
 // cada Evento es una fila de la tabla generador de eventos
@@ -160,7 +165,7 @@ message Evento {
 // una secuencia es el conjunto de eventos en una válvula
 // una secuencia es cada tabla de eventos
 message Secuencia {
-  repeated Evento lista_eventos = 1;
+  repeated Evento evento = 1;
 }
 
 message SimulacionEspecifica {
@@ -168,7 +173,7 @@ message SimulacionEspecifica {
   string fecha_simulacion = 2;
   string nombre_equipo = 3;
   string descripcion_equipo = 4;
-  repeated Secuencia lista_secuencias = 5;
+  repeated Secuencia secuencia = 5;
   double agua_caida = 6;
 }
 
@@ -177,7 +182,7 @@ message ParametrosInicioSimulacion {
   string rut_operador = 2;
   string nombre_simulacion = 3;
   string descripcion_simulacion = 4;
-  repeated Secuencia lista_secuencias = 5;
+  repeated Secuencia secuencia = 5;
 }
 
 message ResultadoInicioSimulacion {
