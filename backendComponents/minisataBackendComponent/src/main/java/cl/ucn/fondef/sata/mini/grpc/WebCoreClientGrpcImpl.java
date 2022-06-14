@@ -45,7 +45,7 @@ public class WebCoreClientGrpcImpl {
     }
 
     public GrpcMensajeResultadoOperacion agregarUsuario (GrpcUsuarioNuevo grpcUsuarioNuevo){
-        Usuario requestObject = Usuario.newBuilder()
+        Usuario usuarioCrear = Usuario.newBuilder()
                 .setRut(grpcUsuarioNuevo.getUsuarioNuevo().getRut())
                 .setNombre(grpcUsuarioNuevo.getUsuarioNuevo().getNombre())
                 .setApellido(grpcUsuarioNuevo.getUsuarioNuevo().getApellido())
@@ -54,14 +54,16 @@ public class WebCoreClientGrpcImpl {
                 .setRol(grpcUsuarioNuevo.getUsuarioNuevo().getRol())
                 .setEstado(grpcUsuarioNuevo.getUsuarioNuevo().isEstado())
                 .build();
-        UsuarioNuevo requestObject2 = UsuarioNuevo.newBuilder()
+        UsuarioNuevo requestObject = UsuarioNuevo.newBuilder()
                 .setRutAdministrador(grpcUsuarioNuevo.getRutAdministrador())
-                .setUsuarioNuevo(requestObject)
+                .setUsuarioNuevo(usuarioCrear)
                 .build();
 
-        MensajeResultadoOperacion serverResponse = this.stub.agregarUsuario(requestObject2);
+        MensajeResultadoOperacion serverResponse = this.stub.agregarUsuario(requestObject);
+
         GrpcMensajeResultadoOperacion objetoResultadoOperacion = new GrpcMensajeResultadoOperacion();
-        objetoResultadoOperacion.setMensajeTexto("Usuario Agregado Exitosamente");
+        objetoResultadoOperacion.setMensajeTexto(serverResponse.getMensajeTexto());
+
         return objetoResultadoOperacion;
     }
 

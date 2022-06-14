@@ -6,6 +6,7 @@ package cl.ucn.fondef.sata.mini.coredao;
 
 import cl.ucn.fondef.sata.mini.grpcobjects.GrpcUsuario;
 import cl.ucn.fondef.sata.mini.grpcobjects.GrpcUsuarioNuevo;
+import cl.ucn.fondef.sata.mini.model.RegistroUsuarios;
 import cl.ucn.fondef.sata.mini.model.Usuario;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
@@ -57,17 +58,51 @@ public class CoreDaoImpl implements CoreDao {
     @Override
     public String anadirUsuario(String rutAdmin, GrpcUsuario usuarioNuevo) {
 
-        String mensaje;
-        GrpcUsuario existe = entityManager.find(GrpcUsuario.class, usuarioNuevo.getRut());
-        if(existe == null){
-            GrpcUsuarioNuevo usuarioAgregar = new GrpcUsuarioNuevo();
-            usuarioAgregar.setRutAdministrador(rutAdmin);
-            usuarioAgregar.setUsuarioNuevo(usuarioNuevo);
+        // Existe la combinación rutAdmin y rutUsuario? => la combinacion es PK
+        String sqlQueryRegistros = "FROM RegistroUsuarios WHERE rut_administrador = :rutAdmin AND rut_usuario = :rutUsuarioNuevo";
+        List listaRegistros=  entityManager.createQuery(sqlQueryRegistros)
+                .setParameter("rutAdmin", rutAdmin)
+                .setParameter("rutUsuarioNuevo", usuarioNuevo.getRut())
+                .getResultList();
 
-            entityManager.getTransaction().begin();
-            entityManager.persist(usuarioAgregar);
-            entityManager.getTransaction().commit();
-            entityManager.close();
+        if( ! listaRegistros.isEmpty()){
+            return "El usuario ya existe";
+        }
+
+        // Buscar si existe el rut o el correo => Si existe uno de los dos, existe el usuario
+        String sqlQueryUsuario = "FROM Usuario WHERE correo = :correoUsuario OR rut = :rutUsuario";
+        List listaUsuarios=  entityManager.createQuery(sqlQueryUsuario)
+                .setParameter("correoUsuario", usuarioNuevo.getCorreo())
+                .setParameter("rutUsuario", usuarioNuevo.getRut())
+                .getResultList();
+        System.out.println("listaUsuarios = " + listaUsuarios);
+
+        String mensaje;
+        if(listaUsuarios.isEmpty()){
+            // RECORDAR QUE LAS CLASES DE /model/ REPRESENTAN LAS TABLAS DE LA DB
+            // tupla para la tabla "RegistroUsuarios"
+            RegistroUsuarios registroUsuarios = new RegistroUsuarios();
+            registroUsuarios.setRutAdministrador(rutAdmin);
+            registroUsuarios.setRutUsuario(usuarioNuevo.getRut());
+
+            // tupla para la tabla "Login"
+            Login loginUsuario = new Login();
+            loginUsuario.setRutUsuario(usuarioNuevo.getRut());
+            loginUsuario.setCorreo(usuarioNuevo.getCorreo());
+            loginUsuario.setContrasena(usuarioNuevo.getContrasena());
+
+            // tupla para la tabla "Usuario"
+            Usuario usuarioRegistrar = new Usuario();
+            usuarioRegistrar.setRut(usuarioNuevo.getRut());
+            usuarioRegistrar.setCorreo(usuarioNuevo.getCorreo());
+            usuarioRegistrar.setNombre(usuarioNuevo.getNombre());
+            usuarioRegistrar.setApellido(usuarioNuevo.getApellido());
+            usuarioRegistrar.setRol(usuarioNuevo.getRol());
+            usuarioRegistrar.setEstado(usuarioNuevo.isEstado());
+
+            entityManager.persist(registroUsuarios);
+            entityManager.persist(loginUsuario);
+            entityManager.persist(usuarioRegistrar);
 
             mensaje = "El usuario ha sido ingresado existosamente";
         }else{
