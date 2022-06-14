@@ -22,10 +22,10 @@ service WebCoreCommuService {
 
   // Usuario Configurador y Operador
   // agregarSimulador y setSimulador tienen la keyword "stream" para enviar las fotos como stream
-  rpc crearSimulador(stream Simulador) returns (MensajeResultadoOperacion){}
+  rpc crearSimulador(Simulador) returns (MensajeResultadoOperacion){}
   rpc getSimuladores(Empty) returns (ListaSimuladoresAcotado) {}
   rpc getSimulador(IdElemento) returns (Simulador) {}
-  rpc setSimulador(stream Simulador) returns (MensajeResultadoOperacion){}
+  rpc setSimulador(Simulador) returns (MensajeResultadoOperacion){}
 
   rpc getSimulaciones(Empty) returns (ListaSimulacionesAcotada){}
   rpc getSimulacionEspecifica(IdElemento) returns (SimulacionEspecifica){}

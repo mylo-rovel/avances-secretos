@@ -4,6 +4,7 @@
 
 package cl.ucn.fondef.sata.mini.coredao;
 
+import cl.ucn.fondef.sata.mini.grpcobjects.GrpcSimulador;
 import cl.ucn.fondef.sata.mini.grpcobjects.GrpcUsuario;
 import cl.ucn.fondef.sata.mini.grpcobjects.GrpcUsuarioNuevo;
 import cl.ucn.fondef.sata.mini.model.RegistroUsuarios;
@@ -108,6 +109,15 @@ public class CoreDaoImpl implements CoreDao {
         }else{
             mensaje = "El usuario ya existe";
         }
+
+        return mensaje;
+    }
+
+    @Override
+    public String anadirSimulador(String rutConfigurador, GrpcSimulador simulador) {
+
+        String mensaje = "";
+        //no se me ocurre como podria saber si el simulador ya existe
 
         return mensaje;
     }

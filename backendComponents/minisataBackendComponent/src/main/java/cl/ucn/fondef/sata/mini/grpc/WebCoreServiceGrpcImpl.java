@@ -1,14 +1,18 @@
 package cl.ucn.fondef.sata.mini.grpc;
 
 import cl.ucn.fondef.sata.mini.coredao.CoreDao;
+import cl.ucn.fondef.sata.mini.grpcobjects.GrpcCompFisico;
+import cl.ucn.fondef.sata.mini.grpcobjects.GrpcSimulador;
 import cl.ucn.fondef.sata.mini.grpcobjects.GrpcUsuario;
 import cl.ucn.fondef.sata.mini.grpcobjects.GrpcUsuarioNuevo;
+import cl.ucn.fondef.sata.mini.model.SimuladorTEMPORAL;
 import cl.ucn.fondef.sata.mini.model.Usuario;
 import cl.ucn.fondef.sata.mini.utilities.JwtUtil;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @GrpcService
@@ -76,6 +80,31 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         responseObserver.onNext(grpcResponse);
 
         // 3ro: Terminar el proceso
+        responseObserver.onCompleted();
+    }
+
+    public void crearSimulador(SimuladorTEMPORAL reqSimulador, StreamObserver<MensajeResultadoOperacion> responseObserver){
+        GrpcSimulador simulador = new GrpcSimulador();
+        simulador.setId(reqSimulador.getId());
+        simulador.setNombre(reqSimulador.getNombre());
+        simulador.setDescripcion(reqSimulador.getDescripcion());
+        simulador.setEnlace_repo(reqSimulador.getEnlaceRepo());
+        simulador.setEstado(reqSimulador.isEstado());
+        //List<GrpcCompFisico> listaVacia = new ArrayList<GrpcCompFisico>();
+        GrpcCompFisico[] listaVacia = new GrpcCompFisico[0];
+        simulador.setListaValvulas(listaVacia);
+        simulador.setListaSensores(listaVacia);
+        simulador.setListaCamaras(listaVacia);
+        simulador.setRutConfigurador(reqSimulador.getRutConfigurador());
+
+        String mensaje = coreDao.anadirSimulador(reqSimulador.getRutConfigurador(),simulador);
+
+        MensajeResultadoOperacion grpcResponse = MensajeResultadoOperacion.newBuilder()
+                .setMensajeTexto(mensaje)
+                .build();
+
+        responseObserver.onNext(grpcResponse);
+
         responseObserver.onCompleted();
     }
 }

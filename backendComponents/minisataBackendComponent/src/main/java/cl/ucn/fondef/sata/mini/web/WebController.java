@@ -53,5 +53,9 @@ public class WebController {
         return tokenEsValido(jwt);
     }
 
+    @RequestMapping(value = "api/simulador", method = RequestMethod.POST)
+      public GrpcMensajeResultadoOperacion registrarSimulador(@RequestBody GrpcSimulador simulador){
+      return webCoreClientGrpc.crearSimulador(simulador);
+    }
 
 }

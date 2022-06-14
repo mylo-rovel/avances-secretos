@@ -1,9 +1,6 @@
 package cl.ucn.fondef.sata.mini.grpc;
 
-import cl.ucn.fondef.sata.mini.grpcobjects.GrpcCredenciales;
-import cl.ucn.fondef.sata.mini.grpcobjects.GrpcMensajeResultadoOperacion;
-import cl.ucn.fondef.sata.mini.grpcobjects.GrpcObjetoSesion;
-import cl.ucn.fondef.sata.mini.grpcobjects.GrpcUsuarioNuevo;
+import cl.ucn.fondef.sata.mini.grpcobjects.*;
 import io.grpc.ManagedChannel;
 import io.grpc.netty.shaded.io.grpc.netty.NettyChannelBuilder;
 import org.springframework.stereotype.Service;
@@ -67,4 +64,22 @@ public class WebCoreClientGrpcImpl {
         return objetoResultadoOperacion;
     }
 
+    public GrpcMensajeResultadoOperacion crearSimulador (GrpcSimulador grpcSimulador){
+        GrpcCompFisico[] listaVacia = new GrpcCompFisico[0];
+        Simulador requestObject = Simulador.newBuilder()
+                .setNombre(grpcSimulador.getNombre())
+                .setDescripcion(grpcSimulador.getDescripcion())
+                .setEnlaceRepo(grpcSimulador.getEnlace_repo())
+                .setEstado(grpcSimulador.isEstado())
+                //.setListaValvulas(listaVacia)
+                //.setListaSensores(listaVacia)
+                //.setListaCamaras(listaVacia)
+                .setRutConfigurador(grpcSimulador.getRutConfigurador())
+                .build();
+
+        MensajeResultadoOperacion serverResponse = this.stub.crearSimulador(requestObject);
+        GrpcMensajeResultadoOperacion objetoResultadoOperacion = new GrpcMensajeResultadoOperacion();
+        objetoResultadoOperacion.setMensajeTexto("Simulador creado exitosamente");
+        return objetoResultadoOperacion;
+    }
 }
