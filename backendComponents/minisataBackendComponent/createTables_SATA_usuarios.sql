@@ -31,7 +31,7 @@ CREATE TABLE usuario
 
 CREATE TABLE equipo
 (
-    id                  int(11)         NOT NULL AUTO_INCREMENT,
+    id                  bigint(20)      NOT NULL AUTO_INCREMENT,
     nombre              varchar(30)     NOT NULL UNIQUE,
     descripcion         varchar(255)    NOT NULL,
     url_repo            varchar(100)    NOT NULL UNIQUE,
@@ -44,9 +44,9 @@ CREATE TABLE equipo
 
 CREATE TABLE simulacion
 (
-    id                  int(11)         NOT NULL AUTO_INCREMENT,
+    id                  bigint(20)      NOT NULL AUTO_INCREMENT,
     rut_operador        varchar(10)     NOT NULL,
-    id_equipo           int(11)         NOT NULL,
+    id_equipo           bigint(20)      NOT NULL,
     nombre              varchar(20)     NOT NULL UNIQUE,
     descripcion         varchar(100)    NOT NULL,
     fecha_creacion      date            NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -59,16 +59,16 @@ CREATE TABLE simulacion
 
 CREATE TABLE tipocomponente
 (
-    id                  int(11)        NOT NULL AUTO_INCREMENT,
+    id                  bigint(20)     NOT NULL AUTO_INCREMENT,
     nombre              varchar(20)    NOT NULL,
     PRIMARY KEY (id)
 );
 
 CREATE TABLE componentefisico
 (
-    id                  int(11)         NOT NULL AUTO_INCREMENT,
-    id_tipo_compo       int(11)         NOT NULL,
-    id_equipo           int(11)         NOT NULL,
+    id                  bigint(20)      NOT NULL AUTO_INCREMENT,
+    id_tipo_compo       bigint(20)      NOT NULL,
+    id_equipo           bigint(20)      NOT NULL,
     descripcion         varchar(100)    NOT NULL,
     pin                 tinyint(3)      NOT NULL,
     estado              tinyint(3)      NOT NULL,
@@ -79,9 +79,9 @@ CREATE TABLE componentefisico
 
 CREATE TABLE secuencia
 (
-    id                  int(11)         NOT NULL AUTO_INCREMENT,
-    id_tipo_compo       int(11)         NOT NULL,
-    id_simulacion       int(11)         NOT NULL,
+    id                  bigint(20)         NOT NULL AUTO_INCREMENT,
+    id_tipo_compo       bigint(20)         NOT NULL,
+    id_simulacion       bigint(20)         NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (id_tipo_compo) REFERENCES tipocomponente (id),
     FOREIGN KEY (id_simulacion) REFERENCES simulacion (id)
@@ -89,8 +89,8 @@ CREATE TABLE secuencia
 
 CREATE TABLE evento
 (
-    id                  int(11)         NOT NULL AUTO_INCREMENT,
-    id_secuencia        int(11)         NOT NULL,
+    id                  bigint(20)      NOT NULL AUTO_INCREMENT,
+    id_secuencia        bigint(20)      NOT NULL,
     intensidad          int(11)         NOT NULL,
     duracion            int(11)         NOT NULL,
     PRIMARY KEY (id),
@@ -99,8 +99,8 @@ CREATE TABLE evento
 
 CREATE TABLE imgequipo
 (
-    id                  int(11)         NOT NULL AUTO_INCREMENT,
-    id_equipo           int(11)         NOT NULL,
+    id                  bigint(20)      NOT NULL AUTO_INCREMENT,
+    id_equipo           bigint(20)      NOT NULL,
     imagen              blob            NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (id_equipo) REFERENCES equipo (id)
