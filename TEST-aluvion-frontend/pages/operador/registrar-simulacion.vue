@@ -81,7 +81,7 @@ export default Vue.extend({
                         </div>
                         <div class = "row my-4 conf-secuencias btn-opciones">
                             <div class= "col">
-                                <NuxtLink to="/operador/main-operador"><CancelButtom :cancelbutton = "cancelbutton"/></NuxtLink>
+                                <NuxtLink to="/menu-operador"><CancelButtom :cancelbutton = "cancelbutton"/></NuxtLink>
                             </div>                            
                             <div class="col">    
                                 <NuxtLink to="/operador/registrar-simulacion"><SubmitButton :submitbutton = "submitbutton"/></NuxtLink>

@@ -7,7 +7,7 @@ export default {
 </script>
 
 <template>
-    <button class=" btn cancel-button">{{cancelbutton}}</button>
+    <button class="cancel-button">{{cancelbutton}}</button>
 </template>
 
 <style>
