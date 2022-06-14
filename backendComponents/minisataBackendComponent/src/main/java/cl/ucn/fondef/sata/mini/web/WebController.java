@@ -38,14 +38,11 @@ public class WebController {
     }
 
     @RequestMapping(value = "api/usuarios", method = RequestMethod.POST)
-//    public String registrarUsuario(@RequestHeader(value="Authorization") String jwt, @RequestBody GrpcUsuarioNuevo grpcUsuarioNuevo) {
-    //public String registrarUsuario(@RequestHeader(value="Authorization") String jwt) {
+    //public GrpcMensajeResultadoOperacion registrarUsuario(@RequestHeader(value="Authorization") String jwt, @RequestBody GrpcUsuarioNuevo usuarioNuevo) {
       public GrpcMensajeResultadoOperacion registrarUsuario(@RequestBody GrpcUsuarioNuevo usuarioNuevo){
-        //System.out.println("jwt = " + jwt);
         //if (!tokenEsValido(jwt)){
         //    return "No hay permisos";
         //}
-        System.out.println("usuarioNuevo = " + usuarioNuevo);
         return webCoreClientGrpc.agregarUsuario(usuarioNuevo);
     }
 

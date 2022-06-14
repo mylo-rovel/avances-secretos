@@ -53,10 +53,9 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
     }
 
     public void agregarUsuario(UsuarioNuevo reqUsuarioNuevo, StreamObserver<MensajeResultadoOperacion> responseObserver){
-        GrpcUsuarioNuevo usuarioNuevo = new GrpcUsuarioNuevo();
         GrpcUsuario datosUsuario = new GrpcUsuario();
 
-        //por terminar
+        // Guardando nuevamente
         datosUsuario.setNombre(reqUsuarioNuevo.getUsuarioNuevo().getNombre());
         datosUsuario.setApellido(reqUsuarioNuevo.getUsuarioNuevo().getApellido());
         datosUsuario.setRut(reqUsuarioNuevo.getUsuarioNuevo().getRut());
@@ -65,12 +64,7 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         datosUsuario.setRol(reqUsuarioNuevo.getUsuarioNuevo().getRol());
         datosUsuario.setEstado(reqUsuarioNuevo.getUsuarioNuevo().getEstado());
 
-        //creo que estas dos lineas no son necesarias
-        //usuarioNuevo.setRutAdministrador(reqUsuarioNuevo.getRutAdministrador());
-        //usuarioNuevo.setUsuarioNuevo(datosUsuario);
-
         String mensaje = coreDao.anadirUsuario(reqUsuarioNuevo.getRutAdministrador(), datosUsuario);
-//        coreDao.
 
         // PROCESO DE ENVÍO DE RESPUESTA GRPC
         // 1ro: Construir el objeto que almacenará la información a devolver al cliente

@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Table(name = "simulador")
 @ToString
 @EqualsAndHashCode
-public class SimuladorTEMPORAL {
+public class Simulador {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
