@@ -6,11 +6,9 @@ package cl.ucn.fondef.sata.mini.coredao;
 
 import cl.ucn.fondef.sata.mini.grpcobjects.GrpcEquipo;
 import cl.ucn.fondef.sata.mini.grpcobjects.GrpcUsuario;
-import cl.ucn.fondef.sata.mini.model.RegistroUsuarios;
-import cl.ucn.fondef.sata.mini.model.Usuario;
+import cl.ucn.fondef.sata.mini.model.*;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
-import cl.ucn.fondef.sata.mini.model.Login;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -119,5 +117,31 @@ public class CoreDaoImpl implements CoreDao {
         //no se me ocurre como podria saber si el equipo ya existe
 
         return mensaje;
+    }
+
+    @Override
+    public List<Simulacion> obtenerSimulaciones(){
+
+        String mensaje;
+        String sqlQuery = "FROM Simulacion";
+        List listaResultado = entityManager.createQuery(sqlQuery).getResultList();
+        if(listaResultado.isEmpty()){
+            mensaje = "No se encontraron simulaciones";
+        }else{
+            mensaje = "Hay simulaciones";
+        }
+
+        return listaResultado;
+    }
+
+    @Override
+    public Equipo obtenerEquipoEspecifico(Long idEquipo){
+        String sqlQuery = "FROM Equipo WHERE id = :id";
+        List listaResultado = entityManager.createQuery(sqlQuery).setParameter("id", idEquipo).getResultList();
+        if(listaResultado.isEmpty()){
+            return null;
+        }else{
+            return (Equipo) listaResultado.get(0);
+        }
     }
 }
