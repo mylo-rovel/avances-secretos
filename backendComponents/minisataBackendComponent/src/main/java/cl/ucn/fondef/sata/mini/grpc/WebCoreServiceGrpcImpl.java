@@ -118,25 +118,21 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         for (Simulacion simulacion : lista) {
             equipoActual = coreDao.obtenerEquipoEspecifico(simulacion.getIdEquipo());
             SimulacionAcotada simulacionAcotada = SimulacionAcotada.newBuilder()
-            .setIdSimulacion(simulacion.getId())
-            .setNombreEquipo(equipoActual.getNombre())
-            .setFechaSimulacion(simulacion.getFechaCreacion())
-            .setAguaCaida(simulacion.getAguaCaida()).build();
+                .setIdSimulacion(simulacion.getId())
+                .setNombreEquipo(equipoActual.getNombre())
+                .setFechaSimulacion(simulacion.getFechaCreacion())
+                .setAguaCaida(simulacion.getAguaCaida()).build();
             listaAcotada.add(simulacionAcotada);
-
         }
 
-
-        //no se como se podria mandar la lista
 
         ListaSimulacionesAcotada.Builder listToReturn = ListaSimulacionesAcotada.newBuilder();
 
-
         for (SimulacionAcotada simulacion : listaAcotada) {
-            listToReturn
+            listToReturn.addSimulacionAcotada(simulacion);
         }
 
-        responseObserver.onNext(grpcResponse);
+        responseObserver.onNext(listToReturn.build());
 
         responseObserver.onCompleted();
     }
