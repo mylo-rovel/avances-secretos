@@ -31,6 +31,11 @@ public class Usuario {
 
     @Getter
     @Setter
+    @Column(name = "apellido")
+    private String apellido;
+
+    @Getter
+    @Setter
     @Column(name = "correo")
     private String correo;
 
@@ -42,5 +47,5 @@ public class Usuario {
     @Getter
     @Setter
     @Column(name = "estado")
-    private byte estado;
+    private boolean estado;
 }
