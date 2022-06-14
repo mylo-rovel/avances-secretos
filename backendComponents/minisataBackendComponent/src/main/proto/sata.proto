@@ -23,9 +23,10 @@ service WebCoreCommuService {
   // Usuario Configurador y Operador
   // agregarEquipo y setEquipo tienen la keyword "stream" para enviar las fotos como stream
   rpc crearEquipo(Equipo) returns (MensajeResultadoOperacion){}
+  rpc subirImagenesEquipo(stream ImagenesEquipo) returns (MensajeResultadoOperacion){}
   rpc getEquipos(Empty) returns (ListaEquiposAcotado) {}
   rpc getEquipo(IdElemento) returns (Equipo) {}
-  rpc setEquipo(Equipo) returns (MensajeResultadoOperacion){}
+  rpc setEquipo(stream Equipo) returns (MensajeResultadoOperacion){}
 
   rpc getSimulaciones(Empty) returns (ListaSimulacionesAcotada){}
   rpc getSimulacionEspecifica(IdElemento) returns (SimulacionEspecifica){}
@@ -118,12 +119,16 @@ message Equipo {
   string nombre = 1;
   string descripcion = 2;
   string enlace_repo = 3;
-  repeated bytes imagen = 4;
   repeated CompFisico lista_valvulas = 5;
   repeated CompFisico lista_sensores = 6;
   repeated CompFisico lista_camaras = 7;
   bool estado = 8;
   string rut_configurador = 9;
+}
+
+message ImagenesEquipo {
+  string nombre_equipo = 1;
+  repeated bytes imagen = 2;
 }
 
 // esto corresponde a una fila de la tabla display equipos
