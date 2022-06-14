@@ -3,12 +3,18 @@ package cl.ucn.fondef.sata.mini.grpc;
 import cl.ucn.fondef.sata.mini.coredao.CoreDao;
 import cl.ucn.fondef.sata.mini.grpcobjects.GrpcCompFisico;
 import cl.ucn.fondef.sata.mini.grpcobjects.GrpcEquipo;
+import cl.ucn.fondef.sata.mini.grpcobjects.GrpcSimulacionAcotada;
 import cl.ucn.fondef.sata.mini.grpcobjects.GrpcUsuario;
+import cl.ucn.fondef.sata.mini.model.Equipo;
+import cl.ucn.fondef.sata.mini.model.Simulacion;
 import cl.ucn.fondef.sata.mini.model.Usuario;
 import cl.ucn.fondef.sata.mini.utilities.JwtUtil;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @GrpcService
 // SERVIDOR gRPC "Central Core"
@@ -98,6 +104,37 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         MensajeResultadoOperacion grpcResponse = MensajeResultadoOperacion.newBuilder()
                 .setMensajeTexto(mensaje)
                 .build();
+
+        responseObserver.onNext(grpcResponse);
+
+        responseObserver.onCompleted();
+    }
+
+    public void getSimulaciones(StreamObserver<ListaSimulacionesAcotada> responseObserver){
+        List<Simulacion> lista = coreDao.obtenerSimulaciones();
+        Equipo equipoActual;
+        List<SimulacionAcotada> listaAcotada = new ArrayList<>();
+
+        for (Simulacion simulacion : lista) {
+            equipoActual = coreDao.obtenerEquipoEspecifico(simulacion.getIdEquipo());
+            SimulacionAcotada simulacionAcotada = SimulacionAcotada.newBuilder()
+            .setIdSimulacion(simulacion.getId())
+            .setNombreEquipo(equipoActual.getNombre())
+            .setFechaSimulacion(simulacion.getFechaCreacion())
+            .setAguaCaida(simulacion.getAguaCaida()).build();
+            listaAcotada.add(simulacionAcotada);
+
+        }
+
+
+        //no se como se podria mandar la lista
+
+        ListaSimulacionesAcotada.Builder listToReturn = ListaSimulacionesAcotada.newBuilder();
+
+
+        for (SimulacionAcotada simulacion : listaAcotada) {
+            listToReturn
+        }
 
         responseObserver.onNext(grpcResponse);
 
