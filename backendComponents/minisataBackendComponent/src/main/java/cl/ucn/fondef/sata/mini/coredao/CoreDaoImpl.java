@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.List;
 
 @Repository
@@ -73,7 +74,6 @@ public class CoreDaoImpl implements CoreDao {
                 .setParameter("correoUsuario", usuarioNuevo.getCorreo())
                 .setParameter("rutUsuario", usuarioNuevo.getRut())
                 .getResultList();
-        System.out.println("listaUsuarios = " + listaUsuarios);
 
         String mensaje;
         if(listaUsuarios.isEmpty()){
@@ -124,24 +124,44 @@ public class CoreDaoImpl implements CoreDao {
 
         String mensaje;
         String sqlQuery = "FROM Simulacion";
-        List listaResultado = entityManager.createQuery(sqlQuery).getResultList();
+        Query listaResultadoQuery = entityManager.createQuery(sqlQuery);
+        List listaResultado = listaResultadoQuery.getResultList();
+
         if(listaResultado.isEmpty()){
             mensaje = "No se encontraron simulaciones";
         }else{
             mensaje = "Hay simulaciones";
         }
-
         return listaResultado;
+
     }
 
     @Override
     public Equipo obtenerEquipoEspecifico(Long idEquipo){
         String sqlQuery = "FROM Equipo WHERE id = :id";
-        List listaResultado = entityManager.createQuery(sqlQuery).setParameter("id", idEquipo).getResultList();
+        Query listaResultadoQuery = entityManager.createQuery(sqlQuery)
+                .setParameter("id", Long.valueOf(idEquipo));
+        try {
+            List listaResultado = listaResultadoQuery.getResultList();
+            if(listaResultado.isEmpty()){
+                return null;
+            }else{
+                return (Equipo) listaResultado.get(0);
+            }
+        }
+        catch (Exception ex) {
+//            System.out.println("ex = " + ex);
+            return null;
+        }
+    }
+    @Override
+    public Simulacion obtenerSimulacionEspecifica(int idSimulacion){
+        String sqlQuery = "FROM Simulacion WHERE id = :id";
+        List listaResultado = entityManager.createQuery(sqlQuery).setParameter("id", idSimulacion).getResultList();
         if(listaResultado.isEmpty()){
             return null;
         }else{
-            return (Equipo) listaResultado.get(0);
+            return (Simulacion) listaResultado.get(0);
         }
     }
 }

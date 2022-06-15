@@ -8,7 +8,6 @@ option java_package = "cl.ucn.fondef.sata.mini.grpc";
 // Estas son las peticiones que se enviarán desde "Backend Application"
 // hasta el "Central Core" para que pueda manejar la base de datos
 service WebCoreCommuService {
-  // el atributo JsonWebToken del objeto ObjetoSesion debe ser "" si el inicio de sesion falla
   rpc loginUsuario(Credenciales) returns (ObjetoSesion){}
 
   // Usuario Administrador
@@ -119,6 +118,10 @@ message ImagenesEquipo {
   repeated bytes imagen = 2;
 }
 
+<<<<<<< HEAD:backendComponents/minisataBackendComponent/src/main/proto/sata.proto
+=======
+
+>>>>>>> getSimulacionesDos:backendComponents/minisataBackendComponent/src/main/proto/sataViejo.proto
 message Equipo {
   string nombre = 1;
   string descripcion = 2;

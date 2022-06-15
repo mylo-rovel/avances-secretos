@@ -1,8 +1,10 @@
 package cl.ucn.fondef.sata.mini.grpc;
 
 import cl.ucn.fondef.sata.mini.grpcobjects.*;
+import cl.ucn.fondef.sata.mini.model.Simulacion;
 import io.grpc.ManagedChannel;
 import io.grpc.netty.shaded.io.grpc.netty.NettyChannelBuilder;
+import net.bytebuddy.matcher.FilterableList;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -99,7 +101,7 @@ public class WebCoreClientGrpcImpl {
 //        Equipo requestObject = Equipo.newBuilder()
 //                .setNombre(grpcEquipo.getNombre())
 //                .setDescripcion(grpcEquipo.getDescripcion())
-//                .setEnlaceRepo(grpcEquipo.getEnlaceRepo())
+//                .seturlRepo(grpcEquipo.geturlRepo())
 //                .setEstado(grpcEquipo.isEstado())
 //                .setListaValvulas(componentesEnviar[0])
 //                .setListaSensores(componentesEnviar[1])
@@ -114,6 +116,48 @@ public class WebCoreClientGrpcImpl {
         return objetoResultadoOperacion;
     }
 
+<<<<<<< HEAD
 //    getSimulaciones
+=======
+    public GrpcListaSimulacionesAcotada getSimulaciones(){
+        Empty empty = Empty.newBuilder().build();
+        ListaSimulacionesAcotada listaSimulacionesAcotada = this.stub.getSimulaciones(empty);
+        List<GrpcSimulacionAcotada> listaRellenar = new ArrayList<>();
+        for(SimulacionAcotada  simulacionAcotada : listaSimulacionesAcotada.getSimulacionAcotadaList()){
+            GrpcSimulacionAcotada simAcoBuilder = new GrpcSimulacionAcotada();
+            simAcoBuilder.setIdSimulacion(
+                    Math.toIntExact(
+                            simulacionAcotada.getIdSimulacion()
+                    )
+            );
+            simAcoBuilder.setNombreEquipo(simulacionAcotada.getNombreEquipo());
+            simAcoBuilder.setFechaSimulacion(simulacionAcotada.getFechaSimulacion());
+            simAcoBuilder.setAguaCaida(simulacionAcotada.getAguaCaida());
+        }
+>>>>>>> getSimulacionesDos
 
+
+        GrpcListaSimulacionesAcotada listaEnviar = new GrpcListaSimulacionesAcotada();
+        listaEnviar.setListaSimulacionAcotada(listaRellenar);
+
+        return listaEnviar;
+    }
+
+    public GrpcSimulacionEspecifica getSimulacionEspecifica(int idElemento){
+        IdElemento idElementoReturn = IdElemento.newBuilder().setId(idElemento).build();
+        SimulacionEspecifica simulacionEspecifica = this.stub.getSimulacionEspecifica(idElementoReturn);
+
+        GrpcSimulacionEspecifica grpcSimulacionEspecifica = new GrpcSimulacionEspecifica();
+        grpcSimulacionEspecifica.setIdSimulacion(simulacionEspecifica.getIdSimulacion());
+        grpcSimulacionEspecifica.setNombreEquipo(simulacionEspecifica.getNombreEquipo());
+        grpcSimulacionEspecifica.setDescrEquipo(simulacionEspecifica.getDescripcionEquipo());
+        grpcSimulacionEspecifica.setFechaSimulacion(simulacionEspecifica.getFechaSimulacion());
+
+        //revisar si esto esta bien
+        grpcSimulacionEspecifica.setListaSecuencias(grpcSimulacionEspecifica.getListaSecuencias());
+
+        grpcSimulacionEspecifica.setAguaCaida(simulacionEspecifica.getAguaCaida());
+
+        return grpcSimulacionEspecifica;
+    }
 }

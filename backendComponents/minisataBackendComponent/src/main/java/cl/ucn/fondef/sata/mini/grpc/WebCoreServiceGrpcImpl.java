@@ -89,7 +89,7 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
 
         equipo.setNombre(reqEquipo.getNombre());
         equipo.setDescripcion(reqEquipo.getDescripcion());
-        equipo.setEnlaceRepo(reqEquipo.getEnlaceRepo());
+        equipo.setUrlRepo(reqEquipo.getUrlRepo());
 
         //List<GrpcCompFisico> listaVacia = new ArrayList<GrpcCompFisico>();
         GrpcCompFisico[] listaVacia = new GrpcCompFisico[0];
@@ -110,13 +110,16 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         responseObserver.onCompleted();
     }
 
-    public void getSimulaciones(StreamObserver<ListaSimulacionesAcotada> responseObserver){
+    public void getSimulaciones(Empty empty, StreamObserver<ListaSimulacionesAcotada> responseObserver){
         List<Simulacion> lista = coreDao.obtenerSimulaciones();
         Equipo equipoActual;
         List<SimulacionAcotada> listaAcotada = new ArrayList<>();
 
         for (Simulacion simulacion : lista) {
             equipoActual = coreDao.obtenerEquipoEspecifico(simulacion.getIdEquipo());
+            System.out.println("equipoActual = " + equipoActual);
+            System.out.println("simulacion = " + simulacion);
+            System.out.println("\n");
             SimulacionAcotada simulacionAcotada = SimulacionAcotada.newBuilder()
                 .setIdSimulacion(simulacion.getId())
                 .setNombreEquipo(equipoActual.getNombre())
@@ -131,9 +134,32 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         for (SimulacionAcotada simulacion : listaAcotada) {
             listToReturn.addSimulacionAcotada(simulacion);
         }
+<<<<<<< HEAD
 
+=======
+        System.out.println("listToReturn = " + listToReturn);
+>>>>>>> getSimulacionesDos
         responseObserver.onNext(listToReturn.build());
 
+        responseObserver.onCompleted();
+    }
+
+    public void getSimulacionEspecifica(int idElemento, StreamObserver<SimulacionEspecifica> responseObserver){
+
+        Simulacion simulacion = coreDao.obtenerSimulacionEspecifica(idElemento);
+
+        SimulacionEspecifica.Builder simulacionRetornar = SimulacionEspecifica.newBuilder();
+
+        simulacionRetornar.setIdSimulacion(simulacion.getId());
+        simulacionRetornar.setFechaSimulacion(simulacion.getFechaCreacion());
+
+        Equipo equipo = coreDao.obtenerEquipoEspecifico(simulacion.getIdEquipo());
+        simulacionRetornar.setNombreEquipo(equipo.getNombre());
+        simulacionRetornar.setDescripcionEquipo(equipo.getDescripcion());
+        //ver donde meter la lista de secuencias
+        simulacionRetornar.setAguaCaida(simulacion.getAguaCaida());
+
+        responseObserver.onNext(simulacionRetornar.build());
         responseObserver.onCompleted();
     }
 }

@@ -50,12 +50,12 @@ public class Simulacion {
 
     @Getter
     @Setter
-    @Column(name = "fecha_ejecucion")
-    private String fechaEjecucion;
+    @Column(name = "agua_caida")
+    private Double aguaCaida;
 
     @Getter
     @Setter
-    @Column(name = "agua_caida")
-    private Double aguaCaida;
+    @Column(name = "fecha_ejecucion")
+    private String fechaEjecucion;
 
 }

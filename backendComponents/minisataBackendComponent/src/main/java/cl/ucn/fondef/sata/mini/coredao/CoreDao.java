@@ -18,6 +18,6 @@ public interface CoreDao {
     String anadirUsuario(String rutAdmin, GrpcUsuario usuarioNuevo);
     String anadirEquipo(String rutConfigurador, GrpcEquipo equipo);
     List<Simulacion> obtenerSimulaciones();
-
     Equipo obtenerEquipoEspecifico(Long idEquipo);
+    Simulacion obtenerSimulacionEspecifica(int idSimulacion);
 }
