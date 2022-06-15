@@ -144,4 +144,14 @@ public class CoreDaoImpl implements CoreDao {
             return (Equipo) listaResultado.get(0);
         }
     }
+    @Override
+    public Simulacion obtenerSimulacionEspecifica(int idSimulacion){
+        String sqlQuery = "FROM Simulacion WHERE id = :id";
+        List listaResultado = entityManager.createQuery(sqlQuery).setParameter("id", idSimulacion).getResultList();
+        if(listaResultado.isEmpty()){
+            return null;
+        }else{
+            return (Simulacion) listaResultado.get(0);
+        }
+    }
 }

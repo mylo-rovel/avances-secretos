@@ -136,4 +136,23 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
 
         responseObserver.onCompleted();
     }
+
+    public void getSimulacionEspecifica(int idElemento, StreamObserver<SimulacionEspecifica> responseObserver){
+
+        Simulacion simulacion = coreDao.obtenerSimulacionEspecifica(idElemento);
+
+        SimulacionEspecifica.Builder simulacionRetornar = SimulacionEspecifica.newBuilder();
+
+        simulacionRetornar.setIdSimulacion(simulacion.getId());
+        simulacionRetornar.setFechaSimulacion(simulacion.getFechaCreacion());
+
+        Equipo equipo = coreDao.obtenerEquipoEspecifico(simulacion.getIdEquipo());
+        simulacionRetornar.setNombreEquipo(equipo.getNombre());
+        simulacionRetornar.setDescripcionEquipo(equipo.getDescripcion());
+        //ver donde meter la lista de secuencias
+        simulacionRetornar.setAguaCaida(simulacion.getAguaCaida());
+
+        responseObserver.onNext(simulacionRetornar.build());
+        responseObserver.onCompleted();
+    }
 }

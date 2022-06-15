@@ -64,8 +64,13 @@ public class WebController {
     }
 
     @RequestMapping(value = "api/simulaciones/lista", method = RequestMethod.GET)
-    public GrpcListaSimulacionesAcotada mostrarSimulaciones(){
+    public GrpcListaSimulacionesAcotada mostrarSimulaciones() {
         return webCoreClientGrpc.getSimulaciones();
+    }
+
+    @RequestMapping(value = "api/simulaciones/especifica", method = RequestMethod.POST)
+    public GrpcSimulacionEspecifica mostrarSimulacionEspecifica(@RequestBody GrpcIdElemento idElemento){
+        return webCoreClientGrpc.getSimulacionEspecifica(Math.toIntExact(idElemento.getId()));
     }
 
 }

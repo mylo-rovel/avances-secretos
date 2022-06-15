@@ -139,5 +139,21 @@ public class WebCoreClientGrpcImpl {
         return listaEnviar;
     }
 
+    public GrpcSimulacionEspecifica getSimulacionEspecifica(int idElemento){
+        IdElemento idElementoReturn = IdElemento.newBuilder().setId(idElemento).build();
+        SimulacionEspecifica simulacionEspecifica = this.stub.getSimulacionEspecifica(idElementoReturn);
 
+        GrpcSimulacionEspecifica grpcSimulacionEspecifica = new GrpcSimulacionEspecifica();
+        grpcSimulacionEspecifica.setIdSimulacion(simulacionEspecifica.getIdSimulacion());
+        grpcSimulacionEspecifica.setNombreEquipo(simulacionEspecifica.getNombreEquipo());
+        grpcSimulacionEspecifica.setDescrEquipo(simulacionEspecifica.getDescripcionEquipo());
+        grpcSimulacionEspecifica.setFechaSimulacion(simulacionEspecifica.getFechaSimulacion());
+
+        //revisar si esto esta bien
+        grpcSimulacionEspecifica.setListaSecuencias(grpcSimulacionEspecifica.getListaSecuencias());
+
+        grpcSimulacionEspecifica.setAguaCaida(simulacionEspecifica.getAguaCaida());
+
+        return grpcSimulacionEspecifica;
+    }
 }
