@@ -116,6 +116,7 @@ public class WebCoreClientGrpcImpl {
         return objetoResultadoOperacion;
     }
 
+
     public GrpcListaSimulacionesAcotada getSimulaciones(){
         Empty empty = Empty.newBuilder().build();
         ListaSimulacionesAcotada listaSimulacionesAcotada = this.stub.getSimulaciones(empty);
@@ -138,6 +139,7 @@ public class WebCoreClientGrpcImpl {
 
         return listaEnviar;
     }
+
 
     public GrpcSimulacionEspecifica getSimulacionEspecifica(int idElemento){
         IdElemento idElementoReturn = IdElemento.newBuilder().setId(idElemento).build();

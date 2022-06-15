@@ -134,6 +134,7 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
 
         responseObserver.onNext(listToReturn.build());
 
+
         responseObserver.onCompleted();
     }
 
@@ -151,6 +152,7 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         simulacionRetornar.setDescripcionEquipo(equipo.getDescripcion());
         //ver donde meter la lista de secuencias
         simulacionRetornar.setAguaCaida(simulacion.getAguaCaida());
+
 
         responseObserver.onNext(simulacionRetornar.build());
         responseObserver.onCompleted();

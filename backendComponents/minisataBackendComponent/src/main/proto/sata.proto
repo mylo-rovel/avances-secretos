@@ -119,7 +119,6 @@ message ImagenesEquipo {
   repeated bytes imagen = 2;
 }
 
-
 message Equipo {
   string nombre = 1;
   string descripcion = 2;
