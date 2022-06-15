@@ -89,7 +89,7 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
 
         equipo.setNombre(reqEquipo.getNombre());
         equipo.setDescripcion(reqEquipo.getDescripcion());
-        equipo.setEnlaceRepo(reqEquipo.getEnlaceRepo());
+        equipo.setUrlRepo(reqEquipo.getUrlRepo());
 
         //List<GrpcCompFisico> listaVacia = new ArrayList<GrpcCompFisico>();
         GrpcCompFisico[] listaVacia = new GrpcCompFisico[0];
@@ -110,13 +110,16 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         responseObserver.onCompleted();
     }
 
-    public void getSimulaciones(StreamObserver<ListaSimulacionesAcotada> responseObserver){
+    public void getSimulaciones(Empty empty, StreamObserver<ListaSimulacionesAcotada> responseObserver){
         List<Simulacion> lista = coreDao.obtenerSimulaciones();
         Equipo equipoActual;
         List<SimulacionAcotada> listaAcotada = new ArrayList<>();
 
         for (Simulacion simulacion : lista) {
             equipoActual = coreDao.obtenerEquipoEspecifico(simulacion.getIdEquipo());
+            System.out.println("equipoActual = " + equipoActual);
+            System.out.println("simulacion = " + simulacion);
+            System.out.println("\n");
             SimulacionAcotada simulacionAcotada = SimulacionAcotada.newBuilder()
                 .setIdSimulacion(simulacion.getId())
                 .setNombreEquipo(equipoActual.getNombre())
@@ -131,7 +134,7 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         for (SimulacionAcotada simulacion : listaAcotada) {
             listToReturn.addSimulacionAcotada(simulacion);
         }
-
+        System.out.println("listToReturn = " + listToReturn);
         responseObserver.onNext(listToReturn.build());
 
         responseObserver.onCompleted();

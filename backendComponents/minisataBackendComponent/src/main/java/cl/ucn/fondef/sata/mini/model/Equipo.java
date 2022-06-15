@@ -12,7 +12,7 @@ import lombok.ToString;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "simulador")
+@Table(name = "equipo")
 @ToString
 @EqualsAndHashCode
 public class Equipo {
@@ -36,8 +36,8 @@ public class Equipo {
 
     @Getter
     @Setter
-    @Column(name = "enlace_repo")
-    private String enlaceRepo;
+    @Column(name = "url_repo ")
+    private String urlRepo;
 
     @Getter
     @Setter

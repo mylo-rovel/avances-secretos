@@ -101,7 +101,7 @@ public class WebCoreClientGrpcImpl {
 //        Equipo requestObject = Equipo.newBuilder()
 //                .setNombre(grpcEquipo.getNombre())
 //                .setDescripcion(grpcEquipo.getDescripcion())
-//                .setEnlaceRepo(grpcEquipo.getEnlaceRepo())
+//                .seturlRepo(grpcEquipo.geturlRepo())
 //                .setEstado(grpcEquipo.isEstado())
 //                .setListaValvulas(componentesEnviar[0])
 //                .setListaSensores(componentesEnviar[1])

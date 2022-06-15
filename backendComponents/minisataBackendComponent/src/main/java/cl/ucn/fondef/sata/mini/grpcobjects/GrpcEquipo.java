@@ -26,7 +26,7 @@ public class GrpcEquipo {
 
     @Getter
     @Setter
-    private String enlaceRepo;
+    private String urlRepo;
 
     @Getter
     @Setter
