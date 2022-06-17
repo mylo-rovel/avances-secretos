@@ -1,11 +1,10 @@
 package cl.ucn.fondef.sata.mini.grpc;
 
 import cl.ucn.fondef.sata.mini.grpcobjects.*;
-import cl.ucn.fondef.sata.mini.model.Simulacion;
 import io.grpc.ManagedChannel;
 import io.grpc.netty.shaded.io.grpc.netty.NettyChannelBuilder;
-import net.bytebuddy.matcher.FilterableList;
 import org.springframework.stereotype.Service;
+import cl.ucn.fondef.sata.mini.grpc.Domain.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,101 +24,114 @@ public class WebCoreClientGrpcImpl {
 
 
     // USAR EL MISMO NOMBRE DE LA FUNCIÓN A LA QUE SE HACE REFERENCIA EN EL ARCHIVO .proto
-    public GrpcObjetoSesion loginUsuario (GrpcCredenciales grpcCredenciales) {
+    public GrpcSesionEntityReply authenticate (GrpcCredencialesEntityReq grpcCredencialesEntityReq) {
         // 3ro: Crear el objeto que será enviado al server RPC "Central Core"
         // Acá le metemos los datos recibidos desde el cliente
-        Credenciales requestObject = Credenciales.newBuilder()
-                .setCorreo( grpcCredenciales.getCorreo() )
-                .setContrasena( grpcCredenciales.getContrasena() )
+        CredencialesEntityReq requestObject = CredencialesEntityReq.newBuilder()
+                .setEmail( grpcCredencialesEntityReq.getEmail() )
+                .setPassword( grpcCredencialesEntityReq.getPassword() )
                 .build();
 
         // 4to: Enviar la petición RPC y guardar la respuesta
-        ObjetoSesion serverResponse = this.stub.loginUsuario(requestObject);
+        SesionEntityReply serverResponse = this.stub.authenticate(requestObject);
 
         // 5to: Crear un objeto que finalmente se transformará en JSON para enviar al browser
         // Esto es importante dado que enviar directamente "serverResponse" arroja errores
-        GrpcObjetoSesion objetoSesion = new GrpcObjetoSesion();
+        GrpcSesionEntityReply sesion = new GrpcSesionEntityReply();
 
-        objetoSesion.setSesionIniciada( serverResponse.getSesionIniciada() );
-        objetoSesion.setJsonWebToken( serverResponse.getJsonWebToken() );
+        sesion.setSesionIniciada( serverResponse.getSesionIniciada() );
+        sesion.setJsonWebToken( serverResponse.getJsonWebToken() );
 
-        return objetoSesion;
+        return sesion;
     }
-
-    public GrpcMensajeResultadoOperacion agregarUsuario (GrpcUsuarioNuevo grpcUsuarioNuevo){
-        Usuario usuarioCrear = Usuario.newBuilder()
-                .setRut(grpcUsuarioNuevo.getUsuarioNuevo().getRut())
-                .setNombre(grpcUsuarioNuevo.getUsuarioNuevo().getNombre())
-                .setApellido(grpcUsuarioNuevo.getUsuarioNuevo().getApellido())
-                .setCorreo(grpcUsuarioNuevo.getUsuarioNuevo().getCorreo())
-                .setContrasena(grpcUsuarioNuevo.getUsuarioNuevo().getContrasena())
-                .setRol(grpcUsuarioNuevo.getUsuarioNuevo().getRol())
-                .setEstado(grpcUsuarioNuevo.getUsuarioNuevo().isEstado())
-                .build();
-        UsuarioNuevo requestObject = UsuarioNuevo.newBuilder()
-                .setRutAdministrador(grpcUsuarioNuevo.getRutAdministrador())
-                .setUsuarioNuevo(usuarioCrear)
+/*    // TODO: set valores del enum
+    public GrpcMensajeReply addUsuario (GrpcUsuarioEntityReq grpcUsuarioEntityReq){
+        UsuarioEntity usuarioNuevo = UsuarioEntity.newBuilder()
+                .setNombre(grpcUsuarioEntityReq.getUsuario().getNombre())
+                .setApellido(grpcUsuarioEntityReq.getUsuario().getApellido())
+                .setRut(grpcUsuarioEntityReq.getUsuario().getRut())
+                .setCorreo(grpcUsuarioEntityReq.getUsuario().getCorreo())
+                .setPassword(grpcUsuarioEntityReq.getUsuario().getPassword())
+                .setRol(UsuarioEntity.RolUsuario.ADMINISTRADOR)
+                .setEstado(UsuarioEntity.EstadoUsuario.ACTIVO)
                 .build();
 
-        MensajeResultadoOperacion serverResponse = this.stub.agregarUsuario(requestObject);
+        UsuarioEntityReq requestObject = UsuarioEntityReq.newBuilder()
+                .setUsuario(usuarioNuevo)
+                .setRutAdministrador(grpcUsuarioEntityReq.getRutAdministrador())
+                .build();
 
-        GrpcMensajeResultadoOperacion objetoResultadoOperacion = new GrpcMensajeResultadoOperacion();
-        objetoResultadoOperacion.setMensajeTexto(serverResponse.getMensajeTexto());
+        MensajeReply serverResponse = this.stub.addUsuario(requestObject);
 
-        return objetoResultadoOperacion;
+        GrpcMensajeReply mensajeRespuesta = new GrpcMensajeReply();
+        mensajeRespuesta.setMensajeTexto(serverResponse.getMensajeTexto());
+
+        return mensajeRespuesta;
     }
 
-    public GrpcMensajeResultadoOperacion crearEquipo (GrpcEquipo grpcEquipo){
 
-        // GUARDAMOS LOS COMPONENTES DE TIPO "GrpcCompFisico" RECIBIDOS PARA PODER ITERAR Y CREAR
-        // OTRA LISTA DE OBJETOS DE TIPO "CompFisico" LA CUAL ES LA QUE EFECTIVAMENTE SE ENVIARÁ
-        List<GrpcCompFisico[]> componentesReq = new ArrayList<GrpcCompFisico[]>();
-        componentesReq.add(grpcEquipo.getListaValvulas());
-        componentesReq.add(grpcEquipo.getListaSensores());
-        componentesReq.add(grpcEquipo.getListaCamaras());
+    public GrpcMensajeReply addEquipo (GrpcEquipoEntityReq equipoNuevo){
 
-        List<List<CompFisico>> componentesEnviar = new ArrayList<>();
+        // GUARDAMOS LOS COMPONENTES DE TIPO "GrpcComponenteFisico" RECIBIDOS PARA PODER ITERAR Y CREAR
+        // OTRA LISTA DE OBJETOS DE TIPO "ComponenteFisico" LA CUAL ES LA QUE EFECTIVAMENTE SE ENVIARÁ
+        List<GrpcComponenteFisico[]> componentesReq = new ArrayList<GrpcComponenteFisico[]>();
+        componentesReq.add(equipoNuevo.getEquipo().getListaValvulas());
+        componentesReq.add(equipoNuevo.getEquipo().getListaSensores());
+        componentesReq.add(equipoNuevo.getEquipo().getListaCamaras());
 
+        List<List<ComponenteFisico>> componentesEnviar = new ArrayList<>();
+
+        // TODO: set valores del enum
         for (int i = 0; i < componentesReq.size(); i ++){
-            List<CompFisico> listaAux = new ArrayList<CompFisico>();
+            List<ComponenteFisico> listaAux = new ArrayList<ComponenteFisico>();
             for (int j = 0; j < componentesReq.get(i).length; j ++){
-                CompFisico compGrpcGuardar = CompFisico.newBuilder()
+                ComponenteFisico compGrpcGuardar = ComponenteFisico.newBuilder()
+                        .setNombre(componentesReq.get(i)[j].getNombre())
                         .setDescripcion(componentesReq.get(i)[j].getDescripcion())
-                        .setEstado(componentesReq.get(i)[j].isEstado())
                         .setPin(componentesReq.get(i)[j].getPin())
                         .build();
                 listaAux.add(compGrpcGuardar);
             }
             componentesEnviar.add(listaAux);
         }
-        System.out.println("componentesEnviar = " + componentesEnviar +'\n');
-        System.out.println("valvulas = " + componentesEnviar.get(0) +'\n');
-        System.out.println("sensores = " + componentesEnviar.get(1) +'\n');
-        System.out.println("camaras  = " + componentesEnviar.get(2) +'\n');
 
+        EquipoEntity.Builder requestObject = EquipoEntity.newBuilder()
+                .setNombre(equipoNuevo.getEquipo().getNombre())
+                .setDescripcion(equipoNuevo.getEquipo().getDescripcion())
+                .setEnlaceRepo("www.google.com")
+                .setRutConfigurador(equipoNuevo.getEquipo().getRutConfigurador());
 
-//        Equipo requestObject = Equipo.newBuilder()
-//                .setNombre(grpcEquipo.getNombre())
-//                .setDescripcion(grpcEquipo.getDescripcion())
-//                .seturlRepo(grpcEquipo.geturlRepo())
-//                .setEstado(grpcEquipo.isEstado())
-//                .setListaValvulas(componentesEnviar[0])
-//                .setListaSensores(componentesEnviar[1])
-//                .setListaCamaras(componentesEnviar[2])
-//                .setRutConfigurador(grpcEquipo.getRutConfigurador())
-//                .build();
-//
-//        MensajeResultadoOperacion serverResponse = this.stub.crearEquipo(requestObject);
+        for (int i = 0; i < componentesEnviar.size(); i++) {
+            for (int j = 0; j < componentesEnviar.get(i).size(); j++) {
+                ComponenteFisico compFisico = componentesEnviar.get(i).get(j);
+                switch (i){
+                    case 0:
+                        requestObject.addValvula(compFisico);
+                        break;
+                    case 1:
+                        requestObject.addSensor(compFisico);
+                        break;
+                    case 2:
+                        requestObject.addCamara(compFisico);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        EquipoEntityReq equipoEntityReq = EquipoEntityReq.newBuilder()
+                .setEquipo(requestObject.build())
+                .build();
 
-        GrpcMensajeResultadoOperacion objetoResultadoOperacion = new GrpcMensajeResultadoOperacion();
-        objetoResultadoOperacion.setMensajeTexto("Equipo creado exitosamente");
+        MensajeReply serverResponse = this.stub.addEquipo(equipoEntityReq);
+
+        GrpcMensajeReply objetoResultadoOperacion = new GrpcMensajeReply();
+        objetoResultadoOperacion.setMensajeTexto(serverResponse.getMensajeTexto());
         return objetoResultadoOperacion;
     }
 
-<<<<<<< HEAD
-//    getSimulaciones
-=======
-    public GrpcListaSimulacionesAcotada getSimulaciones(){
+
+    public GrpcSimulacionesReply getSimulaciones(){
         Empty empty = Empty.newBuilder().build();
         ListaSimulacionesAcotada listaSimulacionesAcotada = this.stub.getSimulaciones(empty);
         List<GrpcSimulacionAcotada> listaRellenar = new ArrayList<>();
@@ -134,30 +146,29 @@ public class WebCoreClientGrpcImpl {
             simAcoBuilder.setFechaSimulacion(simulacionAcotada.getFechaSimulacion());
             simAcoBuilder.setAguaCaida(simulacionAcotada.getAguaCaida());
         }
->>>>>>> getSimulacionesDos
 
 
-        GrpcListaSimulacionesAcotada listaEnviar = new GrpcListaSimulacionesAcotada();
+        GrpcSimulacionesReply listaEnviar = new GrpcSimulacionesReply();
         listaEnviar.setListaSimulacionAcotada(listaRellenar);
 
         return listaEnviar;
     }
 
-    public GrpcSimulacionEspecifica getSimulacionEspecifica(int idElemento){
+    public borrarLuegoSimuEspecifica getSimulacion(int idElemento){
         IdElemento idElementoReturn = IdElemento.newBuilder().setId(idElemento).build();
         SimulacionEspecifica simulacionEspecifica = this.stub.getSimulacionEspecifica(idElementoReturn);
 
-        GrpcSimulacionEspecifica grpcSimulacionEspecifica = new GrpcSimulacionEspecifica();
-        grpcSimulacionEspecifica.setIdSimulacion(simulacionEspecifica.getIdSimulacion());
-        grpcSimulacionEspecifica.setNombreEquipo(simulacionEspecifica.getNombreEquipo());
-        grpcSimulacionEspecifica.setDescrEquipo(simulacionEspecifica.getDescripcionEquipo());
-        grpcSimulacionEspecifica.setFechaSimulacion(simulacionEspecifica.getFechaSimulacion());
+        borrarLuegoSimuEspecifica borrarLuegoSimuEspecifica = new borrarLuegoSimuEspecifica();
+        borrarLuegoSimuEspecifica.setIdSimulacion(simulacionEspecifica.getIdSimulacion());
+        borrarLuegoSimuEspecifica.setNombreEquipo(simulacionEspecifica.getNombreEquipo());
+        borrarLuegoSimuEspecifica.setDescrEquipo(simulacionEspecifica.getDescripcionEquipo());
+        borrarLuegoSimuEspecifica.setFechaSimulacion(simulacionEspecifica.getFechaSimulacion());
 
         //revisar si esto esta bien
-        grpcSimulacionEspecifica.setListaSecuencias(grpcSimulacionEspecifica.getListaSecuencias());
+        borrarLuegoSimuEspecifica.setListaSecuencias(borrarLuegoSimuEspecifica.getListaSecuencias());
 
-        grpcSimulacionEspecifica.setAguaCaida(simulacionEspecifica.getAguaCaida());
+        borrarLuegoSimuEspecifica.setAguaCaida(simulacionEspecifica.getAguaCaida());
 
-        return grpcSimulacionEspecifica;
-    }
+        return borrarLuegoSimuEspecifica;
+    }*/
 }

@@ -7,8 +7,9 @@ import lombok.ToString;
 
 @ToString
 @EqualsAndHashCode
-public class GrpcSecuencia {
+public class GrpcEquipoEntityReq {
+
     @Getter
     @Setter
-    private GrpcEvento[] listaEventos;
+    private GrpcEquipoEntity equipo;
 }

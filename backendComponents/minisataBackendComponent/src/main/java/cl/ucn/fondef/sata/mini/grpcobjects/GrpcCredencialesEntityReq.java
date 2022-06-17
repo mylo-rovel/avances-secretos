@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2022 Fondef IDeA I+D.
- */
-
 package cl.ucn.fondef.sata.mini.grpcobjects;
 
 import lombok.EqualsAndHashCode;
@@ -11,21 +7,13 @@ import lombok.ToString;
 
 @ToString
 @EqualsAndHashCode
-public class GrpcCompFisico {
+public class GrpcCredencialesEntityReq {
 
     @Getter
     @Setter
-    private int id;
+    private String email;
 
     @Getter
     @Setter
-    private String descripcion;
-
-    @Getter
-    @Setter
-    private int pin;
-
-    @Getter
-    @Setter
-    private boolean estado;
+    private String password;
 }

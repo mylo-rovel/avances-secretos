@@ -1,10 +1,9 @@
 package cl.ucn.fondef.sata.mini.grpc;
 
 import cl.ucn.fondef.sata.mini.coredao.CoreDao;
-import cl.ucn.fondef.sata.mini.grpcobjects.GrpcCompFisico;
-import cl.ucn.fondef.sata.mini.grpcobjects.GrpcEquipo;
-import cl.ucn.fondef.sata.mini.grpcobjects.GrpcSimulacionAcotada;
-import cl.ucn.fondef.sata.mini.grpcobjects.GrpcUsuario;
+import cl.ucn.fondef.sata.mini.grpcobjects.GrpcComponenteFisico;
+import cl.ucn.fondef.sata.mini.grpcobjects.GrpcEquipoEntity;
+import cl.ucn.fondef.sata.mini.grpcobjects.GrpcUsuarioEntity;
 import cl.ucn.fondef.sata.mini.model.Equipo;
 import cl.ucn.fondef.sata.mini.model.Simulacion;
 import cl.ucn.fondef.sata.mini.model.Usuario;
@@ -12,6 +11,8 @@ import cl.ucn.fondef.sata.mini.utilities.JwtUtil;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
+import cl.ucn.fondef.sata.mini.grpc.Domain.*;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +34,10 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
 
     @Override
     // USAR EL MISMO NOMBRE DE LA FUNCIÓN A LA QUE SE HACE REFERENCIA EN EL ARCHIVO .proto
-    public void loginUsuario(Credenciales reqCredenciales, StreamObserver<ObjetoSesion> responseObserver) {
+    public void authenticate(CredencialesEntityReq reqCredenciales, StreamObserver<SesionEntityReply> responseObserver) {
         // Llamar a coreDao para hacer el proceso relacionado a la base de datos
-        boolean credencialesCorrectas = coreDao.credencialesSonCorrectas(reqCredenciales.getCorreo(), reqCredenciales.getContrasena());
-        Usuario usuarioLogeado = coreDao.obtenerUsuarioPorCorreo(reqCredenciales.getCorreo());
+        boolean credencialesCorrectas = coreDao.credencialesSonCorrectas(reqCredenciales.getEmail(), reqCredenciales.getPassword());
+        Usuario usuarioLogeado = coreDao.getUsuarioPorCorreo(reqCredenciales.getEmail());
 
         // Por si se registró en la tabla 'login' pero no en 'usuario'
         String jwtUsuario = (credencialesCorrectas && (usuarioLogeado != null )) ?
@@ -45,7 +46,7 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
 
         // PROCESO DE ENVÍO DE RESPUESTA GRPC
         // 1ro: Construir el objeto que almacenará la información a devolver al cliente
-        ObjetoSesion grpcResponse = ObjetoSesion.newBuilder()
+        SesionEntityReply grpcResponse = SesionEntityReply.newBuilder()
                 .setSesionIniciada(credencialesCorrectas)
                 .setJsonWebToken(jwtUsuario)
                 .build();
@@ -57,8 +58,8 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         responseObserver.onCompleted();
     }
 
-    public void agregarUsuario(UsuarioNuevo reqUsuarioNuevo, StreamObserver<MensajeResultadoOperacion> responseObserver){
-        GrpcUsuario datosUsuario = new GrpcUsuario();
+/*    public void addUsuario(UsuarioNuevo reqUsuarioNuevo, StreamObserver<MensajeResultadoOperacion> responseObserver){
+        GrpcUsuarioEntity datosUsuario = new GrpcUsuarioEntity();
 
         // Creando un objeto que puede ser facilmente manipulado al DAO
         datosUsuario.setNombre(reqUsuarioNuevo.getUsuarioNuevo().getNombre());
@@ -84,15 +85,15 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         responseObserver.onCompleted();
     }
 
-    public void crearEquipo(Equipo reqEquipo, StreamObserver<MensajeResultadoOperacion> responseObserver){
-        GrpcEquipo equipo = new GrpcEquipo();
+    public void addEquipo(Equipo reqEquipo, StreamObserver<MensajeResultadoOperacion> responseObserver){
+        GrpcEquipoEntity equipo = new GrpcEquipoEntity();
 
         equipo.setNombre(reqEquipo.getNombre());
         equipo.setDescripcion(reqEquipo.getDescripcion());
         equipo.setUrlRepo(reqEquipo.getUrlRepo());
 
         //List<GrpcCompFisico> listaVacia = new ArrayList<GrpcCompFisico>();
-        GrpcCompFisico[] listaVacia = new GrpcCompFisico[0];
+        GrpcComponenteFisico[] listaVacia = new GrpcComponenteFisico[0];
         equipo.setListaValvulas(listaVacia);
         equipo.setListaSensores(listaVacia);
         equipo.setListaCamaras(listaVacia);
@@ -117,9 +118,6 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
 
         for (Simulacion simulacion : lista) {
             equipoActual = coreDao.obtenerEquipoEspecifico(simulacion.getIdEquipo());
-            System.out.println("equipoActual = " + equipoActual);
-            System.out.println("simulacion = " + simulacion);
-            System.out.println("\n");
             SimulacionAcotada simulacionAcotada = SimulacionAcotada.newBuilder()
                 .setIdSimulacion(simulacion.getId())
                 .setNombreEquipo(equipoActual.getNombre())
@@ -134,17 +132,15 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         for (SimulacionAcotada simulacion : listaAcotada) {
             listToReturn.addSimulacionAcotada(simulacion);
         }
-<<<<<<< HEAD
 
-=======
         System.out.println("listToReturn = " + listToReturn);
->>>>>>> getSimulacionesDos
+
         responseObserver.onNext(listToReturn.build());
 
         responseObserver.onCompleted();
     }
 
-    public void getSimulacionEspecifica(int idElemento, StreamObserver<SimulacionEspecifica> responseObserver){
+    public void getSimulacion(int idElemento, StreamObserver<SimulacionEspecifica> responseObserver){
 
         Simulacion simulacion = coreDao.obtenerSimulacionEspecifica(idElemento);
 
@@ -162,4 +158,5 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         responseObserver.onNext(simulacionRetornar.build());
         responseObserver.onCompleted();
     }
+    */
 }

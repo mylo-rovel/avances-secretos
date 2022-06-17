@@ -5,16 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-/*
-// Campos obtenidos desde el archivo .proto
-message ObjetoSesion {
-    bool sesion_iniciada = 1;
-    string Json_Web_Token = 2;
-}
-}*/
 @ToString
 @EqualsAndHashCode
-public class GrpcObjetoSesion {
+public class GrpcSesionEntityReply {
 
     @Getter
     @Setter

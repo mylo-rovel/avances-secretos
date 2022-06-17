@@ -4,17 +4,16 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-/*
-// Campos obtenidos desde el archivo .proto
-message MensajeResultadoOperacion {
-  string mensaje_texto = 1;
-}
-}*/
+
 @ToString
 @EqualsAndHashCode
-public class GrpcMensajeResultadoOperacion {
+public class GrpcEquipoEntityAcotado {
 
     @Getter
     @Setter
-    private String mensajeTexto;
+    private long nombre;
+
+    @Getter
+    @Setter
+    private EnumEstadoEquipo estado;
 }

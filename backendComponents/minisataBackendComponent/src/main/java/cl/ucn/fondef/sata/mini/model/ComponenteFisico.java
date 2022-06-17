@@ -14,15 +14,25 @@ import javax.persistence.*;
 @ToString
 @EqualsAndHashCode
 @Entity
-@Table(name = "compFisico")
-public class CompFisico {
+@Table(name = "componentefisico")
+public class ComponenteFisico {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Getter
     @Setter
     @Column(name = "id")
-    private int id;
+    private long id;
+
+    @Getter
+    @Setter
+    @Column(name = "id_equipo")
+    private long idEquipo;
+
+    @Getter
+    @Setter
+    @Column(name = "nombre")
+    private String nombre;
 
     @Getter
     @Setter
@@ -36,6 +46,21 @@ public class CompFisico {
 
     @Getter
     @Setter
+    @Column(name = "url")
+    private String url;
+
+    @Getter
+    @Setter
     @Column(name = "estado")
-    private boolean estado;
+    private String estado;
+
+    @Getter
+    @Setter
+    @Column(name = "conexion")
+    private String conexion;
+
+    @Getter
+    @Setter
+    @Column(name = "tipo")
+    private String tipo;
 }

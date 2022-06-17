@@ -4,15 +4,18 @@
 
 package cl.ucn.fondef.sata.mini.grpcobjects;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
-
-public class GrpcSimulacionEspecifica {
+@ToString
+@EqualsAndHashCode
+public class borrarLuegoSimuEspecifica {
 
     @Getter
     @Setter
-    private Long idSimulacion;
+    private long idSimulacion;
 
     @Getter
     @Setter

@@ -5,22 +5,27 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.awt.image.BufferedImage;
+import java.io.File;
 
-/*
-message Evento {
-        int32 intensidad = 1;
-        int32 duracion = 2;
-}
-*/
 @ToString
 @EqualsAndHashCode
-public class GrpcImagenesEquipo {
+public class GrpcArchivosEquipoEntity {
+    enum TipoArchivo {
+        PNG,
+        PDF,
+        JPG,
+        JPEG
+    }
+
     @Getter
     @Setter
     private String nombreEquipo;
 
     @Getter
     @Setter
-    private BufferedImage imagen;
+    private File archivo;
+
+    @Getter
+    @Setter
+    private TipoArchivo tipo;
 }

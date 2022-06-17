@@ -21,7 +21,7 @@ public class Simulacion {
     @Getter
     @Setter
     @Column(name = "id")
-    private int id;
+    private long id;
 
     @Getter
     @Setter

@@ -4,8 +4,8 @@
 
 package cl.ucn.fondef.sata.mini.coredao;
 
-import cl.ucn.fondef.sata.mini.grpcobjects.GrpcEquipo;
-import cl.ucn.fondef.sata.mini.grpcobjects.GrpcUsuario;
+import cl.ucn.fondef.sata.mini.grpcobjects.GrpcEquipoEntity;
+import cl.ucn.fondef.sata.mini.grpcobjects.GrpcUsuarioEntity;
 import cl.ucn.fondef.sata.mini.model.*;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
@@ -25,81 +25,62 @@ public class CoreDaoImpl implements CoreDao {
     private EntityManager entityManager;
 
     @Override
-    public boolean credencialesSonCorrectas(String correoUsuario, String contrasenaUsuario) {
+    public boolean credencialesSonCorrectas(String emailUsuario, String passwordUsuario) {
         // Usuario => con mayuscula porque se refiere a la clase models/Usuario
         // dentro de las clases de models se señala qué tabla y campo es cada clase y atributo
-        String sqlQuery = "FROM Login WHERE correo = :correo";
+        try {
+            String sqlQuery = "FROM Usuario WHERE email = :email";
 
-        List listaResultado=  entityManager.createQuery(sqlQuery).setParameter("correo", correoUsuario).getResultList();
+            List listaResultado=  entityManager.createQuery(sqlQuery).setParameter("email", emailUsuario).getResultList();
 
-        if (listaResultado.isEmpty()) { return false; }
+            if (listaResultado.isEmpty()) { return false; }
 
-        Login usuarioLogin = (Login) listaResultado.get(0);
-        String contrasenaBaseDatos = usuarioLogin.getContrasena();
+            Usuario usuarioLogin = (Usuario) listaResultado.get(0);
+            String passwordBaseDatos = usuarioLogin.getPassword();
+            System.out.println("usuarioLogin = " + usuarioLogin);
+            // instanciar el objeto que nos permitirá comparar las contraseñas
+            Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
 
-        // instanciar el objeto que nos permitirá comparar las contraseñas
-        Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
-
-        // si las contraseñas son equivalentes, entonces retornaremos true
-        return argon2.verify(contrasenaBaseDatos, contrasenaUsuario);
+            // si las contraseñas son equivalentes, entonces retornaremos true
+            return argon2.verify(passwordBaseDatos, passwordUsuario);
+        }
+        catch (Exception ex) {
+            System.out.println("ex = " + ex);
+            return false;
+        }
     }
 
     @Override
-    public Usuario obtenerUsuarioPorCorreo(String correoUsuario) {
+    public Usuario getUsuarioPorCorreo(String emailUsuario) {
         // Usuario => con mayuscula porque se refiere a la clase models/Usuario
         // dentro de las clases de models se señala qué tabla y campo es cada clase y atributo
-        String sqlQuery = "FROM Usuario WHERE correo = :correo";
-        List listaResultado=  entityManager.createQuery(sqlQuery).setParameter("correo", correoUsuario).getResultList();
+        String sqlQuery = "FROM Usuario WHERE email = :email";
+        List listaResultado=  entityManager.createQuery(sqlQuery).setParameter("email", emailUsuario).getResultList();
         if (listaResultado.isEmpty()) { return null; }
         return (Usuario) listaResultado.get(0);
     }
 
     @Override
-    public String anadirUsuario(String rutAdmin, GrpcUsuario usuarioNuevo) {
-
-        // Existe la combinación rutAdmin y rutUsuario? => la combinacion es PK
-        String sqlQueryRegistros = "FROM RegistroUsuarios WHERE rut_administrador = :rutAdmin AND rut_usuario = :rutUsuarioNuevo";
-        List listaRegistros=  entityManager.createQuery(sqlQueryRegistros)
-                .setParameter("rutAdmin", rutAdmin)
-                .setParameter("rutUsuarioNuevo", usuarioNuevo.getRut())
-                .getResultList();
-
-        if( ! listaRegistros.isEmpty()){
-            return "El usuario ya existe";
-        }
+    public String addUsuario(GrpcUsuarioEntity usuarioNuevo) {
 
         // Buscar si existe el rut o el correo => Si existe uno de los dos, existe el usuario
-        String sqlQueryUsuario = "FROM Usuario WHERE correo = :correoUsuario OR rut = :rutUsuario";
+        String sqlQueryUsuario = "FROM Usuario WHERE email = :correoUsuario OR rut = :rutUsuario";
         List listaUsuarios=  entityManager.createQuery(sqlQueryUsuario)
-                .setParameter("correoUsuario", usuarioNuevo.getCorreo())
+                .setParameter("correoUsuario", usuarioNuevo.getEmail())
                 .setParameter("rutUsuario", usuarioNuevo.getRut())
                 .getResultList();
 
         String mensaje;
         if(listaUsuarios.isEmpty()){
             // RECORDAR QUE LAS CLASES DE /model/ REPRESENTAN LAS TABLAS DE LA DB
-            // tupla para la tabla "RegistroUsuarios"
-            RegistroUsuarios registroUsuarios = new RegistroUsuarios();
-            registroUsuarios.setRutAdministrador(rutAdmin);
-            registroUsuarios.setRutUsuario(usuarioNuevo.getRut());
 
-            // tupla para la tabla "Login"
-            Login loginUsuario = new Login();
-            loginUsuario.setRutUsuario(usuarioNuevo.getRut());
-            loginUsuario.setCorreo(usuarioNuevo.getCorreo());
-            loginUsuario.setContrasena(usuarioNuevo.getContrasena());
 
             // tupla para la tabla "Usuario"
             Usuario usuarioRegistrar = new Usuario();
             usuarioRegistrar.setRut(usuarioNuevo.getRut());
-            usuarioRegistrar.setCorreo(usuarioNuevo.getCorreo());
             usuarioRegistrar.setNombre(usuarioNuevo.getNombre());
             usuarioRegistrar.setApellido(usuarioNuevo.getApellido());
-            usuarioRegistrar.setRol(usuarioNuevo.getRol());
-            usuarioRegistrar.setEstado(usuarioNuevo.isEstado());
 
-            entityManager.persist(registroUsuarios);
-            entityManager.persist(loginUsuario);
             entityManager.persist(usuarioRegistrar);
 
             mensaje = "El usuario ha sido ingresado existosamente";
@@ -111,7 +92,7 @@ public class CoreDaoImpl implements CoreDao {
     }
 
     @Override
-    public String anadirEquipo(String rutConfigurador, GrpcEquipo equipo) {
+    public String addEquipo(String rutConfigurador, GrpcEquipoEntity equipo) {
 
         String mensaje = "";
         //no se me ocurre como podria saber si el equipo ya existe
@@ -120,7 +101,7 @@ public class CoreDaoImpl implements CoreDao {
     }
 
     @Override
-    public List<Simulacion> obtenerSimulaciones(){
+    public List<Simulacion> getSimulaciones(){
 
         String mensaje;
         String sqlQuery = "FROM Simulacion";
@@ -137,7 +118,7 @@ public class CoreDaoImpl implements CoreDao {
     }
 
     @Override
-    public Equipo obtenerEquipoEspecifico(Long idEquipo){
+    public Equipo getEquipo(Long idEquipo){
         String sqlQuery = "FROM Equipo WHERE id = :id";
         Query listaResultadoQuery = entityManager.createQuery(sqlQuery)
                 .setParameter("id", Long.valueOf(idEquipo));
@@ -155,7 +136,7 @@ public class CoreDaoImpl implements CoreDao {
         }
     }
     @Override
-    public Simulacion obtenerSimulacionEspecifica(int idSimulacion){
+    public Simulacion getSimulacion(int idSimulacion){
         String sqlQuery = "FROM Simulacion WHERE id = :id";
         List listaResultado = entityManager.createQuery(sqlQuery).setParameter("id", idSimulacion).getResultList();
         if(listaResultado.isEmpty()){

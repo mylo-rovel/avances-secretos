@@ -11,7 +11,7 @@ import lombok.ToString;
 
 @ToString
 @EqualsAndHashCode
-public class GrpcSimulacionAcotada {
+public class GrpcSimulacionReq {
 
     @Getter
     @Setter
@@ -19,7 +19,15 @@ public class GrpcSimulacionAcotada {
 
     @Getter
     @Setter
-    private String nombreEquipo;
+    private String descripcion;
+
+    @Getter
+    @Setter
+    private Long nombreEquipo;
+
+    @Getter
+    @Setter
+    private String rutOperador;
 
     @Getter
     @Setter
@@ -27,5 +35,5 @@ public class GrpcSimulacionAcotada {
 
     @Getter
     @Setter
-    private Double aguaCaida;
+    private GrpcSecuencia[] listaSecuencias;
 }

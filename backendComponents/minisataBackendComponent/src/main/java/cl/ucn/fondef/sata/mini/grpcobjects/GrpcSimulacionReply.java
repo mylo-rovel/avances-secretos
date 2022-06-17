@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2022 Fondef IDeA I+D.
- */
-
 package cl.ucn.fondef.sata.mini.grpcobjects;
 
 import lombok.EqualsAndHashCode;
@@ -11,10 +7,11 @@ import lombok.ToString;
 
 @ToString
 @EqualsAndHashCode
-public class GrpcEquipo {
+public class GrpcSimulacionReply {
+
     @Getter
     @Setter
-    private Long id;
+    private long id;
 
     @Getter
     @Setter
@@ -26,25 +23,25 @@ public class GrpcEquipo {
 
     @Getter
     @Setter
-    private String urlRepo;
+    private String nombreEquipo;
 
     @Getter
     @Setter
-    private boolean estado;
+    private String descripcionEquipo;
 
     @Getter
     @Setter
-    private GrpcCompFisico[] listaValvulas;
+    private String fechaCreacion;
 
     @Getter
     @Setter
-    private GrpcCompFisico[] listaSensores;
+    private String fechaEjecucion;
 
     @Getter
     @Setter
-    private GrpcCompFisico[] listaCamaras;
+    private GrpcSecuencia[] listaSecuencias;
 
     @Getter
     @Setter
-    private String rutConfigurador;
+    private double aguaCaida;
 }

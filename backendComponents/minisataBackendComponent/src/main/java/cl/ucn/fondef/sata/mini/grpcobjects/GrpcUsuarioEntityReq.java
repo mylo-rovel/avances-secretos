@@ -4,16 +4,10 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-/*
-// Campos obtenidos desde el archivo .proto
-message UsuarioNuevo {
-  string rut_administrador = 1;
-  Usuario usuario_nuevo = 2;
-}
-}*/
+
 @ToString
 @EqualsAndHashCode
-public class GrpcUsuarioNuevo {
+public class GrpcUsuarioEntityReq {
 
     @Getter
     @Setter
@@ -21,6 +15,6 @@ public class GrpcUsuarioNuevo {
 
     @Getter
     @Setter
-    private GrpcUsuario usuarioNuevo;
+    private GrpcUsuarioEntity usuario;
 }
 

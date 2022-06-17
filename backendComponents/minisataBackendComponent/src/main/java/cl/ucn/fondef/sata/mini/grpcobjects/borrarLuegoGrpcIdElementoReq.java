@@ -4,14 +4,16 @@
 
 package cl.ucn.fondef.sata.mini.grpcobjects;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
-import java.util.List;
-
-public class GrpcListaSimulacionesAcotada {
+@ToString
+@EqualsAndHashCode
+public class borrarLuegoGrpcIdElementoReq {
 
     @Getter
     @Setter
-    private List<GrpcSimulacionAcotada> listaSimulacionAcotada;
+    private long id;
 }

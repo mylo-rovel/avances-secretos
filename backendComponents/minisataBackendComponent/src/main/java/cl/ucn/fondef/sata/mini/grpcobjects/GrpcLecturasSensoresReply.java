@@ -7,16 +7,22 @@ import lombok.ToString;
 
 @ToString
 @EqualsAndHashCode
-public class GrpcEvento {
-    @Getter
-    @Setter
-    private int intensidad;
+public class GrpcLecturasSensoresReply {
 
     @Getter
     @Setter
-    private int duracion;
+    private String nombreSimulacion;
 
     @Getter
     @Setter
-    private int posicion;
+    private String nombreEquipo;
+
+    @Getter
+    @Setter
+    private double flujoMedido;
+
+    @Getter
+    @Setter
+    private double tiempoTranscurrido;
 }
+

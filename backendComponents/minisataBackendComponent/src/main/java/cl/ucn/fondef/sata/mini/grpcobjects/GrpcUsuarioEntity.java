@@ -4,21 +4,20 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-/*
-// Campos obtenidos desde el archivo .proto
-message Usuario {
-  string nombre = 1;
-  string apellido = 2;
-  string rut = 3;
-  string correo = 4;
-  string contrasena = 5;
-  string rol = 6;
-  bool estado = 7;
-}
-}*/
+
 @ToString
 @EqualsAndHashCode
-public class GrpcUsuario {
+public class GrpcUsuarioEntity {
+    enum EstadoUsuario {
+        ACTIVO,
+        INACTIVO
+    }
+
+    enum RolUsuario {
+        ADMINISTRADOR,
+        CONFIGURADOR,
+        OPERADOR
+    }
 
     @Getter
     @Setter
@@ -34,18 +33,18 @@ public class GrpcUsuario {
 
     @Getter
     @Setter
-    private String correo;
+    private String email;
 
     @Getter
     @Setter
-    private String contrasena;
+    private String password;
 
     @Getter
     @Setter
-    private String rol;
+    private RolUsuario rol;
 
     @Getter
     @Setter
-    private boolean estado;
+    private EstadoUsuario estado;
 
 }

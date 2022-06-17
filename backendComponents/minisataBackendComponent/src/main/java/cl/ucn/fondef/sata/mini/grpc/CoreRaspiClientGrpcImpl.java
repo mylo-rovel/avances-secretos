@@ -1,6 +1,8 @@
 package cl.ucn.fondef.sata.mini.grpc;
 
 import org.springframework.stereotype.Service;
+import cl.ucn.fondef.sata.mini.grpc.Domain.*;
+
 
 @Service
 // CLIENTE gRPC "Central Core"

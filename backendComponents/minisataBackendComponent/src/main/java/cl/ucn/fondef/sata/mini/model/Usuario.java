@@ -19,10 +19,26 @@ import javax.persistence.*;
 public class Usuario {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
+    @Setter
+    @Column(name = "id")
+    private long id;
+
     @Getter
     @Setter
     @Column(name = "rut")
     private String rut;
+
+    @Getter
+    @Setter
+    @Column(name = "email")
+    private String email;
+
+    @Getter
+    @Setter
+    @Column(name = "password")
+    private String password;
 
     @Getter
     @Setter
@@ -36,16 +52,11 @@ public class Usuario {
 
     @Getter
     @Setter
-    @Column(name = "correo")
-    private String correo;
-
-    @Getter
-    @Setter
     @Column(name = "rol")
     private String rol;
 
     @Getter
     @Setter
     @Column(name = "estado")
-    private boolean estado;
+    private String estado;
 }

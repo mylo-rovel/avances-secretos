@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2022 Fondef IDeA I+D.
- */
-
 package cl.ucn.fondef.sata.mini.model;
 
 import lombok.EqualsAndHashCode;
@@ -12,24 +8,25 @@ import lombok.ToString;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "login")
+@Table(name = "secuencia")
 @ToString
 @EqualsAndHashCode
-public class Login {
+public class Secuencia {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
     @Setter
-    @Column(name = "correo")
-    private String correo;
+    @Column(name = "id")
+    private long id;
 
     @Getter
     @Setter
-    @Column(name = "contrasena")
-    private String contrasena;
+    @Column(name = "id_simulacion")
+    private long idSimulacion;
 
     @Getter
     @Setter
-    @Column(name = "rut_usuario")
-    private String rutUsuario;
+    @Column(name = "id_componente")
+    private long idComponente;
 }

@@ -22,7 +22,7 @@ public class Equipo {
     @Getter
     @Setter
     @Column(name = "id")
-    private Long id;
+    private long id;
 
     @Getter
     @Setter
@@ -36,17 +36,17 @@ public class Equipo {
 
     @Getter
     @Setter
-    @Column(name = "url_repo ")
-    private String urlRepo;
-
-    @Getter
-    @Setter
-    @Column(name = "estado")
-    private String estado;
+    @Column(name = "url_repositorio ")
+    private String urlRepositorio;
 
     @Getter
     @Setter
     @Column(name = "rut_configurador")
     private String rutConfigurador;
+
+    @Getter
+    @Setter
+    @Column(name = "estado")
+    private String estado;
 
 }

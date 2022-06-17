@@ -5,22 +5,15 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-/*
-// Campos obtenidos desde el archivo .proto
-message Credenciales {
-        string correo = 1;
-        string contrasena = 2;
-}
-*/
 @ToString
 @EqualsAndHashCode
-public class GrpcCredenciales {
+public class GrpcEquipoEntityReply {
 
     @Getter
     @Setter
-    private String correo;
+    private long id;
 
     @Getter
     @Setter
-    private String contrasena;
+    private GrpcEquipoEntity equipo;
 }

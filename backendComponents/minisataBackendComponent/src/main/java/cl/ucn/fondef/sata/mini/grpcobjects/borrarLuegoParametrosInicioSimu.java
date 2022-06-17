@@ -5,21 +5,12 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-/*
-message ParametrosInicioSimulacion {
-    int32 id_simulador = 1;
-    string rut_operador = 2;
-    string nombre_simulacion = 3;
-    string descripcion_simulacion = 4;
-    repeated Secuencia lista_secuencias = 5;
-}
-*/
 @ToString
 @EqualsAndHashCode
-public class GrpcParametrosInicioSimulacion {
+public class borrarLuegoParametrosInicioSimu {
     @Getter
     @Setter
-    private int idEquipo;
+    private long idEquipo;
 
     @Getter
     @Setter
