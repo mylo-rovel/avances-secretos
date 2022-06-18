@@ -11,5 +11,5 @@ public class GrpcArchivosEquipoEntityReq {
 
     @Getter
     @Setter
-    private GrpcArchivosEquipoEntity archivo;
+    private GrpcArchivosEquipoEntity[] archivo;
 }
