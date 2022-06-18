@@ -158,21 +158,21 @@ public class WebCoreClientGrpcImpl {
         return listaEnviar;
     }
 
-    public borrarLuegoSimuEspecifica getSimulacion(int idElemento){
+    public GrpcSimulacionReply getSimulacion(int idElemento){
         IdElemento idElementoReturn = IdElemento.newBuilder().setId(idElemento).build();
         SimulacionEspecifica simulacionEspecifica = this.stub.getSimulacionEspecifica(idElementoReturn);
 
-        borrarLuegoSimuEspecifica borrarLuegoSimuEspecifica = new borrarLuegoSimuEspecifica();
-        borrarLuegoSimuEspecifica.setIdSimulacion(simulacionEspecifica.getIdSimulacion());
-        borrarLuegoSimuEspecifica.setNombreEquipo(simulacionEspecifica.getNombreEquipo());
-        borrarLuegoSimuEspecifica.setDescrEquipo(simulacionEspecifica.getDescripcionEquipo());
-        borrarLuegoSimuEspecifica.setFechaSimulacion(simulacionEspecifica.getFechaSimulacion());
+        GrpcSimulacionReply GrpcSimulacionReply = new GrpcSimulacionReply();
+        GrpcSimulacionReply.setIdSimulacion(simulacionEspecifica.getIdSimulacion());
+        GrpcSimulacionReply.setNombreEquipo(simulacionEspecifica.getNombreEquipo());
+        GrpcSimulacionReply.setDescrEquipo(simulacionEspecifica.getDescripcionEquipo());
+        GrpcSimulacionReply.setFechaSimulacion(simulacionEspecifica.getFechaSimulacion());
 
         //revisar si esto esta bien
-        borrarLuegoSimuEspecifica.setListaSecuencias(borrarLuegoSimuEspecifica.getListaSecuencias());
+        GrpcSimulacionReply.setListaSecuencias(GrpcSimulacionReply.getListaSecuencias());
 
-        borrarLuegoSimuEspecifica.setAguaCaida(simulacionEspecifica.getAguaCaida());
+        GrpcSimulacionReply.setAguaCaida(simulacionEspecifica.getAguaCaida());
 
-        return borrarLuegoSimuEspecifica;
+        return GrpcSimulacionReply;
     }*/
 }
