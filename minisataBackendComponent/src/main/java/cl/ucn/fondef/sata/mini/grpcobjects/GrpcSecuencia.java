@@ -5,10 +5,12 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 @ToString
 @EqualsAndHashCode
 public class GrpcSecuencia {
     @Getter
     @Setter
-    private GrpcEvento[] listaEventos;
+    private List<GrpcEvento> listaEventos;
 }

@@ -86,8 +86,12 @@ dependencies {
     // To hashing passwords
     implementation group: 'de.mkammerer', name: 'argon2-jvm', version: '2.5'
 
-    // to create JWT
+    // To create JWT
     implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+
+    // To JSON protobufs
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.7'
+
 }
 
 // Protobuf configuration

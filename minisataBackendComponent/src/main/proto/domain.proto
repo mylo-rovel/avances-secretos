@@ -136,9 +136,7 @@ message EquipoEntity {
   string nombre = 1;
   string descripcion = 2;
   string url_repositorio = 3;
-  repeated ComponenteFisico valvula = 5;
-  repeated ComponenteFisico sensor = 6;
-  repeated ComponenteFisico camara = 7;
+  repeated ComponenteFisico componente_fisico = 5;
   EstadoEquipo estado = 8;
   string rut_configurador = 9;
 }
@@ -212,10 +210,9 @@ message SimulacionReply {
   string descripcion = 3;
   string nombre_equipo = 4;
   string descripcion_equipo = 5;
-  string fecha_creacion = 6;
-  string fecha_ejecucion = 7;
-  repeated Secuencia secuencia = 8;
-  double agua_caida = 9;
+  string fecha_ejecucion = 6;
+  repeated Secuencia secuencia = 7;
+  double agua_caida = 8;
 }
 
 message SimulacionAcotada {

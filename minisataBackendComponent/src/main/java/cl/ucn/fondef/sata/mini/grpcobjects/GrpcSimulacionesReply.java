@@ -9,11 +9,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 @ToString
 @EqualsAndHashCode
 public class GrpcSimulacionesReply {
 
     @Getter
     @Setter
-    private GrpcSimulacionAcotada[] listaSimulacionesAcotadas;
+    private List<GrpcSimulacionAcotada> listaSimulacionesAcotadas;
 }

@@ -20,8 +20,8 @@ import java.util.List;
 // Esta clase se usa para RECIBIR y RESPONDER peticiones desde el "Backend Appplication"
 // Asimismo, acá también se usa "CoreRaspiClientGrpcImpl" para hablar con el RASPBERRY PI
 public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommuServiceImplBase {
-    @Autowired
-    private CoreRaspiClientGrpcImpl coreRaspiClientGrpc;
+/*    @Autowired
+    private CoreRaspiClientGrpcImpl coreRaspiClientGrpc;*/
 
     @Autowired
     private CoreDao coreDao;
@@ -34,12 +34,12 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
     // USAR EL MISMO NOMBRE DE LA FUNCIÓN A LA QUE SE HACE REFERENCIA EN EL ARCHIVO .proto
     public void authenticate(CredencialesEntityReq reqCredenciales, StreamObserver<SesionEntityReply> responseObserver) {
         // Llamar a coreDao para hacer el proceso relacionado a la base de datos
-        boolean credencialesCorrectas = coreDao.credencialesSonCorrectas(reqCredenciales.getEmail(), reqCredenciales.getPassword());
+        boolean credencialesCorrectas = coreDao.credencialesSonCorrectas(reqCredenciales);
         Usuario usuarioLogeado = coreDao.getUsuarioPorCorreo(reqCredenciales.getEmail());
 
         // Por si se registró en la tabla 'login' pero no en 'usuario'
         String jwtUsuario = (credencialesCorrectas && (usuarioLogeado != null )) ?
-                jwtUtil.create(usuarioLogeado.getRut(), usuarioLogeado.getRol())
+                jwtUtil.create(usuarioLogeado.getRut(), usuarioLogeado.getRol().name())
                 : "";
 
         // PROCESO DE ENVÍO DE RESPUESTA GRPC
@@ -58,12 +58,12 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
 
     public void addUsuario(UsuarioEntityReq reqUsuarioNuevo, StreamObserver<MensajeReply> responseObserver){
 
-        String mensaje = coreDao.addUsuario(reqUsuarioNuevo);
+        String mensajeRespuesta = coreDao.addUsuario(reqUsuarioNuevo);
 
         // PROCESO DE ENVÍO DE RESPUESTA GRPC
         // 1ro: Construir el objeto que almacenará la información a devolver al cliente
-        MensajeResultadoOperacion grpcResponse = MensajeResultadoOperacion.newBuilder()
-                .setMensajeTexto(mensaje)
+        MensajeReply grpcResponse = MensajeReply.newBuilder()
+                .setMensajeTexto(mensajeRespuesta)
                 .build();
 
         // 2do: Enviar el objeto construido al cliente
@@ -73,78 +73,62 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         responseObserver.onCompleted();
     }
 
-/*        public void addEquipo(Equipo reqEquipo, StreamObserver<MensajeResultadoOperacion> responseObserver){
-        GrpcEquipoEntity equipo = new GrpcEquipoEntity();
-
-        equipo.setNombre(reqEquipo.getNombre());
-        equipo.setDescripcion(reqEquipo.getDescripcion());
-        equipo.setUrlRepo(reqEquipo.getUrlRepo());
-
-        //List<GrpcCompFisico> listaVacia = new ArrayList<GrpcCompFisico>();
-        GrpcComponenteFisico[] listaVacia = new GrpcComponenteFisico[0];
-        equipo.setListaValvulas(listaVacia);
-        equipo.setListaSensores(listaVacia);
-        equipo.setListaCamaras(listaVacia);
-        equipo.setRutConfigurador(reqEquipo.getRutConfigurador());
-
-        String mensaje = coreDao.anadirEquipo(reqEquipo.getRutConfigurador(),equipo);
+    public void addEquipo(EquipoEntityReq equipoEntityReq, StreamObserver<MensajeReply> responseObserver){
+        // GUARDAR EN LA DB
+        String mensajeResultado = coreDao.addEquipo(equipoEntityReq);
 
         // GRPC parte
-        MensajeResultadoOperacion grpcResponse = MensajeResultadoOperacion.newBuilder()
-                .setMensajeTexto(mensaje)
+        MensajeReply grpcResponse = MensajeReply.newBuilder()
+                .setMensajeTexto(mensajeResultado)
                 .build();
 
         responseObserver.onNext(grpcResponse);
-
         responseObserver.onCompleted();
     }
 
-    public void getSimulaciones(Empty empty, StreamObserver<ListaSimulacionesAcotada> responseObserver){
-        List<Simulacion> lista = coreDao.obtenerSimulaciones();
-        Equipo equipoActual;
-        List<SimulacionAcotada> listaAcotada = new ArrayList<>();
+    // TODO: HACER EL INNER JOIN PARA OBTENER LAS "Secuencia" o eventos DE LA SIMULACION
+    public void getSimulacion(IdElementoReq idElemento, StreamObserver<SimulacionReply> responseObserver){
+        // Obtener la simulacion desde la base de datos
+        Simulacion simulacionGuardada = coreDao.getSimulacion(idElemento);
 
-        for (Simulacion simulacion : lista) {
-            equipoActual = coreDao.obtenerEquipoEspecifico(simulacion.getIdEquipo());
-            SimulacionAcotada simulacionAcotada = SimulacionAcotada.newBuilder()
-                .setIdSimulacion(simulacion.getId())
-                .setNombreEquipo(equipoActual.getNombre())
-                .setFechaSimulacion(simulacion.getFechaCreacion())
-                .setAguaCaida(simulacion.getAguaCaida()).build();
-            listaAcotada.add(simulacionAcotada);
+        IdElementoReq idEquipo = IdElementoReq.newBuilder().setId(simulacionGuardada.getId()).build();
+        Equipo equipoAsociado = coreDao.getEquipo(idEquipo);
+
+        SimulacionReply simulacionRetornar = SimulacionReply.newBuilder()
+                .setId(simulacionGuardada.getId())
+                .setNombre(simulacionGuardada.getNombre())
+                .setDescripcion(simulacionGuardada.getDescripcion())
+                .setNombreEquipo(equipoAsociado.getNombre())
+                .setDescripcionEquipo(equipoAsociado.getDescripcion())
+                .setFechaEjecucion(simulacionGuardada.getFechaEjecucion())
+//                .setSecuencia()
+                .setAguaCaida(simulacionGuardada.getAguaCaida())
+                .build();
+
+        responseObserver.onNext(simulacionRetornar);
+        responseObserver.onCompleted();
+    }
+
+    // TODO: OPTIMIZAR Y HACER UNA QUERY HACIENDO UN INNER JOIN PARA...
+    // TODO: ... EVITAR HACER MULTIPLES QUERIES A LA BASE DE DATOS
+    public void getSimulaciones(EmptyReq emptyReq, StreamObserver<SimulacionesReply> responseObserver){
+        List<Simulacion> listaSimuGuardadas = coreDao.getSimulaciones();
+        SimulacionesReply.Builder listaRetornar = SimulacionesReply.newBuilder();
+
+        for (Simulacion simulacion : listaSimuGuardadas) {
+            IdElementoReq idEquipo = IdElementoReq.newBuilder().setId(simulacion.getIdEquipo()).build();
+            Equipo equipoAsociado = coreDao.getEquipo(idEquipo);
+
+            SimulacionAcotada simuRetornar = SimulacionAcotada.newBuilder()
+                    .setNombre(simulacion.getNombre())
+                    .setNombreEquipo(equipoAsociado.getNombre())
+                    .setFechaEjecucion(equipoAsociado.getDescripcion())
+                    .setAguaCaida(simulacion.getAguaCaida())
+                    .build();
+
+            listaRetornar.addSimulacionAcotada(simuRetornar);
         }
-
-
-        ListaSimulacionesAcotada.Builder listToReturn = ListaSimulacionesAcotada.newBuilder();
-
-        for (SimulacionAcotada simulacion : listaAcotada) {
-            listToReturn.addSimulacionAcotada(simulacion);
-        }
-
-        System.out.println("listToReturn = " + listToReturn);
-
-        responseObserver.onNext(listToReturn.build());
-
+        responseObserver.onNext(listaRetornar.build());
         responseObserver.onCompleted();
     }
-
-    public void getSimulacion(int idElemento, StreamObserver<SimulacionEspecifica> responseObserver){
-
-        Simulacion simulacion = coreDao.obtenerSimulacionEspecifica(idElemento);
-
-        SimulacionEspecifica.Builder simulacionRetornar = SimulacionEspecifica.newBuilder();
-
-        simulacionRetornar.setIdSimulacion(simulacion.getId());
-        simulacionRetornar.setFechaSimulacion(simulacion.getFechaCreacion());
-
-        Equipo equipo = coreDao.obtenerEquipoEspecifico(simulacion.getIdEquipo());
-        simulacionRetornar.setNombreEquipo(equipo.getNombre());
-        simulacionRetornar.setDescripcionEquipo(equipo.getDescripcion());
-        //ver donde meter la lista de secuencias
-        simulacionRetornar.setAguaCaida(simulacion.getAguaCaida());
-
-        responseObserver.onNext(simulacionRetornar.build());
-        responseObserver.onCompleted();
-    }
-    */
 }

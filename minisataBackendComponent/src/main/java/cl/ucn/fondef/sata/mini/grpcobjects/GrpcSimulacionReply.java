@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 @ToString
 @EqualsAndHashCode
 public class GrpcSimulacionReply {
@@ -29,9 +31,6 @@ public class GrpcSimulacionReply {
     @Setter
     private String descripcionEquipo;
 
-    @Getter
-    @Setter
-    private String fechaCreacion;
 
     @Getter
     @Setter
@@ -39,7 +38,7 @@ public class GrpcSimulacionReply {
 
     @Getter
     @Setter
-    private GrpcSecuencia[] listaSecuencias;
+    private List<GrpcSecuencia> listaSecuencias;
 
     @Getter
     @Setter

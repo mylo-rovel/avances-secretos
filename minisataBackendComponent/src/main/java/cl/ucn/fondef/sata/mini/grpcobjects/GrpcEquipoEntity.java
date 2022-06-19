@@ -10,6 +10,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 @ToString
 @EqualsAndHashCode
 public class GrpcEquipoEntity {
@@ -28,15 +30,7 @@ public class GrpcEquipoEntity {
 
     @Getter
     @Setter
-    private GrpcComponenteFisico[] listaValvulas;
-
-    @Getter
-    @Setter
-    private GrpcComponenteFisico[] listaSensores;
-
-    @Getter
-    @Setter
-    private GrpcComponenteFisico[] listaCamaras;
+    private List<GrpcComponenteFisico> listaComponentesFisicos;
 
     @Getter
     @Setter

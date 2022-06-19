@@ -1,17 +1,16 @@
 package cl.ucn.fondef.sata.mini.grpcobjects;
 
+import cl.ucn.fondef.sata.mini.grpc.Domain;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.File;
+
 @ToString
 @EqualsAndHashCode
-public class GrpcLecturasSensoresReply {
-
-    @Getter
-    @Setter
-    private String nombreSimulacion;
+public class GrpcArchivoEquipoEntity {
 
     @Getter
     @Setter
@@ -19,10 +18,9 @@ public class GrpcLecturasSensoresReply {
 
     @Getter
     @Setter
-    private double flujoMedido;
+    private File archivo;
 
     @Getter
     @Setter
-    private double tiempoTranscurrido;
+    private Domain.ArchivoEquipoEntityReq.TipoArchivo tipo;
 }
-

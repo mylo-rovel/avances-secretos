@@ -79,9 +79,8 @@ CREATE TABLE simulacion
     id_equipo           bigint(20)      NOT NULL,
     nombre              varchar(30)     NOT NULL UNIQUE,
     descripcion         varchar(100)    NOT NULL,
-    fecha_creacion      timestamp       NOT NULL,
-    agua_caida          double          NOT NULL,
-    fecha_ejecucion     date            NOT NULL,
+    fecha_ejecucion      timestamp      NOT NULL,
+    agua_caida          double          NOT NULL DEFAULT '0',
     PRIMARY KEY (id),
     FOREIGN KEY (rut_operador) REFERENCES usuario (rut),
     FOREIGN KEY (id_equipo) REFERENCES equipo (id)

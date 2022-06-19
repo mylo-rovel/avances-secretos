@@ -5,11 +5,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 @ToString
 @EqualsAndHashCode
 public class GrpcArchivosEquipoEntityReply {
 
     @Getter
     @Setter
-    private GrpcArchivosEquipoEntity[] archivo;
+    private List<GrpcArchivoEquipoEntity> archivo;
 }

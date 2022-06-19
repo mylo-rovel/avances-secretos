@@ -28,9 +28,12 @@ public class CoreDaoImpl implements CoreDao {
     private EntityManager entityManager;
 
     @Override
-    public boolean credencialesSonCorrectas(String emailUsuario, String passwordUsuario) {
+    public boolean credencialesSonCorrectas(CredencialesEntityReq reqCredenciales) {
         // Usuario => con mayuscula porque se refiere a la clase models/Usuario
         // dentro de las clases de models se señala qué tabla y campo es cada clase y atributo
+        String emailUsuario = reqCredenciales.getEmail();
+        String passwordUsuario = reqCredenciales.getPassword();
+
         try {
             String sqlQuery = "FROM Usuario WHERE email = :email";
             List listaResultado=  entityManager.createQuery(sqlQuery).setParameter("email", emailUsuario).getResultList();
@@ -39,10 +42,9 @@ public class CoreDaoImpl implements CoreDao {
 
             Usuario usuarioLogin = (Usuario) listaResultado.get(0);
             String passwordBaseDatos = usuarioLogin.getPassword();
-            System.out.println("usuarioLogin = " + usuarioLogin);
+
             // instanciar el objeto que nos permitirá comparar las contraseñas
             Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
-
             // si las contraseñas son equivalentes, entonces retornaremos true
             return argon2.verify(passwordBaseDatos, passwordUsuario);
         }
@@ -115,36 +117,20 @@ public class CoreDaoImpl implements CoreDao {
     }
 
     @Override
-    public String addEquipo(String rutConfigurador, GrpcEquipoEntity equipo) {
+    public String addEquipo(EquipoEntityReq equipoEntityReq) {
+        String rutConfigurador = equipoEntityReq.getEquipo().getRutConfigurador();
+        EquipoEntity equipoGuardar = equipoEntityReq.getEquipo();
 
-        String mensaje = "";
-        //no se me ocurre como podria saber si el equipo ya existe
+        String mensaje = "Guardado? idk";
 
         return mensaje;
     }
 
     @Override
-    public List<Simulacion> getSimulaciones(){
-
-        String mensaje;
-        String sqlQuery = "FROM Simulacion";
-        Query listaResultadoQuery = entityManager.createQuery(sqlQuery);
-        List listaResultado = listaResultadoQuery.getResultList();
-
-        if(listaResultado.isEmpty()){
-            mensaje = "No se encontraron simulaciones";
-        }else{
-            mensaje = "Hay simulaciones";
-        }
-        return listaResultado;
-
-    }
-
-    @Override
-    public Equipo getEquipo(Long idEquipo){
+    public Equipo getEquipo(IdElementoReq idEquipo){
         String sqlQuery = "FROM Equipo WHERE id = :id";
         Query listaResultadoQuery = entityManager.createQuery(sqlQuery)
-                .setParameter("id", Long.valueOf(idEquipo));
+                .setParameter("id", idEquipo.getId());
         try {
             List listaResultado = listaResultadoQuery.getResultList();
             if(listaResultado.isEmpty()){
@@ -159,13 +145,30 @@ public class CoreDaoImpl implements CoreDao {
         }
     }
     @Override
-    public Simulacion getSimulacion(int idSimulacion){
-        String sqlQuery = "FROM Simulacion WHERE id = :id";
-        List listaResultado = entityManager.createQuery(sqlQuery).setParameter("id", idSimulacion).getResultList();
+    public Simulacion getSimulacion(IdElementoReq idElementoReq){
+        String sqlQuery = "FROM Simulacion WHERE id = :idSimulacion";
+
+        List listaResultado = entityManager.createQuery(sqlQuery)
+                .setParameter("idSimulacion", idElementoReq.getId()).getResultList();
         if(listaResultado.isEmpty()){
             return null;
         }else{
             return (Simulacion) listaResultado.get(0);
         }
+    }
+
+    @Override
+    public List<Simulacion> getSimulaciones(){
+        String mensaje;
+        String sqlQuery = "FROM Simulacion WHERE 1=1";
+        List <Simulacion> listaResultado = entityManager.createQuery(sqlQuery).getResultList();
+
+        if(listaResultado.isEmpty()){
+            mensaje = "No se encontraron simulaciones";
+        }else{
+            mensaje = "Hay simulaciones";
+        }
+        return listaResultado;
+
     }
 }
