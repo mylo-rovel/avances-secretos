@@ -155,7 +155,7 @@ public class WebController {
     @RequestMapping(value = "api/simulaciones", method = RequestMethod.POST)
     // public String startSimulacion(@RequestBody GrpcSimulacionReq simulacionNueva, @RequestHeader(value="Authorization") String jwt) {
     public String startSimulacion(@RequestBody GrpcSimulacionReq simulacionNueva) {
-        System.out.println("nuevaSimulacion = " + simulacionNueva);
+        log.info("nuevaSimulacion = " + simulacionNueva);
         return new String();
     }
 

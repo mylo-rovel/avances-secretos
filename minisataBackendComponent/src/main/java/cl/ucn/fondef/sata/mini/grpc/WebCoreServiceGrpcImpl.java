@@ -20,8 +20,6 @@ import java.util.List;
 // Esta clase se usa para RECIBIR y RESPONDER peticiones desde el "Backend Appplication"
 // Asimismo, acá también se usa "CoreRaspiClientGrpcImpl" para hablar con el RASPBERRY PI
 public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommuServiceImplBase {
-/*    @Autowired
-    private CoreRaspiClientGrpcImpl coreRaspiClientGrpc;*/
 
     @Autowired
     private CoreDao coreDao;
@@ -41,7 +39,7 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         String jwtUsuario = (credencialesCorrectas && (usuarioLogeado != null )) ?
                 jwtUtil.create(usuarioLogeado.getRut(), usuarioLogeado.getRol().name())
                 : "";
-
+        
         // PROCESO DE ENVÍO DE RESPUESTA GRPC
         // 1ro: Construir el objeto que almacenará la información a devolver al cliente
         SesionEntityReply grpcResponse = SesionEntityReply.newBuilder()

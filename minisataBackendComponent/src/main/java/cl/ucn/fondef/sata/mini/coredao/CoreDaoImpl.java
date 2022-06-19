@@ -5,6 +5,7 @@
 package cl.ucn.fondef.sata.mini.coredao;
 
 import cl.ucn.fondef.sata.mini.grpc.Domain;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import cl.ucn.fondef.sata.mini.grpcobjects.GrpcEquipoEntity;
@@ -20,6 +21,7 @@ import javax.persistence.Query;
 import java.text.MessageFormat;
 import java.util.List;
 
+@Slf4j
 @Repository
 @Transactional
 public class CoreDaoImpl implements CoreDao {
@@ -49,7 +51,7 @@ public class CoreDaoImpl implements CoreDao {
             return argon2.verify(passwordBaseDatos, passwordUsuario);
         }
         catch (Exception ex) {
-            System.out.println("ex = " + ex);
+            log.debug("ex = " + ex);
             return false;
         }
     }
@@ -94,7 +96,7 @@ public class CoreDaoImpl implements CoreDao {
                     .setParameter("rutUsuario", usuarioRegistrar.getRut())
                     .getResultList();
 
-            System.out.println("listaUsuarios = " + listaUsuariosEspecifica);
+            log.info("listaUsuarios = " + listaUsuariosEspecifica);
             long idUsuario = listaUsuariosEspecifica.get(0).getId();
 
             Registro registroGuardado = new Registro();
@@ -140,7 +142,7 @@ public class CoreDaoImpl implements CoreDao {
             }
         }
         catch (Exception ex) {
-//            System.out.println("ex = " + ex);
+            log.debug("ex = " + ex);
             return null;
         }
     }

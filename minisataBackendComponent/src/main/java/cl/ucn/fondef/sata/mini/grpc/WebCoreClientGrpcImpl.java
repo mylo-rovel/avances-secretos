@@ -50,9 +50,9 @@ public class WebCoreClientGrpcImpl {
 
         // 5to: Crear un objeto que finalmente se transformará en JSON para enviar al browser
         // Esto es importante dado que enviar directamente "serverResponse" arroja errores
-//        GrpcSesionEntityReply sesion = new GrpcSesionEntityReply();
-//        sesion.setSesionIniciada( serverResponse.getSesionIniciada() );
-//        sesion.setJsonWebToken( serverResponse.getJsonWebToken() );
+/*        GrpcSesionEntityReply sesion = new GrpcSesionEntityReply();
+        sesion.setSesionIniciada( serverResponse.getSesionIniciada() );
+        sesion.setJsonWebToken( serverResponse.getJsonWebToken() );*/
     }
 
     public String addUsuario (GrpcUsuarioEntityReq grpcUsuarioEntityReq){
