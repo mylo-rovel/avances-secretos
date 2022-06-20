@@ -17,12 +17,15 @@ public interface CoreDao {
     Usuario getUsuarioPorCorreo(String correoUsuario);
 
     String addUsuario(UsuarioEntityReq usuarioNuevo);
+    Usuario getUsuario(RutEntityReq rutEntityReq);
+    List<Usuario> getUsuarios();
+    String setUsuario(UsuarioEntityReq usuarioEditar);
 
     String addEquipo(EquipoEntityReq equipoEntityReq);
-
+    String setEquipo(EquipoEntityReq equipoEntityReq);
     Equipo getEquipo(IdElementoReq idEquipo);
+    List<Equipo> getEquipos();
 
     Simulacion getSimulacion(IdElementoReq idElemento);
-
     List<Simulacion> getSimulaciones();
 }

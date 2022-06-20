@@ -18,6 +18,10 @@ public class GrpcEquipoEntity {
 
     @Getter
     @Setter
+    private long id;
+
+    @Getter
+    @Setter
     private String nombre;
 
     @Getter
