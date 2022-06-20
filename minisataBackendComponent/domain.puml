@@ -1,0 +1,196 @@
+@startuml
+left to right direction
+
+interface MiniSataWeb <<services>> {
+    + authenticate(login, password): Usuario
+    + addUsuario(usuario): Usuario
+    + getUsuario(rut): Usuario
+    + getUsuarios(): List<Usuario>
+    + setUsuario(usuario): Usuario
+    ..
+    + addEquipo(equipo): Equipo
+    + setEquipo(equipo): Equipo
+    + getEquipo(id): Equipo
+    + getEquipos(): List<Equipo>
+    + uploadArchivo(archivo, id): Archivo
+    + getArchivos(id): Archivo
+    ..
+    + getSimulaciones(): List<Simulacion>
+    + getSimulacion(id): Simulacion
+    ..
+    + getRegistros(rut): Registro
+    ..
+    + startSimulacion(simulacion): Simulacion
+    + getSimulacionActual(): Simulacion
+    + getLecturaSensores(): Simulacion
+}
+
+interface MiniSataRaspberry <<services>> {
+    + retrieveComponente(id): Componente
+    ..
+    + startSimulacion(simulacion): Simulacion
+    + getSimulacionActual(): Simulacion
+    + getLecturasSensores(): Simulacion
+
+}
+
+class Usuario {
+    {static} id: Long
+    rut: String
+    email: String
+    nombre: String
+    apellido: String
+    password: String
+}
+
+enum EstadoUsuario {
+    NONE
+    ACTIVO
+    INACTIVO
+    ...
+}
+
+enum RolUsuario {
+    NONE
+    ADMINISTRADOR
+    CONFIGURADOR
+    OPERADOR
+}
+
+class Equipo {
+    {static} id: Long
+    nombre: String
+    descripcion: String
+    urlRepositorio: String
+}
+
+
+enum EstadoEquipo {
+    NONE
+    PROTOTIPO
+    CONSTRUCCION
+    ...
+}
+
+class Archivo {
+    {static} id: Long
+    data: byte[]
+}
+
+enum TipoArchivo {
+    NONE
+    PNG
+    PDF
+    JPG
+    ...
+}
+
+class Componente {
+    {static} id: Long
+    nombre: String
+    descripcion: String
+    url: String
+}
+
+enum EstadoComponente {
+    NONE
+    ACTIVO
+    INACTIVO
+    FALLA
+    REPARACION
+    ...
+}
+
+enum ConexionComponente {
+    NONE
+    INPUT_ANALOGICO
+    INPUT_DIGITAL
+    OUTPUT_ANALOGICO
+    OUTPUT_DIGITAL
+}
+
+enum TipoComponente {
+    NONE
+    CAMARA
+    FLUJOMETRO
+    TERMOMETRO
+    VALVULA
+    ...
+}
+
+class Pin {
+    {static} id: Long
+    nombre: String
+    numero: Integer
+    descripcion: String
+    ...
+}
+
+enum PlacaPin {
+    NONE
+    ARDUINO_2560
+    ...
+}
+
+class Simulacion {
+    {static} id: Long
+    nombre: String
+    descripcion: String
+    fechaCreacion: String
+}
+
+class Ejecucion {
+    {static} id: Long
+    aguaCaidaTotal: Double
+}
+
+class Evento {
+    {static} id: Long
+    intensidad: Integer
+    duracion: Integer
+    posicion: Integer
+}
+
+class Registro {
+    {static} id: Long
+    idEntidad: Long
+    fecha: ZonedDateTime
+    descripcion: String
+}
+
+enum TipoRegistro {
+    NONE
+    CREACION_USUARIO
+    LOGIN_USUARIO
+    CREACION_SIMULACION
+    INICIO_SIMULACION
+    UPLOAD_ARCHIVO
+    ...
+}
+
+Usuario *--> "1" EstadoUsuario: estado
+Usuario *--> "1" RolUsuario: rol
+
+Equipo o--> "*" Simulacion: simulaciones
+Equipo o--> "*" Componente: componentes
+Equipo o--> "*" Archivo: archivos
+Equipo *--> "1" EstadoEquipo: estado
+
+Componente *--> "1" EstadoComponente: estado
+Componente *--> "1" TipoComponente: tipo
+
+Pin *--> "1"  PlacaPin: placa
+Componente o--> "*" Pin: pines
+Pin *--> "1" ConexionComponente: conexion
+
+
+Archivo *--> "1"  TipoArchivo: tipoArchivo
+
+Simulacion --> "*" Ejecucion: ejecuciones
+Ejecucion *--> "*" Evento: eventos
+Evento *--> "1" Componente: componente
+
+Registro *--> "1" Usuario: usuario
+Registro *--> "1" TipoRegistro: tipo
+
+@enduml
