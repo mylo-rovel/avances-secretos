@@ -14,7 +14,7 @@ export default {
         <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="/operador/main-operador">Inicio</a>
+              <a class="nav-link" aria-current="page" href="/menu-operador">Inicio</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" aria-current="page" href="/operador/encender">Perfil</a>

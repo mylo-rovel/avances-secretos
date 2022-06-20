@@ -47,10 +47,10 @@
                     </ul>
                 </span>
             </p> -->
-            <p  :id="`Inicio_key`" @click="(e) => {}">
+            <p :id="`Inicio_key`" @click="(e) => {}">
                 <span class="menu-routes-element underlined-element lista-items">
                     <img src="~/assets/home.svg" class="img-icono">
-                    <NuxtLink to="/operador/">Inicio</NuxtLink>
+                    <NuxtLink to="/menu-operador">Inicio</NuxtLink>
                 </span>
             </p>
             <p :id="`Perfil_key`" @click="(e) => {}">
@@ -67,7 +67,7 @@
                     <p ><NuxtLink to="/operador/registrar-simulacion">Registrar simulacion</NuxtLink></p>
                     <p ><NuxtLink to="/operador/iniciar-simulacion">Iniciar simulacion</NuxtLink></p>
                     <p ><NuxtLink to="/operador/ver-simulacion">Ver simulacion</NuxtLink></p>
-                    <p ><NuxtLink to="/operador/lista-secuencia">Historial de simulaciones</NuxtLink></p>
+                    <p ><NuxtLink to="/operador/lista-simulaciones">Historial de simulaciones</NuxtLink></p>
                 </ul>
             </p>
             <p :id="`Contacto_key`" @click="(e) => {}" class="row">
