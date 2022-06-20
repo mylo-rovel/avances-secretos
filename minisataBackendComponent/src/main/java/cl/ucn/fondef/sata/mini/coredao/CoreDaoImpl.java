@@ -5,10 +5,10 @@
 package cl.ucn.fondef.sata.mini.coredao;
 
 import cl.ucn.fondef.sata.mini.grpc.Domain;
+import cl.ucn.fondef.sata.mini.model.ComponenteFisico;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import cl.ucn.fondef.sata.mini.grpcobjects.GrpcEquipoEntity;
 import cl.ucn.fondef.sata.mini.model.*;
 import cl.ucn.fondef.sata.mini.model.Registro;
 import de.mkammerer.argon2.Argon2;
@@ -326,4 +326,20 @@ public class CoreDaoImpl implements CoreDao {
 
     }
 
+    //TODO: IMPLEMENTAR EN EL DAO UNA FUNCION ADD, GETCOMPONENTEFISICO Y GETCOMPONENTESFISICOS
+
+    @Override
+    public List<ComponenteFisico> getComponentesFisicosEquipo(IdElementoReq idElementoReq){
+        String mensaje;
+        String sqlQuery = "FROM ComponenteFisico WHERE id_equipo = :id_equipo";
+        List listaResultado = entityManager.createQuery(sqlQuery)
+                .setParameter("id_equipo", idElementoReq.getId())
+                .getResultList();
+        if(listaResultado.isEmpty()){
+            mensaje = "No se encontraron componentes fisicos";
+        }else{
+            mensaje = "Hay componentes fisicos";
+        }
+        return listaResultado;
+    }
 }
