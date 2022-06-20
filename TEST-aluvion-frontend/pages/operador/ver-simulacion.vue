@@ -49,7 +49,7 @@ export default Vue.extend({
                                 <NuxtLink to="/menu-operador"><CancelButtom :cancelbutton = "cancelbutton"/></NuxtLink>
                             </div>                            
                             <div class="col-12 contenido-botones my-4">    
-                                <NuxtLink to="/operador/registrar-simulacion"><SubmitButton :submitbutton = "submitbutton"/></NuxtLink>
+                                <NuxtLink to="/menu-operador"><SubmitButton :submitbutton = "submitbutton"/></NuxtLink>
                             </div>
                         </div>
                     </form>
