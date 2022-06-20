@@ -133,12 +133,13 @@ enum EstadoEquipo {
 }
 
 message EquipoEntity {
-  string nombre = 1;
-  string descripcion = 2;
-  string url_repositorio = 3;
+  int64 id = 1
+  string nombre = 2;
+  string descripcion = 3;
+  string url_repositorio = 4;
   repeated ComponenteFisico componente_fisico = 5;
-  EstadoEquipo estado = 8;
-  string rut_configurador = 9;
+  EstadoEquipo estado = 6;
+  string rut_configurador = 7;
 }
 
 message EquipoEntityReq {
@@ -173,8 +174,9 @@ message ArchivosEquipoEntityReply {
 }
 
 message EquipoEntityAcotado {
-  string nombre = 1;
-  EstadoEquipo estado = 2;
+  int64 id = 1;
+  string nombre = 2;
+  EstadoEquipo estado = 3;
 }
 
 message EquiposEntityReply {
