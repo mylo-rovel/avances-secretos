@@ -133,7 +133,7 @@ enum EstadoEquipo {
 }
 
 message EquipoEntity {
-  int64 id = 1
+  int64 id = 1;
   string nombre = 2;
   string descripcion = 3;
   string url_repositorio = 4;
@@ -148,8 +148,7 @@ message EquipoEntityReq {
 }
 
 message EquipoEntityReply {
-  int64 id = 1;
-  EquipoEntity equipo = 2;
+  EquipoEntity equipo = 1;
 }
 
 message ArchivoEquipoEntityReq {

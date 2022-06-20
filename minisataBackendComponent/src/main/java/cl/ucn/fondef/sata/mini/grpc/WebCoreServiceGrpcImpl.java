@@ -39,7 +39,7 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         String jwtUsuario = (credencialesCorrectas && (usuarioLogeado != null )) ?
                 jwtUtil.create(usuarioLogeado.getRut(), usuarioLogeado.getRol().name())
                 : "";
-        
+
         // PROCESO DE ENVÍO DE RESPUESTA GRPC
         // 1ro: Construir el objeto que almacenará la información a devolver al cliente
         SesionEntityReply grpcResponse = SesionEntityReply.newBuilder()
@@ -53,7 +53,7 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         // 3ro: Terminar el proceso
         responseObserver.onCompleted();
     }
-
+    @Override
     public void addUsuario(UsuarioEntityReq reqUsuarioNuevo, StreamObserver<MensajeReply> responseObserver){
 
         String mensajeRespuesta = coreDao.addUsuario(reqUsuarioNuevo);
@@ -70,7 +70,7 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         // 3ro: Terminar el proceso
         responseObserver.onCompleted();
     }
-
+    @Override
     public void addEquipo(EquipoEntityReq equipoEntityReq, StreamObserver<MensajeReply> responseObserver){
         // GUARDAR EN LA DB
         String mensajeResultado = coreDao.addEquipo(equipoEntityReq);
@@ -84,6 +84,7 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         responseObserver.onCompleted();
     }
 
+    @Override
     // TODO: HACER EL INNER JOIN PARA OBTENER LAS "Secuencia" o eventos DE LA SIMULACION
     public void getSimulacion(IdElementoReq idElemento, StreamObserver<SimulacionReply> responseObserver){
         // Obtener la simulacion desde la base de datos
@@ -107,6 +108,7 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         responseObserver.onCompleted();
     }
 
+    @Override
     // TODO: OPTIMIZAR Y HACER UNA QUERY HACIENDO UN INNER JOIN PARA...
     // TODO: ... EVITAR HACER MULTIPLES QUERIES A LA BASE DE DATOS
     public void getSimulaciones(EmptyReq emptyReq, StreamObserver<SimulacionesReply> responseObserver){
