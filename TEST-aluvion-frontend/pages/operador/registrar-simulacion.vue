@@ -4,16 +4,20 @@
     import PageHeader from '~/components/PageHeader.vue'
     import CancelButtom from '~/components/CancelButtom.vue'
     import SubmitButton from '~/components/SubmitButton.vue'
+    import SecuenciaButton from '~/components/SecuenciaButton.vue'
     import NavbarPag from '~/components/NavbarPag.vue'
+    import Modal from '~/components/Modal.vue'
 
     export default Vue.extend({
         name: "RegistrarSimulacion",
-        components: { PageHeader, CancelButtom, SubmitButton},
+        components: { PageHeader, CancelButtom, SubmitButton, Modal, SecuenciaButton},
         data() {
             return {
                 "cancelbutton": "cancelar",
                 "submitbutton": "guardar",
                 selectEquipo: "",
+                "infoContenido": "Simulación registrada :D",
+                "nombreSecuencia": "Configurar Secuencia",
             };
         },
         methods: {
@@ -53,13 +57,36 @@
                 }
             },
             //Cuando se haga click al boton secuencia
-            modalPrueba(){
-                document.getElementById("boton_prueba").addEventListener("click",
+            abrirModal(){
+                document.getElementById("submit-btn").addEventListener("click",
                 function() {
-                    document.querySelector(".bg-modal2").style.display = "flex";
+                    document.querySelector(".back-modal").style.display = "flex";
                 });
-            }
-        }
+            },
+            cerrarModal(){
+                document.querySelector(".close-modal").addEventListener("click",
+                function() {
+                    document.querySelector('.back-modal').style.display = "none";
+                });
+            },
+            async obtenerValvulas(){
+                const serverPath ='http://localhost:8081/api/equipo/valvulas/1';
+                const otherHeaders = {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJjb3JyZW90ZXN0ZW8yQGpvdG1haWwuY29tIiwiaWF0IjoxNjU1MDU1MjAyLCJzdWIiOiJPcGVyYWRvciIsImlzcyI6Ik1haW4iLCJleHAiOjE2NTUxNDE2MDJ9.woGqMNxHLqywEZw9W_RBqf6dRECPMaDtNkQ0gg91bw8',
+                    }
+                }
+                const serverResponse = await this.$axios.$get(serverPath, otherHeaders).catch(err => err);
+                if (serverResponse instanceof Error) {
+                    alert("ERROR. rayos :(", serverResponse)
+                    return false;
+                }
+                alert(serverResponse);
+                return true;
+            },
+
+        }    
     })
 </script>
 
@@ -91,42 +118,16 @@
                         </div>
                         <div class="my-4 form-group row">
                             <label for="add_nombre" class="col-sm-4 col-form-label">Secuencias</label>
-                            <!--<div class="col-sm-6">
-                                <input id="add_nombre" type="text" class="form-control" aria-describedby="addon-wrapping">
-                            </div>-->
-                            <div class="row mb-2">
+                            <div  v-for="(evento, posicionSecuencia) in [66,198,287]" :key="`secKey_${posicionSecuencia}`"  class="row mb-2">
                                 <div class="col-sm-4">
-                                    <label for="secuencia-valvula1" class="conf-secuencias col-form-label">Válvula 1</label>
+                                    <label for="secuencia-valvula3" class="conf-secuencias col-form-label">Válvula {{posicionSecuencia+1}}</label>
                                 </div>
                                 <div class="col-sm-6">
-                                <!-- asociar funcion con el evento click
-                                tomar el valor del id del boton-->
-                                    <NuxtLink  to="/operador/agregar-evento"><button id="secuencia1" class="btn-secuencias form-control">Configurar Secuencia 1</button></NuxtLink>
+                                   <NuxtLink to="/operador/agregar-evento"><SecuenciaButton :nombreSecuencia = "nombreSecuencia" :posicionSecuencia = "posicionSecuencia"/></NuxtLink>
                                 </div>
-                            </div>
-                            <div class="row mb-2">
-                                <div class="col-sm-4">
-                                    <label for="secuencia-valvula2" class="conf-secuencias col-form-label">Válvula 2</label>
-                                </div>
-                                <div class="col-sm-6">
-                                    <NuxtLink to="/operador/agregar-evento"><button class=" btn-secuencias form-control">Configurar Secuencia 2</button></NuxtLink>
-                                </div>
-                            </div>
-                            <div class="row mb-2">
-                                <div class="col-sm-4">
-                                    <label for="secuencia-valvula3" class="conf-secuencias col-form-label">Válvula 3</label>
-                                </div>
-                                <div class="col-sm-6">
-                                    <NuxtLink to="/operador/agregar-evento"><button class="btn-secuencias form-control">Configurar Secuencia 3</button></NuxtLink>
-                                </div>
+                                
                             </div>
                         </div>
-                        <button id="boton_prueba" type="button" class="btn btn-primary" @click = "modalPrueba()" >pinchar aqui</button> 
-                        <div class= "bg-modal2">
-                            <div class="modal-content2">
-                                <h3>hola holaholaholaholaholaholaholaholaholaholaholahola</h3>
-                            </div>
-                        </div>                  
                         <div class="my-4 form-group row">
                             <label for="add_descripcion_equipo" class="col-sm-4 col-form-label">Descripción</label>
                             <div class="col-sm-6">
@@ -138,9 +139,11 @@
                                 <NuxtLink to="/menu-operador"><CancelButtom :cancelbutton = "cancelbutton"/></NuxtLink>
                             </div>                            
                             <div class="col-12 contenido-botones my-4">    
-                                <NuxtLink to="/operador/registrar-simulacion"><SubmitButton :submitbutton = "submitbutton" /></NuxtLink>
+                                <SubmitButton :submitbutton = "submitbutton" @click = "abrirModal()" />
+                                <Modal :infoContenido = "infoContenido"/>
+                                <div class="close-modal" @click = "cerrarModal()">+</div>
                             </div>
-                        </div>
+                        </div> 
                     </form>
                 </div>
             </div>
@@ -175,17 +178,17 @@
         color: black;
         /*transform: scale(1.1);*/
     }
-    .bg-modal2 {
+    .back-modal{
         display: none;
         width: 100%;
         height: 100%;
         background-color: rgba(0, 0, 0, 0.7);
-        position: absolute;
+        position: relative;
         top: 0;
         justify-content: center;
         align-items: center;
     }
-    .modal-content2 {
+    .modal-content {
         /*width: 500px;
         height: 300px;*/
         background-color: white;
@@ -195,5 +198,13 @@
         position: relative;
         margin-left: 40px;
         margin-right: 40px;
+    }
+    .close-modal {
+        position: absolute;
+        top: 0;
+        right: 14px;
+        font-size: 42px;
+        transform: rotate(45deg);
+        cursor: pointer;
     }
 </style>
