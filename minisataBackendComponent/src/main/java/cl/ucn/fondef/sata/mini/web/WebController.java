@@ -4,13 +4,13 @@
 
 package cl.ucn.fondef.sata.mini.web;
 
-import cl.ucn.fondef.sata.mini.grpc.webcoreclient.WebCoreClientGrpcEquipos;
-import cl.ucn.fondef.sata.mini.grpc.webcoreclient.WebCoreClientGrpcSimulaciones;
-import cl.ucn.fondef.sata.mini.grpc.webcoreclient.WebCoreClientGrpcUsuarios;
+import cl.ucn.fondef.sata.mini.grpc.webcoreclient.WebCoreClientGrpcEquipo;
+import cl.ucn.fondef.sata.mini.grpc.webcoreclient.WebCoreClientGrpcExtra;
+import cl.ucn.fondef.sata.mini.grpc.webcoreclient.WebCoreClientGrpcSimulacion;
+import cl.ucn.fondef.sata.mini.grpc.webcoreclient.WebCoreClientGrpcUsuario;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import cl.ucn.fondef.sata.mini.utilities.JwtUtil;
-import cl.ucn.fondef.sata.mini.grpc.webcoreclient.WebCoreClientGrpcBase;
 import cl.ucn.fondef.sata.mini.grpcobjects.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,13 +22,16 @@ import org.springframework.web.bind.annotation.*;
 public class WebController {
     // ESTE SERVIDOR ES EL PUENTE ENTRE EL WEBBROWSER Y EL "CENTRAL CORE"
     @Autowired
-    private WebCoreClientGrpcUsuarios webCoreClientGrpcUsuarios;
+    private WebCoreClientGrpcUsuario webCoreClientGrpcUsuario;
 
     @Autowired
-    private WebCoreClientGrpcEquipos webCoreClientGrpcEquipos;
+    private WebCoreClientGrpcEquipo webCoreClientGrpcEquipo;
 
     @Autowired
-    private WebCoreClientGrpcSimulaciones webCoreClientGrpcSimulaciones;
+    private WebCoreClientGrpcSimulacion webCoreClientGrpcSimulacion;
+
+    @Autowired
+    private WebCoreClientGrpcExtra webCoreClientGrpcExtra;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -43,14 +46,14 @@ public class WebController {
     // rpc authenticate(CredencialesEntityReq) returns (SesionEntityReply){}
     @RequestMapping(value = "api/login", method = RequestMethod.POST)
     public String authenticate(@RequestBody GrpcCredencialesEntityReq credenciales) {
-        return webCoreClientGrpcUsuarios.authenticate(credenciales);
+        return webCoreClientGrpcUsuario.authenticate(credenciales);
     }
 
     // rpc addUsuario(UsuarioEntityReq)  returns (MensajeReply) {}
     @RequestMapping(value = "api/usuarios", method = RequestMethod.POST)
     //public String addUsuario(@RequestBody GrpcUsuarioNuevo usuarioNuevo, @RequestHeader(value="Authorization") String jwt) {
     public String addUsuario(@RequestBody GrpcUsuarioEntityReq usuarioNuevo){
-        return webCoreClientGrpcUsuarios.addUsuario(usuarioNuevo);
+        return webCoreClientGrpcUsuario.addUsuario(usuarioNuevo);
     }
 
     // ***---- IMPLEMENTAR ----
@@ -58,7 +61,7 @@ public class WebController {
     @RequestMapping(value = "api/usuarios/{rut}", method = RequestMethod.GET)
     //public String getUsuario(@PathVariable String rut, @RequestHeader(value="Authorization") String jwt) {
     public String getUsuario(@PathVariable String rut) {
-        return webCoreClientGrpcUsuarios.getUsuario(rut);
+        return webCoreClientGrpcUsuario.getUsuario(rut);
     }
 
     // ***---- IMPLEMENTAR ----
@@ -66,7 +69,7 @@ public class WebController {
     @RequestMapping(value = "api/usuarios", method = RequestMethod.GET)
     // public String getUsuarios(@RequestHeader(value="Authorization") String jwt) {
     public String getUsuarios(){
-        return webCoreClientGrpcUsuarios.getUsuarios();
+        return webCoreClientGrpcUsuario.getUsuarios();
     }
 
     // ***---- IMPLEMENTAR ----
@@ -74,7 +77,7 @@ public class WebController {
     @RequestMapping(value = "api/usuarios", method = RequestMethod.PATCH)
     // public String setUsuario(@RequestBody GrpcUsuarioEntityReq usuarioModificar, @RequestHeader(value="Authorization") String jwt) {
     public String setUsuario(@RequestBody GrpcUsuarioEntityReq usuarioModificar){
-        return webCoreClientGrpcUsuarios.setUsuario(usuarioModificar);
+        return webCoreClientGrpcUsuario.setUsuario(usuarioModificar);
     }
 
 
@@ -86,7 +89,7 @@ public class WebController {
     @RequestMapping(value = "api/equipos", method = RequestMethod.POST)
     // public String addEquipo(@RequestBody GrpcEquipoEntityReq equipoNuevo, @RequestHeader(value="Authorization") String jwt){
     public String addEquipo(@RequestBody GrpcEquipoEntityReq equipoNuevo){
-        return webCoreClientGrpcEquipos.addEquipo(equipoNuevo);
+        return webCoreClientGrpcEquipo.addEquipo(equipoNuevo);
 //        TODO (emilio): REHACER CONSIDERANDO NUEVOS COMPONENTES (clase Pin)
 //        return new String();
     }
@@ -95,8 +98,8 @@ public class WebController {
     //   rpc setEquipo(EquipoEntityReq)  returns (MensajeReply){}
     @RequestMapping(value = "api/equipos", method = RequestMethod.PATCH)
     // public String setEquipo(@RequestBody GrpcEquipoEntityReq equipoNuevo, @RequestHeader(value="Authorization") String jwt){
-    public String setEquipo(@RequestBody GrpcEquipoEntityReq equipoNuevo){
-        return webCoreClientGrpcEquipos.setEquipo(equipoNuevo);
+    public String setEquipo(@RequestBody GrpcEquipoEntityReq equipoModificado){
+        return webCoreClientGrpcEquipo.setEquipo(equipoModificado);
     }
 
     // ***---- IMPLEMENTAR ----
@@ -104,7 +107,7 @@ public class WebController {
     @RequestMapping(value = "api/equipos/{id}", method = RequestMethod.GET)
     //public String getEquipo(@PathVariable long id, @RequestHeader(value="Authorization") String jwt) {
     public String getEquipo(@PathVariable long id){
-        return webCoreClientGrpcEquipos.getEquipo(id);
+        return webCoreClientGrpcEquipo.getEquipo(id);
     }
 
     // ***---- IMPLEMENTAR ----
@@ -112,7 +115,7 @@ public class WebController {
     @RequestMapping(value = "api/equipos", method = RequestMethod.GET)
     // public String getEquipos(@RequestHeader(value="Authorization") String jwt) {
     public String getEquipos(){
-        return webCoreClientGrpcEquipos.getEquipos();
+        return webCoreClientGrpcEquipo.getEquipos();
     }
 
     // ***---- IMPLEMENTAR ----
@@ -120,7 +123,7 @@ public class WebController {
     @RequestMapping(value = "api/equipos/archivo", method = RequestMethod.POST)
     // public String uploadArchivo(@RequestBody GrpcArchivosEquipoEntityReq archivoNuevo, @RequestHeader(value="Authorization") String jwt) {
     public String uploadArchivo(@RequestBody GrpcArchivosEquipoEntityReq archivoNuevo){
-        return webCoreClientGrpcEquipos.uploadArchivo(archivoNuevo);
+        return webCoreClientGrpcEquipo.uploadArchivo(archivoNuevo);
     }
 
     // ***---- IMPLEMENTAR ----
@@ -128,17 +131,16 @@ public class WebController {
     @RequestMapping(value = "api/equipos/archivo/{idEquipo}", method = RequestMethod.GET)
     // public String getArchivos(@PathVariable long idEquipo, @RequestHeader(value="Authorization") String jwt) {
     public String getArchivos(@PathVariable long idEquipo){
-        return webCoreClientGrpcEquipos.getArchivos(idEquipo);
+        return webCoreClientGrpcEquipo.getArchivos(idEquipo);
     }
 
     // ***---- IMPLEMENTAR ----
-    //   rpc getRegistros(RutEntityReq) returns (RegistrosReply){}
-    @RequestMapping(value = "api/registros/{rut}", method = RequestMethod.GET)
-    // public String getRegistros(@PathVariable String rut, @RequestHeader(value="Authorization") String jwt) {
-    public String getRegistros(@PathVariable String rut){
-        return webCoreClientGrpcEquipos.getRegistros(rut);
+    //   rpc getValvulasEquipo(IdElementoReq) returns (ComponentesEquipoReply) {}
+    @RequestMapping(value = "api/equipos/valvulas/{idEquipo}", method = RequestMethod.GET)
+    // public String getValvulasEquipo(@PathVariable long idEquipo, @RequestHeader(value="Authorization") String jwt) {
+    public String getValvulasEquipo(@PathVariable long idEquipo){
+        return webCoreClientGrpcEquipo.getValvulasEquipo(idEquipo);
     }
-
 
     // ---- EQUIPOS      ------------------------------------------------------------------------------------
     // ---- SIMULACIONES ------------------------------------------------------------------------------------
@@ -148,14 +150,14 @@ public class WebController {
     @RequestMapping(value = "api/simulaciones/{id}", method = RequestMethod.GET)
     // public String getSimulacion(@PathVariable long id, @RequestHeader(value="Authorization") String jwt){
     public String getSimulacion(@PathVariable long id){
-        return webCoreClientGrpcSimulaciones.getSimulacion(id);
+        return webCoreClientGrpcSimulacion.getSimulacion(id);
     }
 
     //   rpc getSimulaciones(EmptyReq) returns (SimulacionesReply){}
     @RequestMapping(value = "api/simulaciones", method = RequestMethod.GET)
     // public String getSimulaciones(@RequestHeader(value="Authorization") String jwt) {
     public String getSimulaciones() {
-        return webCoreClientGrpcSimulaciones.getSimulaciones();
+        return webCoreClientGrpcSimulacion.getSimulaciones();
 
     }
 
@@ -165,28 +167,34 @@ public class WebController {
     // public String startSimulacion(@RequestBody GrpcSimulacionReq simulacionNueva, @RequestHeader(value="Authorization") String jwt) {
     public String startSimulacion(@RequestBody GrpcSimulacionReq simulacionNueva) {
         log.info("nuevaSimulacion = " + simulacionNueva);
-        return webCoreClientGrpcSimulaciones.startSimulacion(simulacionNueva);
+        return webCoreClientGrpcSimulacion.startSimulacion(simulacionNueva);
     }
-
-
-    // ---- SIMULACIONES       ------------------------------------------------------------------------------
-    // ---- OPERACIONES EXTRA  ------------------------------------------------------------------------------
-
 
     // ***---- IMPLEMENTAR ----
     //   rpc getSimulacionActual(IdElementoReq) returns (SimulacionReply){}
     @RequestMapping(value = "api/ejecuciones/actual/{id}", method = RequestMethod.GET)
     // public String getSimulacionActual(@PathVariable long id, @RequestHeader(value="Authorization") String jwt) {
     public String getSimulacionActual() {
-        return webCoreClientGrpcSimulaciones.getSimulacionActual();
+        return webCoreClientGrpcSimulacion.getSimulacionActual();
     }
+
+    // ---- SIMULACIONES       ------------------------------------------------------------------------------
+    // ---- OPERACIONES EXTRA  ------------------------------------------------------------------------------
+
 
     // ***---- IMPLEMENTAR ----
     //   rpc getLecturaSensores(IdElementoReq) returns (stream LecturaSensoresReply) {}
     @RequestMapping(value = "api/ejecuciones/lecturas/{id}", method = RequestMethod.GET)
     // public String getLecturaSensores(@PathVariable long id, @RequestHeader(value="Authorization") String jwt) {
     public String getLecturaSensores(@PathVariable long id) {
-        return webCoreClientGrpcSimulaciones.getLecturaSensores(id);
+        return webCoreClientGrpcExtra.getLecturaSensores(id);
     }
 
+    // ***---- IMPLEMENTAR ----
+    //   rpc getRegistros(RutEntityReq) returns (RegistrosReply){}
+    @RequestMapping(value = "api/registros/{rut}", method = RequestMethod.GET)
+    // public String getRegistros(@PathVariable String rut, @RequestHeader(value="Authorization") String jwt) {
+    public String getRegistros(@PathVariable String rut){
+        return webCoreClientGrpcExtra.getRegistros(rut);
+    }
 }

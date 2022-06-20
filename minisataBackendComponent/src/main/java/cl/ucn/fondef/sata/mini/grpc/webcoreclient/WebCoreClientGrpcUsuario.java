@@ -6,7 +6,7 @@ import cl.ucn.fondef.sata.mini.grpcobjects.GrpcUsuarioEntityReq;
 import org.springframework.stereotype.Service;
 
 @Service
-public class WebCoreClientGrpcUsuarios extends WebCoreClientGrpcBase {
+public class WebCoreClientGrpcUsuario extends WebCoreClientGrpcBase {
 
     // USAR EL MISMO NOMBRE DE LA FUNCION A LA QUE SE HACE REFERENCIA EN EL ARCHIVO .proto
     public String authenticate (GrpcCredencialesEntityReq grpcCredencialesEntityReq) {

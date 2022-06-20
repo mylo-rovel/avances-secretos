@@ -127,6 +127,10 @@ message ComponenteFisico {
   TipoComponente tipo = 7;
 }
 
+message ComponentesEquipoReply {
+  repeated ComponenteFisico componente_fisico = 1;
+}
+
 enum EstadoEquipo {
   PROTOTIPO = 0;
   CONSTRUCCION = 1;
