@@ -4,7 +4,7 @@ import Vue from 'vue'
 import PageHeader from '~/components/PageHeader.vue'
 
 export default Vue.extend({
-  name: "ListadoSecuencia",
+  name: "ListaSimulaciones",
   components: { PageHeader },
   data() {
         return {
@@ -17,10 +17,10 @@ export default Vue.extend({
 
 <template>
   <section>
-    <div class="container-fluid">
+    <div>
       <NavbarPag :tituloPag="tituloPag"/>
     </div>
-    <div class="container">
+    <div class="container-header">
         <PageHeader :headerTitle="headerTitle"/>
     </div>
     <div class="container">
