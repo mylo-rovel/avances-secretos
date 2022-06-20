@@ -13,13 +13,13 @@ export default {
 <style>
   .cancel-button {
       background: #C70039;
-      padding: 1rem 1.5rem 1rem 1.5rem;
+      padding: 1rem 1.25rem 1rem 1.25rem;
       font-size: 1rem;
       color: #fff;
       justify-content: center;
       text-transform: uppercase;
       font-weight: bold;
-      border-radius: 10px;
+      border-radius: 3rem;
   }
   .cancel-button:hover {
         background: white;
