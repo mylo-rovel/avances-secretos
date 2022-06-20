@@ -142,7 +142,8 @@ message EquipoEntity {
 }
 
 message EquipoEntityReq {
-  EquipoEntity equipo = 1;
+  string rut_configurador = 1;
+  EquipoEntity equipo = 2;
 }
 
 message EquipoEntityReply {
