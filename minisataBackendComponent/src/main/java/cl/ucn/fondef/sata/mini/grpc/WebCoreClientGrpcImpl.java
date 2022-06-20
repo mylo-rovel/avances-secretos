@@ -79,6 +79,37 @@ public class WebCoreClientGrpcImpl {
         return this.gson.toJson(serverResponse);
     }
 
+    public String getUsuario (String rutUsuario){
+        RutEntityReq rutUsuarioReturn = RutEntityReq.newBuilder().setRut(rutUsuario).build();
+        UsuarioEntityReply serverResponse = this.stub.getUsuario(rutUsuarioReturn);
+        return this.gson.toJson(serverResponse);
+    }
+
+    public String getUsuarios(){
+        EmptyReq emptyReq = EmptyReq.newBuilder().build();
+        UsuariosEntityReply serverResponse = this.stub.getUsuarios(emptyReq);
+        return this.gson.toJson(serverResponse);
+    }
+
+    public String setUsuario(GrpcUsuarioEntityReq grpcUsuarioEntityReq){
+        UsuarioEntity usuarioEntity = UsuarioEntity.newBuilder()
+                .setRut(grpcUsuarioEntityReq.getUsuario().getRut())
+                .setNombre(grpcUsuarioEntityReq.getUsuario().getNombre())
+                .setApellido(grpcUsuarioEntityReq.getUsuario().getApellido())
+                .setEmail(grpcUsuarioEntityReq.getUsuario().getEmail())
+                .setPassword(grpcUsuarioEntityReq.getUsuario().getPassword())
+                .setEstado(grpcUsuarioEntityReq.getUsuario().getEstado())
+                .setRol(grpcUsuarioEntityReq.getUsuario().getRol())
+                .build();
+
+        UsuarioEntityReq usuarioEditar = UsuarioEntityReq.newBuilder()
+                .setUsuario(usuarioEntity)
+                .setRutAdministrador(grpcUsuarioEntityReq.getRutAdministrador())
+                .build();
+
+        MensajeReply serverResponse = this.stub.setUsuario(usuarioEditar);
+        return this.gson.toJson(serverResponse);
+    }
 
     public String addEquipo (GrpcEquipoEntityReq equipoNuevo){
 
@@ -91,17 +122,50 @@ public class WebCoreClientGrpcImpl {
         // ITERAMOS SOBRE EL OBJETO RECIBIDO PARA CREAR OBJETOS...
         // ... "repeated ComponenteFisico componente_fisico = 5;" A ENVIAR
         List<GrpcComponenteFisico> listaComponentesNuevos = equipoNuevo.getEquipo().getListaComponentesFisicos();
-        for (int i = 0; i < listaComponentesNuevos.size(); i++) {
-            GrpcComponenteFisico componenteFuenteInformacion = listaComponentesNuevos.get(i);
+        for (GrpcComponenteFisico componenteFuenteInformacion : listaComponentesNuevos) {
             ComponenteFisico componenteEnviar = ComponenteFisico.newBuilder()
-                            .setNombre(componenteFuenteInformacion.getNombre())
-                            .setDescripcion(componenteFuenteInformacion.getDescripcion())
-                            .setPin(componenteFuenteInformacion.getPin())
-                            .setUrl(componenteFuenteInformacion.getUrl())
-                            .setEstado(componenteFuenteInformacion.getEstado())
-                            .setConexion(componenteFuenteInformacion.getConexion())
-                            .setTipo(componenteFuenteInformacion.getTipo())
-                            .build();
+                    .setNombre(componenteFuenteInformacion.getNombre())
+                    .setDescripcion(componenteFuenteInformacion.getDescripcion())
+                    .setPin(componenteFuenteInformacion.getPin())
+                    .setUrl(componenteFuenteInformacion.getUrl())
+                    .setEstado(componenteFuenteInformacion.getEstado())
+                    .setConexion(componenteFuenteInformacion.getConexion())
+                    .setTipo(componenteFuenteInformacion.getTipo())
+                    .build();
+            equipoRecibidoEnviar.addComponenteFisico(componenteEnviar);
+        }
+
+        EquipoEntityReq equipoEntityReq = EquipoEntityReq.newBuilder()
+                .setEquipo(equipoRecibidoEnviar.build())
+                .build();
+
+        /*MensajeReply serverResponse = this.stub.addEquipo(equipoEntityReq);
+        return this.gson.toJson(serverResponse);
+        return this.gson.toJson(equipoEntityReq);*/
+        MensajeReply serverResponse = this.stub.addEquipo(equipoEntityReq);
+        return this.gson.toJson(serverResponse);
+    }
+
+    public String setEquipo(GrpcEquipoEntityReq equipoEditar){
+        EquipoEntity.Builder equipoRecibidoEnviar = EquipoEntity.newBuilder()
+                .setNombre(equipoEditar.getEquipo().getNombre())
+                .setDescripcion(equipoEditar.getEquipo().getDescripcion())
+                .setUrlRepositorio(equipoEditar.getEquipo().getUrlRepositorio())
+                .setRutConfigurador(equipoEditar.getEquipo().getRutConfigurador());
+
+        // ITERAMOS SOBRE EL OBJETO RECIBIDO PARA CREAR OBJETOS...
+        // ... "repeated ComponenteFisico componente_fisico = 5;" A ENVIAR
+        List<GrpcComponenteFisico> listaComponentesNuevos = equipoEditar.getEquipo().getListaComponentesFisicos();
+        for (GrpcComponenteFisico componenteFuenteInformacion : listaComponentesNuevos) {
+            ComponenteFisico componenteEnviar = ComponenteFisico.newBuilder()
+                    .setNombre(componenteFuenteInformacion.getNombre())
+                    .setDescripcion(componenteFuenteInformacion.getDescripcion())
+                    .setPin(componenteFuenteInformacion.getPin())
+                    .setUrl(componenteFuenteInformacion.getUrl())
+                    .setEstado(componenteFuenteInformacion.getEstado())
+                    .setConexion(componenteFuenteInformacion.getConexion())
+                    .setTipo(componenteFuenteInformacion.getTipo())
+                    .build();
             equipoRecibidoEnviar.addComponenteFisico(componenteEnviar);
         }
 
@@ -111,7 +175,21 @@ public class WebCoreClientGrpcImpl {
 
         /*MensajeReply serverResponse = this.stub.addEquipo(equipoEntityReq);
         return this.gson.toJson(serverResponse);*/
-        return this.gson.toJson(equipoEntityReq);
+
+        MensajeReply serverResponse = this.stub.setEquipo(equipoEntityReq);
+        return this.gson.toJson(serverResponse);
+    }
+
+    public String getEquipo(long idEquipo){
+        IdElementoReq idElementoReturn = IdElementoReq.newBuilder().setId(idEquipo).build();
+        EquipoEntityReply serverResponse = this.stub.getEquipo(idElementoReturn);
+        return this.gson.toJson(serverResponse);
+    }
+
+    public String getEquipos(){
+        EmptyReq emptyReq = EmptyReq.newBuilder().build();
+        EquiposEntityReply serverResponse = this.stub.getEquipos(emptyReq);
+        return this.gson.toJson(serverResponse);
     }
 
     public String getSimulacion(long idSimulacion){

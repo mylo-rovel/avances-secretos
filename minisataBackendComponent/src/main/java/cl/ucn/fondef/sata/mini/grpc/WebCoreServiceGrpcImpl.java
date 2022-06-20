@@ -199,7 +199,7 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
                     .setEstado(EstadoEquipo.valueOf(equipo.getEstado()))
 
                     .build();
-            
+
             listaRetornar.addEquipoAcotado(equipoRetornar);
         }
 
