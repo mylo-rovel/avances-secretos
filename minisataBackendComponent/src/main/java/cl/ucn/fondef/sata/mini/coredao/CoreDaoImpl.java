@@ -29,6 +29,8 @@ public class CoreDaoImpl implements CoreDao {
     @PersistenceContext
     private EntityManager entityManager;
 
+    //TODO: PONER REGISTROS EN LOS RESPECTIVOS METODOS
+
     @Override
     public boolean credencialesSonCorrectas(CredencialesEntityReq reqCredenciales) {
         // Usuario => con mayuscula porque se refiere a la clase models/Usuario
@@ -117,13 +119,141 @@ public class CoreDaoImpl implements CoreDao {
 
         return mensaje;
     }
+    @Override
+    public Usuario getUsuario(RutEntityReq rutEntityReq){
+        String sqlQuery = "FROM Usuario WHERE rut = :rut";
+        Query listaResultadoQuery = entityManager.createQuery(sqlQuery)
+                .setParameter("rut", rutEntityReq.getRut());
+        try{
+            List listaResultado = listaResultadoQuery.getResultList();
+            if(listaResultado.isEmpty()){
+                return null;
+            }else{
+                return (Usuario) listaResultado.get(0);
+            }
+        }
+        catch (Exception ex) {
+            log.debug("ex = " + ex);
+            return null;
+        }
+    }
 
+    //TODO: IMPLEMENTAR UN SYSTEMOUTPRINT PARA INDICAR QUE LA LISTA DE GETUSUARIOS ESTA VACIA
+    @Override
+    public List<Usuario> getUsuarios(){
+        String sqlQuery = "FROM Usuario WHERE 1=1";
+        List<Usuario> listaResultadoQuery = entityManager.createQuery(sqlQuery).getResultList();
+        if(listaResultadoQuery.isEmpty()){
+            return null;
+        }else{
+            return listaResultadoQuery;
+        }
+    }
+    @Override
+    public String setUsuario(UsuarioEntityReq usuarioEntityReq){
+        /*
+        String sqlQuery = "FROM Usuario WHERE rut = :rut";
+        Query listaResultadoQuery = entityManager.createQuery(sqlQuery)
+                .setParameter("rut", usuarioEntityReq.getUsuario().getRut());
+        try{
+            List listaResultado = listaResultadoQuery.getResultList();
+            if(listaResultado.isEmpty()){
+                return null;
+            }else{
+                Usuario usuarioEditar = new Usuario();
+                usuarioEditar.setNombre(usuarioEntityReq.getUsuario().getNombre());
+                usuarioEditar.setApellido(usuarioEntityReq.getUsuario().getApellido());
+                usuarioEditar.setEmail(usuarioEntityReq.getUsuario().getEmail());
+                usuarioEditar.setPassword(usuarioEntityReq.getUsuario().getPassword());
+                usuarioEditar.setEstado(usuarioEntityReq.getUsuario().getEstado());
+                usuarioEditar.setRol(usuarioEntityReq.getUsuario().getRol());
+
+
+            }
+        }
+         */
+
+        /*
+        RutEntityReq rutUsuarioBuscado = RutEntityReq.newBuilder()
+                                            .setRut(usuarioEntityReq.getUsuario().getRut())
+                                            .build();
+
+        Usuario usuarioEditar = this.getUsuario(rutUsuarioBuscado);
+        usuarioEditar.setNombre(usuarioEntityReq.getUsuario().getNombre());
+        usuarioEditar.setApellido(usuarioEntityReq.getUsuario().getApellido());
+        usuarioEditar.setEmail(usuarioEntityReq.getUsuario().getEmail());
+        usuarioEditar.setPassword(usuarioEntityReq.getUsuario().getPassword());
+        usuarioEditar.setEstado(usuarioEntityReq.getUsuario().getEstado());
+        usuarioEditar.setRol(usuarioEntityReq.getUsuario().getRol());
+        */
+
+        /*
+        String sqlQuery = "UPDATE Usuario " +
+                "SET nombre = :nombre, apellido = :apellido, email = :email, password = :password, estado = :estado, rol = :rol " +
+                "WHERE rut = :rut";
+        Query listaResultadoQuery = entityManager.createQuery(sqlQuery)
+                .setParameter("nombre", usuarioEntityReq.getUsuario().getNombre())
+                .setParameter("apellido", usuarioEntityReq.getUsuario().getApellido())
+                .setParameter("email", usuarioEntityReq.getUsuario().getEmail())
+                .setParameter("password", usuarioEntityReq.getUsuario().getPassword())
+                .setParameter("estado", usuarioEntityReq.getUsuario().getEstado())
+                .setParameter("rol", usuarioEntityReq.getUsuario().getRol());
+
+        */
+
+        Usuario usuarioEditar = entityManager.find(Usuario.class, usuarioEntityReq.getUsuario().getRut());
+
+        usuarioEditar.setNombre(usuarioEntityReq.getUsuario().getNombre());
+        usuarioEditar.setApellido(usuarioEntityReq.getUsuario().getApellido());
+        usuarioEditar.setEmail(usuarioEntityReq.getUsuario().getEmail());
+        usuarioEditar.setPassword(usuarioEntityReq.getUsuario().getPassword());
+        usuarioEditar.setEstado(usuarioEntityReq.getUsuario().getEstado());
+        usuarioEditar.setRol(usuarioEntityReq.getUsuario().getRol());
+
+        entityManager.merge(usuarioEditar);
+
+        String mensaje = "el usuario ha sido actualizado exitosamente";
+
+        return mensaje;
+    }
+
+    //TODO: COMPLETAR EL METODO ADDEQUIPO
     @Override
     public String addEquipo(EquipoEntityReq equipoEntityReq) {
-        String rutConfigurador = equipoEntityReq.getEquipo().getRutConfigurador();
-        EquipoEntity equipoGuardar = equipoEntityReq.getEquipo();
+        String sqlQuery = "FROM Equipo WHERE nombre = :nombre";
+        List listaResultado = entityManager.createQuery(sqlQuery)
+                .setParameter("nombre", equipoEntityReq.getEquipo().getNombre())
+                .getResultList();
+        String mensaje;
+        if(listaResultado.isEmpty()){
+            Equipo equipo = new Equipo();
+            equipo.setNombre(equipoEntityReq.getEquipo().getNombre());
+            equipo.setDescripcion(equipoEntityReq.getEquipo().getDescripcion());
+            equipo.setRutConfigurador(equipoEntityReq.getEquipo().getUrlRepositorio());
+            equipo.setRutConfigurador(equipoEntityReq.getRutConfigurador());
+            equipo.setEstado(equipoEntityReq.getEquipo().getEstado().toString());
 
-        String mensaje = "Guardado? idk";
+            entityManager.persist(equipo);
+
+            mensaje = "El equipo se ha agregado exitosamente";
+        }else{
+            mensaje = "El equipo ingresado ya existe";
+        }
+
+        return mensaje;
+    }
+    @Override
+    public String setEquipo(EquipoEntityReq equipoEntityReq){
+        Equipo equipoEditar = entityManager.find(Equipo.class, equipoEntityReq.getEquipo().getId());
+
+        equipoEditar.setNombre(equipoEntityReq.getEquipo().getNombre());
+        equipoEditar.setDescripcion(equipoEntityReq.getEquipo().getDescripcion());
+        equipoEditar.setUrlRepositorio(equipoEntityReq.getEquipo().getUrlRepositorio());
+        equipoEditar.setEstado(equipoEntityReq.getEquipo().getEstado().toString());
+
+        entityManager.merge(equipoEditar);
+
+        String mensaje = "El equipo se ha actualizado exitosamente";
 
         return mensaje;
     }
@@ -146,6 +276,27 @@ public class CoreDaoImpl implements CoreDao {
             return null;
         }
     }
+
+    //TODO: IMPLEMENTAR UN SYSTEMOUTPRINT PARA INDICAR QUE LA LISTA DE GETEQUIPOS ESTA VACIA
+    @Override
+    public List<Equipo> getEquipos(){
+        String mensaje;
+        String sqlQuery = "FROM Equipo WHERE 1=1";
+        List listaResultado = entityManager.createQuery(sqlQuery).getResultList();
+
+        if(listaResultado.isEmpty()){
+            mensaje = "No se han encontrado equipos";
+        }else{
+            mensaje = "Se han encontrado equipos";
+        }
+
+        return listaResultado;
+    }
+
+    /*public String uploadArchivo(ArchivosEquipoEntityReq archivosEquipoEntityReq){
+
+    }*/
+
     @Override
     public Simulacion getSimulacion(IdElementoReq idElementoReq){
         String sqlQuery = "FROM Simulacion WHERE id = :idSimulacion";
@@ -159,11 +310,12 @@ public class CoreDaoImpl implements CoreDao {
         }
     }
 
+    //TODO: IMPLEMENTAR UN SYSTEMOUTPRINT PARA INDICAR QUE LA LISTA DE GETSIMULACIONES ESTA VACIA
     @Override
     public List<Simulacion> getSimulaciones(){
         String mensaje;
         String sqlQuery = "FROM Simulacion WHERE 1=1";
-        List <Simulacion> listaResultado = entityManager.createQuery(sqlQuery).getResultList();
+        List listaResultado = entityManager.createQuery(sqlQuery).getResultList();
 
         if(listaResultado.isEmpty()){
             mensaje = "No se encontraron simulaciones";
@@ -173,4 +325,5 @@ public class CoreDaoImpl implements CoreDao {
         return listaResultado;
 
     }
+
 }
