@@ -30,8 +30,4 @@ public interface CoreDao {
     Simulacion getSimulacion(IdElementoReq idElemento);
     List<Simulacion> getSimulaciones();
     List<ComponenteFisico> getComponentesFisicosEquipo(IdElementoReq idElementoReq);
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 03847a5eda3bc8c8e1d7f17bdf1f00a572617f0e
