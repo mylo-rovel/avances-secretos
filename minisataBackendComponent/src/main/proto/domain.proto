@@ -43,9 +43,9 @@ message UsuarioEntity {
   }
 
   enum RolUsuario {
-    ADMINISTRADOR = 0;
+    OPERADOR = 0;
     CONFIGURADOR = 1;
-    OPERADOR = 2;
+    ADMINISTRADOR = 2;
   }
 
   string nombre = 1;
@@ -75,9 +75,12 @@ message Registro {
   enum TipoRegistro {
     CREACION_USUARIO = 0;
     LOGIN_USUARIO = 1;
-    CREACION_SIMULACION = 2;
-    INICIO_SIMULACION = 3;
-    UPLOAD_ARCHIVO = 4;
+    MODIFICACION_USUARIO = 2;
+    CREACION_SIMULACION = 3;
+    INICIO_SIMULACION = 4;
+    UPLOAD_ARCHIVO = 5;
+    CREACION_EQUIPO = 6;
+    MODIFICACION_EQUIPO = 7;
   }
 
   int64 id = 1;
@@ -187,9 +190,6 @@ message EquiposEntityReply {
   repeated EquipoEntityAcotado equipo_acotado = 1;
 }
 
-message ComponentesEquipoReply {
-  repeated ComponenteFisico valvula = 1;
-}
 
 // Equipo       - - - - - - - - - - - - - -
 // Simulacion   - - - - - - - - - - - - - -

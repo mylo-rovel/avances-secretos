@@ -44,10 +44,14 @@ public class Equipo {
     @Setter
     @Column(name = "rut_configurador")
     private String rutConfigurador;
-
+/*
     @Getter
     @Setter
     @Column(name = "estado")
     private Domain.EstadoEquipo estado;
-
+    */
+    @Getter
+    @Setter
+    @Column(name = "estado")
+    private String estado;
 }

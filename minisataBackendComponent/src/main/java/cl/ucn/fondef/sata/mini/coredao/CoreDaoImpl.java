@@ -76,7 +76,7 @@ public class CoreDaoImpl implements CoreDao {
                 .setParameter("emailUsuario", usuarioNuevo.getUsuario().getEmail())
                 .setParameter("rutUsuario", usuarioNuevo.getUsuario().getRut())
                 .getResultList();
-
+        log.info("Cantidad de usuarios matcheados: "+ listaUsuarios.size());
         String mensaje;
         if(listaUsuarios.isEmpty()){
             // RECORDAR QUE LAS CLASES DE /model/ REPRESENTAN LAS TABLAS DE LA DB
@@ -86,24 +86,24 @@ public class CoreDaoImpl implements CoreDao {
             usuarioRegistrar.setPassword(usuarioNuevo.getUsuario().getPassword());
             usuarioRegistrar.setNombre(usuarioNuevo.getUsuario().getNombre());
             usuarioRegistrar.setApellido(usuarioNuevo.getUsuario().getApellido());
-            usuarioRegistrar.setRol(usuarioNuevo.getUsuario().getRol());
-            usuarioRegistrar.setEstado(usuarioNuevo.getUsuario().getEstado());
 
+            usuarioRegistrar.setRol(usuarioNuevo.getUsuario().getRol().name());
+            usuarioRegistrar.setEstado(usuarioNuevo.getUsuario().getEstado().name());
+            System.out.println("usuarioRegistrar = " + usuarioRegistrar);
             entityManager.persist(usuarioRegistrar);
 
-            sqlQueryUsuario = "SELECT '*' FROM Usuario WHERE email = :emailUsuario AND rut = :rutUsuario";
+            sqlQueryUsuario = "FROM Usuario WHERE email = :emailUsuario AND rut = :rutUsuario";
             //noinspection unchecked
             List<Usuario> listaUsuariosEspecifica = entityManager.createQuery(sqlQueryUsuario)
                     .setParameter("emailUsuario", usuarioRegistrar.getEmail())
                     .setParameter("rutUsuario", usuarioRegistrar.getRut())
                     .getResultList();
 
-            log.info("listaUsuarios = " + listaUsuariosEspecifica);
             long idUsuario = listaUsuariosEspecifica.get(0).getId();
 
             Registro registroGuardado = new Registro();
             registroGuardado.setIdUsuario(idUsuario);
-            registroGuardado.setTipoRegistro(Domain.Registro.TipoRegistro.CREACION_USUARIO);
+            registroGuardado.setTipoRegistro(Domain.Registro.TipoRegistro.CREACION_USUARIO.name());
 
             String format = "El rut {0} registra al rut {1} con el rol {2}";
             String descripcionRegistro = MessageFormat.format(format,usuarioNuevo.getRutAdministrador(), usuarioRegistrar.getRut(), usuarioRegistrar.getRol());
@@ -114,7 +114,7 @@ public class CoreDaoImpl implements CoreDao {
 
             mensaje = "El usuario ha sido ingresado existosamente";
         }else{
-            mensaje = "El usuario ya existe";
+            mensaje = "El rut o email del usuario ya existe";
         }
 
         return mensaje;
@@ -207,8 +207,8 @@ public class CoreDaoImpl implements CoreDao {
         usuarioEditar.setApellido(usuarioEntityReq.getUsuario().getApellido());
         usuarioEditar.setEmail(usuarioEntityReq.getUsuario().getEmail());
         usuarioEditar.setPassword(usuarioEntityReq.getUsuario().getPassword());
-        usuarioEditar.setEstado(usuarioEntityReq.getUsuario().getEstado());
-        usuarioEditar.setRol(usuarioEntityReq.getUsuario().getRol());
+        usuarioEditar.setEstado(usuarioEntityReq.getUsuario().getEstado().name());
+        usuarioEditar.setRol(usuarioEntityReq.getUsuario().getRol().name());
 
         entityManager.merge(usuarioEditar);
 
@@ -231,8 +231,7 @@ public class CoreDaoImpl implements CoreDao {
             equipo.setDescripcion(equipoEntityReq.getEquipo().getDescripcion());
             equipo.setRutConfigurador(equipoEntityReq.getEquipo().getUrlRepositorio());
             equipo.setRutConfigurador(equipoEntityReq.getRutConfigurador());
-            equipo.setEstado(equipoEntityReq.getEquipo().getEstado().toString());
-
+            equipo.setEstado(equipoEntityReq.getEquipo().getEstado().name());
             entityManager.persist(equipo);
 
             mensaje = "El equipo se ha agregado exitosamente";
@@ -249,7 +248,7 @@ public class CoreDaoImpl implements CoreDao {
         equipoEditar.setNombre(equipoEntityReq.getEquipo().getNombre());
         equipoEditar.setDescripcion(equipoEntityReq.getEquipo().getDescripcion());
         equipoEditar.setUrlRepositorio(equipoEntityReq.getEquipo().getUrlRepositorio());
-        equipoEditar.setEstado(equipoEntityReq.getEquipo().getEstado().toString());
+        equipoEditar.setEstado(equipoEntityReq.getEquipo().getEstado().name());
 
         entityManager.merge(equipoEditar);
 

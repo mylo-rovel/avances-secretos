@@ -4,10 +4,12 @@
 
 package cl.ucn.fondef.sata.mini.web;
 
+import cl.ucn.fondef.sata.mini.grpc.Domain;
 import cl.ucn.fondef.sata.mini.grpc.webcoreclient.WebCoreClientGrpcEquipo;
 import cl.ucn.fondef.sata.mini.grpc.webcoreclient.WebCoreClientGrpcExtra;
 import cl.ucn.fondef.sata.mini.grpc.webcoreclient.WebCoreClientGrpcSimulacion;
 import cl.ucn.fondef.sata.mini.grpc.webcoreclient.WebCoreClientGrpcUsuario;
+import cl.ucn.fondef.sata.mini.utilities.EnumValuesResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import cl.ucn.fondef.sata.mini.utilities.JwtUtil;
@@ -196,5 +198,22 @@ public class WebController {
     // public String getRegistros(@PathVariable String rut, @RequestHeader(value="Authorization") String jwt) {
     public String getRegistros(@PathVariable String rut){
         return webCoreClientGrpcExtra.getRegistros(rut);
+    }
+
+
+    @RequestMapping(value = "api/extras/enums", method = RequestMethod.GET)
+    // public EnumValuesResponse getEnumDict(@RequestHeader(value="Authorization") String jwt) {
+    public EnumValuesResponse getEnumDict() {
+        EnumValuesResponse objetoRetornar = new EnumValuesResponse();
+        objetoRetornar.addEnumList("RolUsuario", Domain.UsuarioEntity.RolUsuario.values());
+        objetoRetornar.addEnumList("EstadoUsuario", Domain.UsuarioEntity.EstadoUsuario.values());
+        objetoRetornar.addEnumList("TipoRegistro", Domain.Registro.TipoRegistro.values());
+        objetoRetornar.addEnumList("TipoComponente", Domain.ComponenteFisico.TipoComponente.values());
+        objetoRetornar.addEnumList("ConexionComponente", Domain.ComponenteFisico.ConexionComponente.values());
+        objetoRetornar.addEnumList("EstadoComponente", Domain.ComponenteFisico.EstadoComponente.values());
+        objetoRetornar.addEnumList("EstadoEquipo", Domain.EstadoEquipo.values());
+        objetoRetornar.addEnumList("TipoArchivo", Domain.ArchivoEquipoEntityReq.TipoArchivo.values());
+
+        return objetoRetornar;
     }
 }

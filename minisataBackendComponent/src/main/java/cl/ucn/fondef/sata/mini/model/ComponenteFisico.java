@@ -49,7 +49,7 @@ public class ComponenteFisico {
     @Setter
     @Column(name = "url")
     private String url;
-
+/*
     @Getter
     @Setter
     @Column(name = "estado")
@@ -64,4 +64,19 @@ public class ComponenteFisico {
     @Setter
     @Column(name = "tipo")
     private Domain.ComponenteFisico.TipoComponente tipo;
+    */
+    @Getter
+    @Setter
+    @Column(name = "estado")
+    private String estado;
+
+    @Getter
+    @Setter
+    @Column(name = "conexion")
+    private String conexion;
+
+    @Getter
+    @Setter
+    @Column(name = "tipo")
+    private String tipo;
 }

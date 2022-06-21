@@ -51,6 +51,7 @@ public class Usuario {
     @Column(name = "apellido")
     private String apellido;
 
+/*
     @Getter
     @Setter
     @Column(name = "rol")
@@ -60,4 +61,16 @@ public class Usuario {
     @Setter
     @Column(name = "estado")
     public Domain.UsuarioEntity.EstadoUsuario estado;
+*/
+
+    @Getter
+    @Setter
+    @Column(name = "rol")
+    public String rol;
+
+    @Getter
+    @Setter
+    @Column(name = "estado")
+    public String estado;
+
 }

@@ -37,10 +37,16 @@ public class Registro {
     @Column(name = "descripcion")
     private String descripcion;
 
+    /*
     @Getter
     @Setter
     @Column(name = "tipo_registro")
     private Domain.Registro.TipoRegistro tipoRegistro;
+*/
+    @Getter
+    @Setter
+    @Column(name = "tipo_registro")
+    private String tipoRegistro;
 
     @Getter
     @Setter

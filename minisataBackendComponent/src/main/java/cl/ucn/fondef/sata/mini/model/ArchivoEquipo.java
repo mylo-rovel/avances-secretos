@@ -32,9 +32,14 @@ public class ArchivoEquipo {
     @Column(name = "data")
     private File data;
 
-    @Getter
+/*    @Getter
     @Setter
     @Column(name = "tipo")
     private Domain.Registro.TipoRegistro tipo;
+    */
+    @Getter
+    @Setter
+    @Column(name = "tipo")
+    private String tipo;
 
 }

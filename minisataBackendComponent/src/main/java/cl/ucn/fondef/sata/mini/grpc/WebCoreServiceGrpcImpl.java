@@ -1,20 +1,18 @@
 package cl.ucn.fondef.sata.mini.grpc;
 
 import cl.ucn.fondef.sata.mini.coredao.CoreDao;
-import cl.ucn.fondef.sata.mini.grpcobjects.*;
 import cl.ucn.fondef.sata.mini.model.ComponenteFisico;
 import cl.ucn.fondef.sata.mini.model.Equipo;
 import cl.ucn.fondef.sata.mini.model.Simulacion;
 import cl.ucn.fondef.sata.mini.model.Usuario;
+import cl.ucn.fondef.sata.mini.utilities.StringEnumTransformer;
 import cl.ucn.fondef.sata.mini.utilities.JwtUtil;
-import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import cl.ucn.fondef.sata.mini.grpc.Domain.*;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 @GrpcService
@@ -29,6 +27,8 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Autowired
+    StringEnumTransformer stringEnumTransformer;
 
     @Override
     // USAR EL MISMO NOMBRE DE LA FUNCIÓN A LA QUE SE HACE REFERENCIA EN EL ARCHIVO .proto
@@ -39,7 +39,7 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
 
         // Por si se registró en la tabla 'login' pero no en 'usuario'
         String jwtUsuario = (credencialesCorrectas && (usuarioLogeado != null )) ?
-                jwtUtil.create(usuarioLogeado.getRut(), usuarioLogeado.getRol().name())
+                jwtUtil.create(usuarioLogeado.getRut(), usuarioLogeado.getRol())
                 : "";
 
         // PROCESO DE ENVÍO DE RESPUESTA GRPC
@@ -58,7 +58,6 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
 
     @Override
     public void addUsuario(UsuarioEntityReq reqUsuarioNuevo, StreamObserver<MensajeReply> responseObserver){
-
         String mensajeRespuesta = coreDao.addUsuario(reqUsuarioNuevo);
 
         // PROCESO DE ENVÍO DE RESPUESTA GRPC
@@ -78,20 +77,21 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
     public void getUsuario(RutEntityReq rutEntityReq, StreamObserver<UsuarioEntityReply> responseObserver){
         Usuario usuarioGuardado = coreDao.getUsuario(rutEntityReq);
 
-        UsuarioEntity.Builder usuarioEnte = UsuarioEntity.newBuilder()
-                .setRut(usuarioGuardado.getRut())
-                .setNombre(usuarioGuardado.getNombre())
-                .setApellido(usuarioGuardado.getApellido())
-                .setEmail(usuarioGuardado.getEmail())
-                .setPassword(usuarioGuardado.getPassword())
-                .setRol(usuarioGuardado.getRol())
-                .setEstado(usuarioGuardado.getEstado());
+        UsuarioEntityReply.Builder usuarioRetornar = UsuarioEntityReply.newBuilder();
+        if (usuarioGuardado != null) {
+            UsuarioEntity.Builder usuarioEnte = UsuarioEntity.newBuilder()
+                    .setRut(usuarioGuardado.getRut())
+                    .setNombre(usuarioGuardado.getNombre())
+                    .setApellido(usuarioGuardado.getApellido())
+                    .setEmail(usuarioGuardado.getEmail())
+                    .setPassword(usuarioGuardado.getPassword())
+                    .setRol(stringEnumTransformer.getEnumRolUsuario(usuarioGuardado.getRol()))
+                    .setEstado(stringEnumTransformer.getEnumEstadoUsuario(usuarioGuardado.getEstado()));
 
-        UsuarioEntityReply usuarioRetornar = UsuarioEntityReply.newBuilder()
-                .setId(usuarioGuardado.getId())
-                .setUsuario(usuarioEnte.build())
-                .build();
-        responseObserver.onNext(usuarioRetornar);
+            usuarioRetornar.setId(usuarioGuardado.getId());
+            usuarioRetornar.setUsuario(usuarioEnte.build());
+        }
+        responseObserver.onNext(usuarioRetornar.build());
         responseObserver.onCompleted();
     }
 
@@ -100,17 +100,19 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         List<Usuario> listaUsuariosGuardados = coreDao.getUsuarios();
         UsuariosEntityReply.Builder listaRetornar = UsuariosEntityReply.newBuilder();
 
-        for(Usuario usuario: listaUsuariosGuardados){
-            UsuarioEntity usuarioEnte = UsuarioEntity.newBuilder()
-                    .setRut(usuario.getRut())
-                    .setNombre(usuario.getNombre())
-                    .setApellido(usuario.getApellido())
-                    .setEmail(usuario.getEmail())
-                    .setPassword(usuario.getPassword())
-                    .setRol(usuario.getRol())
-                    .setEstado(usuario.getEstado())
-                    .build();
-            listaRetornar.addUsuario(usuarioEnte);
+        if (listaUsuariosGuardados != null ){
+            for(Usuario usuario: listaUsuariosGuardados){
+                UsuarioEntity usuarioEnte = UsuarioEntity.newBuilder()
+                        .setRut(usuario.getRut())
+                        .setNombre(usuario.getNombre())
+                        .setApellido(usuario.getApellido())
+                        .setEmail(usuario.getEmail())
+                        .setPassword(usuario.getPassword())
+                        .setRol(stringEnumTransformer.getEnumRolUsuario(usuario.getRol()))
+                        .setEstado(stringEnumTransformer.getEnumEstadoUsuario(usuario.getEstado()))
+                        .build();
+                listaRetornar.addUsuario(usuarioEnte);
+            }
         }
 
         responseObserver.onNext(listaRetornar.build());
@@ -162,15 +164,15 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
                 .setNombre(equipoGuardado.getNombre())
                 .setDescripcion(equipoGuardado.getDescripcion())
                 .setUrlRepositorio(equipoGuardado.getUrlRepositorio())
-                .setEstado(equipoGuardado.getEstado())
+                .setEstado(stringEnumTransformer.getEnumEstadoEquipo(equipoGuardado.getEstado()))
                 .setRutConfigurador(equipoGuardado.getRutConfigurador());
 
         List<ComponenteFisico> listaComponenteFisico = coreDao.getComponentesFisicosEquipo(idElementoReq);
         for(ComponenteFisico componenteFisico: listaComponenteFisico){
             Domain.ComponenteFisico componenteDominio = Domain.ComponenteFisico.newBuilder()
-                    .setEstado(componenteFisico.getEstado())
-                    .setConexion(componenteFisico.getConexion())
-                    .setTipo(componenteFisico.getTipo())
+                    .setEstado(stringEnumTransformer.getEnumEstadoComponente(componenteFisico.getEstado()))
+                    .setConexion(stringEnumTransformer.getEnumConexionComponente(componenteFisico.getConexion()))
+                    .setTipo(stringEnumTransformer.getEnumTipoComponente(componenteFisico.getTipo()))
                     .setNombre(componenteFisico.getNombre())
                     .setDescripcion(componenteFisico.getDescripcion())
                     .setPin(componenteFisico.getPin())
@@ -197,7 +199,7 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
             EquipoEntityAcotado equipoRetornar = EquipoEntityAcotado.newBuilder()
                     .setId(equipo.getId())
                     .setNombre(equipo.getNombre())
-                    .setEstado(equipo.getEstado())
+                    .setEstado(stringEnumTransformer.getEnumEstadoEquipo(equipo.getEstado()))
                     .build();
 
             listaRetornar.addEquipoAcotado(equipoRetornar);

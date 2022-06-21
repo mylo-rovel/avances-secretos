@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 @ToString
 @EqualsAndHashCode
 public class GrpcSimulacionReq {
@@ -35,5 +37,5 @@ public class GrpcSimulacionReq {
 
     @Getter
     @Setter
-    private GrpcSecuencia[] listaSecuencias;
+    private List<GrpcSecuencia> listaSecuencias;
 }
