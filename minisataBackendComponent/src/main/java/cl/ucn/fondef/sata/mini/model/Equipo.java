@@ -4,6 +4,7 @@
 
 package cl.ucn.fondef.sata.mini.model;
 
+import cl.ucn.fondef.sata.mini.grpc.Domain;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -47,6 +48,6 @@ public class Equipo {
     @Getter
     @Setter
     @Column(name = "estado")
-    private String estado;
+    private Domain.EstadoEquipo estado;
 
 }

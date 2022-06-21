@@ -187,6 +187,9 @@ message EquiposEntityReply {
   repeated EquipoEntityAcotado equipo_acotado = 1;
 }
 
+message ComponentesEquipoReply {
+  repeated ComponenteFisico valvula = 1;
+}
 
 // Equipo       - - - - - - - - - - - - - -
 // Simulacion   - - - - - - - - - - - - - -

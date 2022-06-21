@@ -4,6 +4,7 @@
 
 package cl.ucn.fondef.sata.mini.model;
 
+import cl.ucn.fondef.sata.mini.grpc.Domain;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -52,15 +53,15 @@ public class ComponenteFisico {
     @Getter
     @Setter
     @Column(name = "estado")
-    private String estado;
+    private Domain.ComponenteFisico.EstadoComponente estado;
 
     @Getter
     @Setter
     @Column(name = "conexion")
-    private String conexion;
+    private Domain.ComponenteFisico.ConexionComponente conexion;
 
     @Getter
     @Setter
     @Column(name = "tipo")
-    private String tipo;
+    private Domain.ComponenteFisico.TipoComponente tipo;
 }
