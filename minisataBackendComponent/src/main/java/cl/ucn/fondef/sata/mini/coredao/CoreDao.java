@@ -4,6 +4,7 @@
 
 package cl.ucn.fondef.sata.mini.coredao;
 
+import cl.ucn.fondef.sata.mini.model.ComponenteFisico;
 import cl.ucn.fondef.sata.mini.model.Equipo;
 import cl.ucn.fondef.sata.mini.model.Simulacion;
 import cl.ucn.fondef.sata.mini.model.Usuario;
@@ -28,4 +29,5 @@ public interface CoreDao {
 
     Simulacion getSimulacion(IdElementoReq idElemento);
     List<Simulacion> getSimulaciones();
+    List<ComponenteFisico> getComponentesFisicosEquipo(IdElementoReq idElementoReq);
 }

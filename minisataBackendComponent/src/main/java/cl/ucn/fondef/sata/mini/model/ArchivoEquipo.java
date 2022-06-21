@@ -1,5 +1,6 @@
 package cl.ucn.fondef.sata.mini.model;
 
+import cl.ucn.fondef.sata.mini.grpc.Domain;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,6 +35,6 @@ public class ArchivoEquipo {
     @Getter
     @Setter
     @Column(name = "tipo")
-    private String tipo;
+    private Domain.Registro.TipoRegistro tipo;
 
 }

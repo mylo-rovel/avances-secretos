@@ -12,6 +12,10 @@ public class GrpcEquipoEntityAcotado {
 
     @Getter
     @Setter
+    private long id;
+
+    @Getter
+    @Setter
     private long nombre;
 
     @Getter

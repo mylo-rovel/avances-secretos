@@ -148,8 +148,7 @@ message EquipoEntityReq {
 }
 
 message EquipoEntityReply {
-  int64 id = 1;
-  EquipoEntity equipo = 2;
+  EquipoEntity equipo = 1;
 }
 
 message ArchivoEquipoEntityReq {
