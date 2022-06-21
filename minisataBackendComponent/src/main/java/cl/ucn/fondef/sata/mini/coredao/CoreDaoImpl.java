@@ -342,4 +342,8 @@ public class CoreDaoImpl implements CoreDao {
         }
         return listaResultado;
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 03847a5eda3bc8c8e1d7f17bdf1f00a572617f0e

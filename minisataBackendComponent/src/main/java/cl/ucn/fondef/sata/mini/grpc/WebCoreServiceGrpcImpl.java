@@ -74,7 +74,10 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         responseObserver.onCompleted();
     }
 
+<<<<<<< HEAD
     @Override
+=======
+>>>>>>> 03847a5eda3bc8c8e1d7f17bdf1f00a572617f0e
     public void getUsuario(RutEntityReq rutEntityReq, StreamObserver<UsuarioEntityReply> responseObserver){
         Usuario usuarioGuardado = coreDao.getUsuario(rutEntityReq);
 
@@ -95,7 +98,10 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         responseObserver.onCompleted();
     }
 
+<<<<<<< HEAD
     @Override
+=======
+>>>>>>> 03847a5eda3bc8c8e1d7f17bdf1f00a572617f0e
     public void getUsuarios(EmptyReq emptyReq, StreamObserver<UsuariosEntityReply> responseObserver){
         List<Usuario> listaUsuariosGuardados = coreDao.getUsuarios();
         UsuariosEntityReply.Builder listaRetornar = UsuariosEntityReply.newBuilder();
@@ -117,7 +123,11 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         responseObserver.onCompleted();
     }
 
+<<<<<<< HEAD
     @Override
+    public void setUsuario(UsuarioEntityReq usuarioEntityReq, StreamObserver<MensajeReply> responseObserver){
+        String mensajeResultado = coreDao.setUsuario(usuarioEntityReq);
+=======
     public void setUsuario(UsuarioEntityReq usuarioEntityReq, StreamObserver<MensajeReply> responseObserver){
         String mensajeResultado = coreDao.setUsuario(usuarioEntityReq);
 
@@ -129,6 +139,20 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         responseObserver.onCompleted();
     }
 
+    public void addEquipo(EquipoEntityReq equipoEntityReq, StreamObserver<MensajeReply> responseObserver){
+        // GUARDAR EN LA DB
+        String mensajeResultado = coreDao.addEquipo(equipoEntityReq);
+>>>>>>> 03847a5eda3bc8c8e1d7f17bdf1f00a572617f0e
+
+        MensajeReply grpcResponse = MensajeReply.newBuilder()
+                .setMensajeTexto(mensajeResultado)
+                .build();
+
+        responseObserver.onNext(grpcResponse);
+        responseObserver.onCompleted();
+    }
+
+<<<<<<< HEAD
     @Override
     public void addEquipo(EquipoEntityReq equipoEntityReq, StreamObserver<MensajeReply> responseObserver){
         String mensajeResultado = coreDao.addEquipo(equipoEntityReq);
@@ -142,6 +166,8 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
     }
 
     @Override
+=======
+>>>>>>> 03847a5eda3bc8c8e1d7f17bdf1f00a572617f0e
     public void setEquipo(EquipoEntityReq equipoEntityReq, StreamObserver<MensajeReply> responseObserver){
         String mensajeResultado = coreDao.setEquipo(equipoEntityReq);
 
@@ -153,16 +179,29 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         responseObserver.onCompleted();
     }
 
+<<<<<<< HEAD
     @Override
     public void getEquipo(IdElementoReq idElementoReq, StreamObserver<EquipoEntityReply> responseObserver){
         Equipo equipoGuardado = coreDao.getEquipo(idElementoReq);
 
+=======
+    //TODO: REVISAR SI EL VALUEOF DE ESTA FUNCION NO HACE EXPLOTAR EL PROGRAMA Y VER COMO INGRESAR LOS COMPONENTES FISICOS
+    public void getEquipo(IdElementoReq idElementoReq, StreamObserver<EquipoEntityReply> responseObserver){
+        Equipo equipoGuardado = coreDao.getEquipo(idElementoReq);
+
+        EstadoEquipo estadoEquipo = EstadoEquipo.valueOf(equipoGuardado.getEstado());
+
+>>>>>>> 03847a5eda3bc8c8e1d7f17bdf1f00a572617f0e
         EquipoEntity.Builder equipoEnte = EquipoEntity.newBuilder()
                 .setId(equipoGuardado.getId())
                 .setNombre(equipoGuardado.getNombre())
                 .setDescripcion(equipoGuardado.getDescripcion())
                 .setUrlRepositorio(equipoGuardado.getUrlRepositorio())
+<<<<<<< HEAD
                 .setEstado(equipoGuardado.getEstado())
+=======
+                .setEstado(estadoEquipo)
+>>>>>>> 03847a5eda3bc8c8e1d7f17bdf1f00a572617f0e
                 .setRutConfigurador(equipoGuardado.getRutConfigurador());
 
         List<ComponenteFisico> listaComponenteFisico = coreDao.getComponentesFisicosEquipo(idElementoReq);
@@ -180,6 +219,10 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         }
 
         EquipoEntityReply equipoRetornar = EquipoEntityReply.newBuilder()
+<<<<<<< HEAD
+=======
+                .setId(equipoGuardado.getId())
+>>>>>>> 03847a5eda3bc8c8e1d7f17bdf1f00a572617f0e
                 .setEquipo(equipoEnte.build())
                 .build();
 
@@ -188,7 +231,10 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
     }
 
     //TODO: TAMBIEN REVISAR AQUI SI EL VALUEOF NO HACE EXPLOTAR EL PROGRAMA
+<<<<<<< HEAD
     @Override
+=======
+>>>>>>> 03847a5eda3bc8c8e1d7f17bdf1f00a572617f0e
     public void getEquipos(EmptyReq emptyReq, StreamObserver<EquiposEntityReply> responseObserver){
         List<Equipo> listaEquiposGuardados = coreDao.getEquipos();
         EquiposEntityReply.Builder listaRetornar = EquiposEntityReply.newBuilder();
@@ -197,7 +243,13 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
             EquipoEntityAcotado equipoRetornar = EquipoEntityAcotado.newBuilder()
                     .setId(equipo.getId())
                     .setNombre(equipo.getNombre())
+<<<<<<< HEAD
                     .setEstado(equipo.getEstado())
+=======
+
+                    .setEstado(EstadoEquipo.valueOf(equipo.getEstado()))
+
+>>>>>>> 03847a5eda3bc8c8e1d7f17bdf1f00a572617f0e
                     .build();
 
             listaRetornar.addEquipoAcotado(equipoRetornar);
