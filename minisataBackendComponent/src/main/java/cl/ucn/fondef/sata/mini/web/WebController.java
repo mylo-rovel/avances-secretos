@@ -58,7 +58,6 @@ public class WebController {
         return webCoreClientGrpcUsuario.addUsuario(usuarioNuevo);
     }
 
-    // ***---- IMPLEMENTAR ----
     // rpc getUsuario(RutEntityReq)  returns (UsuarioEntityReply) {}
     @RequestMapping(value = "api/usuarios/{rut}", method = RequestMethod.GET)
     //public String getUsuario(@PathVariable String rut, @RequestHeader(value="Authorization") String jwt) {
@@ -66,7 +65,6 @@ public class WebController {
         return webCoreClientGrpcUsuario.getUsuario(rut);
     }
 
-    // ***---- IMPLEMENTAR ----
     // rpc getUsuarios(EmptyReq) returns (UsuariosEntityReply) {}
     @RequestMapping(value = "api/usuarios", method = RequestMethod.GET)
     // public String getUsuarios(@RequestHeader(value="Authorization") String jwt) {

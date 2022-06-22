@@ -78,8 +78,7 @@ public class WebCoreClientGrpcUsuario extends WebCoreClientGrpcBase {
                 .setRutAdministrador(usuarioModificar.getRutAdministrador())
                 .build();
 
-/*        Domain.MensajeReply serverResponse = this.stub.addUsuario(requestObject);
-        return this.gson.toJson(serverResponse);*/
-        return this.gson.toJson(requestObject);
+        Domain.MensajeReply serverResponse = this.stub.setUsuario(requestObject);
+        return this.gson.toJson(serverResponse);
     }
 }
