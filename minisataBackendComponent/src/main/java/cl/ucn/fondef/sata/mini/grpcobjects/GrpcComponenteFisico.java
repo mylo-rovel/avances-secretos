@@ -10,9 +10,15 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 @ToString
 @EqualsAndHashCode
 public class GrpcComponenteFisico {
+
+    @Getter
+    @Setter
+    private int numero;
 
     @Getter
     @Setter
@@ -21,10 +27,6 @@ public class GrpcComponenteFisico {
     @Getter
     @Setter
     private String descripcion;
-
-    @Getter
-    @Setter
-    private int pin;
 
     @Getter
     @Setter
@@ -37,9 +39,9 @@ public class GrpcComponenteFisico {
 
     @Getter
     @Setter
-    private Domain.ComponenteFisico.ConexionComponente conexion;
+    private Domain.ComponenteFisico.TipoComponente tipo;
 
     @Getter
     @Setter
-    private Domain.ComponenteFisico.TipoComponente tipo;
+    private List<GrpcPin> listaPines;
 }

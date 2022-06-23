@@ -207,7 +207,7 @@ public class WebController {
         objetoRetornar.addEnumList("EstadoUsuario", Domain.UsuarioEntity.EstadoUsuario.values());
         objetoRetornar.addEnumList("TipoRegistro", Domain.Registro.TipoRegistro.values());
         objetoRetornar.addEnumList("TipoComponente", Domain.ComponenteFisico.TipoComponente.values());
-        objetoRetornar.addEnumList("ConexionComponente", Domain.ComponenteFisico.ConexionComponente.values());
+        objetoRetornar.addEnumList("ConexionComponente", Domain.Pin.ConexionPin.values());
         objetoRetornar.addEnumList("EstadoComponente", Domain.ComponenteFisico.EstadoComponente.values());
         objetoRetornar.addEnumList("EstadoEquipo", Domain.EstadoEquipo.values());
         objetoRetornar.addEnumList("TipoArchivo", Domain.ArchivoEquipoEntityReq.TipoArchivo.values());

@@ -48,22 +48,30 @@ public class StringEnumTransformer {
         }
     }
 
-    public Domain.ComponenteFisico.ConexionComponente getEnumConexionComponente(String stringEvaluar) {
-        switch (stringEvaluar){
-            case "INPUT_ANALOGICO": return Domain.ComponenteFisico.ConexionComponente.INPUT_ANALOGICO;
-            case "INPUT_DIGITAL": return Domain.ComponenteFisico.ConexionComponente.INPUT_DIGITAL;
-            case "OUPUT_ANALOGICO": return Domain.ComponenteFisico.ConexionComponente.OUPUT_ANALOGICO;
-            case "OUPUT_DIGITAL": return Domain.ComponenteFisico.ConexionComponente.OUPUT_DIGITAL;
-            default: return null;
-        }
-    }
-
     public Domain.ComponenteFisico.EstadoComponente getEnumEstadoComponente(String stringEvaluar) {
         switch (stringEvaluar){
             case "ACTIVO": return Domain.ComponenteFisico.EstadoComponente.ACTIVO;
             case "INACTIVO": return Domain.ComponenteFisico.EstadoComponente.INACTIVO;
             case "FALLA": return Domain.ComponenteFisico.EstadoComponente.FALLA;
             case "REPARACION": return Domain.ComponenteFisico.EstadoComponente.REPARACION;
+            default: return null;
+        }
+    }
+
+    public Domain.Pin.ConexionPin getEnumConexionPin(String stringEvaluar) {
+        switch (stringEvaluar){
+            case "INPUT_ANALOGICO": return Domain.Pin.ConexionPin.INPUT_ANALOGICO;
+            case "INPUT_DIGITAL": return Domain.Pin.ConexionPin.INPUT_DIGITAL;
+            case "OUPUT_ANALOGICO": return Domain.Pin.ConexionPin.OUPUT_ANALOGICO;
+            case "OUPUT_DIGITAL": return Domain.Pin.ConexionPin.OUPUT_DIGITAL;
+            default: return null;
+        }
+    }
+
+
+    public Domain.Pin.PlacaPin getEnumPlacaPin(String stringEvaluar) {
+        switch (stringEvaluar){
+            case "ARDUINO_2560": return Domain.Pin.PlacaPin.ARDUINO_2560;
             default: return null;
         }
     }

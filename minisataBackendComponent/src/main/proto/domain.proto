@@ -98,19 +98,30 @@ message RegistrosReply {
 // Usuario  - - - - - - - - - - - - - -
 // Equipo   - - - - - - - - - - - - - -
 
+message Pin {
+  enum ConexionPin {
+    INPUT_ANALOGICO  = 0;
+    INPUT_DIGITAL = 1;
+    OUPUT_ANALOGICO = 2;
+    OUPUT_DIGITAL = 3;
+  }
+  enum PlacaPin {
+    ARDUINO_2560  = 0;
+  }
+
+  int32 numero = 1;
+  string nombre = 2;
+  string descripcion = 3;
+  PlacaPin placa = 4;
+  ConexionPin conexion = 5;
+}
+
 message ComponenteFisico {
   enum EstadoComponente {
     ACTIVO = 0;
     INACTIVO = 1;
     FALLA = 2;
     REPARACION = 3;
-  }
-
-  enum ConexionComponente {
-    INPUT_ANALOGICO  = 0;
-    INPUT_DIGITAL = 1;
-    OUPUT_ANALOGICO = 2;
-    OUPUT_DIGITAL = 3;
   }
 
   enum TipoComponente {
@@ -122,12 +133,10 @@ message ComponenteFisico {
 
   string nombre = 1;
   string descripcion = 2;
-  int32 pin = 3;
-  // para webcams, string url. para otros componentes, null
-  string url = 4;
+  string url = 4; // para webcams, string url. para otros componentes, null
   EstadoComponente estado = 5;
-  ConexionComponente conexion = 6;
-  TipoComponente tipo = 7;
+  TipoComponente tipo = 6;
+  repeated Pin pin_componente = 7;
 }
 
 message ComponentesEquipoReply {
@@ -144,9 +153,9 @@ message EquipoEntity {
   string nombre = 2;
   string descripcion = 3;
   string url_repositorio = 4;
-  repeated ComponenteFisico componente_fisico = 5;
   EstadoEquipo estado = 6;
   string rut_configurador = 7;
+  repeated ComponenteFisico componente_fisico = 5;
 }
 
 message EquipoEntityReq {

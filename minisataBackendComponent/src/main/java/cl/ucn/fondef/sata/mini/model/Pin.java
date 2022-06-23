@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2022 Fondef IDeA I+D.
- */
-
 package cl.ucn.fondef.sata.mini.model;
 
 import lombok.EqualsAndHashCode;
@@ -15,7 +11,7 @@ import javax.persistence.*;
 @EqualsAndHashCode
 @Entity
 @Table(name = "componentefisico")
-public class ComponenteFisico {
+public class Pin {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -26,8 +22,8 @@ public class ComponenteFisico {
 
     @Getter
     @Setter
-    @Column(name = "id_equipo")
-    private long idEquipo;
+    @Column(name = "id_componente")
+    private long idComponente;
 
     @Getter
     @Setter
@@ -36,21 +32,21 @@ public class ComponenteFisico {
 
     @Getter
     @Setter
+    @Column(name = "numero")
+    private int numero;
+
+    @Getter
+    @Setter
     @Column(name = "descripcion")
     private String descripcion;
 
     @Getter
     @Setter
-    @Column(name = "url")
-    private String url;
+    @Column(name = "placa")
+    private String placa;
 
     @Getter
     @Setter
-    @Column(name = "estado")
-    private String estado;
-
-    @Getter
-    @Setter
-    @Column(name = "tipo")
-    private String tipo;
+    @Column(name = "conexion")
+    private String conexion;
 }

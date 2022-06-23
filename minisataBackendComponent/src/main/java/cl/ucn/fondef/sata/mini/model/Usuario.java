@@ -4,8 +4,6 @@
 
 package cl.ucn.fondef.sata.mini.model;
 
-
-import cl.ucn.fondef.sata.mini.grpc.Domain;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -50,18 +48,6 @@ public class Usuario {
     @Setter
     @Column(name = "apellido")
     private String apellido;
-
-/*
-    @Getter
-    @Setter
-    @Column(name = "rol")
-    public Domain.UsuarioEntity.RolUsuario rol;
-
-    @Getter
-    @Setter
-    @Column(name = "estado")
-    public Domain.UsuarioEntity.EstadoUsuario estado;
-*/
 
     @Getter
     @Setter

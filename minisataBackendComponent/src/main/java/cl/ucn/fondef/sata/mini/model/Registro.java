@@ -4,7 +4,6 @@
 
 package cl.ucn.fondef.sata.mini.model;
 
-import cl.ucn.fondef.sata.mini.grpc.Domain;
 import lombok.*;
 
 import javax.persistence.*;
@@ -37,12 +36,6 @@ public class Registro {
     @Column(name = "descripcion")
     private String descripcion;
 
-    /*
-    @Getter
-    @Setter
-    @Column(name = "tipo_registro")
-    private Domain.Registro.TipoRegistro tipoRegistro;
-*/
     @Getter
     @Setter
     @Column(name = "tipo_registro")
