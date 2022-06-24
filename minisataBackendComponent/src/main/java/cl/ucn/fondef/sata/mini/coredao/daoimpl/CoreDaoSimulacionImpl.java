@@ -23,6 +23,9 @@ import javax.persistence.Query;
 import java.text.MessageFormat;
 import java.util.List;
 
+/**
+ * The type Core dao simulacion.
+ */
 @Slf4j
 @Repository
 @Transactional
@@ -44,19 +47,17 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
         }
     }
 
-    //TODO: IMPLEMENTAR UN SYSTEMOUTPRINT PARA INDICAR QUE LA LISTA DE GETSIMULACIONES ESTA VACIA
     @Override
     public List<Simulacion> getSimulaciones(){
-        String mensaje;
         String sqlQuery = "FROM Simulacion WHERE 1=1";
         List listaResultado = entityManager.createQuery(sqlQuery).getResultList();
 
         if(listaResultado.isEmpty()){
-            mensaje = "No se encontraron simulaciones";
+            log.warn("La lista no contiene elementos");
+            return null;
         }else{
-            mensaje = "Hay simulaciones";
+            return listaResultado;
         }
-        return listaResultado;
 
     }
 }

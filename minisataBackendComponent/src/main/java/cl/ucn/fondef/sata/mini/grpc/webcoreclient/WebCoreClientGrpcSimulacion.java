@@ -8,20 +8,41 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * The type Web core client grpc simulacion.
+ */
 @Service
 public class WebCoreClientGrpcSimulacion extends WebCoreClientGrpcBase {
 
+    /**
+     * Get simulacion string.
+     *
+     * @param idSimulacion the id simulacion
+     * @return the string
+     */
     public String getSimulacion(long idSimulacion){
         Domain.IdElementoReq idElementoReturn = Domain.IdElementoReq.newBuilder().setId(idSimulacion).build();
         Domain.SimulacionReply serverResponse = this.stub.getSimulacion(idElementoReturn);
         return this.gson.toJson(serverResponse);
     }
 
+    /**
+     * Get simulaciones string.
+     *
+     * @return the string
+     */
     public String getSimulaciones(){
         Domain.EmptyReq emptyReq = Domain.EmptyReq.newBuilder().build();
         Domain.SimulacionesReply serverResponse = this.stub.getSimulaciones(emptyReq);
         return this.gson.toJson(serverResponse);
     }
+
+    /**
+     * Start simulacion string.
+     *
+     * @param simulacionNueva the simulacion nueva
+     * @return the string
+     */
     public String startSimulacion(GrpcSimulacionReq simulacionNueva) {
         Domain.SimulacionReq.Builder simulacionReq = Domain.SimulacionReq.newBuilder()
                 .setNombre(simulacionNueva.getNombre())
@@ -48,6 +69,11 @@ public class WebCoreClientGrpcSimulacion extends WebCoreClientGrpcBase {
         return "";
     }
 
+    /**
+     * Gets simulacion actual.
+     *
+     * @return the simulacion actual
+     */
     public String getSimulacionActual() {
         return "";
     }

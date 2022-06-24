@@ -14,13 +14,19 @@ import cl.ucn.fondef.sata.mini.grpc.Domain.*;
 
 import java.util.List;
 
+/**
+ * The type Web core client grpc base.
+ */
 /*@Service*/
 // CLIENTE gRPC "Backend Application"
 // Esta "clase" se usa para ENVIAR peticiones desde "Backend Application" hasta el "Central Core"
 // Usaremos esta clase en el package "web". Especificamente en "WebController"
 // En realidad, esta clase es heredada por las otras de este package
 public class WebCoreClientGrpcBase {
-    // objeto que nos permitirá transformar protobufs a JSON
+    /**
+     * The Gson.
+     */
+// objeto que nos permitirá transformar protobufs a JSON
     protected final Gson gson = new Gson();
     
     // PROCESO DE ENVIO DE PETICION GRPC
@@ -30,6 +36,9 @@ public class WebCoreClientGrpcBase {
     private final ManagedChannel channel = NettyChannelBuilder.forTarget(this.channelTargetWebToCore).usePlaintext().build();
     // 2do: Crear un stub (o cliente rpc) asociado al canal de comunicacion y al servicio gRPC
 
+    /**
+     * The Stub.
+     */
     protected final WebCoreCommuServiceGrpc.WebCoreCommuServiceBlockingStub stub = WebCoreCommuServiceGrpc.newBlockingStub(this.channel);
 
 }

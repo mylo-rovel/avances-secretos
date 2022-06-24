@@ -23,6 +23,9 @@ import javax.persistence.Query;
 import java.text.MessageFormat;
 import java.util.List;
 
+/**
+ * The type Core dao extra.
+ */
 @Slf4j
 @Repository
 @Transactional

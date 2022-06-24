@@ -12,5 +12,8 @@ import cl.ucn.fondef.sata.mini.grpc.Domain.*;
 
 import java.util.List;
 
+/**
+ * The interface Core dao extra.
+ */
 public interface CoreDaoExtra {
 }

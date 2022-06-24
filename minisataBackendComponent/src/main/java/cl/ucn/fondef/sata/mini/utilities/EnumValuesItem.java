@@ -7,6 +7,9 @@ import lombok.ToString;
 
 import java.util.List;
 
+/**
+ * The type Enum values item.
+ */
 @ToString
 @EqualsAndHashCode
 public class EnumValuesItem {

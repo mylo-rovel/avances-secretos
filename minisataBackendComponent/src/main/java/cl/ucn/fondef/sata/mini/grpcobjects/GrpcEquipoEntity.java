@@ -38,9 +38,5 @@ public class GrpcEquipoEntity {
 
     @Getter
     @Setter
-    private String rutConfigurador;
-
-    @Getter
-    @Setter
     private List<GrpcComponenteFisico> listaComponentesFisicos;
 }

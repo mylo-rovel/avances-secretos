@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * The type Web core service grpc simulacion.
+ */
 @Service
 public class WebCoreServiceGrpcSimulacion {
 
@@ -20,9 +23,20 @@ public class WebCoreServiceGrpcSimulacion {
     @Autowired
     private CoreDaoEquipo coreDaoEquipo;
 
+    /**
+     * Get simulacion domain . simulacion reply.
+     *
+     * @param idElemento       the id elemento
+     * @param responseObserver the response observer
+     * @return the domain . simulacion reply
+     */
     public Domain.SimulacionReply getSimulacion(Domain.IdElementoReq idElemento, StreamObserver<Domain.SimulacionReply> responseObserver){
         // Obtener la simulacion desde la base de datos
         Simulacion simulacionGuardada = coreDaoSimulacion.getSimulacion(idElemento);
+
+        if (simulacionGuardada == null) {
+            return Domain.SimulacionReply.newBuilder().build();
+        }
 
         Domain.IdElementoReq idEquipo = Domain.IdElementoReq.newBuilder().setId(simulacionGuardada.getId()).build();
         Equipo equipoAsociado = coreDaoEquipo.getEquipo(idEquipo);
@@ -41,9 +55,20 @@ public class WebCoreServiceGrpcSimulacion {
         return simulacionRetornar;
     }
 
+    /**
+     * Get simulaciones domain . simulaciones reply.
+     *
+     * @param emptyReq         the empty req
+     * @param responseObserver the response observer
+     * @return the domain . simulaciones reply
+     */
     public Domain.SimulacionesReply getSimulaciones(Domain.EmptyReq emptyReq, StreamObserver<Domain.SimulacionesReply> responseObserver){
         List<Simulacion> listaSimuGuardadas = coreDaoSimulacion.getSimulaciones();
         Domain.SimulacionesReply.Builder listaRetornar = Domain.SimulacionesReply.newBuilder();
+
+        if (listaSimuGuardadas == null) {
+            return listaRetornar.build();
+        }
 
         for (Simulacion simulacion : listaSimuGuardadas) {
             Domain.IdElementoReq idEquipo = Domain.IdElementoReq.newBuilder().setId(simulacion.getIdEquipo()).build();

@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * The type Web core service grpc usuario.
+ */
 @Service
 public class WebCoreServiceGrpcUsuario {
     // EN ESTA CLASE CONSTRUIMOS LA RESPUESTA A RETORNAR AL CLIENTE RPC EN BASE A LO QUE
@@ -23,9 +26,19 @@ public class WebCoreServiceGrpcUsuario {
     @Autowired
     private JwtUtil jwtUtil;
 
+    /**
+     * The String enum transformer.
+     */
     @Autowired
     StringEnumTransformer stringEnumTransformer;
 
+    /**
+     * Authenticate domain . sesion entity reply.
+     *
+     * @param reqCredenciales  the req credenciales
+     * @param responseObserver the response observer
+     * @return the domain . sesion entity reply
+     */
     public Domain.SesionEntityReply authenticate(Domain.CredencialesEntityReq reqCredenciales, StreamObserver<Domain.SesionEntityReply> responseObserver) {
         // Llamar a coreDaoUsuario para hacer el proceso relacionado a la base de datos
         boolean credencialesCorrectas = coreDaoUsuario.credencialesSonCorrectas(reqCredenciales);
@@ -43,6 +56,13 @@ public class WebCoreServiceGrpcUsuario {
         return grpcResponse;
     }
 
+    /**
+     * Add usuario domain . mensaje reply.
+     *
+     * @param reqUsuarioNuevo  the req usuario nuevo
+     * @param responseObserver the response observer
+     * @return the domain . mensaje reply
+     */
     public Domain.MensajeReply addUsuario(Domain.UsuarioEntityReq reqUsuarioNuevo, StreamObserver<Domain.MensajeReply> responseObserver){
         String mensajeRespuesta = coreDaoUsuario.addUsuario(reqUsuarioNuevo);
 
@@ -55,6 +75,13 @@ public class WebCoreServiceGrpcUsuario {
         return grpcResponse;
     }
 
+    /**
+     * Gets usuario.
+     *
+     * @param rutEntityReq     the rut entity req
+     * @param responseObserver the response observer
+     * @return the usuario
+     */
     public Domain.UsuarioEntityReply getUsuario(Domain.RutEntityReq rutEntityReq, StreamObserver<Domain.UsuarioEntityReply> responseObserver) {
         Usuario usuarioGuardado = coreDaoUsuario.getUsuario(rutEntityReq);
 
@@ -75,6 +102,13 @@ public class WebCoreServiceGrpcUsuario {
         return usuarioRetornar.build();
     }
 
+    /**
+     * Gets usuarios.
+     *
+     * @param emptyReq         the empty req
+     * @param responseObserver the response observer
+     * @return the usuarios
+     */
     public Domain.UsuariosEntityReply getUsuarios(Domain.EmptyReq emptyReq, StreamObserver<Domain.UsuariosEntityReply> responseObserver) {
         List<Usuario> listaUsuariosGuardados = coreDaoUsuario.getUsuarios();
         Domain.UsuariosEntityReply.Builder listaRetornar = Domain.UsuariosEntityReply.newBuilder();
@@ -96,8 +130,15 @@ public class WebCoreServiceGrpcUsuario {
         return listaRetornar.build();
     }
 
-    public Domain.MensajeReply setUsuario(Domain.UsuarioEntityReq usuarioEntityReq, StreamObserver<Domain.MensajeReply> responseObserver){
-        String mensajeResultado = coreDaoUsuario.setUsuario(usuarioEntityReq);
+    /**
+     * Update usuario domain . mensaje reply.
+     *
+     * @param usuarioEntityReq the usuario entity req
+     * @param responseObserver the response observer
+     * @return the domain . mensaje reply
+     */
+    public Domain.MensajeReply updateUsuario(Domain.UsuarioEntityReq usuarioEntityReq, StreamObserver<Domain.MensajeReply> responseObserver){
+        String mensajeResultado = coreDaoUsuario.updateUsuario(usuarioEntityReq);
 
         Domain.MensajeReply grpcResponse = Domain.MensajeReply.newBuilder()
                 .setMensajeTexto(mensajeResultado)

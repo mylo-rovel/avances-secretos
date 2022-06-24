@@ -22,6 +22,9 @@ import javax.persistence.Query;
 import java.text.MessageFormat;
 import java.util.List;
 
+/**
+ * The type Core dao usuario.
+ */
 @Slf4j
 @Repository
 @Transactional
@@ -90,7 +93,6 @@ public class CoreDaoUsuarioImpl implements CoreDaoUsuario {
 
             usuarioRegistrar.setRol(usuarioNuevo.getUsuario().getRol().name());
             usuarioRegistrar.setEstado(usuarioNuevo.getUsuario().getEstado().name());
-            System.out.println("usuarioRegistrar = " + usuarioRegistrar);
             entityManager.persist(usuarioRegistrar);
 
             sqlQueryUsuario = "FROM Usuario WHERE email = :emailUsuario AND rut = :rutUsuario";
@@ -120,38 +122,9 @@ public class CoreDaoUsuarioImpl implements CoreDaoUsuario {
 
         return mensaje;
     }
-    @Override
-    public Usuario getUsuario(RutEntityReq rutEntityReq){
-        String sqlQuery = "FROM Usuario WHERE rut = :rut";
-        Query listaResultadoQuery = entityManager.createQuery(sqlQuery)
-                .setParameter("rut", rutEntityReq.getRut());
-        try{
-            List listaResultado = listaResultadoQuery.getResultList();
-            if(listaResultado.isEmpty()){
-                return null;
-            }else{
-                return (Usuario) listaResultado.get(0);
-            }
-        }
-        catch (Exception ex) {
-            log.debug("ex = " + ex);
-            return null;
-        }
-    }
 
-    //TODO: IMPLEMENTAR UN SYSTEMOUTPRINT PARA INDICAR QUE LA LISTA DE GETUSUARIOS ESTA VACIA
     @Override
-    public List<Usuario> getUsuarios(){
-        String sqlQuery = "FROM Usuario WHERE 1=1";
-        List<Usuario> listaResultadoQuery = entityManager.createQuery(sqlQuery).getResultList();
-        if(listaResultadoQuery.isEmpty()){
-            return null;
-        }else{
-            return listaResultadoQuery;
-        }
-    }
-    @Override
-    public String setUsuario(UsuarioEntityReq usuarioEntityReq){
+    public String updateUsuario(UsuarioEntityReq usuarioEntityReq){
         String sqlQuery = "FROM Usuario WHERE rut = :rut";
         List listaUsuarios = entityManager.createQuery(sqlQuery).setParameter("rut", usuarioEntityReq.getUsuario().getRut()).getResultList();
         Usuario usuarioEncontrado = (Usuario) listaUsuarios.get(0);
@@ -174,5 +147,35 @@ public class CoreDaoUsuarioImpl implements CoreDaoUsuario {
             mensaje = "No se pudo actualizar";
         }
         return mensaje;
+    }
+
+    @Override
+    public Usuario getUsuario(RutEntityReq rutEntityReq){
+        String sqlQuery = "FROM Usuario WHERE rut = :rut";
+        List listaResultado = entityManager.createQuery(sqlQuery)
+                .setParameter("rut", rutEntityReq.getRut()).getResultList();
+        try{
+            if(listaResultado.isEmpty()){
+                return null;
+            }else{
+                return (Usuario) listaResultado.get(0);
+            }
+        }
+        catch (Exception ex) {
+            log.debug("ex = " + ex);
+            return null;
+        }
+    }
+
+    @Override
+    public List<Usuario> getUsuarios(){
+        String sqlQuery = "FROM Usuario WHERE 1=1";
+        List<Usuario> listaResultadoQuery = entityManager.createQuery(sqlQuery).getResultList();
+        if(listaResultadoQuery.isEmpty()){
+            log.warn("La lista no contiene elementos");
+            return null;
+        }else{
+            return listaResultadoQuery;
+        }
     }
 }

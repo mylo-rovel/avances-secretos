@@ -15,6 +15,10 @@ message IdElementoReq {
   int64 id = 1;
 }
 
+message MensajeReq {
+  string mensaje_texto = 1;
+}
+
 message MensajeReply {
   string mensaje_texto = 1;
 }
@@ -102,8 +106,8 @@ message Pin {
   enum ConexionPin {
     INPUT_ANALOGICO  = 0;
     INPUT_DIGITAL = 1;
-    OUPUT_ANALOGICO = 2;
-    OUPUT_DIGITAL = 3;
+    OUTPUT_ANALOGICO = 2;
+    OUTPUT_DIGITAL = 3;
   }
   enum PlacaPin {
     ARDUINO_2560  = 0;
@@ -153,9 +157,8 @@ message EquipoEntity {
   string nombre = 2;
   string descripcion = 3;
   string url_repositorio = 4;
-  EstadoEquipo estado = 6;
-  string rut_configurador = 7;
-  repeated ComponenteFisico componente_fisico = 5;
+  EstadoEquipo estado = 5;
+  repeated ComponenteFisico componente_fisico = 6;
 }
 
 message EquipoEntityReq {

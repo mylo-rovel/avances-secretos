@@ -18,10 +18,6 @@ public class GrpcComponenteFisico {
 
     @Getter
     @Setter
-    private int numero;
-
-    @Getter
-    @Setter
     private String nombre;
 
     @Getter

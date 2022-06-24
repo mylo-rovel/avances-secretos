@@ -11,9 +11,5 @@ public class GrpcEquipoEntityReply {
 
     @Getter
     @Setter
-    private long id;
-
-    @Getter
-    @Setter
     private GrpcEquipoEntity equipo;
 }

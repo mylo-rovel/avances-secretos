@@ -11,5 +11,9 @@ public class GrpcEquipoEntityReq {
 
     @Getter
     @Setter
+    private String rutConfigurador;
+
+    @Getter
+    @Setter
     private GrpcEquipoEntity equipo;
 }

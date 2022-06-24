@@ -19,6 +19,8 @@ import java.security.Key;
 import java.util.Date;
 
 /**
+ * The type Jwt util.
+ *
  * @author Mahesh
  */
 @Component
@@ -39,9 +41,9 @@ public class JwtUtil {
     /**
      * Create a new token.
      *
-     * @param id
-     * @param subject
-     * @return
+     * @param id      the id
+     * @param subject the subject
+     * @return string
      */
     public String create(String id, String subject) {
 
@@ -72,8 +74,8 @@ public class JwtUtil {
     /**
      * Method to validate and read the JWT
      *
-     * @param jwt
-     * @return
+     * @param jwt the jwt
+     * @return value
      */
     public String getValue(String jwt) {
         // This line will throw an exception if it is not a signed JWS (as
@@ -87,8 +89,8 @@ public class JwtUtil {
     /**
      * Method to validate and read the JWT
      *
-     * @param jwt
-     * @return
+     * @param jwt the jwt
+     * @return key
      */
     public String getKey(String jwt) {
         // This line will throw an exception if it is not a signed JWS (as

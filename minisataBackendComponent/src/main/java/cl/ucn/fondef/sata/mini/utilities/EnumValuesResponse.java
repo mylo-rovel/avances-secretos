@@ -8,6 +8,9 @@ import lombok.ToString;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Enum values response.
+ */
 @ToString
 @EqualsAndHashCode
 public class EnumValuesResponse {
@@ -16,10 +19,20 @@ public class EnumValuesResponse {
     @Setter
     private List<EnumValuesItem> listaItemsEnum;
 
+    /**
+     * Instantiates a new Enum values response.
+     */
     public EnumValuesResponse() {
         this.listaItemsEnum = new ArrayList<>();
     }
 
+    /**
+     * Add enum list.
+     *
+     * @param <T>        the type parameter
+     * @param nombreEnum the nombre enum
+     * @param enumArr    the enum arr
+     */
     public <T> void addEnumList(String nombreEnum, T[] enumArr){
         EnumValuesItem enumValuesItemList = new EnumValuesItem();
         enumValuesItemList.setNombreEnum(nombreEnum);

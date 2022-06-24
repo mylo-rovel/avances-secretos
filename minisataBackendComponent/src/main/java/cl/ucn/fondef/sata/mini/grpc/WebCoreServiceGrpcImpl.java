@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import cl.ucn.fondef.sata.mini.grpc.Domain.*;
 
 
+/**
+ * The type Web core service grpc.
+ */
 @GrpcService
 // SERVIDOR gRPC "Central Core"
 // Esta clase se usa para RECIBIR y RESPONDER peticiones desde el "Backend Appplication"
@@ -44,6 +47,13 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
     }
 
     @Override
+    public void updateUsuario(UsuarioEntityReq usuarioEntityReq, StreamObserver<MensajeReply> responseObserver){
+        var grpcResponse = webCoreServiceGrpcUsuario.updateUsuario(usuarioEntityReq, responseObserver);
+        responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
+        responseObserver.onCompleted(); //Terminar el proceso
+    }
+
+    @Override
     public void getUsuario(RutEntityReq rutEntityReq, StreamObserver<UsuarioEntityReply> responseObserver){
         var grpcResponse = webCoreServiceGrpcUsuario.getUsuario(rutEntityReq, responseObserver);
         responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
@@ -58,13 +68,6 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
     }
 
     @Override
-    public void setUsuario(UsuarioEntityReq usuarioEntityReq, StreamObserver<MensajeReply> responseObserver){
-        var grpcResponse = webCoreServiceGrpcUsuario.setUsuario(usuarioEntityReq, responseObserver);
-        responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
-        responseObserver.onCompleted(); //Terminar el proceso
-    }
-
-    @Override
     public void addEquipo(EquipoEntityReq equipoEntityReq, StreamObserver<MensajeReply> responseObserver){
         var grpcResponse = webCoreServiceGrpcEquipo.addEquipo(equipoEntityReq, responseObserver);
         responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
@@ -72,8 +75,8 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
     }
 
     @Override
-    public void setEquipo(EquipoEntityReq equipoEntityReq, StreamObserver<MensajeReply> responseObserver){
-        var grpcResponse = webCoreServiceGrpcEquipo.setEquipo(equipoEntityReq, responseObserver);
+    public void updateEquipo(EquipoEntityReq equipoEntityReq, StreamObserver<MensajeReply> responseObserver){
+        var grpcResponse = webCoreServiceGrpcEquipo.updateEquipo(equipoEntityReq, responseObserver);
         responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
         responseObserver.onCompleted(); //Terminar el proceso
     }
@@ -88,6 +91,13 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
     @Override
     public void getEquipos(EmptyReq emptyReq, StreamObserver<EquiposEntityReply> responseObserver){
         var grpcResponse = webCoreServiceGrpcEquipo.getEquipos(emptyReq, responseObserver);
+        responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
+        responseObserver.onCompleted(); //Terminar el proceso
+    }
+
+    @Override
+    public void getValvulasEquipo(IdElementoReq idElemento, StreamObserver<ComponentesEquipoReply> responseObserver){
+        var grpcResponse = webCoreServiceGrpcEquipo.getValvulasEquipo(idElemento, responseObserver);
         responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
         responseObserver.onCompleted(); //Terminar el proceso
     }
