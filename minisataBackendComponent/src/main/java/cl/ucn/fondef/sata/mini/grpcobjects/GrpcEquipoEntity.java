@@ -12,6 +12,9 @@ import lombok.ToString;
 
 import java.util.List;
 
+/**
+ * The type Grpc equipo entity.
+ */
 @ToString
 @EqualsAndHashCode
 public class GrpcEquipoEntity {

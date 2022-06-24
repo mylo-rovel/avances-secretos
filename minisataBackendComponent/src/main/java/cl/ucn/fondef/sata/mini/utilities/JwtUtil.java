@@ -43,7 +43,7 @@ public class JwtUtil {
      *
      * @param id      the id
      * @param subject the subject
-     * @return string
+     * @return string string
      */
     public String create(String id, String subject) {
 
@@ -75,7 +75,7 @@ public class JwtUtil {
      * Method to validate and read the JWT
      *
      * @param jwt the jwt
-     * @return value
+     * @return value value
      */
     public String getValue(String jwt) {
         // This line will throw an exception if it is not a signed JWS (as
@@ -90,7 +90,7 @@ public class JwtUtil {
      * Method to validate and read the JWT
      *
      * @param jwt the jwt
-     * @return key
+     * @return key key
      */
     public String getKey(String jwt) {
         // This line will throw an exception if it is not a signed JWS (as

@@ -7,6 +7,9 @@ import lombok.ToString;
 
 import javax.persistence.*;
 
+/**
+ * The type Secuencia.
+ */
 @Entity
 @Table(name = "secuencia")
 @ToString

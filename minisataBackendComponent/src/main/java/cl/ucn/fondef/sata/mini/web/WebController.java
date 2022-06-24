@@ -104,7 +104,7 @@ public class WebController {
      * @param usuarioModificar the usuario modificar
      * @return the usuario
      */
-    // rpc updateUsuario(UsuarioEntityReq)  returns (MensajeReply) {}
+// rpc updateUsuario(UsuarioEntityReq)  returns (MensajeReply) {}
     @RequestMapping(value = "api/usuarios", method = RequestMethod.PATCH)
     // public String updateUsuario(@RequestBody GrpcUsuarioEntityReq usuarioModificar, @RequestHeader(value="Authorization") String jwt) {
     public String updateUsuario(@RequestBody GrpcUsuarioEntityReq usuarioModificar){

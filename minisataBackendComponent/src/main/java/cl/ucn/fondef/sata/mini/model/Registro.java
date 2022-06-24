@@ -8,6 +8,9 @@ import lombok.*;
 
 import javax.persistence.*;
 
+/**
+ * The type Registro.
+ */
 @Entity
 @Table(name = "registro")
 @ToString

@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * The type Grpc lectura sensores reply.
+ */
 @ToString
 @EqualsAndHashCode
 public class GrpcLecturaSensoresReply {

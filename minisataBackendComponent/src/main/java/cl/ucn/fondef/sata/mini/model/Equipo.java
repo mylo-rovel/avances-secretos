@@ -11,6 +11,9 @@ import lombok.ToString;
 
 import javax.persistence.*;
 
+/**
+ * The type Equipo.
+ */
 @Entity
 @Table(name = "equipo")
 @ToString

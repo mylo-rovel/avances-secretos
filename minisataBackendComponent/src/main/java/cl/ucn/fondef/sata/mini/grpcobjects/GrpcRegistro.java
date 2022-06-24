@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * The type Grpc registro.
+ */
 @ToString
 @EqualsAndHashCode
 public class GrpcRegistro {

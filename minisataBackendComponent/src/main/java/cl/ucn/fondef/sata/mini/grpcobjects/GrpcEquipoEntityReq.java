@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * The type Grpc equipo entity req.
+ */
 @ToString
 @EqualsAndHashCode
 public class GrpcEquipoEntityReq {

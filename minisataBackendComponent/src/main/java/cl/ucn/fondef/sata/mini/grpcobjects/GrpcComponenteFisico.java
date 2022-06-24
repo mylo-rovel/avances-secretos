@@ -12,6 +12,9 @@ import lombok.ToString;
 
 import java.util.List;
 
+/**
+ * The type Grpc componente fisico.
+ */
 @ToString
 @EqualsAndHashCode
 public class GrpcComponenteFisico {

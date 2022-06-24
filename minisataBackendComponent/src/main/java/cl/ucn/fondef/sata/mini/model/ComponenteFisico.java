@@ -11,6 +11,9 @@ import lombok.ToString;
 
 import javax.persistence.*;
 
+/**
+ * The type Componente fisico.
+ */
 @ToString
 @EqualsAndHashCode
 @Entity

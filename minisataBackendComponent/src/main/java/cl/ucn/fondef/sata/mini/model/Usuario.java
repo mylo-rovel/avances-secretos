@@ -11,6 +11,9 @@ import lombok.ToString;
 
 import javax.persistence.*;
 
+/**
+ * The type Usuario.
+ */
 @Entity
 @Table(name = "usuario")
 @ToString
@@ -49,11 +52,17 @@ public class Usuario {
     @Column(name = "apellido")
     private String apellido;
 
+    /**
+     * The Rol.
+     */
     @Getter
     @Setter
     @Column(name = "rol")
     public String rol;
 
+    /**
+     * The Estado.
+     */
     @Getter
     @Setter
     @Column(name = "estado")

@@ -8,6 +8,9 @@ import lombok.ToString;
 
 import java.io.File;
 
+/**
+ * The type Grpc archivo equipo entity.
+ */
 @ToString
 @EqualsAndHashCode
 public class GrpcArchivoEquipoEntity {

@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * The type Grpc equipo entity acotado.
+ */
 @ToString
 @EqualsAndHashCode
 public class GrpcEquipoEntityAcotado {

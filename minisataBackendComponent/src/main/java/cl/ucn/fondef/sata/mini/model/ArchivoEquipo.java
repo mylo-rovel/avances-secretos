@@ -9,6 +9,9 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.io.File;
 
+/**
+ * The type Archivo equipo.
+ */
 @ToString
 @EqualsAndHashCode
 @Entity

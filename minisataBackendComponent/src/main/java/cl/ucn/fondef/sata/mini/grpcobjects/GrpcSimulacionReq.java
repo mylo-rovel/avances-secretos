@@ -11,6 +11,9 @@ import lombok.ToString;
 
 import java.util.List;
 
+/**
+ * The type Grpc simulacion req.
+ */
 @ToString
 @EqualsAndHashCode
 public class GrpcSimulacionReq {
