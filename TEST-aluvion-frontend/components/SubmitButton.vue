@@ -21,13 +21,13 @@
 <style>
   .submit-button {
     background: #025cfa;
-    padding: 1rem 1.25rem 1rem 1.25rem;
+    padding: 0.5rem 1.25rem 0.5rem 1.25rem;
     font-size: 1rem;
     color: #fff;
     justify-content: center;
     text-transform: uppercase;
     font-weight: bold;
-    border-radius: 30px;
+    border-radius: 10px;
   }
   .submit-button:hover {
         background: white;

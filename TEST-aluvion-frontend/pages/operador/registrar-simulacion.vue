@@ -7,6 +7,8 @@
     import SecuenciaButton from '~/components/SecuenciaButton.vue'
     import NavbarPag from '~/components/NavbarPag.vue'
     import Modal from '~/components/Modal.vue'
+    import * as d3 from "d3";
+    
 
     export default Vue.extend({
         name: "RegistrarSimulacion",
@@ -19,6 +21,15 @@
                 "infoContenido": "Simulación registrada :D",
                 "nombreSecuencia": "Configurar Secuencia",
             };
+        },
+        head(){
+            return{
+                title: "Sistema de Alerta Temprana Aluvional - Registrar Simulación",
+                meta: [{
+                    name: "registrarSimulacion",
+                    content: "Registrar simulación"
+                }],
+            }
         },
         methods: {
             /*mostrarEquipo(){
@@ -41,6 +52,12 @@
                 }else{
                     return true;
                 }
+            },
+            grafico(){
+                console.log(d3);
+                const graf = d3.selectAll("div");
+                graf.data([1,2,3]).enter().append('p').text(dta => dta);                
+                return graf;
             },*/
 
             mensaje: function (event){
@@ -105,7 +122,7 @@
                 </div>
                 
                 <div class="row">
-                    <form id ="form-registrar-simulacion" action="/nueva-simulacion" @submit = "desactivarForm(this);" method="post">
+                    <form id ="form-registrar-simulacion" action="/nueva-simulacion" method="post">
                         <div class="my-4 form-group row">
                             <label for="id_equipo" class="col-sm-4 col-form-label ">Seleccione un equipo</label>
                             <div class="col-sm-6">
@@ -114,6 +131,13 @@
                                         <option>Equipo simulador de lluvia</option>
                                         <option>Simulador 2.0</option>
                                 </select>
+                            </div>
+                        </div>
+                     
+                        <div class="my-4 form-group row">
+                            <label for="add_nombre_simulacion" class="col-sm-4 col-form-label">Nombre Simulación</label>
+                            <div class="col-sm-6">
+                                <input id="add_nombre_simulacion" type="text" class="form-control" aria-describedby="addon-wrapping" required>
                             </div>
                         </div>
                         <div class="my-4 form-group row">
@@ -129,7 +153,7 @@
                             </div>
                         </div>
                         <div class="my-4 form-group row">
-                            <label for="add_descripcion_equipo" class="col-sm-4 col-form-label">Descripción</label>
+                            <label for="add_descripcion_equipo" class="col-sm-4 col-form-label">Descripción Simulación</label>
                             <div class="col-sm-6">
                                 <input id="add_descripcion_equipo" type="text" class="form-control" aria-describedby="addon-wrapping" required>
                             </div>
