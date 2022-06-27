@@ -4,11 +4,13 @@
 
 package cl.ucn.fondef.sata.mini.model;
 
-import cl.ucn.fondef.sata.mini.grpc.Domain;
 import lombok.*;
 
 import javax.persistence.*;
 
+/**
+ * The type Registro.
+ */
 @Entity
 @Table(name = "registro")
 @ToString
@@ -40,7 +42,7 @@ public class Registro {
     @Getter
     @Setter
     @Column(name = "tipo_registro")
-    private Domain.Registro.TipoRegistro tipoRegistro;
+    private String tipoRegistro;
 
     @Getter
     @Setter

@@ -11,6 +11,9 @@ import lombok.ToString;
 
 import javax.persistence.*;
 
+/**
+ * The type Simulacion.
+ */
 @Entity
 @Table(name = "simulacion")
 @ToString

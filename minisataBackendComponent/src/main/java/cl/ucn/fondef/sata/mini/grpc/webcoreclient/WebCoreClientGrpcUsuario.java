@@ -4,9 +4,33 @@ import cl.ucn.fondef.sata.mini.grpc.Domain;
 import cl.ucn.fondef.sata.mini.grpcobjects.GrpcCredencialesEntityReq;
 import cl.ucn.fondef.sata.mini.grpcobjects.GrpcUsuarioEntityReq;
 import org.springframework.stereotype.Service;
+import de.mkammerer.argon2.Argon2;
+import de.mkammerer.argon2.Argon2Factory;
 
 @Service
 public class WebCoreClientGrpcUsuario extends WebCoreClientGrpcBase {
+
+    private Domain.UsuarioEntityReq getUsuarioGrpcReqObject (GrpcUsuarioEntityReq grpcUsuarioEntityReq, String password) {
+        // CREAR EL OBJETO RPC QUE LLEVA LOS DATOS A ENVIAR
+        Domain.UsuarioEntity datosUsuario = Domain.UsuarioEntity.newBuilder()
+                .setNombre(grpcUsuarioEntityReq.getUsuario().getNombre())
+                .setApellido(grpcUsuarioEntityReq.getUsuario().getApellido())
+                .setRut(grpcUsuarioEntityReq.getUsuario().getRut())
+                .setEmail(grpcUsuarioEntityReq.getUsuario().getEmail())
+                .setPassword(password)
+                .setRol(grpcUsuarioEntityReq.getUsuario().getRol())
+                .setEstado(grpcUsuarioEntityReq.getUsuario().getEstado())
+                .build();
+
+        Domain.UsuarioEntityReq requestObject = Domain.UsuarioEntityReq.newBuilder()
+                .setUsuario(datosUsuario)
+                .setRutAdministrador(grpcUsuarioEntityReq.getRutAdministrador())
+                .build();
+        return requestObject;
+    }
+
+    // ---- FUNCIONES AUX ----------------------------------------------------------------------------------------
+    // ---- LLAMADAS RPC  ----------------------------------------------------------------------------------------
 
     // USAR EL MISMO NOMBRE DE LA FUNCION A LA QUE SE HACE REFERENCIA EN EL ARCHIVO .proto
     public String authenticate (GrpcCredencialesEntityReq grpcCredencialesEntityReq) {
@@ -23,58 +47,32 @@ public class WebCoreClientGrpcUsuario extends WebCoreClientGrpcBase {
     }
 
     public String addUsuario (GrpcUsuarioEntityReq grpcUsuarioEntityReq){
-        // CREAR EL OBJETO RPC QUE LLEVA LOS DATOS A ENVIAR
-        Domain.UsuarioEntity datosUsuario = Domain.UsuarioEntity.newBuilder()
-                .setNombre(grpcUsuarioEntityReq.getUsuario().getNombre())
-                .setApellido(grpcUsuarioEntityReq.getUsuario().getApellido())
-                .setRut(grpcUsuarioEntityReq.getUsuario().getRut())
-                .setEmail(grpcUsuarioEntityReq.getUsuario().getEmail())
-                .setPassword(grpcUsuarioEntityReq.getUsuario().getPassword())
-                .setRol(grpcUsuarioEntityReq.getUsuario().getRol())
-                .setEstado(grpcUsuarioEntityReq.getUsuario().getEstado())
-                .build();
+        // HASHING LA NUEVA CONTRASEÑA
+        Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
+        String hashPassword= argon2.hash(1, 1024, 1, grpcUsuarioEntityReq.getUsuario().getPassword());
 
-        Domain.UsuarioEntityReq requestObject = Domain.UsuarioEntityReq.newBuilder()
-                .setUsuario(datosUsuario)
-                .setRutAdministrador(grpcUsuarioEntityReq.getRutAdministrador())
-                .build();
+        Domain.UsuarioEntityReq datosUsuario = this.getUsuarioGrpcReqObject(grpcUsuarioEntityReq, hashPassword);
+        Domain.MensajeReply serverResponse = this.stub.addUsuario(datosUsuario);
+        return this.gson.toJson(serverResponse);
+    }
 
-        Domain.MensajeReply serverResponse = this.stub.addUsuario(requestObject);
+    public String updateUsuario(GrpcUsuarioEntityReq grpcUsuarioEntityReq){
+        String password = grpcUsuarioEntityReq.getUsuario().getPassword();
+
+        Domain.UsuarioEntityReq datosUsuario = this.getUsuarioGrpcReqObject(grpcUsuarioEntityReq, password);
+        Domain.MensajeReply serverResponse = this.stub.updateUsuario(datosUsuario);
         return this.gson.toJson(serverResponse);
     }
 
     public String getUsuario (String rutUsuario) {
         Domain.RutEntityReq rutEntityReq = Domain.RutEntityReq.newBuilder().setRut(rutUsuario).build();
-/*        UsuarioEntityReply serverResponse = this.stub.getUsuario(rutEntityReq);
-        return this.gson.toJson(serverResponse);*/
-        return this.gson.toJson(rutUsuario);
+        Domain.UsuarioEntityReply serverResponse = this.stub.getUsuario(rutEntityReq);
+        return this.gson.toJson(serverResponse);
     }
 
     public String getUsuarios () {
         Domain.EmptyReq emptyReq = Domain.EmptyReq.newBuilder().build();
-        /*UsuariosEntityReply serverResponse = this.stub.getUsuarios(emptyReq);
-        return this.gson.toJson(serverResponse);*/
-        return "a";
-    }
-
-    public String setUsuario(GrpcUsuarioEntityReq usuarioModificar){
-        Domain.UsuarioEntity datosUsuario = Domain.UsuarioEntity.newBuilder()
-                .setNombre(usuarioModificar.getUsuario().getNombre())
-                .setApellido(usuarioModificar.getUsuario().getApellido())
-                .setRut(usuarioModificar.getUsuario().getRut())
-                .setEmail(usuarioModificar.getUsuario().getEmail())
-                .setPassword(usuarioModificar.getUsuario().getPassword())
-                .setRol(usuarioModificar.getUsuario().getRol())
-                .setEstado(usuarioModificar.getUsuario().getEstado())
-                .build();
-
-        Domain.UsuarioEntityReq requestObject = Domain.UsuarioEntityReq.newBuilder()
-                .setUsuario(datosUsuario)
-                .setRutAdministrador(usuarioModificar.getRutAdministrador())
-                .build();
-
-/*        MensajeReply serverResponse = this.stub.addUsuario(requestObject);
-        return this.gson.toJson(serverResponse);*/
-        return this.gson.toJson(requestObject);
+        Domain.UsuariosEntityReply serverResponse = this.stub.getUsuarios(emptyReq);
+        return this.gson.toJson(serverResponse);
     }
 }

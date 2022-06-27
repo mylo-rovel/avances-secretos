@@ -4,16 +4,17 @@ left to right direction
 interface MiniSataWeb <<services>> {
     + authenticate(login, password): Usuario
     + addUsuario(usuario): Usuario
+    + updateUsuario(usuario): Usuario
     + getUsuario(rut): Usuario
     + getUsuarios(): List<Usuario>
-    + setUsuario(usuario): Usuario
     ..
     + addEquipo(equipo): Equipo
-    + setEquipo(equipo): Equipo
+    + updateEquipo(equipo): Equipo
     + getEquipo(id): Equipo
     + getEquipos(): List<Equipo>
     + uploadArchivo(archivo, id): Archivo
-    + getArchivos(id): Archivo
+    + getArchivos(id): List<Archivo>
+    + getValvulasEquipo(id): List<Actuador>
     ..
     + getSimulaciones(): List<Simulacion>
     + getSimulacion(id): Simulacion
@@ -21,16 +22,18 @@ interface MiniSataWeb <<services>> {
     + getRegistros(rut): Registro
     ..
     + startSimulacion(simulacion): Simulacion
-    + getSimulacionActual(): Simulacion
-    + getLecturaSensores(): Simulacion
+    + getSimulacionActual(idEquipo): Simulacion
+    + getLecturaSensores(idEquipo): Simulacion
 }
 
-interface MiniSataRaspberry <<services>> {
-    + retrieveComponente(id): Componente
-    ..
+interface MiniSataBoard <<services>> {
+    /'+ retrieveComponente(id): Componente
+    ..'/
     + startSimulacion(simulacion): Simulacion
     + getSimulacionActual(): Simulacion
     + getLecturasSensores(): Simulacion
+    ..
+    + sendMensajeEncendido(): String
 
 }
 
@@ -89,6 +92,14 @@ class Componente {
     {static} id: Long
     nombre: String
     descripcion: String
+}
+
+class Actuador {
+    {static} id: Long
+}
+
+class Sensor {
+    {static} id: Long
     url: String
 }
 
@@ -101,36 +112,42 @@ enum EstadoComponente {
     ...
 }
 
-enum ConexionComponente {
+/'enum ConexionComponente {
     NONE
     INPUT_ANALOGICO
     INPUT_DIGITAL
     OUTPUT_ANALOGICO
     OUTPUT_DIGITAL
-}
+}'/
 
-enum TipoComponente {
+enum TipoActuador {
     NONE
-    CAMARA
-    FLUJOMETRO
-    TERMOMETRO
     VALVULA
     ...
 }
 
-class Pin {
+enum TipoSensor {
+    NONE
+    CAMARA
+    FLUJOMETRO
+    TERMOMETRO
+    ...
+}
+
+class Placa {
     {static} id: Long
     nombre: String
-    numero: Integer
     descripcion: String
     ...
 }
 
-enum PlacaPin {
+enum TipoPlaca {
     NONE
     ARDUINO_2560
+    ESP32
     ...
 }
+
 
 class Simulacion {
     {static} id: Long
@@ -142,6 +159,7 @@ class Simulacion {
 class Ejecucion {
     {static} id: Long
     aguaCaidaTotal: Double
+    fechaEjecucion: String
 }
 
 class Evento {
@@ -149,6 +167,11 @@ class Evento {
     intensidad: Integer
     duracion: Integer
     posicion: Integer
+}
+
+class Secuencia {
+    {static} id: Long
+
 }
 
 class Registro {
@@ -171,24 +194,28 @@ enum TipoRegistro {
 Usuario *--> "1" EstadoUsuario: estado
 Usuario *--> "1" RolUsuario: rol
 
-Equipo o--> "*" Simulacion: simulaciones
-Equipo o--> "*" Componente: componentes
 Equipo o--> "*" Archivo: archivos
 Equipo *--> "1" EstadoEquipo: estado
-
-Componente *--> "1" EstadoComponente: estado
-Componente *--> "1" TipoComponente: tipo
-
-Pin *--> "1"  PlacaPin: placa
-Componente o--> "*" Pin: pines
-Pin *--> "1" ConexionComponente: conexion
-
+Equipo --> "*" Simulacion: simulaciones
+Equipo --> "*" Placa: placas
+Placa *--> "*" Componente: pines
+Placa *--> "1" TipoPlaca: tipo
 
 Archivo *--> "1"  TipoArchivo: tipoArchivo
 
+Componente *--> "1" EstadoComponente: estado
+Componente <|-- Sensor
+Componente <|-- Actuador
+
+Actuador *--> "1" TipoActuador: tipo
+Sensor *--> "1" TipoSensor: tipo
+
+Actuador --> "1" Secuencia: secuencia
+Secuencia --> "* {sorted}" Evento: evento
+
+Simulacion *--> "*" Componente: componentes
 Simulacion --> "*" Ejecucion: ejecuciones
-Ejecucion *--> "*" Evento: eventos
-Evento *--> "1" Componente: componente
+Ejecucion o--> "*" Evento: eventos
 
 Registro *--> "1" Usuario: usuario
 Registro *--> "1" TipoRegistro: tipo

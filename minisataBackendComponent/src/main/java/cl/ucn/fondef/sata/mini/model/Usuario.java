@@ -4,8 +4,6 @@
 
 package cl.ucn.fondef.sata.mini.model;
 
-
-import cl.ucn.fondef.sata.mini.grpc.Domain;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +11,9 @@ import lombok.ToString;
 
 import javax.persistence.*;
 
+/**
+ * The type Usuario.
+ */
 @Entity
 @Table(name = "usuario")
 @ToString
@@ -51,13 +52,20 @@ public class Usuario {
     @Column(name = "apellido")
     private String apellido;
 
+    /**
+     * The Rol.
+     */
     @Getter
     @Setter
     @Column(name = "rol")
-    public Domain.UsuarioEntity.RolUsuario rol;
+    public String rol;
 
+    /**
+     * The Estado.
+     */
     @Getter
     @Setter
     @Column(name = "estado")
-    public Domain.UsuarioEntity.EstadoUsuario estado;
+    public String estado;
+
 }

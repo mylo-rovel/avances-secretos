@@ -14,10 +14,10 @@ service WebCoreCommuService {
   rpc addUsuario(UsuarioEntityReq)  returns (MensajeReply) {}
   rpc getUsuario(RutEntityReq)  returns (UsuarioEntityReply) {}
   rpc getUsuarios(EmptyReq) returns (UsuariosEntityReply) {}
-  rpc setUsuario(UsuarioEntityReq)  returns (MensajeReply) {}
+  rpc updateUsuario(UsuarioEntityReq)  returns (MensajeReply) {}
 
   rpc addEquipo(EquipoEntityReq)  returns (MensajeReply){}
-  rpc setEquipo(EquipoEntityReq)  returns (MensajeReply){}
+  rpc updateEquipo(EquipoEntityReq)  returns (MensajeReply){}
   rpc getEquipo(IdElementoReq)  returns (EquipoEntityReply) {}
   rpc getEquipos(EmptyReq)  returns (EquiposEntityReply) {}
   rpc uploadArchivo(stream ArchivosEquipoEntityReq)  returns (MensajeReply){}

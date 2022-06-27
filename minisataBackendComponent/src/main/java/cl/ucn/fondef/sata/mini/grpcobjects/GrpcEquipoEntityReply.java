@@ -5,13 +5,12 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * The type Grpc equipo entity reply.
+ */
 @ToString
 @EqualsAndHashCode
 public class GrpcEquipoEntityReply {
-
-    @Getter
-    @Setter
-    private long id;
 
     @Getter
     @Setter

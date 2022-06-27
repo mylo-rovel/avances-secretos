@@ -1,5 +1,6 @@
 package cl.ucn.fondef.sata.mini.model;
 
+import cl.ucn.fondef.sata.mini.grpc.Domain;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,6 +9,9 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.io.File;
 
+/**
+ * The type Archivo equipo.
+ */
 @ToString
 @EqualsAndHashCode
 @Entity
@@ -31,6 +35,11 @@ public class ArchivoEquipo {
     @Column(name = "data")
     private File data;
 
+/*    @Getter
+    @Setter
+    @Column(name = "tipo")
+    private Domain.Registro.TipoRegistro tipo;
+    */
     @Getter
     @Setter
     @Column(name = "tipo")

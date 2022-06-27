@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * The type Grpc credenciales entity req.
+ */
 @ToString
 @EqualsAndHashCode
 public class GrpcCredencialesEntityReq {

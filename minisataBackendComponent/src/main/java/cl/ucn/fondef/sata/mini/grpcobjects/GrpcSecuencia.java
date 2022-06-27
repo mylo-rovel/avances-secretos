@@ -7,6 +7,9 @@ import lombok.ToString;
 
 import java.util.List;
 
+/**
+ * The type Grpc secuencia.
+ */
 @ToString
 @EqualsAndHashCode
 public class GrpcSecuencia {

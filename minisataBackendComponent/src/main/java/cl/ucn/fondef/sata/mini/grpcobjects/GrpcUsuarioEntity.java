@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * The type Grpc usuario entity.
+ */
 @ToString
 @EqualsAndHashCode
 public class GrpcUsuarioEntity {
@@ -30,10 +33,16 @@ public class GrpcUsuarioEntity {
     @Setter
     private String password;
 
+    /**
+     * The Rol.
+     */
     @Getter
     @Setter
     public Domain.UsuarioEntity.RolUsuario rol;
 
+    /**
+     * The Estado.
+     */
     @Getter
     @Setter
     public Domain.UsuarioEntity.EstadoUsuario estado;

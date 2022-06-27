@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2022 Fondef IDeA I+D.
- */
-
 package cl.ucn.fondef.sata.mini.grpcobjects;
 
 import cl.ucn.fondef.sata.mini.grpc.Domain;
@@ -10,18 +6,16 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.List;
-
 /**
- * The type Grpc equipo entity.
+ * The type Grpc pin.
  */
 @ToString
 @EqualsAndHashCode
-public class GrpcEquipoEntity {
+public class GrpcPin {
 
     @Getter
     @Setter
-    private long id;
+    private int numero;
 
     @Getter
     @Setter
@@ -33,13 +27,9 @@ public class GrpcEquipoEntity {
 
     @Getter
     @Setter
-    private String urlRepositorio;
+    private Domain.Pin.ConexionPin conexion;
 
     @Getter
     @Setter
-    private Domain.EstadoEquipo estado;
-
-    @Getter
-    @Setter
-    private List<GrpcComponenteFisico> listaComponentesFisicos;
+    private Domain.Pin.PlacaPin placa;
 }

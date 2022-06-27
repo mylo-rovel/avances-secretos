@@ -7,6 +7,9 @@ import lombok.ToString;
 
 import java.util.List;
 
+/**
+ * The type Grpc simulacion reply.
+ */
 @ToString
 @EqualsAndHashCode
 public class GrpcSimulacionReply {

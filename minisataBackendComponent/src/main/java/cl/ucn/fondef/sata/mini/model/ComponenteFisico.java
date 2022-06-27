@@ -11,6 +11,9 @@ import lombok.ToString;
 
 import javax.persistence.*;
 
+/**
+ * The type Componente fisico.
+ */
 @ToString
 @EqualsAndHashCode
 @Entity
@@ -41,11 +44,6 @@ public class ComponenteFisico {
 
     @Getter
     @Setter
-    @Column(name = "pin")
-    private int pin;
-
-    @Getter
-    @Setter
     @Column(name = "url")
     private String url;
 
@@ -53,11 +51,6 @@ public class ComponenteFisico {
     @Setter
     @Column(name = "estado")
     private String estado;
-
-    @Getter
-    @Setter
-    @Column(name = "conexion")
-    private String conexion;
 
     @Getter
     @Setter

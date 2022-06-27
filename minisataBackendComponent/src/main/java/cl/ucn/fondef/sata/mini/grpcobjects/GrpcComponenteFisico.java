@@ -10,6 +10,11 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
+/**
+ * The type Grpc componente fisico.
+ */
 @ToString
 @EqualsAndHashCode
 public class GrpcComponenteFisico {
@@ -24,10 +29,6 @@ public class GrpcComponenteFisico {
 
     @Getter
     @Setter
-    private int pin;
-
-    @Getter
-    @Setter
     // solo para las webcam, para otros componentes es ""
     private String url;
 
@@ -37,9 +38,9 @@ public class GrpcComponenteFisico {
 
     @Getter
     @Setter
-    private Domain.ComponenteFisico.ConexionComponente conexion;
+    private Domain.ComponenteFisico.TipoComponente tipo;
 
     @Getter
     @Setter
-    private Domain.ComponenteFisico.TipoComponente tipo;
+    private List<GrpcPin> listaPines;
 }
