@@ -115,8 +115,8 @@ public class WebCoreClientGrpcImpl {
 
         EquipoEntity.Builder equipoRecibidoEnviar = EquipoEntity.newBuilder()
                 .setNombre(equipoNuevo.getEquipo().getNombre())
-                .setDescripcion(equipoNuevo.getEquipo().getDescripcion())
                 .setUrlRepositorio(equipoNuevo.getEquipo().getUrlRepositorio())
+                .setDescripcion(equipoNuevo.getEquipo().getDescripcion())
                 .setRutConfigurador(equipoNuevo.getEquipo().getRutConfigurador());
 
         // ITERAMOS SOBRE EL OBJETO RECIBIDO PARA CREAR OBJETOS...
