@@ -4,12 +4,15 @@ import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoEquipo;
 import cl.ucn.fondef.sata.mini.grpc.Domain;
 import cl.ucn.fondef.sata.mini.model.ComponenteFisico;
 import cl.ucn.fondef.sata.mini.model.Equipo;
+import cl.ucn.fondef.sata.mini.model.Pin;
+import cl.ucn.fondef.sata.mini.model.Placa;
 import cl.ucn.fondef.sata.mini.utilities.JwtUtil;
 import cl.ucn.fondef.sata.mini.utilities.StringEnumTransformer;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -74,7 +77,7 @@ public class WebCoreServiceGrpcEquipo {
      * @return the domain . equipo entity reply
      */
     public Domain.EquipoEntityReply getEquipo(Domain.IdElementoReq idElementoReq, StreamObserver<Domain.EquipoEntityReply> responseObserver){
-        /*Equipo equipoGuardado = coreDaoEquipo.getEquipo(idElementoReq);
+        Equipo equipoGuardado = coreDaoEquipo.getEquipo(idElementoReq);
 
         if (equipoGuardado == null) {
             return Domain.EquipoEntityReply.newBuilder().build();
@@ -86,9 +89,19 @@ public class WebCoreServiceGrpcEquipo {
                 .setDescripcion(equipoGuardado.getDescripcion())
                 .setUrlRepositorio(equipoGuardado.getUrlRepositorio())
                 .setEstado(stringEnumTransformer.getEnumEstadoEquipo(equipoGuardado.getEstado()));
-                *//*.setRutConfigurador(equipoGuardado.getRutConfigurador());*//*
 
-        List<ComponenteFisico> listaComponentesFisico = coreDaoEquipo.getComponentesFisicosEquipo(idElementoReq);
+        // idElementoReq contiene la id del equipo
+        List<Placa> placasGuardadas = coreDaoEquipo.getPlacas(idElementoReq);
+        List<Pin> todosLosPinesEquipo = new ArrayList<Pin>();
+        for (int i = 0; i < placasGuardadas.size(); i++) {
+            long idPlaca = placasGuardadas.get(i).getId();
+            todosLosPinesEquipo.addAll(coreDaoEquipo.getPinesPorPlaca(idPlaca));
+        }
+
+        // como tenemos todos los pines, podemos obtener el componente usando la llave foranea
+        // pero como hay pines que apuntan al mismo componente, no hay que repetir
+
+        /*List<ComponenteFisico> listaComponentesFisico = coreDaoEquipo.getComponentesFisicosEquipo(idElementoReq);
         if (listaComponentesFisico != null) {
             for(ComponenteFisico componenteFisico: listaComponentesFisico){
                 Domain.ComponenteFisico componenteDominio = Domain.ComponenteFisico.newBuilder()
@@ -120,7 +133,7 @@ public class WebCoreServiceGrpcEquipo {
      * @return the domain . equipos entity reply
      */
     public Domain.EquiposEntityReply getEquipos(Domain.EmptyReq emptyReq, StreamObserver<Domain.EquiposEntityReply> responseObserver){
-        /*List<Equipo> listaEquiposGuardados = coreDaoEquipo.getEquipos();
+        List<Equipo> listaEquiposGuardados = coreDaoEquipo.getEquipos();
         Domain.EquiposEntityReply.Builder listaRetornar = Domain.EquiposEntityReply.newBuilder();
 
         if (listaRetornar == null) {
@@ -137,8 +150,7 @@ public class WebCoreServiceGrpcEquipo {
             listaRetornar.addEquipoAcotado(equipoRetornar);
         }
 
-        return listaRetornar.build();*/
-        return Domain.EquiposEntityReply.newBuilder().build();
+        return listaRetornar.build();
     }
 
     /**

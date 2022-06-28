@@ -6,6 +6,7 @@ package cl.ucn.fondef.sata.mini.coredao.daoimpl;
 
 import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoEquipo;
 import cl.ucn.fondef.sata.mini.grpc.Domain;
+import cl.ucn.fondef.sata.mini.grpcobjects.GrpcPlaca;
 import cl.ucn.fondef.sata.mini.model.ComponenteFisico;
 import cl.ucn.fondef.sata.mini.model.Pin;
 import cl.ucn.fondef.sata.mini.model.Placa;
@@ -165,6 +166,20 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
         return mensaje;
     }
 
+
+    // ---- AUX PARA getEquipo ----
+    public List<Placa> getPlacas(IdElementoReq idEquipo) {
+        String sqlQuery = "FROM Placa WHERE id_equipo = :id_equipo";
+        return entityManager.createQuery(sqlQuery)
+                .setParameter("id_equipo", idEquipo.getId()).getResultList();
+    }
+
+    public List<Pin> getPinesPorPlaca(long idPlaca) {
+        String sqlQuery = "FROM Pin WHERE id_placa = :id_placa";
+        return entityManager.createQuery(sqlQuery)
+                .setParameter("id_placa", idPlaca).getResultList();
+    }
+
     @Override
     public Equipo getEquipo(IdElementoReq idEquipo){
         String sqlQuery = "FROM Equipo WHERE id = :id";
@@ -194,7 +209,7 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
     @Override
     public List<ComponenteFisico> getComponentesFisicosEquipo(IdElementoReq idElementoReq){
         String mensaje;
-        String sqlQuery = "FROM ComponenteFisico WHERE id_equipo = :id_equipo";
+        String sqlQuery = "FROM ComponenteFisico WHERE id = :id";
         List listaResultado = entityManager.createQuery(sqlQuery)
                 .setParameter("id_equipo", idElementoReq.getId())
                 .getResultList();
@@ -209,7 +224,7 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
     @Override
     public List<ComponenteFisico> getValvulasEquipo(IdElementoReq idElementoReq){
         String mensaje;
-        String sqlQuery = "FROM ComponenteFisico WHERE id_equipo = :id_equipo AND tipo = :tipo";
+        String sqlQuery = "FROM ComponenteFisico WHERE id = :id AND tipo = :tipo";
         List listaResultado = entityManager.createQuery(sqlQuery)
                 .setParameter("id_equipo", idElementoReq.getId())
                 .setParameter("tipo", "VALVULA")

@@ -7,6 +7,8 @@ package cl.ucn.fondef.sata.mini.coredao.daointerface;
 import cl.ucn.fondef.sata.mini.model.ComponenteFisico;
 import cl.ucn.fondef.sata.mini.model.Equipo;
 import cl.ucn.fondef.sata.mini.grpc.Domain.*;
+import cl.ucn.fondef.sata.mini.model.Pin;
+import cl.ucn.fondef.sata.mini.model.Placa;
 
 import java.util.List;
 
@@ -60,4 +62,8 @@ public interface CoreDaoEquipo {
      * @return the valvulas equipo
      */
     List<ComponenteFisico> getValvulasEquipo(IdElementoReq idElementoReq);
+
+    List<Placa> getPlacas(IdElementoReq idEquipo);
+
+    List<Pin> getPinesPorPlaca(long idPlaca);
 }

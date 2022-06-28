@@ -12,6 +12,8 @@ import java.util.List;
 @Service
 public class WebCoreClientGrpcEquipo extends WebCoreClientGrpcBase {
 
+    // todo: separar este bloque gigante en funciones chiquititas
+
     // Esta funcion es ejecutada por 'this.addEquipo()' y 'this.updateEquipo' dado que
     // comparten la parte de crear un equipo a enviar
     private Domain.EquipoEntityReq getEquipoGrpcEnviar(GrpcEquipoEntityReq equipoRecibido) {

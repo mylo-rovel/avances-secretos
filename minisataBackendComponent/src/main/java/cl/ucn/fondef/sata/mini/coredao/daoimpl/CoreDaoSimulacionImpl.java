@@ -49,7 +49,7 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
 
     @Override
     public List<Simulacion> getSimulaciones(){
-        String sqlQuery = "FROM Simulacion WHERE 1=1";
+        String sqlQuery = "FROM Simulacion";
         List listaResultado = entityManager.createQuery(sqlQuery).getResultList();
 
         if(listaResultado.isEmpty()){

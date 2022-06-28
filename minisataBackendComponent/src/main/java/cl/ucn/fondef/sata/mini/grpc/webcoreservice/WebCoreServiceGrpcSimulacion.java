@@ -48,7 +48,6 @@ public class WebCoreServiceGrpcSimulacion {
                 .setNombreEquipo(equipoAsociado.getNombre())
                 .setDescripcionEquipo(equipoAsociado.getDescripcion())
                 .setFechaEjecucion(simulacionGuardada.getFechaCreacion())
-//                .setSecuencia()
                 .build();
 
         return simulacionRetornar;
@@ -74,6 +73,7 @@ public class WebCoreServiceGrpcSimulacion {
             Equipo equipoAsociado = coreDaoEquipo.getEquipo(idEquipo);
 
             Domain.SimulacionAcotada simuRetornar = Domain.SimulacionAcotada.newBuilder()
+                    .setId(simulacion.getId())
                     .setNombre(simulacion.getNombre())
                     .setNombreEquipo(equipoAsociado.getNombre())
                     .setFechaEjecucion(equipoAsociado.getDescripcion())
