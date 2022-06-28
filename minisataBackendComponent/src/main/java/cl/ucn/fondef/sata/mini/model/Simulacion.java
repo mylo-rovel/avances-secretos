@@ -28,13 +28,13 @@ public class Simulacion {
 
     @Getter
     @Setter
-    @Column(name = "rut_operador")
-    private String rutOperador;
+    @Column(name = "id_equipo")
+    private Long idEquipo;
 
     @Getter
     @Setter
-    @Column(name = "id_equipo")
-    private Long idEquipo;
+    @Column(name = "id_operador")
+    private long idOperador;
 
     @Getter
     @Setter
@@ -48,11 +48,6 @@ public class Simulacion {
 
     @Getter
     @Setter
-    @Column(name = "fecha_ejecucion")
-    private String fechaEjecucion;
-
-    @Getter
-    @Setter
-    @Column(name = "agua_caida")
-    private Double aguaCaida;
+    @Column(name = "fecha_creacion")
+    private String fechaCreacion;
 }

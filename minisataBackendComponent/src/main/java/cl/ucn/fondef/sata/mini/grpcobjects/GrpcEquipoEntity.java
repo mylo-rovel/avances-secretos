@@ -41,5 +41,9 @@ public class GrpcEquipoEntity {
 
     @Getter
     @Setter
+    private List<GrpcPlaca> listaPlacas;
+
+    @Getter
+    @Setter
     private List<GrpcComponenteFisico> listaComponentesFisicos;
 }

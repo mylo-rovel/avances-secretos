@@ -52,6 +52,7 @@ public class Usuario {
     @Column(name = "apellido")
     private String apellido;
 
+
     /**
      * The Rol.
      */

@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Slf4j
 @RestController
-//@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600, methods = {RequestMethod.GET, RequestMethod.POST} )
+//@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600, methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PATCH, RequestMethod.DELETE} )
 @CrossOrigin(origins = "*", maxAge = 3600, methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PATCH, RequestMethod.DELETE} )
 public class WebController {
     // ESTE SERVIDOR ES EL PUENTE ENTRE EL WEBBROWSER Y EL "CENTRAL CORE"
@@ -41,11 +41,22 @@ public class WebController {
     @Autowired
     private JwtUtil jwtUtil;
 
-/*     private boolean tokenEsValido(String jsonwebtoken) {
-         if (jsonwebtoken == null) {return false;}
-         // si al obtener la llave del token (el correo) se retorna null, entonces el token está malo
-         return jwtUtil.getKey(jsonwebtoken) != null;
-     }*/
+    private String getTokenKey(String jsonwebtoken) {
+        return jwtUtil.getKey(jsonwebtoken);
+    }
+
+     private boolean tokenEsValido(String jsonwebtoken) {
+        try {
+            if (jsonwebtoken == null) {return false;}
+            // si al obtener la llave del token (el correo) se retorna null, entonces el token está malo
+            return jwtUtil.getKey(jsonwebtoken) != null;
+        }
+        catch (Exception ex) {
+            log.warn("Error al validar el token");
+            log.warn(ex.getMessage());
+            return false;
+        }
+     }
 
     /**
      * Authenticate string.
@@ -64,51 +75,67 @@ public class WebController {
      * Add usuario string.
      *
      * @param usuarioNuevo the usuario nuevo
+     * @param jwt          the jwt
      * @return the string
      */
 // rpc addUsuario(UsuarioEntityReq)  returns (MensajeReply) {}
     @RequestMapping(value = "api/usuarios", method = RequestMethod.POST)
-    //public String addUsuario(@RequestBody GrpcUsuarioNuevo usuarioNuevo, @RequestHeader(value="Authorization") String jwt) {
-    public String addUsuario(@RequestBody GrpcUsuarioEntityReq usuarioNuevo){
-        return webCoreClientGrpcUsuario.addUsuario(usuarioNuevo);
+    public String addUsuario(@RequestBody GrpcUsuarioEntityReq usuarioNuevo, @RequestHeader(value="Authorization") String jwt) {
+//    public String addUsuario(@RequestBody GrpcUsuarioEntityReq usuarioNuevo){
+        if (this.tokenEsValido(jwt)){
+            return webCoreClientGrpcUsuario.addUsuario(usuarioNuevo);
+        }
+        return "Error. Token invalido";
     }
 
     /**
      * Gets usuario.
      *
      * @param rut the rut
+     * @param jwt the jwt
      * @return the usuario
      */
 // rpc getUsuario(RutEntityReq)  returns (UsuarioEntityReply) {}
     @RequestMapping(value = "api/usuarios/{rut}", method = RequestMethod.GET)
-    //public String getUsuario(@PathVariable String rut, @RequestHeader(value="Authorization") String jwt) {
-    public String getUsuario(@PathVariable String rut) {
-        return webCoreClientGrpcUsuario.getUsuario(rut);
+    public String getUsuario(@PathVariable String rut, @RequestHeader(value="Authorization") String jwt) {
+//    public String getUsuario(@PathVariable String rut) {
+        if (this.tokenEsValido(jwt)){
+            return webCoreClientGrpcUsuario.getUsuario(rut);
+        }
+        return "Error. Token invalido";
     }
 
     /**
      * Gets usuarios.
      *
+     * @param jwt the jwt
      * @return the usuarios
      */
 // rpc getUsuarios(EmptyReq) returns (UsuariosEntityReply) {}
     @RequestMapping(value = "api/usuarios", method = RequestMethod.GET)
-    // public String getUsuarios(@RequestHeader(value="Authorization") String jwt) {
-    public String getUsuarios(){
-        return webCoreClientGrpcUsuario.getUsuarios();
+     public String getUsuarios(@RequestHeader(value="Authorization") String jwt) {
+//    public String getUsuarios(){
+        if (this.tokenEsValido(jwt)){
+            return webCoreClientGrpcUsuario.getUsuarios();
+        }
+        return "Error. Token invalido";
     }
 
     /**
-     * Sets usuario.
+     * Update usuario string.
      *
      * @param usuarioModificar the usuario modificar
-     * @return the usuario
+     * @param jwt              the jwt
+     * @return the string
      */
 // rpc updateUsuario(UsuarioEntityReq)  returns (MensajeReply) {}
     @RequestMapping(value = "api/usuarios", method = RequestMethod.PATCH)
-    // public String updateUsuario(@RequestBody GrpcUsuarioEntityReq usuarioModificar, @RequestHeader(value="Authorization") String jwt) {
-    public String updateUsuario(@RequestBody GrpcUsuarioEntityReq usuarioModificar){
-        return webCoreClientGrpcUsuario.updateUsuario(usuarioModificar);
+     public String updateUsuario(@RequestBody GrpcUsuarioEntityReq usuarioModificar, @RequestHeader(value="Authorization") String jwt) {
+//    public String updateUsuario(@RequestBody GrpcUsuarioEntityReq usuarioModificar){
+        if (this.tokenEsValido(jwt)){
+            return webCoreClientGrpcUsuario.updateUsuario(usuarioModificar);
+        }
+        return "Error. Token invalido";
     }
 
 
@@ -120,20 +147,25 @@ public class WebController {
      * Add equipo string.
      *
      * @param equipoNuevo the equipo nuevo
+     * @param jwt         the jwt
      * @return the string
      */
 //   rpc addEquipo(EquipoEntityReq)  returns (MensajeReply){}
     @RequestMapping(value = "api/equipos", method = RequestMethod.POST)
-    // public String addEquipo(@RequestBody GrpcEquipoEntityReq equipoNuevo, @RequestHeader(value="Authorization") String jwt){
-    public String addEquipo(@RequestBody GrpcEquipoEntityReq equipoNuevo){
-        return webCoreClientGrpcEquipo.addEquipo(equipoNuevo);
+     public String addEquipo(@RequestBody GrpcEquipoEntityReq equipoNuevo, @RequestHeader(value="Authorization") String jwt){
+//    public String addEquipo(@RequestBody GrpcEquipoEntityReq equipoNuevo){
+        if (this.tokenEsValido(jwt)){
+            equipoNuevo.setRutConfigurador(this.getTokenKey(jwt));
+            return webCoreClientGrpcEquipo.addEquipo(equipoNuevo);
+        }
+        return "Error. Token invalido";
     }
 
     /**
-     * Sets equipo.
+     * Update equipo string.
      *
      * @param equipoModificado the equipo modificado
-     * @return the equipo
+     * @return the string
      */
 // ***---- IMPLEMENTAR ----
     //   rpc updateEquipo(EquipoEntityReq)  returns (MensajeReply){}
@@ -319,6 +351,7 @@ public class WebController {
         objetoRetornar.addEnumList("ConexionComponente", Domain.Pin.ConexionPin.values());
         objetoRetornar.addEnumList("EstadoComponente", Domain.ComponenteFisico.EstadoComponente.values());
         objetoRetornar.addEnumList("EstadoEquipo", Domain.EstadoEquipo.values());
+        objetoRetornar.addEnumList("TipoPlaca", Domain.TipoPlaca.values());
         objetoRetornar.addEnumList("TipoArchivo", Domain.ArchivoEquipoEntityReq.TipoArchivo.values());
 
         return objetoRetornar;

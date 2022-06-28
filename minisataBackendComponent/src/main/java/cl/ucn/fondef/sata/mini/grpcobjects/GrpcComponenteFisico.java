@@ -42,5 +42,9 @@ public class GrpcComponenteFisico {
 
     @Getter
     @Setter
+    private Domain.TipoPlaca tipoPlaca;
+
+    @Getter
+    @Setter
     private List<GrpcPin> listaPines;
 }

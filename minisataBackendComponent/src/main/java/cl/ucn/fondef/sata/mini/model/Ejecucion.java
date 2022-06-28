@@ -7,14 +7,12 @@ import lombok.ToString;
 
 import javax.persistence.*;
 
-/**
- * The type Secuencia.
- */
+
 @Entity
-@Table(name = "secuencia")
+@Table(name = "ejecucion")
 @ToString
 @EqualsAndHashCode
-public class Secuencia {
+public class Ejecucion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +23,16 @@ public class Secuencia {
 
     @Getter
     @Setter
-    @Column(name = "id_componente")
-    private long idComponente;
+    @Column(name = "id_simulacion")
+    private Long idSimulacion;
+
+    @Getter
+    @Setter
+    @Column(name = "agua_caida")
+    private Double aguaCaida;
+
+    @Getter
+    @Setter
+    @Column(name = "fecha_ejecucion")
+    private String fechaEjecucion;
 }

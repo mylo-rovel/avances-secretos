@@ -87,23 +87,24 @@ CREATE TABLE ejecucion
     id                  bigint(20)      NOT NULL AUTO_INCREMENT,
     id_simulacion       bigint(20)      NOT NULL,
     agua_caida          double          NOT NULL DEFAULT '0',
-    fecha_ejecucion     date            NOT NULL,
+    fecha_ejecucion     timestamp       NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (id_simulacion) REFERENCES simulacion (id)
 );
 
 
+-- DESHABILITAMOS EL CAMPO id_simulacion TEMPORALMENTE HASTA ACLARAR DUDAS
 CREATE TABLE componentefisico
 (
     id                  bigint(20)      NOT NULL AUTO_INCREMENT,
-    id_simulacion       bigint(20)      NOT NULL,
+--     id_simulacion       bigint(20)      NOT NULL,
     nombre              varchar(30)     NOT NULL,
     descripcion         varchar(255)    NOT NULL,
     url                 varchar(100)    NOT NULL,
     estado              varchar(20)     NOT NULL,
     tipo                varchar(20)     NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (id_simulacion) REFERENCES simulacion (id)
+    PRIMARY KEY (id)
+--     FOREIGN KEY (id_simulacion) REFERENCES simulacion (id)
 );
 
 
@@ -112,9 +113,10 @@ CREATE TABLE pin
     id                  bigint(20)      NOT NULL AUTO_INCREMENT,
     id_placa            bigint(20)      NOT NULL,
     id_componente       bigint(20)      NOT NULL,
-    nombre              varchar(30)     NOT NULL UNIQUE,
+    nombre              varchar(30)     NOT NULL,
+    numero              int(11)         NOT NULL,
     descripcion         varchar(255)    NOT NULL,
-    tipo                varchar(20)     NOT NULL,
+    conexion            varchar(20)     NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (id_placa) REFERENCES placa (id),
     FOREIGN KEY (id_componente) REFERENCES componentefisico (id)
@@ -132,9 +134,23 @@ CREATE TABLE evento
 (
     id                  bigint(20)      NOT NULL AUTO_INCREMENT,
     id_secuencia        bigint(20)      NOT NULL,
+    id_ejecucion        bigint(20)      NOT NULL,
     intensidad          int(11)         NOT NULL,
     duracion            int(11)         NOT NULL,
     posicion            int(11)         NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (id_secuencia) REFERENCES secuencia (id)
+    FOREIGN KEY (id_secuencia) REFERENCES secuencia (id),
+    FOREIGN KEY (id_ejecucion) REFERENCES ejecucion (id)
+);
+
+
+-- TEMPORAL
+CREATE TABLE simulacioncomponente
+(
+    id                  bigint(20)      NOT NULL AUTO_INCREMENT,
+    id_simulacion       bigint(20)      NOT NULL,
+    id_componente       bigint(20)      NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (id_simulacion) REFERENCES simulacion (id),
+    FOREIGN KEY (id_componente) REFERENCES componentefisico (id)
 );
