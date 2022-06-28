@@ -136,8 +136,9 @@ message ComponenteFisico {
     VALVULA = 3;
   }
 
-  string nombre = 1;
-  string descripcion = 2;
+  int64 id = 1;
+  string nombre = 2;
+  string descripcion = 3;
   string url = 4; // para webcams, string url. para otros componentes, null
   EstadoComponente estado = 5;
   TipoComponente tipo = 6;
@@ -225,6 +226,12 @@ message Secuencia {
   repeated Evento evento = 1;
 }
 
+message SecuenciasComponenteReply {
+  int64 id_componente = 1;
+  string nombreComponente = 2;
+  repeated Secuencia secuencia_componente = 3;
+}
+
 message SimulacionReq {
   string nombre = 1;
   string descripcion = 2;
@@ -246,10 +253,11 @@ message SimulacionReply {
 }
 
 message SimulacionAcotada {
-  string nombre = 1;
-  string nombre_equipo = 2;
-  string fecha_ejecucion = 3;
-  double agua_caida = 4;
+  int64 id = 1;
+  string nombre = 2;
+  string nombre_equipo = 3;
+  string fecha_ejecucion = 4;
+  double agua_caida = 5;
 }
 
 message SimulacionesReply {

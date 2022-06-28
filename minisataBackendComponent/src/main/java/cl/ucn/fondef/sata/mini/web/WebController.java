@@ -244,6 +244,17 @@ public class WebController {
         return webCoreClientGrpcEquipo.getValvulasEquipo(idEquipo);
     }
 
+
+    // ***---- IMPLEMENTAR ----
+    //    rpc getSecuenciasComponente(IdElementoReq) returns (SecuenciasComponenteReply) {}
+    @RequestMapping(value = "api/equipos/secuencias/{idComponente}", method = RequestMethod.GET)
+    // public String getSecuenciasComponente(@PathVariable long idComponente, @RequestHeader(value="Authorization") String jwt) {
+    public String getSecuenciasComponente(@PathVariable long idComponente){
+//        return webCoreClientGrpcEquipo.getSecuenciasComponente(idComponente);
+        return "";
+    }
+
+
     // ---- EQUIPOS      ------------------------------------------------------------------------------------
     // ---- SIMULACIONES ------------------------------------------------------------------------------------
 
