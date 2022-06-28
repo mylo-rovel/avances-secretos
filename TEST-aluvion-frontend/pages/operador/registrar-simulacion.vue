@@ -118,7 +118,7 @@
         <div class= "container">
             <div>
                 <div class="row my-4">
-                    <h2>Registrar Simulación</h2>
+                    <h4>Registrar Simulación</h4>
                 </div>
                 
                 <div class="row">
