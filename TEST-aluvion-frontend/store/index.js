@@ -4,7 +4,9 @@ import { secuenciasStateMethods } from "~/store/secuenciasStateMethods.js";
 export const state = () => ({
     // solo para entender cómo funciona el store o 'estado global'
     counter:0,
-    urlApi: "http://localhost:3000/api",
+    urlApi: "http://192.168.43.73:8081/api",
+    //192.168.43.73 emilio
+    //10.20.109.227 red alumnos
 
     
 
