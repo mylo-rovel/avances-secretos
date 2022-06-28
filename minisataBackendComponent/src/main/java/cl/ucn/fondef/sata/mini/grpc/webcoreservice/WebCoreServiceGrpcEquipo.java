@@ -93,14 +93,60 @@ public class WebCoreServiceGrpcEquipo {
         // idElementoReq contiene la id del equipo
         List<Placa> placasGuardadas = coreDaoEquipo.getPlacas(idElementoReq);
         List<Pin> todosLosPinesEquipo = new ArrayList<Pin>();
-        for (int i = 0; i < placasGuardadas.size(); i++) {
-            long idPlaca = placasGuardadas.get(i).getId();
+        for (Placa placasGuardada : placasGuardadas) {
+            long idPlaca = placasGuardada.getId();
             todosLosPinesEquipo.addAll(coreDaoEquipo.getPinesPorPlaca(idPlaca));
+            Domain.Placa placaEnviar = Domain.Placa.newBuilder()
+                    .setNombre(placasGuardada.getNombre())
+                    .setDescripcion(placasGuardada.getDescripcion())
+                    .setTipo(stringEnumTransformer.getEnumTipoPlaca(placasGuardada.getTipo()))
+                    .build();
+            equipoEnte.addPlaca(placaEnviar);
         }
 
         // como tenemos todos los pines, podemos obtener el componente usando la llave foranea
         // pero como hay pines que apuntan al mismo componente, no hay que repetir
 
+        List<ComponenteFisico> todosLosComponentesEquipo = new ArrayList<ComponenteFisico>();
+        for(Pin pinGuardado : todosLosPinesEquipo){
+            Domain.IdElementoReq idComponente = Domain.IdElementoReq.newBuilder()
+                    .setId(pinGuardado.getId())
+                    .build();
+            ComponenteFisico componenteObtener = coreDaoEquipo.getComponenteFisico(idComponente);
+            if(!todosLosComponentesEquipo.contains(componenteObtener)){
+                todosLosComponentesEquipo.add(componenteObtener);
+            }
+        }
+
+        for(ComponenteFisico componenteObtener : todosLosComponentesEquipo){
+            Domain.ComponenteFisico.Builder componenteGuardado = Domain.ComponenteFisico.newBuilder()
+                    .setId(componenteObtener.getId())
+                    .setNombre(componenteObtener.getNombre())
+                    .setDescripcion(componenteObtener.getDescripcion())
+                    .setUrl(componenteObtener.getUrl())
+                    .setEstado(stringEnumTransformer.getEnumEstadoComponente(componenteObtener.getEstado()))
+                    .setTipo(stringEnumTransformer.getEnumTipoComponente(componenteObtener.getTipo()));
+            List<Pin> todosLosPinesComponente = new ArrayList<Pin>();
+            for(Pin pinGuardado : todosLosPinesEquipo){
+                if(pinGuardado.getIdComponente() == componenteObtener.getId() && !todosLosPinesComponente.contains(pinGuardado)){
+                    todosLosPinesComponente.add(pinGuardado);
+                    Domain.Pin pinEnviar = Domain.Pin.newBuilder()
+                            .setNumero(pinGuardado.getNumero())
+                            .setNombre(pinGuardado.getNombre())
+                            .setDescripcion(pinGuardado.getDescripcion())
+                            .setConexion(stringEnumTransformer.getEnumConexionPin(pinGuardado.getConexion()))
+                            .build();
+                    componenteGuardado.addPinComponente(pinEnviar);
+                }
+            }
+            componenteGuardado.build();
+            equipoEnte.addComponenteFisico(componenteGuardado);
+        }
+        equipoEnte.build();
+
+        Domain.EquipoEntityReply equipoRetornar = Domain.EquipoEntityReply.newBuilder()
+                .setEquipo(equipoEnte)
+                .build();
         /*List<ComponenteFisico> listaComponentesFisico = coreDaoEquipo.getComponentesFisicosEquipo(idElementoReq);
         if (listaComponentesFisico != null) {
             for(ComponenteFisico componenteFisico: listaComponentesFisico){
@@ -121,8 +167,9 @@ public class WebCoreServiceGrpcEquipo {
                 .setEquipo(equipoEnte.build())
                 .build();
 
-        return equipoRetornar;*/
-        return Domain.EquipoEntityReply.newBuilder().build();
+        */
+        return equipoRetornar;
+        //return Domain.EquipoEntityReply.newBuilder().build();
     }
 
     /**

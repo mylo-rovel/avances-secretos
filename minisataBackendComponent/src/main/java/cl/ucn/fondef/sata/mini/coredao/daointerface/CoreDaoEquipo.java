@@ -53,6 +53,9 @@ public interface CoreDaoEquipo {
      * @param idElementoReq the id elemento req
      * @return the componentes fisicos equipo
      */
+
+    ComponenteFisico getComponenteFisico(IdElementoReq idElementoReq);
+
     List<ComponenteFisico> getComponentesFisicosEquipo(IdElementoReq idElementoReq);
 
     /**

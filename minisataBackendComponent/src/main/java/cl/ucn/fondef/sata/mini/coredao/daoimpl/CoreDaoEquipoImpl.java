@@ -220,6 +220,19 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
             return listaResultado;
         }
     }
+    @Override
+    public ComponenteFisico getComponenteFisico(IdElementoReq idElementoReq){
+        String sqlQuery = "FROM ComponenteFisico WHERE id = :id";
+        List listaResultado = entityManager.createQuery(sqlQuery)
+                .setParameter("id", idElementoReq.getId())
+                .getResultList();
+        if(listaResultado.isEmpty()){
+            log.warn("no se ha encontrado ningun componente fisico");
+            return null;
+        }else{
+            return (ComponenteFisico) listaResultado.get(0);
+        }
+    }
 
     @Override
     public List<ComponenteFisico> getValvulasEquipo(IdElementoReq idElementoReq){
