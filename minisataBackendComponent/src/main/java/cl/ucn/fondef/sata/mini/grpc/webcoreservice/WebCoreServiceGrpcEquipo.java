@@ -38,14 +38,14 @@ public class WebCoreServiceGrpcEquipo {
      * @return the domain . mensaje reply
      */
     public Domain.MensajeReply addEquipo(Domain.EquipoEntityReq equipoEntityReq, StreamObserver<Domain.MensajeReply> responseObserver){
-        /*String mensajeResultado = coreDaoEquipo.addEquipo(equipoEntityReq);
+        String mensajeResultado = coreDaoEquipo.addEquipo(equipoEntityReq);
 
         Domain.MensajeReply grpcResponse = Domain.MensajeReply.newBuilder()
                 .setMensajeTexto(mensajeResultado)
                 .build();
 
-        return grpcResponse;*/
-        return Domain.MensajeReply.newBuilder().setMensajeTexto("Falta implementar addEquipo").build();
+        return grpcResponse;
+        /*return Domain.MensajeReply.newBuilder().setMensajeTexto("Falta implementar addEquipo").build();*/
     }
 
     /**

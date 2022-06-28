@@ -13,7 +13,7 @@ import javax.persistence.*;
 @ToString
 @EqualsAndHashCode
 @Entity
-@Table(name = "componentefisico")
+@Table(name = "pin")
 public class Pin {
 
     @Id
@@ -22,6 +22,11 @@ public class Pin {
     @Setter
     @Column(name = "id")
     private long id;
+
+    @Getter
+    @Setter
+    @Column(name = "id_placa")
+    private long idPlaca;
 
     @Getter
     @Setter
@@ -42,11 +47,6 @@ public class Pin {
     @Setter
     @Column(name = "descripcion")
     private String descripcion;
-
-    @Getter
-    @Setter
-    @Column(name = "placa")
-    private String placa;
 
     @Getter
     @Setter

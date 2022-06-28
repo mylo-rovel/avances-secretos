@@ -47,9 +47,8 @@ public class WebCoreServiceGrpcSimulacion {
                 .setDescripcion(simulacionGuardada.getDescripcion())
                 .setNombreEquipo(equipoAsociado.getNombre())
                 .setDescripcionEquipo(equipoAsociado.getDescripcion())
-                .setFechaEjecucion(simulacionGuardada.getFechaEjecucion())
+                .setFechaEjecucion(simulacionGuardada.getFechaCreacion())
 //                .setSecuencia()
-                .setAguaCaida(simulacionGuardada.getAguaCaida())
                 .build();
 
         return simulacionRetornar;
@@ -78,7 +77,6 @@ public class WebCoreServiceGrpcSimulacion {
                     .setNombre(simulacion.getNombre())
                     .setNombreEquipo(equipoAsociado.getNombre())
                     .setFechaEjecucion(equipoAsociado.getDescripcion())
-                    .setAguaCaida(simulacion.getAguaCaida())
                     .build();
 
             listaRetornar.addSimulacionAcotada(simuRetornar);

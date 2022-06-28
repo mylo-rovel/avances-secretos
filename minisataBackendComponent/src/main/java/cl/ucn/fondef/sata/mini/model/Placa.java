@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2022 Fondef IDeA I+D.
- */
-
 package cl.ucn.fondef.sata.mini.model;
 
 import lombok.EqualsAndHashCode;
@@ -11,17 +7,14 @@ import lombok.ToString;
 
 import javax.persistence.*;
 
-/**
- * The type Equipo.
- */
 @Entity
-@Table(name = "equipo")
+@Table(name = "placa")
 @ToString
 @EqualsAndHashCode
-public class Equipo {
+public class Placa {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Getter
     @Setter
     @Column(name = "id")
@@ -29,8 +22,8 @@ public class Equipo {
 
     @Getter
     @Setter
-    @Column(name = "id_configurador")
-    private long idConfigurador;
+    @Column(name = "id_equipo")
+    private long idEquipo;
 
     @Getter
     @Setter
@@ -44,12 +37,6 @@ public class Equipo {
 
     @Getter
     @Setter
-    @Column(name = "url_repositorio ")
-    private String urlRepositorio;
-
-
-    @Getter
-    @Setter
-    @Column(name = "estado")
-    private String estado;
+    @Column(name = "tipo")
+    private String tipo;
 }

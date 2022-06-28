@@ -114,9 +114,10 @@ public class StringEnumTransformer {
      * @param stringEvaluar the string evaluar
      * @return the enum placa pin
      */
-    public Domain.Pin.PlacaPin getEnumPlacaPin(String stringEvaluar) {
+    public Domain.TipoPlaca getEnumTipoPlaca(String stringEvaluar) {
         switch (stringEvaluar){
-            case "ARDUINO_2560": return Domain.Pin.PlacaPin.ARDUINO_2560;
+            case "ARDUINO_2560": return Domain.TipoPlaca.ARDUINO_2560;
+            case "ESP_32": return Domain.TipoPlaca.ESP_32;
             default: return null;
         }
     }

@@ -26,6 +26,11 @@ public class Registro {
 
     @Getter
     @Setter
+    @Column(name = "id_usuario")
+    private long idUsuario;
+
+    @Getter
+    @Setter
     @Column(name = "id_entidad")
     private long idEntidad;
 
@@ -43,9 +48,4 @@ public class Registro {
     @Setter
     @Column(name = "tipo_registro")
     private String tipoRegistro;
-
-    @Getter
-    @Setter
-    @Column(name = "id_usuario")
-    private long idUsuario;
 }

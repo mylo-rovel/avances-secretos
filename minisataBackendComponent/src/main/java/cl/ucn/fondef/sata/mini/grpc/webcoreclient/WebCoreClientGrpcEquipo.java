@@ -1,10 +1,7 @@
 package cl.ucn.fondef.sata.mini.grpc.webcoreclient;
 
 import cl.ucn.fondef.sata.mini.grpc.Domain;
-import cl.ucn.fondef.sata.mini.grpcobjects.GrpcArchivosEquipoEntityReq;
-import cl.ucn.fondef.sata.mini.grpcobjects.GrpcComponenteFisico;
-import cl.ucn.fondef.sata.mini.grpcobjects.GrpcEquipoEntityReq;
-import cl.ucn.fondef.sata.mini.grpcobjects.GrpcPin;
+import cl.ucn.fondef.sata.mini.grpcobjects.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,9 +22,23 @@ public class WebCoreClientGrpcEquipo extends WebCoreClientGrpcBase {
                 .setEstado(equipoRecibido.getEquipo().getEstado());
 
         // ITERAMOS SOBRE EL OBJETO RECIBIDO PARA CREAR OBJETOS...
-        // ... "repeated ComponenteFisico componente_fisico = 6;" A ENVIAR
-        List<GrpcComponenteFisico> listaComponentesRecibidos = equipoRecibido.getEquipo().getListaComponentesFisicos();
+        // ... "repeated Placa placa = 6;" A ENVIAR
+        List<GrpcPlaca> listaPlacasRecibidas = equipoRecibido.getEquipo().getListaPlacas();
+        for (int i = 0; i < listaPlacasRecibidas.size(); i++) {
+            GrpcPlaca placaRecibida = listaPlacasRecibidas.get(i);
 
+            Domain.Placa placaEnviar = Domain.Placa.newBuilder()
+                    .setNombre(placaRecibida.getNombre())
+                    .setDescripcion(placaRecibida.getDescripcion())
+                    .setTipo(placaRecibida.getTipo())
+                    .build();
+
+            equipoGrpc.addPlaca(placaEnviar);
+        }
+
+
+        // ... "repeated ComponenteFisico componente_fisico = 7;" A ENVIAR
+        List<GrpcComponenteFisico> listaComponentesRecibidos = equipoRecibido.getEquipo().getListaComponentesFisicos();
         for (int i = 0; i < listaComponentesRecibidos.size(); i++) {
             GrpcComponenteFisico componenteRecibido = listaComponentesRecibidos.get(i);
 
@@ -36,7 +47,8 @@ public class WebCoreClientGrpcEquipo extends WebCoreClientGrpcBase {
                     .setDescripcion(componenteRecibido.getDescripcion())
                     .setUrl(componenteRecibido.getUrl())
                     .setEstado(componenteRecibido.getEstado())
-                    .setTipo(componenteRecibido.getTipo());
+                    .setTipo(componenteRecibido.getTipo())
+                    .setTipoPlaca(componenteRecibido.getTipoPlaca());
 
             List<GrpcPin> listaPinesComponente = componenteRecibido.getListaPines();
             for (int j = 0; j < listaPinesComponente.size(); j ++) {
@@ -45,7 +57,6 @@ public class WebCoreClientGrpcEquipo extends WebCoreClientGrpcBase {
                         .setNumero(pinComponenteRecibido.getNumero())
                         .setNombre(pinComponenteRecibido.getNombre())
                         .setDescripcion(pinComponenteRecibido.getDescripcion())
-                        .setPlaca(pinComponenteRecibido.getPlaca())
                         .setConexion(pinComponenteRecibido.getConexion())
                         .build();
                 componenteEnviar.addPinComponente(pinEnviar);
