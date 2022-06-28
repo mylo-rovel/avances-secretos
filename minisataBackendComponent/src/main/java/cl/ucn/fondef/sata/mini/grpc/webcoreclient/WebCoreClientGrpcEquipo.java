@@ -129,6 +129,7 @@ public class WebCoreClientGrpcEquipo extends WebCoreClientGrpcBase {
      */
 // Esto es un stream
     public String uploadArchivo(GrpcArchivosEquipoEntityReq archivoNuevo) {
+        
         return "";
     }
 
