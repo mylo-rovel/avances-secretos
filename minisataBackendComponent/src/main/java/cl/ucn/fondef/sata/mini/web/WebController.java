@@ -71,20 +71,14 @@ public class WebController {
         return webCoreClientGrpcUsuario.authenticate(credenciales);
     }
 
-    /**
-     * Add usuario string.
-     *
-     * @param usuarioNuevo the usuario nuevo
-     * @param jwt          the jwt
-     * @return the string
-     */
+
 // rpc addUsuario(UsuarioEntityReq)  returns (MensajeReply) {}
     @RequestMapping(value = "api/usuarios", method = RequestMethod.POST)
-    public String addUsuario(@RequestBody GrpcUsuarioEntityReq usuarioNuevo, @RequestHeader(value="Authorization") String jwt) {
-//    public String addUsuario(@RequestBody GrpcUsuarioEntityReq usuarioNuevo){
-        if (this.tokenEsValido(jwt)){
+//    public String addUsuario(@RequestBody GrpcUsuarioEntityReq usuarioNuevo, @RequestHeader(value="Authorization") String jwt) {
+    public String addUsuario(@RequestBody GrpcUsuarioEntityReq usuarioNuevo){
+/*        if (this.tokenEsValido(jwt)){
             return "Error. Token invalido";
-        }
+        }*/
         return webCoreClientGrpcUsuario.addUsuario(usuarioNuevo);
     }
 
@@ -238,7 +232,7 @@ public class WebController {
      * @param idEquipo the id equipo
      * @return the valvulas equipo
      */
-// ***---- IMPLEMENTAR ----
+// ***---- TESTEAR ----
     //   rpc getValvulasEquipo(IdElementoReq) returns (ComponentesEquipoReply) {}
     @RequestMapping(value = "api/equipos/valvulas/{idEquipo}", method = RequestMethod.GET)
     // public String getValvulasEquipo(@PathVariable long idEquipo, @RequestHeader(value="Authorization") String jwt) {
@@ -247,7 +241,7 @@ public class WebController {
     }
 
 
-    // ***---- IMPLEMENTAR ----
+    // ***---- TESTEAR ----
     //    rpc getSecuenciasComponente(IdElementoReq) returns (SecuenciasComponenteReply) {}
     @RequestMapping(value = "api/equipos/secuencias/{idComponente}", method = RequestMethod.GET)
     // public String getSecuenciasComponente(@PathVariable long idComponente, @RequestHeader(value="Authorization") String jwt) {
@@ -267,6 +261,7 @@ public class WebController {
      * @param id the id
      * @return the simulacion
      */
+    // ***---- ACTUALIZAR ----
 //   rpc getSimulacion(IdElementoReq) returns (SimulacionReply){}
     @RequestMapping(value = "api/simulaciones/{id}", method = RequestMethod.GET)
     // public String getSimulacion(@PathVariable long id, @RequestHeader(value="Authorization") String jwt){
@@ -279,6 +274,7 @@ public class WebController {
      *
      * @return the simulaciones
      */
+    // ***---- ACTUALIZAR ----
 //   rpc getSimulaciones(EmptyReq) returns (SimulacionesReply){}
     @RequestMapping(value = "api/simulaciones", method = RequestMethod.GET)
     // public String getSimulaciones(@RequestHeader(value="Authorization") String jwt) {
@@ -339,7 +335,7 @@ public class WebController {
      * @param rut the rut
      * @return the registros
      */
-// ***---- IMPLEMENTAR ----
+// ***---- TESTEAR ----
     //   rpc getRegistros(RutEntityReq) returns (RegistrosReply){}
     @RequestMapping(value = "api/registros/{rut}", method = RequestMethod.GET)
     // public String getRegistros(@PathVariable String rut, @RequestHeader(value="Authorization") String jwt) {
