@@ -177,7 +177,7 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
         return "El equipo se ha agregado exitosamente";
     }
 
-    // TODO: AÑADIR PARTE DE REGISTRO EN LA DB
+
     @Override
     public String updateEquipo(EquipoEntityReq equipoEntityReq){
         Equipo equipoEditar = entityManager.find(Equipo.class, equipoEntityReq.getEquipo().getId());
