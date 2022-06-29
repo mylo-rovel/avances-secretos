@@ -152,30 +152,13 @@ public class CoreDaoUsuarioImpl implements CoreDaoUsuario {
     @Override
     public Usuario getUsuario(RutEntityReq rutEntityReq){
         String sqlQuery = "FROM Usuario WHERE rut = :rut";
-        List listaResultado = entityManager.createQuery(sqlQuery)
-                .setParameter("rut", rutEntityReq.getRut()).getResultList();
-        try{
-            if(listaResultado.isEmpty()){
-                return null;
-            }else{
-                return (Usuario) listaResultado.get(0);
-            }
-        }
-        catch (Exception ex) {
-            log.debug("ex = " + ex);
-            return null;
-        }
+        return (Usuario) entityManager.createQuery(sqlQuery)
+                .setParameter("rut", rutEntityReq.getRut()).getResultList().get(0);
     }
 
     @Override
     public List<Usuario> getUsuarios(){
         String sqlQuery = "FROM Usuario WHERE 1=1";
-        List<Usuario> listaResultadoQuery = entityManager.createQuery(sqlQuery).getResultList();
-        if(listaResultadoQuery.isEmpty()){
-            log.warn("La lista no contiene elementos");
-            return null;
-        }else{
-            return listaResultadoQuery;
-        }
+        return (List<Usuario>) entityManager.createQuery(sqlQuery).getResultList();
     }
 }

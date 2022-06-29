@@ -74,30 +74,26 @@ public class WebCoreServiceGrpcUsuario {
 
         return grpcResponse;
     }
+    private void attachUsuarioEnteToResponse(Domain.UsuarioEntityReply.Builder usuarioRetornar, Usuario usuarioGuardado) {
+        Domain.UsuarioEntity.Builder usuarioEnte = Domain.UsuarioEntity.newBuilder()
+                .setRut(usuarioGuardado.getRut())
+                .setNombre(usuarioGuardado.getNombre())
+                .setApellido(usuarioGuardado.getApellido())
+                .setEmail(usuarioGuardado.getEmail())
+                .setPassword(usuarioGuardado.getPassword())
+                .setRol(stringEnumTransformer.getEnumRolUsuario(usuarioGuardado.getRol()))
+                .setEstado(stringEnumTransformer.getEnumEstadoUsuario(usuarioGuardado.getEstado()));
 
-    /**
-     * Gets usuario.
-     *
-     * @param rutEntityReq     the rut entity req
-     * @param responseObserver the response observer
-     * @return the usuario
-     */
+        usuarioRetornar.setId(usuarioGuardado.getId());
+        usuarioRetornar.setUsuario(usuarioEnte.build());
+    }
+
     public Domain.UsuarioEntityReply getUsuario(Domain.RutEntityReq rutEntityReq, StreamObserver<Domain.UsuarioEntityReply> responseObserver) {
         Usuario usuarioGuardado = coreDaoUsuario.getUsuario(rutEntityReq);
 
         Domain.UsuarioEntityReply.Builder usuarioRetornar = Domain.UsuarioEntityReply.newBuilder();
         if (usuarioGuardado != null) {
-            Domain.UsuarioEntity.Builder usuarioEnte = Domain.UsuarioEntity.newBuilder()
-                    .setRut(usuarioGuardado.getRut())
-                    .setNombre(usuarioGuardado.getNombre())
-                    .setApellido(usuarioGuardado.getApellido())
-                    .setEmail(usuarioGuardado.getEmail())
-                    .setPassword(usuarioGuardado.getPassword())
-                    .setRol(stringEnumTransformer.getEnumRolUsuario(usuarioGuardado.getRol()))
-                    .setEstado(stringEnumTransformer.getEnumEstadoUsuario(usuarioGuardado.getEstado()));
-
-            usuarioRetornar.setId(usuarioGuardado.getId());
-            usuarioRetornar.setUsuario(usuarioEnte.build());
+            attachUsuarioEnteToResponse(usuarioRetornar, usuarioGuardado);
         }
         return usuarioRetornar.build();
     }
