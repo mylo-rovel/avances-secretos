@@ -33,4 +33,15 @@ public class CoreDaoExtraImpl implements CoreDaoExtra {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Override
+    public List<Registro> getRegistros(Domain.RutEntityReq rutEntityReq) {
+        String queryUsuarioRut = "FROM Usuario WHERE rut = :rut";
+        List<ComponenteFisico> listaUsuarios = entityManager.createQuery(queryUsuarioRut)
+                .setParameter("rut", rutEntityReq.getRut()).getResultList();
+
+        String queryRegistros = "FROM Registro WHERE id_usuario = :id_usuario";
+        return (List<Registro>) entityManager.createQuery(queryRegistros)
+                .setParameter("id_usuario", listaUsuarios.get(0).getId()).getResultList();
+    }
 }

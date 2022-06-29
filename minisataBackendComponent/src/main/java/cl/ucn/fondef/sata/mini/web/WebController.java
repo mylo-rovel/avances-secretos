@@ -83,9 +83,9 @@ public class WebController {
     public String addUsuario(@RequestBody GrpcUsuarioEntityReq usuarioNuevo, @RequestHeader(value="Authorization") String jwt) {
 //    public String addUsuario(@RequestBody GrpcUsuarioEntityReq usuarioNuevo){
         if (this.tokenEsValido(jwt)){
-            return webCoreClientGrpcUsuario.addUsuario(usuarioNuevo);
+            return "Error. Token invalido";
         }
-        return "Error. Token invalido";
+        return webCoreClientGrpcUsuario.addUsuario(usuarioNuevo);
     }
 
     /**
@@ -167,12 +167,16 @@ public class WebController {
      * @param equipoModificado the equipo modificado
      * @return the string
      */
-// ***---- IMPLEMENTAR ----
+    // ***---- ACTUALIZAR CAMPOS ----
     //   rpc updateEquipo(EquipoEntityReq)  returns (MensajeReply){}
     @RequestMapping(value = "api/equipos", method = RequestMethod.PATCH)
-    // public String updateEquipo(@RequestBody GrpcEquipoEntityReq equipoNuevo, @RequestHeader(value="Authorization") String jwt){
-    public String updateEquipo(@RequestBody GrpcEquipoEntityReq equipoModificado){
-        return webCoreClientGrpcEquipo.updateEquipo(equipoModificado);
+//    public String updateEquipo(@RequestBody GrpcEquipoEntityReq equipoModificado){
+    public String updateEquipo(@RequestBody GrpcEquipoEntityReq equipoModificado, @RequestHeader(value="Authorization") String jwt){
+        if (this.tokenEsValido(jwt)){
+            equipoModificado.setRutConfigurador(this.getTokenKey(jwt));
+            return webCoreClientGrpcEquipo.updateEquipo(equipoModificado);
+        }
+        return "Error. Token invalido";
     }
 
     /**
@@ -181,7 +185,6 @@ public class WebController {
      * @param id the id
      * @return the equipo
      */
-// ***---- IMPLEMENTAR ----
     //   rpc getEquipo(IdElementoReq)  returns (EquipoEntityReply) {}
     @RequestMapping(value = "api/equipos/{id}", method = RequestMethod.GET)
     //public String getEquipo(@PathVariable long id, @RequestHeader(value="Authorization") String jwt) {
@@ -194,7 +197,6 @@ public class WebController {
      *
      * @return the equipos
      */
-// ***---- IMPLEMENTAR ----
     //   rpc getEquipos(EmptyReq)  returns (EquiposEntityReply) {}
     @RequestMapping(value = "api/equipos", method = RequestMethod.GET)
     // public String getEquipos(@RequestHeader(value="Authorization") String jwt) {

@@ -1,5 +1,6 @@
 package cl.ucn.fondef.sata.mini.grpc.webcoreclient;
 
+import cl.ucn.fondef.sata.mini.grpc.Domain;
 import org.springframework.stereotype.Service;
 
 /**
@@ -24,6 +25,8 @@ public class WebCoreClientGrpcExtra extends WebCoreClientGrpcBase{
      * @return the registros
      */
     public String getRegistros(String rut) {
-        return "";
+        Domain.RutEntityReq rutEntityReq = Domain.RutEntityReq.newBuilder().setRut(rut).build();
+        Domain.RegistrosReply serverResponse = this.stub.getRegistros(rutEntityReq);
+        return this.gson.toJson(serverResponse);
     }
 }

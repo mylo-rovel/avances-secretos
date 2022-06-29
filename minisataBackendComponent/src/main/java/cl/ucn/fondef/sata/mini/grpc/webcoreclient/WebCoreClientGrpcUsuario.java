@@ -57,9 +57,11 @@ public class WebCoreClientGrpcUsuario extends WebCoreClientGrpcBase {
     }
 
     public String updateUsuario(GrpcUsuarioEntityReq grpcUsuarioEntityReq){
-        String password = grpcUsuarioEntityReq.getUsuario().getPassword();
+        // HASHING LA NUEVA CONTRASEÑA
+        Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
+        String hashPassword= argon2.hash(1, 1024, 1, grpcUsuarioEntityReq.getUsuario().getPassword());
 
-        Domain.UsuarioEntityReq datosUsuario = this.getUsuarioGrpcReqObject(grpcUsuarioEntityReq, password);
+        Domain.UsuarioEntityReq datosUsuario = this.getUsuarioGrpcReqObject(grpcUsuarioEntityReq, hashPassword);
         Domain.MensajeReply serverResponse = this.stub.updateUsuario(datosUsuario);
         return this.gson.toJson(serverResponse);
     }

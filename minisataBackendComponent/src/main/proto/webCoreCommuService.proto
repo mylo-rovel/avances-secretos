@@ -22,7 +22,6 @@ service WebCoreCommuService {
   rpc getEquipos(EmptyReq)  returns (EquiposEntityReply) {}
   rpc uploadArchivo(stream ArchivosEquipoEntityReq)  returns (MensajeReply){}
   rpc getArchivos(IdElementoReq)  returns (ArchivosEquipoEntityReply){}
-
   rpc getValvulasEquipo(IdElementoReq) returns (ComponentesEquipoReply) {}
   rpc getSecuenciasComponente(IdElementoReq) returns (SecuenciasComponenteReply) {}
 

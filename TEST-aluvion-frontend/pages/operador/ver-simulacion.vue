@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="js">
 
 import Vue from 'vue'
 import PageHeader from '~/components/PageHeader.vue'

@@ -153,8 +153,7 @@ public class WebCoreClientGrpcEquipo extends WebCoreClientGrpcBase {
      */
     public String getValvulasEquipo(long idEquipo) {
         Domain.IdElementoReq idRequest = Domain.IdElementoReq.newBuilder().setId(idEquipo).build();
-/*        Domain.ComponentesEquipoReply serverResponse = this.stub.getValvulasEquipo(idRequest);
-        return this.gson.toJson(serverResponse);*/
-        return "";
+        Domain.ComponentesEquipoReply serverResponse = this.stub.getValvulasEquipo(idRequest);
+        return this.gson.toJson(serverResponse);
     }
 }

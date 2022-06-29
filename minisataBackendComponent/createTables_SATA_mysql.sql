@@ -61,7 +61,7 @@ CREATE TABLE placa
 (
     id                  bigint(20)      NOT NULL AUTO_INCREMENT,
     id_equipo           bigint(20)      NOT NULL,
-    nombre              varchar(30)     NOT NULL UNIQUE,
+    nombre              varchar(30)     NOT NULL,
     descripcion         varchar(255)    NOT NULL,
     tipo                varchar(20)     NOT NULL,
     PRIMARY KEY (id),
@@ -93,18 +93,18 @@ CREATE TABLE ejecucion
 );
 
 
--- DESHABILITAMOS EL CAMPO id_simulacion TEMPORALMENTE HASTA ACLARAR DUDAS
 CREATE TABLE componentefisico
 (
     id                  bigint(20)      NOT NULL AUTO_INCREMENT,
---     id_simulacion       bigint(20)      NOT NULL,
+    id_equipo           bigint(20)      NOT NULL,
     nombre              varchar(30)     NOT NULL,
     descripcion         varchar(255)    NOT NULL,
     url                 varchar(100)    NOT NULL,
     estado              varchar(20)     NOT NULL,
     tipo                varchar(20)     NOT NULL,
-    PRIMARY KEY (id)
---     FOREIGN KEY (id_simulacion) REFERENCES simulacion (id)
+    tipo_placa          varchar(30)     NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (id_equipo) REFERENCES equipo (id)
 );
 
 
@@ -144,7 +144,6 @@ CREATE TABLE evento
 );
 
 
--- TEMPORAL
 CREATE TABLE simulacioncomponente
 (
     id                  bigint(20)      NOT NULL AUTO_INCREMENT,

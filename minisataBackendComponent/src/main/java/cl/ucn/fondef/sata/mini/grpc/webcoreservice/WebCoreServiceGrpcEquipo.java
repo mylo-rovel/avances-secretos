@@ -48,7 +48,6 @@ public class WebCoreServiceGrpcEquipo {
                 .build();
 
         return grpcResponse;
-        /*return Domain.MensajeReply.newBuilder().setMensajeTexto("Falta implementar addEquipo").build();*/
     }
 
     /**
@@ -59,70 +58,84 @@ public class WebCoreServiceGrpcEquipo {
      * @return the domain . mensaje reply
      */
     public Domain.MensajeReply updateEquipo(Domain.EquipoEntityReq equipoEntityReq, StreamObserver<Domain.MensajeReply> responseObserver){
-        /*String mensajeResultado = coreDaoEquipo.updateEquipo(equipoEntityReq);
+        String mensajeResultado = coreDaoEquipo.updateEquipo(equipoEntityReq);
 
         Domain.MensajeReply grpcResponse = Domain.MensajeReply.newBuilder()
                 .setMensajeTexto(mensajeResultado)
                 .build();
 
-        return grpcResponse;*/
-        return Domain.MensajeReply.newBuilder().setMensajeTexto("Falta implementar addEquipo").build();
+        return grpcResponse;
+        /*return Domain.MensajeReply.newBuilder().setMensajeTexto("Falta implementar addEquipo").build();*/
     }
 
-    /**
-     * Get equipo domain . equipo entity reply.
-     *
-     * @param idElementoReq    the id elemento req
-     * @param responseObserver the response observer
-     * @return the domain . equipo entity reply
-     */
-    public Domain.EquipoEntityReply getEquipo(Domain.IdElementoReq idElementoReq, StreamObserver<Domain.EquipoEntityReply> responseObserver){
-        Equipo equipoGuardado = coreDaoEquipo.getEquipo(idElementoReq);
 
-        if (equipoGuardado == null) {
-            return Domain.EquipoEntityReply.newBuilder().build();
-        }
-
+    private Domain.EquipoEntity.Builder getEquipoEntityBuilder (Equipo equipoGuardado){
         Domain.EquipoEntity.Builder equipoEnte = Domain.EquipoEntity.newBuilder()
                 .setId(equipoGuardado.getId())
                 .setNombre(equipoGuardado.getNombre())
                 .setDescripcion(equipoGuardado.getDescripcion())
                 .setUrlRepositorio(equipoGuardado.getUrlRepositorio())
                 .setEstado(stringEnumTransformer.getEnumEstadoEquipo(equipoGuardado.getEstado()));
+        return equipoEnte;
+    }
 
-        // idElementoReq contiene la id del equipo
-        List<Placa> placasGuardadas = coreDaoEquipo.getPlacas(idElementoReq);
-        List<Pin> todosLosPinesEquipo = new ArrayList<Pin>();
+    private void addPlacasToEquipo(Domain.EquipoEntity.Builder equipoEnte, Domain.IdElementoReq idEquipoReq) {
+        List<Placa> placasGuardadas = coreDaoEquipo.getPlacas(idEquipoReq);
+        // ITERAR PARA CREAR CADA PROTOBUF DE "Placa"
         for (int i = 0; i < placasGuardadas.size(); i++) {
-            long idPlaca = placasGuardadas.get(i).getId();
-            todosLosPinesEquipo.addAll(coreDaoEquipo.getPinesPorPlaca(idPlaca));
+            Domain.Placa placaEnviar = Domain.Placa.newBuilder()
+                    .setNombre(         placasGuardadas.get(i).getNombre())
+                    .setDescripcion(    placasGuardadas.get(i).getDescripcion())
+                    .setTipo(           stringEnumTransformer.getEnumTipoPlaca(placasGuardadas.get(i).getTipo()))
+                    .build();
+            equipoEnte.addPlaca(placaEnviar);
         }
+        /*return equipoEnte;*/
+    }
 
-        // como tenemos todos los pines, podemos obtener el componente usando la llave foranea
-        // pero como hay pines que apuntan al mismo componente, no hay que repetir
+    private Domain.EquipoEntity.Builder addComponentesYPinesToEquipo(Domain.EquipoEntity.Builder equipoEnte, Domain.IdElementoReq idEquipoReq) {
+        List<ComponenteFisico> componentesGuardados = coreDaoEquipo.getComponentesFisicos(idEquipoReq);
+        // ITERAR PARA CREAR CADA PROTOBUF DE "ComponenteFisico"
+        for (int i = 0; i < componentesGuardados.size(); i++) {
+            Domain.ComponenteFisico.Builder componenteEnviar = Domain.ComponenteFisico.newBuilder()
+                    .setId(         componentesGuardados.get(i).getId())
+                    .setNombre(     componentesGuardados.get(i).getNombre())
+                    .setDescripcion(componentesGuardados.get(i).getDescripcion())
+                    .setUrl(        componentesGuardados.get(i).getUrl())
+                    .setEstado(     stringEnumTransformer.getEnumEstadoComponente(componentesGuardados.get(i).getEstado()))
+                    .setTipo(       stringEnumTransformer.getEnumTipoComponente(componentesGuardados.get(i).getTipo()))
+                    .setTipoPlaca(  stringEnumTransformer.getEnumTipoPlaca(componentesGuardados.get(i).getTipoPlaca()));
 
-        /*List<ComponenteFisico> listaComponentesFisico = coreDaoEquipo.getComponentesFisicosEquipo(idElementoReq);
-        if (listaComponentesFisico != null) {
-            for(ComponenteFisico componenteFisico: listaComponentesFisico){
-                Domain.ComponenteFisico componenteDominio = Domain.ComponenteFisico.newBuilder()
-                        .setEstado(stringEnumTransformer.getEnumEstadoComponente(componenteFisico.getEstado()))
-//                    .setConexion(stringEnumTransformer.getEnumConexionComponente(componenteFisico.getConexion()))
-                        .setTipo(stringEnumTransformer.getEnumTipoComponente(componenteFisico.getTipo()))
-                        .setNombre(componenteFisico.getNombre())
-                        .setDescripcion(componenteFisico.getDescripcion())
-//                    .setPin(componenteFisico.getPin())
-                        .setUrl(componenteFisico.getUrl())
+            // ITERAR PARA CREAR CADA PROTOBUF DE "Pin"
+            long idComponente = componentesGuardados.get(i).getId();
+            List<Pin> pinesGuardados = coreDaoEquipo.getPines(idComponente);
+            for (int j = 0; j < pinesGuardados.size(); j++) {
+                Domain.Pin pinEnviar = Domain.Pin.newBuilder()
+                        .setNumero(         pinesGuardados.get(j).getNumero())
+                        .setNombre(         pinesGuardados.get(j).getNombre())
+                        .setDescripcion(    pinesGuardados.get(j).getDescripcion())
+                        .setConexion(       stringEnumTransformer.getEnumConexionPin(pinesGuardados.get(j).getConexion()))
                         .build();
-                equipoEnte.addComponenteFisico(componenteDominio);
+                componenteEnviar.addPinComponente(pinEnviar);
             }
+            equipoEnte.addComponenteFisico(componenteEnviar);
         }
+        return equipoEnte;
+    }
+
+    public Domain.EquipoEntityReply getEquipo(Domain.IdElementoReq idEquipoReq, StreamObserver<Domain.EquipoEntityReply> responseObserver){
+        Equipo equipoGuardado = coreDaoEquipo.getEquipo(idEquipoReq);
+        if (equipoGuardado == null) { return Domain.EquipoEntityReply.newBuilder().build(); }
+
+        Domain.EquipoEntity.Builder equipoEnte = this.getEquipoEntityBuilder(equipoGuardado);
+        this.addPlacasToEquipo(equipoEnte, idEquipoReq);
+        this.addComponentesYPinesToEquipo(equipoEnte, idEquipoReq);
 
         Domain.EquipoEntityReply equipoRetornar = Domain.EquipoEntityReply.newBuilder()
                 .setEquipo(equipoEnte.build())
                 .build();
 
-        return equipoRetornar;*/
-        return Domain.EquipoEntityReply.newBuilder().build();
+        return equipoRetornar;
     }
 
     /**
@@ -153,22 +166,25 @@ public class WebCoreServiceGrpcEquipo {
         return listaRetornar.build();
     }
 
-    /**
-     * Get valvulas equipo domain . componentes equipo reply.
-     *
-     * @param idRequest        the id request
-     * @param responseObserver the response observer
-     * @return the domain . componentes equipo reply
-     */
-    public Domain.ComponentesEquipoReply getValvulasEquipo(Domain.IdElementoReq idRequest, StreamObserver<Domain.ComponentesEquipoReply> responseObserver){
-        /*List<ComponenteFisico> listaValvulasGuardadas = coreDaoEquipo.getValvulasEquipo(idRequest);
-        if (listaValvulasGuardadas == null) {
-            return Domain.ComponentesEquipoReply.newBuilder().build();
-        }
-        Domain.ComponentesEquipoReply grpcResponse = Domain.ComponentesEquipoReply.newBuilder()
-                .build();
 
-        return grpcResponse;*/
-        return  Domain.ComponentesEquipoReply.newBuilder().build();
+    private void addValvulasToReplyObject (Domain.ComponentesEquipoReply.Builder grpcResponse, List<ComponenteFisico> listaValvulasGuardadas) {
+        for (int i = 0; i < listaValvulasGuardadas.size(); i++) {
+            Domain.ComponenteFisico componenteFisico = Domain.ComponenteFisico.newBuilder()
+                    .setId(listaValvulasGuardadas.get(i).getId())
+                    .setNombre(listaValvulasGuardadas.get(i).getNombre())
+                    .setEstado(stringEnumTransformer.getEnumEstadoComponente(listaValvulasGuardadas.get(i).getEstado()))
+                    .build();
+            grpcResponse.addComponenteFisico(componenteFisico);
+        }
+    }
+
+    public Domain.ComponentesEquipoReply getValvulasEquipo(Domain.IdElementoReq idRequest, StreamObserver<Domain.ComponentesEquipoReply> responseObserver){
+        List<ComponenteFisico> listaValvulasGuardadas = coreDaoEquipo.getValvulasEquipo(idRequest);
+        if (listaValvulasGuardadas == null) { return Domain.ComponentesEquipoReply.newBuilder().build(); }
+
+        Domain.ComponentesEquipoReply.Builder grpcResponse = Domain.ComponentesEquipoReply.newBuilder();
+        this.addValvulasToReplyObject(grpcResponse, listaValvulasGuardadas);
+
+        return grpcResponse.build();
     }
 }

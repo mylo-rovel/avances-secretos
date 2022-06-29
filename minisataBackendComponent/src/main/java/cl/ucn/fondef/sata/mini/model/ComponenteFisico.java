@@ -27,10 +27,10 @@ public class ComponenteFisico {
     @Column(name = "id")
     private long id;
 
-/*    @Getter
+    @Getter
     @Setter
-    @Column(name = "id_simulacion")
-    private long idSimulacion;*/
+    @Column(name = "id_equipo")
+    private long idEquipo;
 
     @Getter
     @Setter
@@ -56,4 +56,9 @@ public class ComponenteFisico {
     @Setter
     @Column(name = "tipo")
     private String tipo;
+
+    @Getter
+    @Setter
+    @Column(name = "tipo_placa")
+    private String tipoPlaca;
 }

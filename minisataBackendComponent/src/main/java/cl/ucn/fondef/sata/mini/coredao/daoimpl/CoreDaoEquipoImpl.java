@@ -6,7 +6,6 @@ package cl.ucn.fondef.sata.mini.coredao.daoimpl;
 
 import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoEquipo;
 import cl.ucn.fondef.sata.mini.grpc.Domain;
-import cl.ucn.fondef.sata.mini.grpcobjects.GrpcPlaca;
 import cl.ucn.fondef.sata.mini.model.ComponenteFisico;
 import cl.ucn.fondef.sata.mini.model.Pin;
 import cl.ucn.fondef.sata.mini.model.Placa;
@@ -14,13 +13,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import cl.ucn.fondef.sata.mini.model.*;
-import cl.ucn.fondef.sata.mini.model.Registro;
 import cl.ucn.fondef.sata.mini.grpc.Domain.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
 
@@ -35,13 +31,16 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
     @PersistenceContext
     private EntityManager entityManager;
 
-    //TODO: COMPLETAR EL METODO ADDEQUIPO
-    @Override
-    public String addEquipo(EquipoEntityReq equipoEntityReq) {
-        // CHEQUEAR SI EL USUARIO EXISTE
+    private List<Usuario> getListaUsuariosPorRut(EquipoEntityReq equipoEntityReq) {
         String usuarioQuery = "FROM Usuario WHERE rut = :rut";
-        List listaUsuariosQuery = entityManager.createQuery(usuarioQuery)
-                .setParameter("rut", equipoEntityReq.getRutConfigurador()).getResultList();;
+        return (List<Usuario>) entityManager.createQuery(usuarioQuery)
+                .setParameter("rut", equipoEntityReq.getRutConfigurador()).getResultList();
+
+    }
+
+    private String isUnableToSave(EquipoEntityReq equipoEntityReq) {
+        // CHEQUEAR SI EL USUARIO EXISTE
+        List<Usuario> listaUsuariosQuery = this.getListaUsuariosPorRut(equipoEntityReq);
         if (listaUsuariosQuery.isEmpty()) {
             return "Usuario configurador no encontrado";
         }
@@ -56,97 +55,126 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
         String sqlQuery = "FROM Equipo WHERE nombre = :nombre";
         List listaResultado = entityManager.createQuery(sqlQuery)
                 .setParameter("nombre", equipoEntityReq.getEquipo().getNombre()).getResultList();
-
-        String mensaje;
-        // Si aun no existe el nombre:
-        if(listaResultado.isEmpty()){
-            // GUARDAR EN LA TABLA EQUIPO
-            Equipo equipo = new Equipo();
-            equipo.setIdConfigurador(usuarioEncontrado.getId());
-            equipo.setNombre(equipoEntityReq.getEquipo().getNombre());
-            equipo.setDescripcion(equipoEntityReq.getEquipo().getDescripcion());
-            equipo.setUrlRepositorio(equipoEntityReq.getEquipo().getUrlRepositorio());
-            equipo.setEstado(equipoEntityReq.getEquipo().getEstado().name());
-            entityManager.persist(equipo);
-
-            String queryEquipo = "FROM Equipo WHERE nombre = :nombre";
-            List<Equipo> equiposGuardados = entityManager.createQuery(sqlQuery)
-                    .setParameter("nombre", equipoEntityReq.getEquipo().getNombre()).getResultList();
-            long idEquipo = equiposGuardados.get(0).getId();
-            String nombreEquipo = equiposGuardados.get(0).getNombre();
-
-            // este hashmap se utiliza para guardar las id de las placas para
-            // "eficiente" iteracion en el for loop y posterior guardado
-            HashMap<String, Long> placasIdHashMap = new HashMap<String, Long>();
-
-            // for loop para guardar las placas
-            List<Domain.Placa> listaPlacas = equipoEntityReq.getEquipo().getPlacaList();
-            for (int i = 0; i < listaPlacas.size(); i++) {
-                Placa placaGuardar = new Placa();
-                placaGuardar.setIdEquipo(idEquipo);
-                placaGuardar.setNombre(        listaPlacas.get(i).getNombre());
-                placaGuardar.setDescripcion(   listaPlacas.get(i).getDescripcion());
-                placaGuardar.setTipo(          listaPlacas.get(i).getTipo().name());
-
-                entityManager.persist(placaGuardar);
-
-                // guardando la llave "tipoPlaca" para, posteriormente acceder a su valor
-                // el valor long -1 es temporal
-                placasIdHashMap.put(    listaPlacas.get(i).getTipo().name(), -1L);
-            }
-
-           // TODO: OPTIMIZAR PARA OBTENER LA ID SIN HACER OTRA QUERY
-            // Obtenemos las id de las placas del equipo a guardado para reemplazar
-            // el valor temporal que dejamos anteriormente: long -1
-            String queryPlacas = "FROM Placa WHERE id_equipo = :id_equipo";
-            List<Placa> placasGuardadas = entityManager.createQuery(queryPlacas)
-                    .setParameter("id_equipo", idEquipo).getResultList();
-
-            for (int i = 0; i < placasGuardadas.size(); i++) {
-                Placa placaTurno = placasGuardadas.get(i);
-                placasIdHashMap.replace(placaTurno.getTipo(), placaTurno.getId());
-            }
-
-            // for loop para guardar CADA componentes
-            List<Domain.ComponenteFisico> listaComponentes = equipoEntityReq.getEquipo().getComponenteFisicoList();
-            for (int i = 0; i < listaComponentes.size(); i++) {
-                ComponenteFisico componenteFisico = new ComponenteFisico();
-                componenteFisico.setNombre(     listaComponentes.get(i).getNombre() + "_" + nombreEquipo);
-                componenteFisico.setDescripcion(listaComponentes.get(i).getDescripcion());
-                componenteFisico.setUrl(        listaComponentes.get(i).getUrl());
-                componenteFisico.setEstado(     listaComponentes.get(i).getEstado().name());
-                componenteFisico.setTipo(       listaComponentes.get(i).getTipo().name());
-
-                entityManager.persist(componenteFisico);
-
-                String queryComponente = "FROM ComponenteFisico WHERE nombre = :nombre";
-                List<ComponenteFisico> componentesGuardados = entityManager.createQuery(queryComponente)
-                        .setParameter("nombre", componenteFisico.getNombre()).getResultList();
-
-                long idComponente_pin = componentesGuardados.get(0).getId();
-                long idPlaca_pin = placasIdHashMap.get(listaComponentes.get(i).getTipoPlaca().name());
-
-                // for loop para guardar los pines
-                List<Domain.Pin> listaPines = listaComponentes.get(i).getPinComponenteList();
-                for (int j = 0; j < listaPines.size(); j++) {
-                    Pin pin = new Pin();
-                    pin.setNumero(      listaPines.get(j).getNumero());
-                    pin.setNombre(      listaPines.get(j).getNombre());
-                    pin.setDescripcion( listaPines.get(j).getDescripcion());
-                    pin.setConexion(    listaPines.get(j).getConexion().name());
-                    pin.setIdPlaca(     idPlaca_pin);
-                    pin.setIdComponente(idComponente_pin);
-
-                    entityManager.persist(pin);
-                }
-            }
-
-            mensaje = "El equipo se ha agregado exitosamente";
-        }else{
-            mensaje = "El equipo ingresado ya existe";
+        if(!listaResultado.isEmpty()){
+            return "El equipo ingresado ya existe";
         }
+        return null;
+    }
 
-        return mensaje;
+    private  HashMap<String, String> getDatosEquipoHashMap (EquipoEntityReq equipoEntityReq) {
+        String queryEquipo = "FROM Equipo WHERE nombre = :nombre";
+        List<Equipo> equiposGuardados = entityManager.createQuery(queryEquipo)
+                .setParameter("nombre", equipoEntityReq.getEquipo().getNombre()).getResultList();
+
+        HashMap<String, String> datosEquipo = new HashMap<String, String>();
+        datosEquipo.put("idEquipo", "" + equiposGuardados.get(0).getId());
+        datosEquipo.put("nombreEquipo",  equiposGuardados.get(0).getNombre());
+        return datosEquipo;
+    }
+
+    private void guardarEquipo(EquipoEntityReq equipoEntityReq) {
+        Usuario usuarioConfigurador = this.getListaUsuariosPorRut(equipoEntityReq).get(0);
+        Equipo equipo = new Equipo();
+        equipo.setIdConfigurador(   usuarioConfigurador.getId());
+        equipo.setNombre(           equipoEntityReq.getEquipo().getNombre());
+        equipo.setDescripcion(      equipoEntityReq.getEquipo().getDescripcion());
+        equipo.setUrlRepositorio(   equipoEntityReq.getEquipo().getUrlRepositorio());
+        equipo.setEstado(           equipoEntityReq.getEquipo().getEstado().name());
+        entityManager.persist(equipo);
+    }
+
+    private HashMap<String, Long> guardarPlacas(EquipoEntityReq equipoEntityReq, long idEquipo) {
+        // LO QUE RETORNAREMOS
+        HashMap<String, Long> placasIdHashMap = new HashMap<String, Long>();
+
+        // for loop para guardar las placas
+        List<Domain.Placa> listaPlacas = equipoEntityReq.getEquipo().getPlacaList();
+        for (int i = 0; i < listaPlacas.size(); i++) {
+            Placa placaGuardar = new Placa();
+            placaGuardar.setIdEquipo(       idEquipo);
+            placaGuardar.setNombre(         listaPlacas.get(i).getNombre());
+            placaGuardar.setDescripcion(    listaPlacas.get(i).getDescripcion());
+            placaGuardar.setTipo(           listaPlacas.get(i).getTipo().name());
+            entityManager.persist(placaGuardar);
+            // guardando la llave "tipoPlaca" para, posteriormente acceder a su valor. El valor long -1 es temporal
+            placasIdHashMap.put(    listaPlacas.get(i).getTipo().name(), -1L);
+        }
+        return placasIdHashMap;
+    }
+
+    private HashMap<String, Long> actualizarPlacasIdHashMap (HashMap<String, Long> placasIdHashMap, long idEquipo){
+        // Obtenemos las id de las placas del equipo a guardado para reemplazar
+        // el valor temporal que dejamos anteriormente: long -1
+        String queryPlacas = "FROM Placa WHERE id_equipo = :id_equipo";
+        List<Placa> placasGuardadas = entityManager.createQuery(queryPlacas)
+                .setParameter("id_equipo", idEquipo).getResultList();
+
+        for (int i = 0; i < placasGuardadas.size(); i++) {
+            Placa placaTurno = placasGuardadas.get(i);
+            placasIdHashMap.replace(placaTurno.getTipo(), placaTurno.getId());
+        }
+        return placasIdHashMap;
+    }
+
+    private ComponenteFisico guardarComponente(Domain.ComponenteFisico componenteRecibido, long idEquipo, String nombreEquipo) {
+        ComponenteFisico componenteFisico = new ComponenteFisico();
+        componenteFisico.setNombre(     componenteRecibido.getNombre() + "_" + nombreEquipo);
+        componenteFisico.setDescripcion(componenteRecibido.getDescripcion());
+        componenteFisico.setUrl(        componenteRecibido.getUrl());
+        componenteFisico.setEstado(     componenteRecibido.getEstado().name());
+        componenteFisico.setTipo(       componenteRecibido.getTipo().name());
+        componenteFisico.setTipoPlaca(  componenteRecibido.getTipoPlaca().name());
+        componenteFisico.setIdEquipo(   idEquipo);
+
+        entityManager.persist(componenteFisico);
+        return componenteFisico;
+    }
+    private void guardarPines(Domain.ComponenteFisico componenteTurno, String nombreComponente, HashMap<String, Long> placasIdHashMap) {
+        String queryComponente = "FROM ComponenteFisico WHERE nombre = :nombre";
+        List<ComponenteFisico> componentesGuardados = entityManager.createQuery(queryComponente).setParameter("nombre", nombreComponente).getResultList();
+
+        // for loop para guardar los pines
+        List<Domain.Pin> listaPines = componenteTurno.getPinComponenteList();
+        for (int j = 0; j < listaPines.size(); j++) {
+            Pin pin = new Pin();
+            pin.setNumero(          listaPines.get(j).getNumero());
+            pin.setNombre(          listaPines.get(j).getNombre());
+            pin.setDescripcion(     listaPines.get(j).getDescripcion());
+            pin.setConexion(        listaPines.get(j).getConexion().name());
+            pin.setIdPlaca(         placasIdHashMap.get(    componenteTurno.getTipoPlaca().name())  );
+            pin.setIdComponente(    componentesGuardados.get(0).getId());
+            entityManager.persist(pin);
+        }
+    }
+
+    private void guardarComponentesYPines ( HashMap<String, Long> placasIdHashMap, EquipoEntityReq equipoEntityReq, long idEquipo, String nombreEquipo) {
+        // for loop para guardar CADA componente
+        List<Domain.ComponenteFisico> listaComponentes = equipoEntityReq.getEquipo().getComponenteFisicoList();
+        for (int i = 0; i < listaComponentes.size(); i++) {
+            ComponenteFisico componenteFisico = this.guardarComponente(listaComponentes.get(i), idEquipo, nombreEquipo);
+            this.guardarPines(listaComponentes.get(i), componenteFisico.getNombre(), placasIdHashMap);
+        }
+    }
+
+    @Override
+    public String addEquipo(EquipoEntityReq equipoEntityReq) {
+        if (this.isUnableToSave(equipoEntityReq) != null) { return this.isUnableToSave(equipoEntityReq); }
+
+        // GUARDAR EN LA TABLA EQUIPO
+        this.guardarEquipo(equipoEntityReq);
+
+        HashMap<String, String> datosEquipo = this.getDatosEquipoHashMap(equipoEntityReq);
+        long idEquipo = Long.parseLong(datosEquipo.get("idEquipo"));
+        String nombreEquipo = datosEquipo.get("nombreEquipo");
+
+        // GUARDAR EN LA TABLA PLACAS. lo del return utiliza para guardar las id de las placas para "eficiente" iteracion en el for loop y posterior guardado
+        HashMap<String, Long> placasIdHashMapCRUDAS = this.guardarPlacas(equipoEntityReq, idEquipo);
+        HashMap<String, Long> placasIdHashMap = this.actualizarPlacasIdHashMap(placasIdHashMapCRUDAS, idEquipo);
+
+        // GUARDAR EN LA TABLA COMPONENTEFISICO Y PIN
+        this.guardarComponentesYPines(placasIdHashMap, equipoEntityReq, idEquipo, nombreEquipo);
+
+        return "El equipo se ha agregado exitosamente";
     }
 
     // TODO: AÑADIR PARTE DE REGISTRO EN LA DB
@@ -168,73 +196,47 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
 
 
     // ---- AUX PARA getEquipo ----
+    @Override
     public List<Placa> getPlacas(IdElementoReq idEquipo) {
         String sqlQuery = "FROM Placa WHERE id_equipo = :id_equipo";
-        return entityManager.createQuery(sqlQuery)
+        return (List<Placa>) entityManager.createQuery(sqlQuery)
                 .setParameter("id_equipo", idEquipo.getId()).getResultList();
     }
 
-    public List<Pin> getPinesPorPlaca(long idPlaca) {
-        String sqlQuery = "FROM Pin WHERE id_placa = :id_placa";
-        return entityManager.createQuery(sqlQuery)
-                .setParameter("id_placa", idPlaca).getResultList();
+    @Override
+    public List<ComponenteFisico> getComponentesFisicos(IdElementoReq idElementoReq){
+        String sqlQuery = "FROM ComponenteFisico WHERE id_equipo = :id_equipo";
+        return (List<ComponenteFisico>) entityManager.createQuery(sqlQuery)
+                .setParameter("id_equipo", idElementoReq.getId()).getResultList();
+    }
+
+    @Override
+    public List<Pin> getPines(long IdComponente){
+        String sqlQuery = "FROM Pin WHERE id_componente = :id_componente";
+        return (List<Pin>) entityManager.createQuery(sqlQuery)
+                .setParameter("id_componente", IdComponente).getResultList();
     }
 
     @Override
     public Equipo getEquipo(IdElementoReq idEquipo){
         String sqlQuery = "FROM Equipo WHERE id = :id";
-        List listaResultado = entityManager.createQuery(sqlQuery)
-                .setParameter("id", idEquipo.getId()).getResultList();
-        if(listaResultado.isEmpty()){
-            return null;
-        }else{
-            return (Equipo) listaResultado.get(0);
-        }
+        return (Equipo) entityManager.createQuery(sqlQuery)
+                .setParameter("id", idEquipo.getId()).getResultList().get(0);
     }
 
     @Override
     public List<Equipo> getEquipos(){
-        String sqlQuery = "FROM Equipo WHERE 1=1";
-        List listaResultado = entityManager.createQuery(sqlQuery).getResultList();
-
-        if(listaResultado.isEmpty()){
-            log.warn("La lista no contiene elementos");
-            return null;
-        }else{
-            return listaResultado;
-        }
-    }
-
-    //TODO: IMPLEMENTAR EN EL DAO UNA FUNCION ADD, GETCOMPONENTEFISICO Y GETCOMPONENTESFISICOS
-    @Override
-    public List<ComponenteFisico> getComponentesFisicosEquipo(IdElementoReq idElementoReq){
-        String mensaje;
-        String sqlQuery = "FROM ComponenteFisico WHERE id = :id";
-        List listaResultado = entityManager.createQuery(sqlQuery)
-                .setParameter("id_equipo", idElementoReq.getId())
-                .getResultList();
-        if(listaResultado.isEmpty()){
-            log.warn("La lista no contiene componentes fisicos");
-            return null;
-        }else{
-            return listaResultado;
-        }
+        String sqlQuery = "FROM Equipo";
+        return (List<Equipo>) entityManager.createQuery(sqlQuery).getResultList();
     }
 
     @Override
     public List<ComponenteFisico> getValvulasEquipo(IdElementoReq idElementoReq){
-        String mensaje;
-        String sqlQuery = "FROM ComponenteFisico WHERE id = :id AND tipo = :tipo";
-        List listaResultado = entityManager.createQuery(sqlQuery)
+        String sqlQuery = "FROM ComponenteFisico WHERE id_equipo = :id_equipo AND tipo = :tipo";
+        return (List<ComponenteFisico>) entityManager.createQuery(sqlQuery)
                 .setParameter("id_equipo", idElementoReq.getId())
                 .setParameter("tipo", "VALVULA")
                 .getResultList();
-        if(listaResultado.isEmpty()){
-            log.warn("La lista no contiene valvulas");
-            return null;
-        }else{
-            return listaResultado;
-        }
     }
 
     /*public String uploadArchivo(ArchivosEquipoEntityReq archivosEquipoEntityReq){

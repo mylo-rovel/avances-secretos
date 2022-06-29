@@ -12,58 +12,21 @@ import cl.ucn.fondef.sata.mini.model.Placa;
 
 import java.util.List;
 
-/**
- * The interface Core dao equipo.
- */
 public interface CoreDaoEquipo {
-    /**
-     * Add equipo string.
-     *
-     * @param equipoEntityReq the equipo entity req
-     * @return the string
-     */
     String addEquipo(EquipoEntityReq equipoEntityReq);
 
-    /**
-     * Update equipo string.
-     *
-     * @param equipoEntityReq the equipo entity req
-     * @return the string
-     */
     String updateEquipo(EquipoEntityReq equipoEntityReq);
-
-    /**
-     * Gets equipo.
-     *
-     * @param idEquipo the id equipo
-     * @return the equipo
-     */
-    Equipo getEquipo(IdElementoReq idEquipo);
-
-    /**
-     * Gets equipos.
-     *
-     * @return the equipos
-     */
-    List<Equipo> getEquipos();
-
-    /**
-     * Gets componentes fisicos equipo.
-     *
-     * @param idElementoReq the id elemento req
-     * @return the componentes fisicos equipo
-     */
-    List<ComponenteFisico> getComponentesFisicosEquipo(IdElementoReq idElementoReq);
-
-    /**
-     * Gets valvulas equipo.
-     *
-     * @param idElementoReq the id elemento req
-     * @return the valvulas equipo
-     */
-    List<ComponenteFisico> getValvulasEquipo(IdElementoReq idElementoReq);
 
     List<Placa> getPlacas(IdElementoReq idEquipo);
 
-    List<Pin> getPinesPorPlaca(long idPlaca);
+    List<ComponenteFisico> getComponentesFisicos(IdElementoReq idElementoReq);
+
+    List<Pin> getPines(long IdComponente);
+
+    Equipo getEquipo(IdElementoReq idEquipo);
+
+    List<Equipo> getEquipos();
+
+    List<ComponenteFisico> getValvulasEquipo(IdElementoReq idElementoReq);
+
 }

@@ -1,4 +1,4 @@
-<script>
+<script lang="js">
     import Vue from 'vue'
     import {mapState, mapMutations} from "vuex";
     import CancelButtom from '~/components/CancelButtom.vue'

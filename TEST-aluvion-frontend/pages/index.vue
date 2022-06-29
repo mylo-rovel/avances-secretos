@@ -67,7 +67,7 @@ export default Vue.extend({
                             </button>
                         </div>
                     </form>   
-                    <div class="login100-more">
+                    <div class="login100-more img-container">
                         <img width="806" height="610" :src="require('~/assets/img/cerro.png?url')"/>
                     </div>
                 </div>   
@@ -574,4 +574,8 @@ export default Vue.extend({
     .bg2 {background: #1da1f2;}
     .bg3 {background: #cd201f;}
 
+    .img-container {
+        padding:0;
+        margin:0;
+    }
 </style>
