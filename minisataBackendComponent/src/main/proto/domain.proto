@@ -212,6 +212,15 @@ message EquiposEntityReply {
   repeated EquipoEntityAcotado equipo_acotado = 1;
 }
 
+message SecuenciasComponente {
+  int64 id_componente = 1;
+  string nombreComponente = 2;
+  repeated Secuencia secuencia_componente = 3;
+}
+
+message SecuenciasComponenteEquipoReply {
+  repeated SecuenciasComponente secuencia_componente = 1;
+}
 
 // Equipo       - - - - - - - - - - - - - -
 // Simulacion   - - - - - - - - - - - - - -
@@ -224,12 +233,6 @@ message Evento {
 
 message Secuencia {
   repeated Evento evento = 1;
-}
-
-message SecuenciasComponenteReply {
-  int64 id_componente = 1;
-  string nombreComponente = 2;
-  repeated Secuencia secuencia_componente = 3;
 }
 
 message SimulacionReq {
