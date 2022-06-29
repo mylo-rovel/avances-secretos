@@ -191,6 +191,9 @@ public class WebCoreServiceGrpcEquipo {
             return Domain.SecuenciasComponenteEquipoReply.newBuilder().build();
         }else{
             Domain.SecuenciasComponenteEquipoReply.Builder grpcResponse = Domain.SecuenciasComponenteEquipoReply.newBuilder();
+            //
+            Domain.SecuenciasComponente.Builder secuenciasComponente = Domain.SecuenciasComponente.newBuilder();
+            //
             for(Secuencia secuencia : listaSecuencias){
                 Domain.IdElementoReq idComponente =Domain.IdElementoReq.newBuilder().setId(secuencia.getIdComponente()).build();
                 ComponenteFisico componenteAgregar = coreDaoEquipo.getComponenteFisico(idComponente);
@@ -206,8 +209,14 @@ public class WebCoreServiceGrpcEquipo {
                             .build();
                     secuenciaAgregar.addEvento(eventoDevolver);
                 }
+                //
+                secuenciasComponente.addSecuenciaComponente(secuenciaAgregar.build());
                 //grpcResponse.addSecuenciaComponente(secuenciaAgregar);
+                //TODO: SOLUCIONAR EL PROBLEMA ENTRE SECUENCIASCOMPONENTEEQUIPOREPLY Y SECUENCIASCOMPONENTE
             }
+            //
+            grpcResponse.addSecuenciaComponente(secuenciasComponente.build());
+            //
             return grpcResponse.build();
         }
     }

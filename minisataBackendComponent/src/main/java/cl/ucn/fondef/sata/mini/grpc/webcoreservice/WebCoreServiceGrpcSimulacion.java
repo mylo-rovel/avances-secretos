@@ -50,11 +50,15 @@ public class WebCoreServiceGrpcSimulacion {
                 .setDescripcionEquipo(equipoAsociado.getDescripcion())
                 .setFechaEjecucion(simulacionGuardada.getFechaCreacion());
 
-        /*
         List<Secuencia> listaSecuencias = coreDaoEquipo.getSecuenciasComponente(idEquipo);
-        for(Secuencia secuencia: listaSecuencias){
-            simulacionRetornar.addSecuencia(secuencia);
-        }*/
+        if(listaSecuencias == null){
+            return simulacionRetornar.build();
+        }else{
+            for(Secuencia secuencia: listaSecuencias){
+
+            }
+        }
+
         return simulacionRetornar.build();
     }
 
