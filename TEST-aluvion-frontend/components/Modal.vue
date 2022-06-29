@@ -1,12 +1,10 @@
 <script>
+    import SubmitButton from '~/components/SubmitButton.vue'
+
     export default {
         name: 'Modal',
-        props: ["infoContenido"],
-        data(){
-            return {
-                infoContenido: "",
-            }
-        },
+        components: { SubmitButton },
+        
         methods: {
             abrirModal(){
                 document.getElementById("submit-btn").addEventListener("click",
@@ -26,18 +24,6 @@
 
 </script>
 <template>
-
-    <section>
-        <div class= "back-modal">
-            <div class="modal-content">
-                <div>
-                    <h2>{{infoContenido}}</h2>
-                </div>
-                <div class="close-modal">+</div>                
-            </div>
-        </div>  
-    </section>
-
 </template>
 <style>
     .back-modal {
