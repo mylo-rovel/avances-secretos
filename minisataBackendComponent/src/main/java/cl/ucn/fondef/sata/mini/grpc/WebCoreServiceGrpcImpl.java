@@ -103,7 +103,7 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
     }
 
     @Override
-    public void getSecuenciasComponente(IdElementoReq idElemento, StreamObserver<SecuenciasComponenteReply> responseObserver){
+    public void getSecuenciasComponente(IdElementoReq idElemento, StreamObserver<SecuenciasComponenteEquipoReply> responseObserver){
         var grpcResponse = webCoreServiceGrpcEquipo.getSecuenciasComponente(idElemento, responseObserver);
         responseObserver.onNext(grpcResponse);
         responseObserver.onCompleted();

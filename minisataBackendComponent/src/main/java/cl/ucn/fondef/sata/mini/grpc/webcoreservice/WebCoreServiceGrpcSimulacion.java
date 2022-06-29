@@ -4,6 +4,7 @@ import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoEquipo;
 import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoSimulacion;
 import cl.ucn.fondef.sata.mini.grpc.Domain;
 import cl.ucn.fondef.sata.mini.model.Equipo;
+import cl.ucn.fondef.sata.mini.model.Secuencia;
 import cl.ucn.fondef.sata.mini.model.Simulacion;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,16 +42,20 @@ public class WebCoreServiceGrpcSimulacion {
         Domain.IdElementoReq idEquipo = Domain.IdElementoReq.newBuilder().setId(simulacionGuardada.getId()).build();
         Equipo equipoAsociado = coreDaoEquipo.getEquipo(idEquipo);
 
-        Domain.SimulacionReply simulacionRetornar = Domain.SimulacionReply.newBuilder()
+        Domain.SimulacionReply.Builder simulacionRetornar = Domain.SimulacionReply.newBuilder()
                 .setId(simulacionGuardada.getId())
                 .setNombre(simulacionGuardada.getNombre())
                 .setDescripcion(simulacionGuardada.getDescripcion())
                 .setNombreEquipo(equipoAsociado.getNombre())
                 .setDescripcionEquipo(equipoAsociado.getDescripcion())
-                .setFechaEjecucion(simulacionGuardada.getFechaCreacion())
-                .build();
+                .setFechaEjecucion(simulacionGuardada.getFechaCreacion());
 
-        return simulacionRetornar;
+        /*
+        List<Secuencia> listaSecuencias = coreDaoEquipo.getSecuenciasComponente(idEquipo);
+        for(Secuencia secuencia: listaSecuencias){
+            simulacionRetornar.addSecuencia(secuencia);
+        }*/
+        return simulacionRetornar.build();
     }
 
     /**

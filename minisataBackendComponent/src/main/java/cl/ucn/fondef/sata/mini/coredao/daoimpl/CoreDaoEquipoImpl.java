@@ -7,6 +7,7 @@ package cl.ucn.fondef.sata.mini.coredao.daoimpl;
 import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoEquipo;
 import cl.ucn.fondef.sata.mini.grpc.Domain;
 import cl.ucn.fondef.sata.mini.model.ComponenteFisico;
+import cl.ucn.fondef.sata.mini.model.Evento;
 import cl.ucn.fondef.sata.mini.model.Pin;
 import cl.ucn.fondef.sata.mini.model.Placa;
 import cl.ucn.fondef.sata.mini.model.Secuencia;
@@ -205,6 +206,12 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
     }
 
     @Override
+    public ComponenteFisico getComponenteFisico(IdElementoReq idElementoReq){
+        String sqlQuery = "FROM ComponenteFisico WHERE id = :id";
+        return (ComponenteFisico) entityManager.createQuery(sqlQuery)
+                .setParameter("id", idElementoReq.getId()).getResultList().get(0);
+    }
+    @Override
     public List<ComponenteFisico> getComponentesFisicos(IdElementoReq idElementoReq){
         String sqlQuery = "FROM ComponenteFisico WHERE id_equipo = :id_equipo";
         return (List<ComponenteFisico>) entityManager.createQuery(sqlQuery)
@@ -218,6 +225,11 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
                 .setParameter("id_componente", IdComponente).getResultList();
     }
 
+    public List<Evento> getEventos(long idSecuencia){
+        String sqlQuery = "FROM Evento WHERE id_secuencia = :id_secuencia";
+        return (List<Evento>) entityManager.createQuery(sqlQuery)
+                .setParameter("id_secuencia", idSecuencia).getResultList();
+    }
     @Override
     public Equipo getEquipo(IdElementoReq idEquipo){
         String sqlQuery = "FROM Equipo WHERE id = :id";

@@ -185,16 +185,28 @@ public class WebCoreServiceGrpcEquipo {
         return grpcResponse.build();
     }
 
-    public Domain.SecuenciasComponenteReply getSecuenciasComponente(Domain.IdElementoReq idRequest, StreamObserver<Domain.SecuenciasComponenteReply> responseObserver){
+    public Domain.SecuenciasComponenteEquipoReply getSecuenciasComponente(Domain.IdElementoReq idRequest, StreamObserver<Domain.SecuenciasComponenteEquipoReply> responseObserver){
         List<Secuencia> listaSecuencias = coreDaoEquipo.getSecuenciasComponente(idRequest);
         if(listaSecuencias == null){
-            return Domain.SecuenciasComponenteReply.newBuilder().build();
+            return Domain.SecuenciasComponenteEquipoReply.newBuilder().build();
         }else{
-            Domain.SecuenciasComponenteReply.Builder grpcResponse = Domain.SecuenciasComponenteReply.newBuilder();
+            Domain.SecuenciasComponenteEquipoReply.Builder grpcResponse = Domain.SecuenciasComponenteEquipoReply.newBuilder();
             for(Secuencia secuencia : listaSecuencias){
-                //hice algo raro aqui, intenta escribir addSecuenciaComponente y revisa las opciones que te da en comparacion a los
-                //add de otros entity
-                grpcResponse.addSecuenciaComponente(secuencia);
+                Domain.IdElementoReq idComponente =Domain.IdElementoReq.newBuilder().setId(secuencia.getIdComponente()).build();
+                ComponenteFisico componenteAgregar = coreDaoEquipo.getComponenteFisico(idComponente);
+                Domain.Secuencia.Builder secuenciaAgregar = Domain.Secuencia.newBuilder()
+                        .setIdComponente(componenteAgregar.getId())
+                        .setNombreComponente(componenteAgregar.getNombre());
+                List<Evento> eventosAgregar = coreDaoEquipo.getEventos(secuencia.getId());
+                for(Evento evento : eventosAgregar){
+                    Domain.Evento eventoDevolver = Domain.Evento.newBuilder()
+                            .setDuracion(evento.getDuracion())
+                            .setIntensidad(evento.getIntensidad())
+                            .setPosicion(evento.getPosicion())
+                            .build();
+                    secuenciaAgregar.addEvento(eventoDevolver);
+                }
+                //grpcResponse.addSecuenciaComponente(secuenciaAgregar);
             }
             return grpcResponse.build();
         }
