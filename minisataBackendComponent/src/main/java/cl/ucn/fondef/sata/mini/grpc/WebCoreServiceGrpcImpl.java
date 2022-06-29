@@ -102,6 +102,13 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         responseObserver.onCompleted(); //Terminar el proceso
     }
 
+    @Override
+    public void getSecuenciasComponente(IdElementoReq idElemento, StreamObserver<SecuenciasComponenteReply> responseObserver){
+        var grpcResponse = webCoreServiceGrpcEquipo.getSecuenciasComponente(idElemento, responseObserver);
+        responseObserver.onNext(grpcResponse);
+        responseObserver.onCompleted();
+    }
+
     // TODO: HACER EL INNER JOIN PARA OBTENER LAS "Secuencia" o eventos DE LA SIMULACION
     @Override
     public void getSimulacion(IdElementoReq idElemento, StreamObserver<SimulacionReply> responseObserver){

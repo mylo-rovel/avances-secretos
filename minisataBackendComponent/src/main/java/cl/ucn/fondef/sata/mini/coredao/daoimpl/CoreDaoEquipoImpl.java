@@ -9,6 +9,7 @@ import cl.ucn.fondef.sata.mini.grpc.Domain;
 import cl.ucn.fondef.sata.mini.model.ComponenteFisico;
 import cl.ucn.fondef.sata.mini.model.Pin;
 import cl.ucn.fondef.sata.mini.model.Placa;
+import cl.ucn.fondef.sata.mini.model.Secuencia;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -236,6 +237,15 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
         return (List<ComponenteFisico>) entityManager.createQuery(sqlQuery)
                 .setParameter("id_equipo", idElementoReq.getId())
                 .setParameter("tipo", "VALVULA")
+                .getResultList();
+    }
+
+    @Override
+    public List<Secuencia> getSecuenciasComponente(IdElementoReq idElementoReq){
+        //se obtienen las secuencias de la id de un equipo dado utilizando la id_equipo de componenteFisico
+        String sqlQuery = "FROM Secuencia s,ComponenteFisico c WHERE c.id_equipo = :id_equipo AND s.id_componente = c.id";
+        return (List<Secuencia>) entityManager.createQuery(sqlQuery)
+                .setParameter("id_equipo", idElementoReq.getId())
                 .getResultList();
     }
 

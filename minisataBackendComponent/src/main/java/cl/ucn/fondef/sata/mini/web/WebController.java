@@ -252,8 +252,7 @@ public class WebController {
     @RequestMapping(value = "api/equipos/secuencias/{idComponente}", method = RequestMethod.GET)
     // public String getSecuenciasComponente(@PathVariable long idComponente, @RequestHeader(value="Authorization") String jwt) {
     public String getSecuenciasComponente(@PathVariable long idComponente){
-//        return webCoreClientGrpcEquipo.getSecuenciasComponente(idComponente);
-        return "";
+        return webCoreClientGrpcEquipo.getSecuenciasComponente(idComponente);
     }
 
 

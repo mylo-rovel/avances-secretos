@@ -2,10 +2,7 @@ package cl.ucn.fondef.sata.mini.grpc.webcoreservice;
 
 import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoEquipo;
 import cl.ucn.fondef.sata.mini.grpc.Domain;
-import cl.ucn.fondef.sata.mini.model.ComponenteFisico;
-import cl.ucn.fondef.sata.mini.model.Equipo;
-import cl.ucn.fondef.sata.mini.model.Pin;
-import cl.ucn.fondef.sata.mini.model.Placa;
+import cl.ucn.fondef.sata.mini.model.*;
 import cl.ucn.fondef.sata.mini.utilities.JwtUtil;
 import cl.ucn.fondef.sata.mini.utilities.StringEnumTransformer;
 import io.grpc.stub.StreamObserver;
@@ -186,5 +183,20 @@ public class WebCoreServiceGrpcEquipo {
         this.addValvulasToReplyObject(grpcResponse, listaValvulasGuardadas);
 
         return grpcResponse.build();
+    }
+
+    public Domain.SecuenciasComponenteReply getSecuenciasComponente(Domain.IdElementoReq idRequest, StreamObserver<Domain.SecuenciasComponenteReply> responseObserver){
+        List<Secuencia> listaSecuencias = coreDaoEquipo.getSecuenciasComponente(idRequest);
+        if(listaSecuencias == null){
+            return Domain.SecuenciasComponenteReply.newBuilder().build();
+        }else{
+            Domain.SecuenciasComponenteReply.Builder grpcResponse = Domain.SecuenciasComponenteReply.newBuilder();
+            for(Secuencia secuencia : listaSecuencias){
+                //hice algo raro aqui, intenta escribir addSecuenciaComponente y revisa las opciones que te da en comparacion a los
+                //add de otros entity
+                grpcResponse.addSecuenciaComponente(secuencia);
+            }
+            return grpcResponse.build();
+        }
     }
 }

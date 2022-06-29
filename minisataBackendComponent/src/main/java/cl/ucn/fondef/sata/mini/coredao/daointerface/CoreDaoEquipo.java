@@ -9,6 +9,7 @@ import cl.ucn.fondef.sata.mini.model.Equipo;
 import cl.ucn.fondef.sata.mini.grpc.Domain.*;
 import cl.ucn.fondef.sata.mini.model.Pin;
 import cl.ucn.fondef.sata.mini.model.Placa;
+import cl.ucn.fondef.sata.mini.model.Secuencia;
 
 import java.util.List;
 
@@ -28,5 +29,7 @@ public interface CoreDaoEquipo {
     List<Equipo> getEquipos();
 
     List<ComponenteFisico> getValvulasEquipo(IdElementoReq idElementoReq);
+
+    List<Secuencia> getSecuenciasComponente(IdElementoReq idElementoReq);
 
 }
