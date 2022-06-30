@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.*;
  */
 @Slf4j
 @RestController
-//@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600, methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PATCH, RequestMethod.DELETE} )
-@CrossOrigin(origins = "*", maxAge = 3600, methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PATCH, RequestMethod.DELETE} )
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600, methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PATCH, RequestMethod.DELETE} )
+//@CrossOrigin(origins = "*", maxAge = 3600, methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PATCH, RequestMethod.DELETE} )
 public class WebController {
     // ESTE SERVIDOR ES EL PUENTE ENTRE EL WEBBROWSER Y EL "CENTRAL CORE"
     @Autowired
@@ -232,7 +232,7 @@ public class WebController {
      * @param idEquipo the id equipo
      * @return the valvulas equipo
      */
-// ***---- TESTEAR ----
+// ***---- CORREGIR => DEVUELVE UN EQUIPO ----
     //   rpc getValvulasEquipo(IdElementoReq) returns (ComponentesEquipoReply) {}
     @RequestMapping(value = "api/equipos/valvulas/{idEquipo}", method = RequestMethod.GET)
     // public String getValvulasEquipo(@PathVariable long idEquipo, @RequestHeader(value="Authorization") String jwt) {
