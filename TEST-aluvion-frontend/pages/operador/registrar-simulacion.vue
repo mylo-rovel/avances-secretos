@@ -7,7 +7,7 @@
     import SecuenciaButton from '~/components/SecuenciaButton.vue'
     import NavbarPag from '~/components/NavbarPag.vue'
     import Modal from '~/components/Modal.vue'
-    import * as d3 from "d3";
+    import d3 from "d3";
     
 
     export default Vue.extend({

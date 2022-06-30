@@ -1,7 +1,6 @@
 <script lang="js">
 
 import Vue from 'vue';
-import {mapState, mapMutations} from "vuex";
 import PageHeader from '~/components/PageHeader.vue'
 import SubmitButton from '~/components/SubmitButton.vue'
 import Modal from '~/components/Modal.vue'
@@ -16,12 +15,11 @@ export default Vue.extend({
       simulaciones: []
     };
   },
-  computed: mapState(["urlApi"]) ,
-  async fetch(){
-    this.simulaciones = await fetch(`${this.urlApi}/simulaciones`).then(res => {
-      console.log(res.json());
-      return res.json();
-    });
+  async fetch(context) {
+    const simulacionesRes = await context.$sataApi.get('/simulaciones/').catch(err => err);
+    const simulacionesObtenidas = simulacionesRes.data.simulacionAcotada_;
+    // console.log("this.data", this.methods)
+    this.methods.mergeSimulacionesObtenidas(simulacionesObtenidas);
   },
   head(){
     return{
@@ -33,7 +31,10 @@ export default Vue.extend({
     }
   },
   methods: {
-  
+    mergeSimulacionesObtenidas(simulacionesObtenidas) {
+      console.log(this)
+    }
+    ,
     //FUNCION EN LA QUE RELLENA LAS FILAS DE LA TABLA CON LOS DATOS DE SIMULACION (ID, NOMBRE, EQUIPO)
     async obtenerSimulacionesTabla(simulaciones){
       let tBodySimulaciones = document.getElementById("tBody-simulaciones");
@@ -91,9 +92,10 @@ export default Vue.extend({
       <div class="container-header">
           <PageHeader />
       </div>
-      <div class="container">
+        <div class="container">
         <div class="row my-4">
           <h4>Simulaciones</h4>       
+          {{simulaciones.length}}
         </div> 
         <div class="my-4 table-responsive">
           <table id="tablaSimulaciones" class=" tabla-simulacion table table-lifht table-bordered table-hover table-striped">

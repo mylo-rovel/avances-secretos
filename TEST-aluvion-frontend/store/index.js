@@ -3,8 +3,8 @@ import { secuenciasStateMethods } from "~/store/secuenciasStateMethods.js";
 // El estado corresponde
 export const state = () => ({
     // solo para entender cómo funciona el store o 'estado global'
-    counter:0,
-    
+    userToken: "1234567",
+
     urlApi: "http://192.168.43.73:8081/api",
     //192.168.43.73 emilio
     //10.20.109.227 red alumnos
@@ -60,16 +60,19 @@ export const state = () => ({
 // todo: obtener la cantidad de valvulas de un simulador para preparar la lista secuencias
 // todo: utilizar el indice 'currentSecuencia' para acceder a cada válvula (el boton de acceso a la
 // todo: tabla de eventos debe alterar este valor) de forma rápida
+{/* <button @click="() => getSimulaciones({$axios})">press me</button> */}
 export const actions = {
-
+    async getSimulaciones(context, {$sataApi}) {
+        const simulaciones = await $sataApi.get('/simulaciones/').catch(err => err);
+        context.commit("getSimulaciones", simulaciones);
+    },
 }
 
 export const mutations = {
-    // solo para entender cómo funciona el store o 'estado global'
-    increase_counter(state, increment = 1) {
-        state.counter += increment;
+    getSimulaciones(state, actionPayload) {
+        console.log(actionPayload);
     },
-    
+
     // esta sintaxis indica que estamos entregando las funciones del objeto secuenciasStateMethods
     // importado desde el archivo '~/store/secuenciasStateMethods.js' para ocuparlas dentro de este
     // objeto que manipula el estado. así mantenemos separadas las funciones según su pertinencia
