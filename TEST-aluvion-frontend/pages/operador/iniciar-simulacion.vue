@@ -8,15 +8,43 @@
 
 
     export default Vue.extend({
-    name: "MainOperadorPage",
-    components: { PageHeader, CancelButtom, SubmitButton},
-    data() {
+        name: "IniciarSimulacion",
+        components: { PageHeader, CancelButtom, SubmitButton},
+        data() {
             return {
             "cancelbutton": "cancelar",
             "submitbutton": "guardar",
-            "tituloPag": "Iniciar Simulación",
+            simulaciones: [],
+            equipoSeleccionado: "",
+            simulacionSeleccionada:""
             };
         },
+        // async fetch(){
+        //     this.simulaciones = await fetch(`${this.urlApi}/simulaciones`).then(res => {
+        //     console.log(res.json());
+        //     return res.json();
+        //     });
+        // },
+        methods: {
+            async getSimulaciones ({$axios}){//enviar peticion
+                 const serverPath = `${this.apiURL}/leddeldestino`;
+                const serverResponse = await $axios.$get(serverPath).catch(err => err);
+                if (serverResponse instanceof Error) {
+                    alert("ERROR. rayos :(", serverResponse)
+                    return false;
+                }
+                alert(serverResponse);
+                return true;
+            },
+            obtenerEquipos(){
+                var equipoActual = document.getElementById('select_equipoSimulacion').selectedIndex;
+                for(let i = 0; i < simulaciones.length; i++ ){
+                    document.getElementById('select_simulacion').value = simulaciones[equipoActual].nombre_;
+                }
+            },
+
+
+        }
     })
 </script>
     <template>
@@ -26,66 +54,28 @@
             </div>
             <div class="container-header">
                 <PageHeader/>
-            </div>
-            <!--<div class= "container">
-                <div class="cuadricula">
-                    <div class="my-4 text-center">
-                        <h2>Iniciar Simulación</h2>
-                    </div>
-                    <div class= "">        
-                        <form>
-                            <div class="row my-4"> 
-                                <label for="equipo_simulacion" class="col-form-label col-sm-4  ">Seleccione Equipo</label>
-                                <div class="col-sm-4">
-                                    <select id="equipo_simulacion" name="equipo_simulacion" class="form-select" aria-label="Simulador">
-                                        <option>Equipo simulador de lluvia</option>
-                                        <option>Equipo simulador 2.0</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row my-4">
-                                <label for="simulacion" class=" col-form-label col-sm-4">Seleccione Simulación</label>
-                                <div class="col-sm-4">
-                                    <select id="simulacion" name="simulacion" class="form-select" aria-label="Simulacion">
-                                        <option>Simulación 1</option>
-                                        <option>Simulación 2</option>
-                                    </select>
-                                </div>
-                            </div>
-                                <div class="contenido-botones row my-4">
-                                    <div class="col">
-                                        <NuxtLink to="/menu-operador"><CancelButtom :cancelbutton = "cancelbutton"/></NuxtLink>
-                                    </div>
-                                    <div class="col">
-                                        <NuxtLink to="/operador/iniciar-simulacion"><SubmitButton :submitbutton = "submitbutton"/></NuxtLink>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>-->           
+            </div>          
             <div class= "container">
                 <div>
                     <div class="row my-4">
                         <h3>Iniciar Simulación</h3>
                     </div>
                     <div class="row">
-                        <form>
+                        <form id="form_iniciarSimulacion" method="post">
                             <div class="my-4 form-group row">
-                                <label for="equipo-simulacion" class="col-sm-4 col-form-label ">Seleccione un equipo</label>
+                                <label for="equipo-simulacion" class="col-sm-4 col-form-label " >Seleccione un equipo</label>
                                 <div class="col-sm-6">
-                                    <select id="equipo-simulacion" name="equipo-simulacion" class="form-select" aria-label="Simulador" required>
-                                        <option value="" disabled selected></option>
+                                    <select id="select_equipoSimulacion" name="equipo-simulacion" class="form-select" @click="obtenerEquipos()" aria-label="Equipo" required>
+                                        <!--<option value="" disabled selected></option>
                                             <option>Equipo simulador de lluvia </option>
-                                            <option>Simulador 2.0</option>
+                                            <option>Simulador 2.0</option>-->
                                     </select>
                                 </div>
                             </div>
                             <div class="my-4 form-group row">
                                 <label for="simulacion" class="col-sm-4 col-form-label ">Seleccione una simulación</label>
                                 <div class="col-sm-6">
-                                    <select id="simulacion" name="simulacion" class="form-select" aria-label="Simulacion" required>
+                                    <select id="select_simulacion" name="simulacion" class="form-select" aria-label="Simulacion" required>
                                         <option value="" disabled selected></option>
                                             <option>Simulación 1</option>
                                             <option>Simulación 2</option>

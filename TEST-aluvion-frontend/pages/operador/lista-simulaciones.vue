@@ -119,7 +119,7 @@ export default Vue.extend({
                     <div class="input-group flex-nowrap">
                       <label class="col-sm-4 col-form-label" id="addon-wrapping">ID Simulación</label>
                       <div class="col-sm-4">
-                        <input id="ver_id" name="id" type="text" class="form-control-plaintext" aria-label="nombre_mascota_add" aria-describedby="addon-wrapping" readonly>
+                        <input id="ver_id" name="id" type="text" class="form-control-plaintext" aria-describedby="addon-wrapping" readonly>
                       </div>  
                     </div>
                   </div>
@@ -127,7 +127,7 @@ export default Vue.extend({
                     <div class="input-group flex-nowrap">
                       <label class="col-sm-4 col-form-label" id="addon-wrapping">Nombre Simulación</label>
                       <div class="col-sm-4">
-                        <input id="ver_nombre" name="nombre" type="text" class="form-control-plaintext" aria-label="nombre_mascota_add" aria-describedby="addon-wrapping" readonly>
+                        <input id="ver_nombre" name="nombre" type="text" class="form-control-plaintext" aria-describedby="addon-wrapping" readonly>
                       </div>
                     </div>
                   </div>
@@ -135,7 +135,7 @@ export default Vue.extend({
                     <div class="input-group flex-nowrap">
                       <label class="col-sm-4 col-form-label" id="addon-wrapping">Equipo</label>
                       <div class="col-sm-4">
-                        <input id="ver_equipo" name="equipo" type="text" class="form-control-plaintext" aria-label="nombre_mascota_add" aria-describedby="addon-wrapping" readonly>
+                        <input id="ver_equipo" name="equipo" type="text" class="form-control-plaintext" aria-describedby="addon-wrapping" readonly>
                       </div>
                     </div>
                   </div>
@@ -148,7 +148,7 @@ export default Vue.extend({
                     <div class="input-group flex-nowrap">
                       <label class="col-sm-4 col-form-label" id="addon-wrapping">Descripción</label>
                       <div class="col-sm-4">
-                        <input id="ver_descripcion" name="descripcion" type="text" class="form-control-plaintext" aria-label="nombre_mascota_add" aria-describedby="addon-wrapping" readonly>
+                        <input id="ver_descripcion" name="descripcion" type="text" class="form-control-plaintext"  aria-describedby="addon-wrapping" readonly>
                       </div>  
                     </div>
                   </div>
@@ -156,7 +156,7 @@ export default Vue.extend({
                     <div class="input-group flex-nowrap">
                       <label class="col-sm-4 col-form-label" id="addon-wrapping">Estado</label>
                       <div class="col-sm-4">
-                        <input id="ver_estado" name="estado" type="text" class="form-control-plaintext" aria-label="nombre_mascota_add" aria-describedby="addon-wrapping" readonly>
+                        <input id="ver_estado" name="estado" type="text" class="form-control-plaintext"  aria-describedby="addon-wrapping" readonly>
                       </div>
                     </div>
                   </div>           
