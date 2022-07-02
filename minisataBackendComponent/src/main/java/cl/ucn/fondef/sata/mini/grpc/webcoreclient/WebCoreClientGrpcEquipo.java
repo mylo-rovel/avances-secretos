@@ -39,12 +39,12 @@ public class WebCoreClientGrpcEquipo extends WebCoreClientGrpcBase {
         }
 
 
-        // ... "repeated ComponenteFisico componente_fisico = 7;" A ENVIAR
-        List<GrpcComponenteFisico> listaComponentesRecibidos = equipoRecibido.getEquipo().getListaComponentesFisicos();
+        // ... "repeated Componente componente_fisico = 7;" A ENVIAR
+        List<GrpcComponente> listaComponentesRecibidos = equipoRecibido.getEquipo().getListaComponentesFisicos();
         for (int i = 0; i < listaComponentesRecibidos.size(); i++) {
-            GrpcComponenteFisico componenteRecibido = listaComponentesRecibidos.get(i);
+            GrpcComponente componenteRecibido = listaComponentesRecibidos.get(i);
 
-            Domain.ComponenteFisico.Builder componenteEnviar = Domain.ComponenteFisico.newBuilder()
+            Domain.Componente.Builder componenteEnviar = Domain.Componente.newBuilder()
                     .setNombre(componenteRecibido.getNombre())
                     .setDescripcion(componenteRecibido.getDescripcion())
                     .setUrl(componenteRecibido.getUrl())
@@ -63,7 +63,7 @@ public class WebCoreClientGrpcEquipo extends WebCoreClientGrpcBase {
                         .build();
                 componenteEnviar.addPinComponente(pinEnviar);
             }
-            equipoGrpc.addComponenteFisico(componenteEnviar);
+            equipoGrpc.addComponente(componenteEnviar);
         }
 
         Domain.EquipoEntityReq equipoEntityReq = Domain.EquipoEntityReq.newBuilder()
@@ -130,7 +130,7 @@ public class WebCoreClientGrpcEquipo extends WebCoreClientGrpcBase {
      * @return the string
      */
 // Esto es un stream
-    public String uploadArchivo(GrpcArchivosEquipoEntityReq archivoNuevo) {
+    public String uploadArchivo(GrpcArchivosEntityReq archivoNuevo) {
         return "";
     }
 

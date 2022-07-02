@@ -17,8 +17,8 @@ import javax.persistence.*;
 @ToString
 @EqualsAndHashCode
 @Entity
-@Table(name = "componentefisico")
-public class ComponenteFisico {
+@Table(name = "componente")
+public class Componente {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)

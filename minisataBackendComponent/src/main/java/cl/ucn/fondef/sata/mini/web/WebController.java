@@ -207,8 +207,8 @@ public class WebController {
 // ***---- IMPLEMENTAR ----
     //   rpc uploadArchivo(stream ArchivosEquipoEntityReq)  returns (MensajeReply){}
     @RequestMapping(value = "api/equipos/archivo", method = RequestMethod.POST)
-    // public String uploadArchivo(@RequestBody GrpcArchivosEquipoEntityReq archivoNuevo, @RequestHeader(value="Authorization") String jwt) {
-    public String uploadArchivo(@RequestBody GrpcArchivosEquipoEntityReq archivoNuevo){
+    // public String uploadArchivo(@RequestBody GrpcArchivosEntityReq archivoNuevo, @RequestHeader(value="Authorization") String jwt) {
+    public String uploadArchivo(@RequestBody GrpcArchivosEntityReq archivoNuevo){
         return webCoreClientGrpcEquipo.uploadArchivo(archivoNuevo);
     }
 
@@ -356,12 +356,12 @@ public class WebController {
         objetoRetornar.addEnumList("RolUsuario", Domain.UsuarioEntity.RolUsuario.values());
         objetoRetornar.addEnumList("EstadoUsuario", Domain.UsuarioEntity.EstadoUsuario.values());
         objetoRetornar.addEnumList("TipoRegistro", Domain.Registro.TipoRegistro.values());
-        objetoRetornar.addEnumList("TipoComponente", Domain.ComponenteFisico.TipoComponente.values());
+        objetoRetornar.addEnumList("TipoComponente", Domain.Componente.TipoComponente.values());
         objetoRetornar.addEnumList("ConexionComponente", Domain.Pin.ConexionPin.values());
-        objetoRetornar.addEnumList("EstadoComponente", Domain.ComponenteFisico.EstadoComponente.values());
+        objetoRetornar.addEnumList("EstadoComponente", Domain.Componente.EstadoComponente.values());
         objetoRetornar.addEnumList("EstadoEquipo", Domain.EstadoEquipo.values());
         objetoRetornar.addEnumList("TipoPlaca", Domain.TipoPlaca.values());
-        objetoRetornar.addEnumList("TipoArchivo", Domain.ArchivoEquipoEntityReq.TipoArchivo.values());
+        objetoRetornar.addEnumList("TipoArchivo", Domain.ArchivoEntityReq.TipoArchivo.values());
 
         return objetoRetornar;
     }

@@ -17,7 +17,7 @@ import java.util.List;
  */
 @ToString
 @EqualsAndHashCode
-public class GrpcComponenteFisico {
+public class GrpcComponente {
 
     @Getter
     @Setter
@@ -34,11 +34,11 @@ public class GrpcComponenteFisico {
 
     @Getter
     @Setter
-    private Domain.ComponenteFisico.EstadoComponente estado;
+    private Domain.Componente.EstadoComponente estado;
 
     @Getter
     @Setter
-    private Domain.ComponenteFisico.TipoComponente tipo;
+    private Domain.Componente.TipoComponente tipo;
 
     @Getter
     @Setter

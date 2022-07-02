@@ -6,7 +6,7 @@ package cl.ucn.fondef.sata.mini.coredao.daoimpl;
 
 import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoEquipo;
 import cl.ucn.fondef.sata.mini.grpc.Domain;
-import cl.ucn.fondef.sata.mini.model.ComponenteFisico;
+import cl.ucn.fondef.sata.mini.model.Componente;
 import cl.ucn.fondef.sata.mini.model.Pin;
 import cl.ucn.fondef.sata.mini.model.Placa;
 import lombok.extern.slf4j.Slf4j;
@@ -116,22 +116,22 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
         return placasIdHashMap;
     }
 
-    private ComponenteFisico guardarComponente(Domain.ComponenteFisico componenteRecibido, long idEquipo, String nombreEquipo) {
-        ComponenteFisico componenteFisico = new ComponenteFisico();
-        componenteFisico.setNombre(     componenteRecibido.getNombre() + "_" + nombreEquipo);
-        componenteFisico.setDescripcion(componenteRecibido.getDescripcion());
-        componenteFisico.setUrl(        componenteRecibido.getUrl());
-        componenteFisico.setEstado(     componenteRecibido.getEstado().name());
-        componenteFisico.setTipo(       componenteRecibido.getTipo().name());
-        componenteFisico.setTipoPlaca(  componenteRecibido.getTipoPlaca().name());
-        componenteFisico.setIdEquipo(   idEquipo);
+    private Componente guardarComponente(Domain.ComponenteFisico componenteRecibido, long idEquipo, String nombreEquipo) {
+        Componente componente = new Componente();
+        componente.setNombre(     componenteRecibido.getNombre() + "_" + nombreEquipo);
+        componente.setDescripcion(componenteRecibido.getDescripcion());
+        componente.setUrl(        componenteRecibido.getUrl());
+        componente.setEstado(     componenteRecibido.getEstado().name());
+        componente.setTipo(       componenteRecibido.getTipo().name());
+        componente.setTipoPlaca(  componenteRecibido.getTipoPlaca().name());
+        componente.setIdEquipo(   idEquipo);
 
-        entityManager.persist(componenteFisico);
-        return componenteFisico;
+        entityManager.persist(componente);
+        return componente;
     }
     private void guardarPines(Domain.ComponenteFisico componenteTurno, String nombreComponente, HashMap<String, Long> placasIdHashMap) {
         String queryComponente = "FROM ComponenteFisico WHERE nombre = :nombre";
-        List<ComponenteFisico> componentesGuardados = entityManager.createQuery(queryComponente).setParameter("nombre", nombreComponente).getResultList();
+        List<Componente> componentesGuardados = entityManager.createQuery(queryComponente).setParameter("nombre", nombreComponente).getResultList();
 
         // for loop para guardar los pines
         List<Domain.Pin> listaPines = componenteTurno.getPinComponenteList();
@@ -151,8 +151,8 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
         // for loop para guardar CADA componente
         List<Domain.ComponenteFisico> listaComponentes = equipoEntityReq.getEquipo().getComponenteFisicoList();
         for (int i = 0; i < listaComponentes.size(); i++) {
-            ComponenteFisico componenteFisico = this.guardarComponente(listaComponentes.get(i), idEquipo, nombreEquipo);
-            this.guardarPines(listaComponentes.get(i), componenteFisico.getNombre(), placasIdHashMap);
+            Componente componente = this.guardarComponente(listaComponentes.get(i), idEquipo, nombreEquipo);
+            this.guardarPines(listaComponentes.get(i), componente.getNombre(), placasIdHashMap);
         }
     }
 
@@ -204,9 +204,9 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
     }
 
     @Override
-    public List<ComponenteFisico> getComponentesFisicos(IdElementoReq idElementoReq){
+    public List<Componente> getComponentesFisicos(IdElementoReq idElementoReq){
         String sqlQuery = "FROM ComponenteFisico WHERE id_equipo = :id_equipo";
-        return (List<ComponenteFisico>) entityManager.createQuery(sqlQuery)
+        return (List<Componente>) entityManager.createQuery(sqlQuery)
                 .setParameter("id_equipo", idElementoReq.getId()).getResultList();
     }
 
@@ -231,9 +231,9 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
     }
 
     @Override
-    public List<ComponenteFisico> getValvulasEquipo(IdElementoReq idElementoReq){
+    public List<Componente> getValvulasEquipo(IdElementoReq idElementoReq){
         String sqlQuery = "FROM ComponenteFisico WHERE id_equipo = :id_equipo AND tipo = :tipo";
-        return (List<ComponenteFisico>) entityManager.createQuery(sqlQuery)
+        return (List<Componente>) entityManager.createQuery(sqlQuery)
                 .setParameter("id_equipo", idElementoReq.getId())
                 .setParameter("tipo", "VALVULA")
                 .getResultList();

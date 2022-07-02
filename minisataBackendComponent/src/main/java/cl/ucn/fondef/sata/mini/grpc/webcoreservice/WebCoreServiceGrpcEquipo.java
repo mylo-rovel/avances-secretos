@@ -2,17 +2,15 @@ package cl.ucn.fondef.sata.mini.grpc.webcoreservice;
 
 import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoEquipo;
 import cl.ucn.fondef.sata.mini.grpc.Domain;
-import cl.ucn.fondef.sata.mini.model.ComponenteFisico;
+import cl.ucn.fondef.sata.mini.model.Componente;
 import cl.ucn.fondef.sata.mini.model.Equipo;
 import cl.ucn.fondef.sata.mini.model.Pin;
 import cl.ucn.fondef.sata.mini.model.Placa;
-import cl.ucn.fondef.sata.mini.utilities.JwtUtil;
 import cl.ucn.fondef.sata.mini.utilities.StringEnumTransformer;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -94,10 +92,10 @@ public class WebCoreServiceGrpcEquipo {
     }
 
     private Domain.EquipoEntity.Builder addComponentesYPinesToEquipo(Domain.EquipoEntity.Builder equipoEnte, Domain.IdElementoReq idEquipoReq) {
-        List<ComponenteFisico> componentesGuardados = coreDaoEquipo.getComponentesFisicos(idEquipoReq);
-        // ITERAR PARA CREAR CADA PROTOBUF DE "ComponenteFisico"
+        List<Componente> componentesGuardados = coreDaoEquipo.getComponentesFisicos(idEquipoReq);
+        // ITERAR PARA CREAR CADA PROTOBUF DE "Componente"
         for (int i = 0; i < componentesGuardados.size(); i++) {
-            Domain.ComponenteFisico.Builder componenteEnviar = Domain.ComponenteFisico.newBuilder()
+            Domain.Componente.Builder componenteEnviar = Domain.Componente.newBuilder()
                     .setId(         componentesGuardados.get(i).getId())
                     .setNombre(     componentesGuardados.get(i).getNombre())
                     .setDescripcion(componentesGuardados.get(i).getDescripcion())
@@ -118,7 +116,7 @@ public class WebCoreServiceGrpcEquipo {
                         .build();
                 componenteEnviar.addPinComponente(pinEnviar);
             }
-            equipoEnte.addComponenteFisico(componenteEnviar);
+            equipoEnte.addComponente(componenteEnviar);
         }
         return equipoEnte;
     }
@@ -167,19 +165,19 @@ public class WebCoreServiceGrpcEquipo {
     }
 
 
-    private void addValvulasToReplyObject (Domain.ComponentesEquipoReply.Builder grpcResponse, List<ComponenteFisico> listaValvulasGuardadas) {
+    private void addValvulasToReplyObject (Domain.ComponentesEquipoReply.Builder grpcResponse, List<Componente> listaValvulasGuardadas) {
         for (int i = 0; i < listaValvulasGuardadas.size(); i++) {
-            Domain.ComponenteFisico componenteFisico = Domain.ComponenteFisico.newBuilder()
+            Domain.Componente componenteFisico = Domain.Componente.newBuilder()
                     .setId(listaValvulasGuardadas.get(i).getId())
                     .setNombre(listaValvulasGuardadas.get(i).getNombre())
                     .setEstado(stringEnumTransformer.getEnumEstadoComponente(listaValvulasGuardadas.get(i).getEstado()))
                     .build();
-            grpcResponse.addComponenteFisico(componenteFisico);
+            grpcResponse.addComponente(componenteFisico);
         }
     }
 
     public Domain.ComponentesEquipoReply getValvulasEquipo(Domain.IdElementoReq idRequest, StreamObserver<Domain.ComponentesEquipoReply> responseObserver){
-        List<ComponenteFisico> listaValvulasGuardadas = coreDaoEquipo.getValvulasEquipo(idRequest);
+        List<Componente> listaValvulasGuardadas = coreDaoEquipo.getValvulasEquipo(idRequest);
         if (listaValvulasGuardadas == null) { return Domain.ComponentesEquipoReply.newBuilder().build(); }
 
         Domain.ComponentesEquipoReply.Builder grpcResponse = Domain.ComponentesEquipoReply.newBuilder();

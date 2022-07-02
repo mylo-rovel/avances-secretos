@@ -20,8 +20,8 @@ service WebCoreCommuService {
   rpc updateEquipo(EquipoEntityReq)  returns (MensajeReply){}
   rpc getEquipo(IdElementoReq)  returns (EquipoEntityReply) {}
   rpc getEquipos(EmptyReq)  returns (EquiposEntityReply) {}
-  rpc uploadArchivo(stream ArchivosEquipoEntityReq)  returns (MensajeReply){}
-  rpc getArchivos(IdElementoReq)  returns (ArchivosEquipoEntityReply){}
+  rpc uploadArchivo(stream ArchivosEntityReq)  returns (MensajeReply){}
+  rpc getArchivos(IdElementoReq)  returns (ArchivosEntityReply){}
   rpc getValvulasEquipo(IdElementoReq) returns (ComponentesEquipoReply) {}
   rpc getSecuenciasComponente(IdElementoReq) returns (SecuenciasComponenteEquipoReply) {}
 

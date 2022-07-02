@@ -4,7 +4,7 @@
 
 package cl.ucn.fondef.sata.mini.coredao.daointerface;
 
-import cl.ucn.fondef.sata.mini.model.ComponenteFisico;
+import cl.ucn.fondef.sata.mini.model.Componente;
 import cl.ucn.fondef.sata.mini.model.Equipo;
 import cl.ucn.fondef.sata.mini.grpc.Domain.*;
 import cl.ucn.fondef.sata.mini.model.Pin;
@@ -19,7 +19,7 @@ public interface CoreDaoEquipo {
 
     List<Placa> getPlacas(IdElementoReq idEquipo);
 
-    List<ComponenteFisico> getComponentesFisicos(IdElementoReq idElementoReq);
+    List<Componente> getComponentesFisicos(IdElementoReq idElementoReq);
 
     List<Pin> getPines(long IdComponente);
 
@@ -27,6 +27,6 @@ public interface CoreDaoEquipo {
 
     List<Equipo> getEquipos();
 
-    List<ComponenteFisico> getValvulasEquipo(IdElementoReq idElementoReq);
+    List<Componente> getValvulasEquipo(IdElementoReq idElementoReq);
 
 }

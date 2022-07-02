@@ -12,9 +12,9 @@ import java.util.List;
  */
 @ToString
 @EqualsAndHashCode
-public class GrpcArchivosEquipoEntityReply {
+public class GrpcArchivosEntityReply {
 
     @Getter
     @Setter
-    private List<GrpcArchivoEquipoEntity> archivo;
+    private List<GrpcArchivoEntity> archivo;
 }

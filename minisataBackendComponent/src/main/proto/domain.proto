@@ -121,7 +121,7 @@ enum TipoPlaca {
   ESP_32 = 1;
 }
 
-message ComponenteFisico {
+message Componente {
   enum EstadoComponente {
     ACTIVO = 0;
     INACTIVO = 1;
@@ -153,7 +153,7 @@ message Placa {
 }
 
 message ComponentesEquipoReply {
-  repeated ComponenteFisico componente_fisico = 1;
+  repeated Componente componente = 1;
 }
 
 enum EstadoEquipo {
@@ -168,7 +168,7 @@ message EquipoEntity {
   string url_repositorio = 4;
   EstadoEquipo estado = 5;
   repeated Placa placa = 6;
-  repeated ComponenteFisico componente_fisico = 7;
+  repeated Componente componente = 7;
 }
 
 message EquipoEntityReq {
@@ -180,7 +180,7 @@ message EquipoEntityReply {
   EquipoEntity equipo = 1;
 }
 
-message ArchivoEquipoEntityReq {
+message ArchivoEntityReq {
   enum TipoArchivo {
     PNG  = 0;
     PDF  = 1;
@@ -193,12 +193,12 @@ message ArchivoEquipoEntityReq {
   TipoArchivo tipo_archivo = 3;
 }
 
-message ArchivosEquipoEntityReq {
-  repeated ArchivoEquipoEntityReq archivo = 1;
+message ArchivosEntityReq {
+  repeated ArchivoEntityReq archivo = 1;
 }
 
-message ArchivosEquipoEntityReply {
-  repeated ArchivoEquipoEntityReq archivo = 1;
+message ArchivosEntityReply {
+  repeated ArchivoEntityReq archivo = 1;
 }
 
 message EquipoEntityAcotado {

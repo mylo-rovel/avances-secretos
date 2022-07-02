@@ -13,7 +13,7 @@ import java.io.File;
  */
 @ToString
 @EqualsAndHashCode
-public class GrpcArchivoEquipoEntity {
+public class GrpcArchivoEntity {
 
     @Getter
     @Setter
