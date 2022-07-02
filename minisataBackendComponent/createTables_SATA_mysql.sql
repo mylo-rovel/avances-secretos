@@ -47,7 +47,7 @@ CREATE TABLE equipo
     FOREIGN KEY (id_configurador) REFERENCES usuario (id)
 );
 
-CREATE TABLE archivoequipo
+CREATE TABLE archivo
 (
     id                  bigint(20)      NOT NULL AUTO_INCREMENT,
     id_equipo           bigint(20)      NOT NULL,
@@ -93,7 +93,7 @@ CREATE TABLE ejecucion
 );
 
 
-CREATE TABLE componentefisico
+CREATE TABLE componente
 (
     id                  bigint(20)      NOT NULL AUTO_INCREMENT,
     id_equipo           bigint(20)      NOT NULL,
@@ -119,7 +119,7 @@ CREATE TABLE pin
     conexion            varchar(20)     NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (id_placa) REFERENCES placa (id),
-    FOREIGN KEY (id_componente) REFERENCES componentefisico (id)
+    FOREIGN KEY (id_componente) REFERENCES componente (id)
 );
 
 CREATE TABLE secuencia
@@ -127,7 +127,7 @@ CREATE TABLE secuencia
     id                  bigint(20)         NOT NULL AUTO_INCREMENT,
     id_componente       bigint(20)         NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (id_componente) REFERENCES componentefisico (id)
+    FOREIGN KEY (id_componente) REFERENCES componente (id)
 );
 
 CREATE TABLE evento
@@ -151,5 +151,5 @@ CREATE TABLE simulacioncomponente
     id_componente       bigint(20)      NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (id_simulacion) REFERENCES simulacion (id),
-    FOREIGN KEY (id_componente) REFERENCES componentefisico (id)
+    FOREIGN KEY (id_componente) REFERENCES componente (id)
 );

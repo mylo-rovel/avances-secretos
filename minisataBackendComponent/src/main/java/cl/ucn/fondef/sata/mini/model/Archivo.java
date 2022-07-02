@@ -1,6 +1,5 @@
 package cl.ucn.fondef.sata.mini.model;
 
-import cl.ucn.fondef.sata.mini.grpc.Domain;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,8 +14,8 @@ import java.io.File;
 @ToString
 @EqualsAndHashCode
 @Entity
-@Table(name = "archivoequipo")
-public class ArchivoEquipo {
+@Table(name = "archivo")
+public class Archivo {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
