@@ -116,7 +116,7 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
         return placasIdHashMap;
     }
 
-    private Componente guardarComponente(Domain.ComponenteFisico componenteRecibido, long idEquipo, String nombreEquipo) {
+    private Componente guardarComponente(Domain.Componente componenteRecibido, long idEquipo, String nombreEquipo) {
         Componente componente = new Componente();
         componente.setNombre(     componenteRecibido.getNombre() + "_" + nombreEquipo);
         componente.setDescripcion(componenteRecibido.getDescripcion());
@@ -129,7 +129,7 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
         entityManager.persist(componente);
         return componente;
     }
-    private void guardarPines(Domain.ComponenteFisico componenteTurno, String nombreComponente, HashMap<String, Long> placasIdHashMap) {
+    private void guardarPines(Domain.Componente componenteTurno, String nombreComponente, HashMap<String, Long> placasIdHashMap) {
         String queryComponente = "FROM ComponenteFisico WHERE nombre = :nombre";
         List<Componente> componentesGuardados = entityManager.createQuery(queryComponente).setParameter("nombre", nombreComponente).getResultList();
 
@@ -149,7 +149,7 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
 
     private void guardarComponentesYPines ( HashMap<String, Long> placasIdHashMap, EquipoEntityReq equipoEntityReq, long idEquipo, String nombreEquipo) {
         // for loop para guardar CADA componente
-        List<Domain.ComponenteFisico> listaComponentes = equipoEntityReq.getEquipo().getComponenteFisicoList();
+        List<Domain.Componente> listaComponentes = equipoEntityReq.getEquipo().getComponenteList();
         for (int i = 0; i < listaComponentes.size(); i++) {
             Componente componente = this.guardarComponente(listaComponentes.get(i), idEquipo, nombreEquipo);
             this.guardarPines(listaComponentes.get(i), componente.getNombre(), placasIdHashMap);
