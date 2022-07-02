@@ -12,7 +12,7 @@ import java.util.List;
  * The type Web core client grpc simulacion.
  */
 @Service
-public class WebCoreClientGrpcSimulacion extends WebCoreClientGrpcBase {
+public final class WebCoreClientGrpcSimulacion extends WebCoreClientGrpcBase {
 
     /**
      * Get simulacion string.

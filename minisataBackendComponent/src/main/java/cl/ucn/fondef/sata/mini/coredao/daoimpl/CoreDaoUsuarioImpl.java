@@ -125,6 +125,9 @@ public class CoreDaoUsuarioImpl implements CoreDaoUsuario {
     public String updateUsuario(UsuarioEntityReq usuarioEntityReq){
         String sqlQuery = "FROM Usuario WHERE rut = :rut";
         List listaUsuarios = entityManager.createQuery(sqlQuery).setParameter("rut", usuarioEntityReq.getUsuario().getRut()).getResultList();
+        if (listaUsuarios.isEmpty()) {
+            return "No se pudo actualizar. No existe el usuario";
+        }
         Usuario usuarioEncontrado = (Usuario) listaUsuarios.get(0);
 
         Usuario usuarioEditar = entityManager.find(Usuario.class, usuarioEncontrado.getId());
@@ -150,8 +153,13 @@ public class CoreDaoUsuarioImpl implements CoreDaoUsuario {
     @Override
     public Usuario getUsuario(RutEntityReq rutEntityReq){
         String sqlQuery = "FROM Usuario WHERE rut = :rut";
-        return (Usuario) entityManager.createQuery(sqlQuery)
-                .setParameter("rut", rutEntityReq.getRut()).getResultList().get(0);
+        List listaResultado = entityManager.createQuery(sqlQuery)
+                .setParameter("rut", rutEntityReq.getRut()).getResultList();
+        if(listaResultado.isEmpty()) {
+            log.warn("La lista no contiene elementos");
+            return null;
+        }
+        return (Usuario) listaResultado.get(0);
     }
 
     @Override

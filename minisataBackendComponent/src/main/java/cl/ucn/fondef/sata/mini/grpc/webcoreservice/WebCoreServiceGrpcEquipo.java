@@ -147,7 +147,7 @@ public class WebCoreServiceGrpcEquipo {
         List<Equipo> listaEquiposGuardados = coreDaoEquipo.getEquipos();
         Domain.EquiposEntityReply.Builder listaRetornar = Domain.EquiposEntityReply.newBuilder();
 
-        if (listaRetornar == null) {
+        if (listaEquiposGuardados == null) {
             return listaRetornar.build();
         }
 

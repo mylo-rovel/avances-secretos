@@ -13,7 +13,7 @@ import lombok.ToString;
 import java.util.List;
 
 /**
- * The type Grpc componente fisico.
+ * The type Grpc componente.
  */
 @ToString
 @EqualsAndHashCode

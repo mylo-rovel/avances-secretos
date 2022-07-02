@@ -33,14 +33,12 @@ public class WebCoreServiceGrpcSimulacion {
     public Domain.SimulacionReply getSimulacion(Domain.IdElementoReq idElemento, StreamObserver<Domain.SimulacionReply> responseObserver){
         // Obtener la simulacion desde la base de datos
         Simulacion simulacionGuardada = coreDaoSimulacion.getSimulacion(idElemento);
-
         if (simulacionGuardada == null) {
             return Domain.SimulacionReply.newBuilder().build();
         }
 
-        Domain.IdElementoReq idEquipo = Domain.IdElementoReq.newBuilder().setId(simulacionGuardada.getId()).build();
+        Domain.IdElementoReq idEquipo = Domain.IdElementoReq.newBuilder().setId(simulacionGuardada.getIdEquipo()).build();
         Equipo equipoAsociado = coreDaoEquipo.getEquipo(idEquipo);
-
         Domain.SimulacionReply simulacionRetornar = Domain.SimulacionReply.newBuilder()
                 .setId(simulacionGuardada.getId())
                 .setNombre(simulacionGuardada.getNombre())

@@ -29,14 +29,13 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
     @Override
     public Simulacion getSimulacion(IdElementoReq idElementoReq){
         String sqlQuery = "FROM Simulacion WHERE id = :idSimulacion";
-
         List listaResultado = entityManager.createQuery(sqlQuery)
                 .setParameter("idSimulacion", idElementoReq.getId()).getResultList();
-        if(listaResultado.isEmpty()){
+        if(listaResultado.isEmpty()) {
+            log.warn("La lista no contiene elementos");
             return null;
-        }else{
-            return (Simulacion) listaResultado.get(0);
         }
+        return (Simulacion) listaResultado.get(0);
     }
 
     @Override
@@ -47,9 +46,7 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
         if(listaResultado.isEmpty()){
             log.warn("La lista no contiene elementos");
             return null;
-        }else{
-            return listaResultado;
         }
-
+        return listaResultado;
     }
 }

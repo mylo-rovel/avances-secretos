@@ -232,7 +232,6 @@ public class WebController {
      * @param idEquipo the id equipo
      * @return the valvulas equipo
      */
-// ***---- TESTEAR ----
     //   rpc getValvulasEquipo(IdElementoReq) returns (ComponentesEquipoReply) {}
     @RequestMapping(value = "api/equipos/valvulas/{idEquipo}", method = RequestMethod.GET)
     // public String getValvulasEquipo(@PathVariable long idEquipo, @RequestHeader(value="Authorization") String jwt) {
@@ -261,7 +260,7 @@ public class WebController {
      * @param id the id
      * @return the simulacion
      */
-    // ***---- ACTUALIZAR ----
+    // ***---- ACTUALIZAR: AGREGAR AGUA CAIDA Y SECUENCIAS ----
 //   rpc getSimulacion(IdElementoReq) returns (SimulacionReply){}
     @RequestMapping(value = "api/simulaciones/{id}", method = RequestMethod.GET)
     // public String getSimulacion(@PathVariable long id, @RequestHeader(value="Authorization") String jwt){
@@ -274,7 +273,7 @@ public class WebController {
      *
      * @return the simulaciones
      */
-    // ***---- ACTUALIZAR ----
+    // ***---- ACTUALIZAR: ARREGLAR DATO AGUA CAIDA ----
 //   rpc getSimulaciones(EmptyReq) returns (SimulacionesReply){}
     @RequestMapping(value = "api/simulaciones", method = RequestMethod.GET)
     // public String getSimulaciones(@RequestHeader(value="Authorization") String jwt) {
@@ -289,7 +288,7 @@ public class WebController {
      * @param simulacionNueva the simulacion nueva
      * @return the string
      */
-// ***---- IMPLEMENTAR ----
+// ***---- IMPLEMENTAR: TODO: ARREGLAR DOMAIN.PROTO => Sólo recibimos equipo y simulacion ----
     //   rpc startSimulacion(SimulacionReq) returns (MensajeReply){}
     @RequestMapping(value = "api/simulaciones", method = RequestMethod.POST)
     // public String startSimulacion(@RequestBody GrpcSimulacionReq simulacionNueva, @RequestHeader(value="Authorization") String jwt) {
@@ -335,7 +334,6 @@ public class WebController {
      * @param rut the rut
      * @return the registros
      */
-// ***---- TESTEAR ----
     //   rpc getRegistros(RutEntityReq) returns (RegistrosReply){}
     @RequestMapping(value = "api/registros/{rut}", method = RequestMethod.GET)
     // public String getRegistros(@PathVariable String rut, @RequestHeader(value="Authorization") String jwt) {

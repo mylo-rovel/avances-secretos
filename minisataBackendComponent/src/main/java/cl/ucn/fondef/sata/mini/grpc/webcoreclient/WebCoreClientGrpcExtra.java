@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
  * The type Web core client grpc extra.
  */
 @Service
-public class WebCoreClientGrpcExtra extends WebCoreClientGrpcBase{
+public final class WebCoreClientGrpcExtra extends WebCoreClientGrpcBase{
     /**
      * Gets lectura sensores.
      *
@@ -21,11 +21,11 @@ public class WebCoreClientGrpcExtra extends WebCoreClientGrpcBase{
     /**
      * Gets registros.
      *
-     * @param rut the rut
+     * @param rutUsuario the rut
      * @return the registros
      */
-    public String getRegistros(String rut) {
-        Domain.RutEntityReq rutEntityReq = Domain.RutEntityReq.newBuilder().setRut(rut).build();
+    public String getRegistros (String rutUsuario) {
+        Domain.RutEntityReq rutEntityReq = Domain.RutEntityReq.newBuilder().setRut(rutUsuario).build();
         Domain.RegistrosReply serverResponse = this.stub.getRegistros(rutEntityReq);
         return this.gson.toJson(serverResponse);
     }

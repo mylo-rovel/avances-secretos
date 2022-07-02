@@ -52,11 +52,12 @@ public class WebCoreServiceGrpcExtra {
 
     public Domain.RegistrosReply getRegistros(Domain.RutEntityReq rutEntityReq, StreamObserver<Domain.RegistrosReply> responseObserver){
         List<Registro> listaRegistros = coreDaoExtra.getRegistros(rutEntityReq);
-        Domain.UsuarioEntity usuarioRegistro = this.getProtobufUsuarioRegistro(coreDaoUsuario.getUsuario(rutEntityReq));
-
         Domain.RegistrosReply.Builder grpcResponse = Domain.RegistrosReply.newBuilder();
+        if (listaRegistros == null) {
+            return grpcResponse.build();
+        }
+        Domain.UsuarioEntity usuarioRegistro = this.getProtobufUsuarioRegistro(coreDaoUsuario.getUsuario(rutEntityReq));
         this.attachRegistroToResponse(grpcResponse, listaRegistros, usuarioRegistro);
-
         return grpcResponse.build();
     }
 }

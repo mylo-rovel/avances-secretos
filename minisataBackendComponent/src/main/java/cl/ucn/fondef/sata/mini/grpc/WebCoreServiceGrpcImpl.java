@@ -118,4 +118,11 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
         responseObserver.onCompleted(); //Terminar el proceso
     }
+
+    @Override
+    public void getRegistros(RutEntityReq rutEntityReq, StreamObserver<RegistrosReply> responseObserver){
+        var grpcResponse = webCoreServiceGrpcExtra.getRegistros(rutEntityReq, responseObserver);
+        responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
+        responseObserver.onCompleted(); //Terminar el proceso
+    }
 }

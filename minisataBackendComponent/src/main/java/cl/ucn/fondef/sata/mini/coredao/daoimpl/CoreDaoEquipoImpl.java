@@ -130,7 +130,7 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
         return componente;
     }
     private void guardarPines(Domain.Componente componenteTurno, String nombreComponente, HashMap<String, Long> placasIdHashMap) {
-        String queryComponente = "FROM ComponenteFisico WHERE nombre = :nombre";
+        String queryComponente = "FROM Componente WHERE nombre = :nombre";
         List<Componente> componentesGuardados = entityManager.createQuery(queryComponente).setParameter("nombre", nombreComponente).getResultList();
 
         // for loop para guardar los pines
@@ -171,7 +171,7 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
         HashMap<String, Long> placasIdHashMapCRUDAS = this.guardarPlacas(equipoEntityReq, idEquipo);
         HashMap<String, Long> placasIdHashMap = this.actualizarPlacasIdHashMap(placasIdHashMapCRUDAS, idEquipo);
 
-        // GUARDAR EN LA TABLA COMPONENTEFISICO Y PIN
+        // GUARDAR EN LA TABLA Componente Y PIN
         this.guardarComponentesYPines(placasIdHashMap, equipoEntityReq, idEquipo, nombreEquipo);
 
         return "El equipo se ha agregado exitosamente";
@@ -205,7 +205,7 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
 
     @Override
     public List<Componente> getComponentesFisicos(IdElementoReq idElementoReq){
-        String sqlQuery = "FROM ComponenteFisico WHERE id_equipo = :id_equipo";
+        String sqlQuery = "FROM Componente WHERE id_equipo = :id_equipo";
         return (List<Componente>) entityManager.createQuery(sqlQuery)
                 .setParameter("id_equipo", idElementoReq.getId()).getResultList();
     }
@@ -220,8 +220,13 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
     @Override
     public Equipo getEquipo(IdElementoReq idEquipo){
         String sqlQuery = "FROM Equipo WHERE id = :id";
-        return (Equipo) entityManager.createQuery(sqlQuery)
-                .setParameter("id", idEquipo.getId()).getResultList().get(0);
+        List listaResultado =entityManager.createQuery(sqlQuery)
+                .setParameter("id", idEquipo.getId()).getResultList();
+        if(listaResultado.isEmpty()) {
+            log.warn("La lista no contiene elementos");
+            return null;
+        }
+        return (Equipo) listaResultado.get(0);
     }
 
     @Override
@@ -232,14 +237,14 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
 
     @Override
     public List<Componente> getValvulasEquipo(IdElementoReq idElementoReq){
-        String sqlQuery = "FROM ComponenteFisico WHERE id_equipo = :id_equipo AND tipo = :tipo";
+        String sqlQuery = "FROM Componente WHERE id_equipo = :id_equipo AND tipo = :tipo";
         return (List<Componente>) entityManager.createQuery(sqlQuery)
                 .setParameter("id_equipo", idElementoReq.getId())
                 .setParameter("tipo", "VALVULA")
                 .getResultList();
     }
 
-    /*public String uploadArchivo(ArchivosEquipoEntityReq archivosEquipoEntityReq){
+    /*public String uploadArchivo(ArchivosEntityReq archivosEntityReq){
 
     }*/
 }

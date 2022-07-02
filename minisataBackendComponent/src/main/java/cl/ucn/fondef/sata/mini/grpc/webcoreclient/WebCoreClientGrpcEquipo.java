@@ -10,7 +10,7 @@ import java.util.List;
  * The type Web core client grpc equipo.
  */
 @Service
-public class WebCoreClientGrpcEquipo extends WebCoreClientGrpcBase {
+public final class WebCoreClientGrpcEquipo extends WebCoreClientGrpcBase {
 
     // todo: separar este bloque gigante en funciones chiquititas
 
@@ -40,7 +40,7 @@ public class WebCoreClientGrpcEquipo extends WebCoreClientGrpcBase {
 
 
         // ... "repeated Componente componente_fisico = 7;" A ENVIAR
-        List<GrpcComponente> listaComponentesRecibidos = equipoRecibido.getEquipo().getListaComponentesFisicos();
+        List<GrpcComponente> listaComponentesRecibidos = equipoRecibido.getEquipo().getListaComponentes();
         for (int i = 0; i < listaComponentesRecibidos.size(); i++) {
             GrpcComponente componenteRecibido = listaComponentesRecibidos.get(i);
 
