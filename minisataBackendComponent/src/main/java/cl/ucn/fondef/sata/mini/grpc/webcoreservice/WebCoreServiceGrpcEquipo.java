@@ -2,10 +2,7 @@ package cl.ucn.fondef.sata.mini.grpc.webcoreservice;
 
 import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoEquipo;
 import cl.ucn.fondef.sata.mini.grpc.Domain;
-import cl.ucn.fondef.sata.mini.model.Componente;
-import cl.ucn.fondef.sata.mini.model.Equipo;
-import cl.ucn.fondef.sata.mini.model.Pin;
-import cl.ucn.fondef.sata.mini.model.Placa;
+import cl.ucn.fondef.sata.mini.model.*;
 import cl.ucn.fondef.sata.mini.utilities.StringEnumTransformer;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,7 +89,7 @@ public class WebCoreServiceGrpcEquipo {
     }
 
     private Domain.EquipoEntity.Builder addComponentesYPinesToEquipo(Domain.EquipoEntity.Builder equipoEnte, Domain.IdElementoReq idEquipoReq) {
-        List<Componente> componentesGuardados = coreDaoEquipo.getComponentesFisicos(idEquipoReq);
+        List<Componente> componentesGuardados = coreDaoEquipo.getComponentes(idEquipoReq);
         // ITERAR PARA CREAR CADA PROTOBUF DE "Componente"
         for (int i = 0; i < componentesGuardados.size(); i++) {
             Domain.Componente.Builder componenteEnviar = Domain.Componente.newBuilder()
@@ -183,6 +180,40 @@ public class WebCoreServiceGrpcEquipo {
         Domain.ComponentesEquipoReply.Builder grpcResponse = Domain.ComponentesEquipoReply.newBuilder();
         this.addValvulasToReplyObject(grpcResponse, listaValvulasGuardadas);
 
+        return grpcResponse.build();
+    }
+
+    public Domain.SecuenciasComponenteEquipoReply getSecuenciasComponente(Domain.IdElementoReq idRequest, StreamObserver<Domain.SecuenciasComponenteEquipoReply> responseObserver){
+        List<Secuencia> listaSecuencias = coreDaoEquipo.getSecuenciasComponente(idRequest);
+        if(listaSecuencias == null){
+            return Domain.SecuenciasComponenteEquipoReply.newBuilder().build();
+        }
+
+        Domain.SecuenciasComponenteEquipoReply.Builder grpcResponse = Domain.SecuenciasComponenteEquipoReply.newBuilder();
+        Domain.SecuenciasComponente.Builder secuenciasComponente = Domain.SecuenciasComponente.newBuilder();
+        for(Secuencia secuencia : listaSecuencias){
+            Domain.IdElementoReq idComponente =Domain.IdElementoReq.newBuilder().setId(secuencia.getIdComponente()).build();
+            Componente componenteAgregar = coreDaoEquipo.getComponente(idComponente);
+            Domain.Secuencia.Builder secuenciaAgregar = Domain.Secuencia.newBuilder()
+                    .setIdComponente(componenteAgregar.getId())
+                    .setNombreComponente(componenteAgregar.getNombre());
+            List<Evento> eventosAgregar = coreDaoEquipo.getEventos(secuencia.getId());
+            for(Evento evento : eventosAgregar){
+                Domain.Evento eventoDevolver = Domain.Evento.newBuilder()
+                        .setDuracion(evento.getDuracion())
+                        .setIntensidad(evento.getIntensidad())
+                        .setPosicion(evento.getPosicion())
+                        .build();
+                secuenciaAgregar.addEvento(eventoDevolver);
+            }
+            //
+            secuenciasComponente.addSecuenciaComponente(secuenciaAgregar.build());
+            //grpcResponse.addSecuenciaComponente(secuenciaAgregar);
+            //TODO: SOLUCIONAR EL PROBLEMA ENTRE SECUENCIASCOMPONENTEEQUIPOREPLY Y SECUENCIASCOMPONENTE
+        }
+        //
+        grpcResponse.addSecuenciaComponente(secuenciasComponente.build());
+        //
         return grpcResponse.build();
     }
 }

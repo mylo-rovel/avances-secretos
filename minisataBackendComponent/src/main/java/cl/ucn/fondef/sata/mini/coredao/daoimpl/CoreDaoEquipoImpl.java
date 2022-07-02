@@ -7,8 +7,10 @@ package cl.ucn.fondef.sata.mini.coredao.daoimpl;
 import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoEquipo;
 import cl.ucn.fondef.sata.mini.grpc.Domain;
 import cl.ucn.fondef.sata.mini.model.Componente;
+import cl.ucn.fondef.sata.mini.model.Evento;
 import cl.ucn.fondef.sata.mini.model.Pin;
 import cl.ucn.fondef.sata.mini.model.Placa;
+import cl.ucn.fondef.sata.mini.model.Secuencia;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -204,7 +206,14 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
     }
 
     @Override
-    public List<Componente> getComponentesFisicos(IdElementoReq idElementoReq){
+    public Componente getComponente(IdElementoReq idElementoReq){
+        String sqlQuery = "FROM Componente WHERE id = :id";
+        return (Componente) entityManager.createQuery(sqlQuery)
+                .setParameter("id", idElementoReq.getId()).getResultList().get(0);
+    }
+
+    @Override
+    public List<Componente> getComponentes(IdElementoReq idElementoReq){
         String sqlQuery = "FROM Componente WHERE id_equipo = :id_equipo";
         return (List<Componente>) entityManager.createQuery(sqlQuery)
                 .setParameter("id_equipo", idElementoReq.getId()).getResultList();
@@ -241,6 +250,21 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
         return (List<Componente>) entityManager.createQuery(sqlQuery)
                 .setParameter("id_equipo", idElementoReq.getId())
                 .setParameter("tipo", "VALVULA")
+                .getResultList();
+    }
+
+    public List<Evento> getEventos(long idSecuencia){
+        String sqlQuery = "FROM Evento WHERE id_secuencia = :id_secuencia";
+        return (List<Evento>) entityManager.createQuery(sqlQuery)
+                .setParameter("id_secuencia", idSecuencia).getResultList();
+    }
+
+    @Override
+    public List<Secuencia> getSecuenciasComponente(IdElementoReq idElementoReq){
+        //se obtienen las secuencias de la id de un equipo dado utilizando la id_equipo de componenteFisico
+        String sqlQuery = "FROM Secuencia s,ComponenteFisico c WHERE c.id_equipo = :id_equipo AND s.id_componente = c.id";
+        return (List<Secuencia>) entityManager.createQuery(sqlQuery)
+                .setParameter("id_equipo", idElementoReq.getId())
                 .getResultList();
     }
 
