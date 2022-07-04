@@ -14,14 +14,14 @@ public final class BytesChunker {
         final int grpcMaxFileSize = 4194304;
         final long fileSize = fileToChunk.getSize();
 
-        long amountOfChunks = (fileSize/grpcMaxFileSize) + 1;
+        long amountOfChunks = (fileSize/grpcMaxFileSize); // this give us the e
         byte[][] allChunksArr = new byte[(int)amountOfChunks][];
 
         for (int i = 0; i < amountOfChunks; i++) {
             int leftEdge = i*grpcMaxFileSize;
             int rightEdge = (i+1)*grpcMaxFileSize;
 
-            if (i == amountOfChunks - 1) {
+            if (i == amountOfChunks) {
                 // Obtener el ultimo chunk pequeño => este grupo tiene un length variable
                 rightEdge = fileBytes.length;
             }

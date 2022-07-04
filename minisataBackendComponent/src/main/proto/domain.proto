@@ -237,11 +237,7 @@ message SecuenciasComponenteEquipoReply {
 
 message SimulacionReq {
   string nombre = 1;
-  string descripcion = 2;
-  string nombre_equipo = 3;
-  string rut_operador = 4;
-  string fecha_ejecucion = 5;
-  repeated Secuencia secuencia = 6;
+  string nombre_equipo = 2;
 }
 
 message SimulacionReply {
