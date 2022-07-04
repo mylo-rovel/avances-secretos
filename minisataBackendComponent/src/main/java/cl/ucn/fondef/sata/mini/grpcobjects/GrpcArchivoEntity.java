@@ -25,5 +25,5 @@ public class GrpcArchivoEntity {
 
     @Getter
     @Setter
-    private Domain.ArchivoEntityReq.TipoArchivo tipo;
+    private Domain.ArchivoEntity.TipoArchivo tipo;
 }

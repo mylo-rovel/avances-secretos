@@ -180,7 +180,7 @@ message EquipoEntityReply {
   EquipoEntity equipo = 1;
 }
 
-message ArchivoEntityReq {
+message ArchivoEntity {
   enum TipoArchivo {
     PNG  = 0;
     PDF  = 1;
@@ -193,12 +193,12 @@ message ArchivoEntityReq {
   TipoArchivo tipo_archivo = 3;
 }
 
-message ArchivosEntityReq {
-  repeated ArchivoEntityReq archivo = 1;
+message ArchivoEntityReq {
+  ArchivoEntity archivo = 1;
 }
 
 message ArchivosEntityReply {
-  repeated ArchivoEntityReq archivo = 1;
+  ArchivoEntity archivo = 1;
 }
 
 message EquipoEntityAcotado {

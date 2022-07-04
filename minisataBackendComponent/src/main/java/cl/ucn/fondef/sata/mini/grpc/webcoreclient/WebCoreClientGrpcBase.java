@@ -1,18 +1,9 @@
 package cl.ucn.fondef.sata.mini.grpc.webcoreclient;
 
 import cl.ucn.fondef.sata.mini.grpc.WebCoreCommuServiceGrpc;
-import cl.ucn.fondef.sata.mini.grpcobjects.*;
 import com.google.gson.Gson;
 import io.grpc.ManagedChannel;
 import io.grpc.netty.shaded.io.grpc.netty.NettyChannelBuilder;
-import lombok.Getter;
-import org.springframework.stereotype.Service;
-import cl.ucn.fondef.sata.mini.grpc.Domain.*;
-
-
-//import com.google.protobuf.util.JsonFormat;
-
-import java.util.List;
 
 /**
  * The type Web core client grpc base.
@@ -40,5 +31,6 @@ public class WebCoreClientGrpcBase {
      * The Stub.
      */
     protected final WebCoreCommuServiceGrpc.WebCoreCommuServiceBlockingStub stub = WebCoreCommuServiceGrpc.newBlockingStub(this.channel);
+    protected final WebCoreCommuServiceGrpc.WebCoreCommuServiceStub asyncStub = WebCoreCommuServiceGrpc.newStub(this.channel);;
 
 }

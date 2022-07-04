@@ -5,16 +5,19 @@
 package cl.ucn.fondef.sata.mini.web;
 
 import cl.ucn.fondef.sata.mini.grpc.Domain;
-import cl.ucn.fondef.sata.mini.grpc.webcoreclient.WebCoreClientGrpcEquipo;
-import cl.ucn.fondef.sata.mini.grpc.webcoreclient.WebCoreClientGrpcExtra;
-import cl.ucn.fondef.sata.mini.grpc.webcoreclient.WebCoreClientGrpcSimulacion;
-import cl.ucn.fondef.sata.mini.grpc.webcoreclient.WebCoreClientGrpcUsuario;
+import cl.ucn.fondef.sata.mini.grpc.webcoreclient.*;
+import cl.ucn.fondef.sata.mini.utilities.BytesChunker;
 import cl.ucn.fondef.sata.mini.utilities.EnumValuesResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import cl.ucn.fondef.sata.mini.utilities.JwtUtil;
 import cl.ucn.fondef.sata.mini.grpcobjects.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 
 /**
@@ -37,6 +40,9 @@ public class WebController {
 
     @Autowired
     private WebCoreClientGrpcExtra webCoreClientGrpcExtra;
+
+    @Autowired
+    private WebCoreStreamClientGrpc webCoreStreamClientGrpc;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -198,18 +204,24 @@ public class WebController {
         return webCoreClientGrpcEquipo.getEquipos();
     }
 
-    /**
-     * Upload archivo string.
-     *
-     * @param archivoNuevo the archivo nuevo
-     * @return the string
-     */
 // ***---- IMPLEMENTAR ----
     //   rpc uploadArchivo(stream ArchivosEquipoEntityReq)  returns (MensajeReply){}
-    @RequestMapping(value = "api/equipos/archivo", method = RequestMethod.POST)
+    @RequestMapping(value = "api/equipos/archivos", method = RequestMethod.POST)
     // public String uploadArchivo(@RequestBody GrpcArchivosEntityReq archivoNuevo, @RequestHeader(value="Authorization") String jwt) {
-    public String uploadArchivo(@RequestBody GrpcArchivosEntityReq archivoNuevo){
-        return webCoreClientGrpcEquipo.uploadArchivo(archivoNuevo);
+//    public String uploadArchivo(@RequestBody GrpcArchivosEntityReq archivoNuevo){
+    public String uploadArchivo(@RequestParam("file") MultipartFile file) throws IOException, InterruptedException {
+//        return webCoreClientGrpcEquipo.uploadArchivo(archivoNuevo);
+        var baitsArr =file.getBytes();
+        System.out.println("baitsArr length = " + baitsArr.length);
+        var contentType = file.getContentType();
+        System.out.println("lastElement = " + contentType);
+        var fileSize = file.getSize();
+        System.out.println("fileSize = " + fileSize);
+
+        webCoreStreamClientGrpc.uploadArchivo(file);
+        return file.getOriginalFilename();
+        //        ResponseEntity<?>
+        //        ResponseEntity.status(HttpStatus.BAD_GATEWAY).build();
     }
 
     /**
@@ -358,7 +370,7 @@ public class WebController {
         objetoRetornar.addEnumList("EstadoComponente", Domain.Componente.EstadoComponente.values());
         objetoRetornar.addEnumList("EstadoEquipo", Domain.EstadoEquipo.values());
         objetoRetornar.addEnumList("TipoPlaca", Domain.TipoPlaca.values());
-        objetoRetornar.addEnumList("TipoArchivo", Domain.ArchivoEntityReq.TipoArchivo.values());
+        objetoRetornar.addEnumList("TipoArchivo", Domain.ArchivoEntity.TipoArchivo.values());
 
         return objetoRetornar;
     }
