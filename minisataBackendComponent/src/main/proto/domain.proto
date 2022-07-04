@@ -11,6 +11,11 @@ message EmptyReq {
   // se usa esto para las funciones que usan 0 argumentos
 }
 
+message IdElementoConRutReq {
+  int64 id = 1;
+  string rut = 2;
+}
+
 message IdElementoReq {
   int64 id = 1;
 }

@@ -3,6 +3,7 @@ package cl.ucn.fondef.sata.mini.grpc.webcoreclient;
 import cl.ucn.fondef.sata.mini.grpc.Domain;
 import cl.ucn.fondef.sata.mini.grpcobjects.GrpcEvento;
 import cl.ucn.fondef.sata.mini.grpcobjects.GrpcSecuencia;
+import cl.ucn.fondef.sata.mini.grpcobjects.GrpcSimulacionReply;
 import cl.ucn.fondef.sata.mini.grpcobjects.GrpcSimulacionReq;
 import org.springframework.stereotype.Service;
 
@@ -43,12 +44,12 @@ public final class WebCoreClientGrpcSimulacion extends WebCoreClientGrpcBase {
      * @param simulacionNueva the simulacion nueva
      * @return the string
      */
-    public String startSimulacion(GrpcSimulacionReq simulacionNueva) {
-        Domain.SimulacionReq.Builder simulacionReq = Domain.SimulacionReq.newBuilder()
+    public String startSimulacion(GrpcSimulacionReply simulacionNueva) {
+        Domain.SimulacionReply.Builder simulacionReq = Domain.SimulacionReply.newBuilder()
                 .setNombre(simulacionNueva.getNombre())
                 .setDescripcion(simulacionNueva.getDescripcion())
                 .setNombreEquipo(simulacionNueva.getNombre())
-                .setRutOperador(simulacionNueva.getRutOperador())
+                //.setRutOperador(simulacionNueva.getRutOperador())
                 .setFechaEjecucion(simulacionNueva.getFechaEjecucion());
 
         List<GrpcSecuencia> secuenciasRecibidas = simulacionNueva.getListaSecuencias();

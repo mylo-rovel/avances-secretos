@@ -31,6 +31,14 @@ public interface CoreDaoEquipo {
 
     List<Equipo> getEquipos();
 
+    Equipo getEquipoOperador(IdElementoConRutReq idEquipoUsuario);
+
+    List<Equipo> getEquiposOperador(RutEntityReq rutUsuario);
+
+    Equipo getEquipoConfigurador(IdElementoConRutReq idEquipoUsuario);
+
+    List<Equipo> getEquiposConfigurador(RutEntityReq rutUsuario);
+
     List<Componente> getValvulasEquipo(IdElementoReq idElementoReq);
 
     List<Secuencia> getSecuenciasComponente(IdElementoReq idElementoReq);

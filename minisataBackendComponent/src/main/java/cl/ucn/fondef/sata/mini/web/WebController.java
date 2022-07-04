@@ -4,8 +4,10 @@
 
 package cl.ucn.fondef.sata.mini.web;
 
+import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoUsuario;
 import cl.ucn.fondef.sata.mini.grpc.Domain;
 import cl.ucn.fondef.sata.mini.grpc.webcoreclient.*;
+import cl.ucn.fondef.sata.mini.model.Usuario;
 import cl.ucn.fondef.sata.mini.utilities.BytesChunker;
 import cl.ucn.fondef.sata.mini.utilities.EnumValuesResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -46,6 +48,9 @@ public class WebController {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private CoreDaoUsuario coreDaoUsuario;
 
     private String getTokenKey(String jsonwebtoken) {
         return jwtUtil.getKey(jsonwebtoken);
@@ -187,9 +192,20 @@ public class WebController {
      */
     //   rpc getEquipo(IdElementoReq)  returns (EquipoEntityReply) {}
     @RequestMapping(value = "api/equipos/{id}", method = RequestMethod.GET)
-    //public String getEquipo(@PathVariable long id, @RequestHeader(value="Authorization") String jwt) {
-    public String getEquipo(@PathVariable long id){
-        return webCoreClientGrpcEquipo.getEquipo(id);
+    public String getEquipo(@PathVariable long id, @RequestHeader(value="Authorization") String jwt) {
+        if(this.tokenEsValido(jwt)){
+            Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
+            Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
+            if(usuario.getRol().equals("OPERADOR")){
+                return webCoreClientGrpcEquipo.getEquipoOC(id, rutUsuario.getRut());
+            }else if(usuario.getRol().equals("CONFIGURADOR")){
+                return webCoreClientGrpcEquipo.getEquipoOC(id, rutUsuario.getRut());
+            }else{
+                return webCoreClientGrpcEquipo.getEquipo(id);
+            }
+        }
+    //public String getEquipo(@PathVariable long id){
+        return "Error. Token invalido";
     }
 
     /**
@@ -199,9 +215,20 @@ public class WebController {
      */
     //   rpc getEquipos(EmptyReq)  returns (EquiposEntityReply) {}
     @RequestMapping(value = "api/equipos", method = RequestMethod.GET)
-    // public String getEquipos(@RequestHeader(value="Authorization") String jwt) {
-    public String getEquipos(){
-        return webCoreClientGrpcEquipo.getEquipos();
+    public String getEquipos(@RequestHeader(value="Authorization") String jwt) {
+        if(this.tokenEsValido(jwt)){
+            Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
+            Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
+            if(usuario.getRol().equals("OPERADOR")){
+                return webCoreClientGrpcEquipo.getEquiposOC(rutUsuario.getRut());
+            }else if(usuario.getRol().equals("CONFIGURADOR")){
+                return webCoreClientGrpcEquipo.getEquiposOC(rutUsuario.getRut());
+            }else{
+                return webCoreClientGrpcEquipo.getEquipos();
+            }
+        }
+    //public String getEquipos(){
+        return "Error. Token invalido";
     }
 
 // ***---- IMPLEMENTAR ----
@@ -303,7 +330,7 @@ public class WebController {
     //   rpc startSimulacion(SimulacionReq) returns (MensajeReply){}
     @RequestMapping(value = "api/simulaciones", method = RequestMethod.POST)
     // public String startSimulacion(@RequestBody GrpcSimulacionReq simulacionNueva, @RequestHeader(value="Authorization") String jwt) {
-    public String startSimulacion(@RequestBody GrpcSimulacionReq simulacionNueva) {
+    public String startSimulacion(@RequestBody GrpcSimulacionReply simulacionNueva) {
         log.info("nuevaSimulacion = " + simulacionNueva);
         return webCoreClientGrpcSimulacion.startSimulacion(simulacionNueva);
     }

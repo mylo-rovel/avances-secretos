@@ -1,6 +1,7 @@
 package cl.ucn.fondef.sata.mini.grpc.webcoreservice;
 
 import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoEquipo;
+import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoUsuario;
 import cl.ucn.fondef.sata.mini.grpc.Domain;
 import cl.ucn.fondef.sata.mini.model.*;
 import cl.ucn.fondef.sata.mini.utilities.StringEnumTransformer;
@@ -21,6 +22,9 @@ public class WebCoreServiceGrpcEquipo {
     // OBTENER EL OBJETO QUE SE DEVOLVERA
     @Autowired
     private CoreDaoEquipo coreDaoEquipo;
+
+    @Autowired
+    private CoreDaoUsuario coreDaoUsuario;
 
     /**
      * The String enum transformer.
@@ -161,6 +165,94 @@ public class WebCoreServiceGrpcEquipo {
         return listaRetornar.build();
     }
 
+    public Domain.EquipoEntityReply getEquipoOC(Domain.IdElementoConRutReq idEquipoUsuario,
+                                                StreamObserver<Domain.EquipoEntityReply> responseObserver){
+
+        Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(idEquipoUsuario.getRut()).build();
+        Domain.IdElementoReq idEquipoReq = Domain.IdElementoReq.newBuilder().setId(idEquipoUsuario.getId()).build();
+        Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
+
+        Equipo equipoGuardado;
+        if(usuario.getRol().equals("OPERADOR")){
+            equipoGuardado = coreDaoEquipo.getEquipoOperador(idEquipoUsuario);
+            /*
+            if(equipoGuardado == null){
+                return Domain.EquipoEntityReply.newBuilder().build();
+            }
+            Domain.EquipoEntity.Builder equipoEnte = this.getEquipoEntityBuilder(equipoGuardado);
+            this.addPlacasToEquipo(equipoEnte, idEquipoReq);
+            this.addComponentesYPinesToEquipo(equipoEnte, idEquipoReq);
+
+            Domain.EquipoEntityReply equipoRetornar = Domain.EquipoEntityReply.newBuilder()
+                    .setEquipo(equipoEnte)
+                    .build();
+            return equipoRetornar;
+            */
+        }else if(usuario.getRol().equals("CONFIGURADOR")){
+            equipoGuardado = coreDaoEquipo.getEquipoConfigurador(idEquipoUsuario);
+            /*
+            if(equipoGuardado == null){
+                return Domain.EquipoEntityReply.newBuilder().build();
+            }
+            Domain.EquipoEntity.Builder equipoEnte = this.getEquipoEntityBuilder(equipoGuardado);
+            this.addPlacasToEquipo(equipoEnte, idEquipoReq);
+            this.addComponentesYPinesToEquipo(equipoEnte, idEquipoReq);
+
+            Domain.EquipoEntityReply equipoRetornar = Domain.EquipoEntityReply.newBuilder()
+                    .setEquipo(equipoEnte)
+                    .build();
+            return equipoRetornar;
+            */
+        }else{
+            equipoGuardado = null;
+        }
+
+        if(equipoGuardado == null){
+            return Domain.EquipoEntityReply.newBuilder().build();
+        }
+        Domain.EquipoEntity.Builder equipoEnte = this.getEquipoEntityBuilder(equipoGuardado);
+        this.addPlacasToEquipo(equipoEnte, idEquipoReq);
+        this.addComponentesYPinesToEquipo(equipoEnte, idEquipoReq);
+        /*
+        Domain.EquipoEntityReply equipoRetornar = Domain.EquipoEntityReply.newBuilder()
+                .setEquipo(equipoEnte)
+                .build();
+        return equipoRetornar;
+        */
+        return Domain.EquipoEntityReply.newBuilder().setEquipo(equipoEnte).build();
+
+    }
+
+    public Domain.EquiposEntityReply getEquiposOC(Domain.RutEntityReq rutUsuario,
+                                                  StreamObserver<Domain.EquiposEntityReply> responseObserver){
+        Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
+        List<Equipo> listaEquiposGuardados;
+        Domain.EquiposEntityReply.Builder listaRetornar = Domain.EquiposEntityReply.newBuilder();
+
+        if(usuario.getRol().equals("OPERADOR")){
+            listaEquiposGuardados = coreDaoEquipo.getEquiposOperador(rutUsuario);
+        }else if(usuario.getRol().equals("CONFIGURADOR")){
+            listaEquiposGuardados = coreDaoEquipo.getEquiposConfigurador(rutUsuario);
+        }else{
+            listaEquiposGuardados = null;
+        }
+
+        if(listaEquiposGuardados == null){
+            return listaRetornar.build();
+        }
+
+        for(Equipo equipo : listaEquiposGuardados){
+            Domain.EquipoEntityAcotado equipoRetornar = Domain.EquipoEntityAcotado.newBuilder()
+                    .setId(equipo.getId())
+                    .setNombre(equipo.getNombre())
+                    .setEstado(stringEnumTransformer.getEnumEstadoEquipo(equipo.getEstado()))
+                    .build();
+
+            listaRetornar.addEquipoAcotado(equipoRetornar);
+        }
+
+        return listaRetornar.build();
+    }
 
     private void addValvulasToReplyObject (Domain.ComponentesEquipoReply.Builder grpcResponse, List<Componente> listaValvulasGuardadas) {
         for (int i = 0; i < listaValvulasGuardadas.size(); i++) {
