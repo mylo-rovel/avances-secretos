@@ -142,12 +142,12 @@ public class StringEnumTransformer {
      * @param stringEvaluar the string evaluar
      * @return the enum tipo archivo
      */
-    public Domain.ArchivoEntityReq.TipoArchivo getEnumTipoArchivo(String stringEvaluar) {
+    public Domain.ArchivoEntity.TipoArchivo getEnumTipoArchivo(String stringEvaluar) {
         switch (stringEvaluar){
-            case "PNG": return Domain.ArchivoEntityReq.TipoArchivo.PNG;
-            case "PDF": return Domain.ArchivoEntityReq.TipoArchivo.PDF;
-            case "JPG": return Domain.ArchivoEntityReq.TipoArchivo.JPG;
-            case "JPEG": return Domain.ArchivoEntityReq.TipoArchivo.JPEG;
+            case "PNG": return Domain.ArchivoEntity.TipoArchivo.PNG;
+            case "PDF": return Domain.ArchivoEntity.TipoArchivo.PDF;
+            case "JPG": return Domain.ArchivoEntity.TipoArchivo.JPG;
+            case "JPEG": return Domain.ArchivoEntity.TipoArchivo.JPEG;
             default: return null;
         }
     }

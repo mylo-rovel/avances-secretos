@@ -5,6 +5,7 @@ import cl.ucn.fondef.sata.mini.grpc.webcoreservice.WebCoreServiceGrpcUsuario;
 import cl.ucn.fondef.sata.mini.grpc.webcoreservice.WebCoreServiceGrpcSimulacion;
 import cl.ucn.fondef.sata.mini.grpc.webcoreservice.WebCoreServiceGrpcExtra;
 import io.grpc.stub.StreamObserver;
+import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import cl.ucn.fondef.sata.mini.grpc.Domain.*;
@@ -13,6 +14,7 @@ import cl.ucn.fondef.sata.mini.grpc.Domain.*;
 /**
  * The type Web core service grpc.
  */
+@Slf4j
 @GrpcService
 // SERVIDOR gRPC "Central Core"
 // Esta clase se usa para RECIBIR y RESPONDER peticiones desde el "Backend Appplication"
@@ -124,5 +126,32 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         var grpcResponse = webCoreServiceGrpcExtra.getRegistros(rutEntityReq, responseObserver);
         responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
         responseObserver.onCompleted(); //Terminar el proceso
+    }
+
+    @Override
+    // rpc uploadArchivo(stream ArchivoEntityReq)  returns (MensajeReply){}
+    public StreamObserver<ArchivoEntityReq> uploadArchivo(final StreamObserver<MensajeReply> responseObserver) {
+        return new StreamObserver<ArchivoEntityReq>() {
+
+            @Override
+            // here recibimos los archivos. los guardamos en algun
+            public void onNext(ArchivoEntityReq archivoValue) {
+                log.info("req recibida");
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                log.warn("Stream cancelado por un error");
+            }
+
+            @Override
+            public void onCompleted() {
+                MensajeReply grpcResponse = MensajeReply.newBuilder()
+                        .setMensajeTexto("Stream completado")
+                        .build();
+                responseObserver.onNext(grpcResponse);
+                responseObserver.onCompleted();
+            }
+        };
     }
 }
