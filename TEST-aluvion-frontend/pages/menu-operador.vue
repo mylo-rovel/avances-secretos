@@ -26,6 +26,14 @@
                 console.log(idRouteTitle)
                 // this.elementsObj[idRouteTitle].esDesplegable = !this.elementsObj[idRouteTitle].esDesplegable;
                 this.elementsObj[idRouteTitle] = !this.elementsObj[idRouteTitle];
+            },
+            girarFlecha(){
+                //let flecha = document.getElementById("");
+                document.getElementById("flechaSimulacion").addEventListener("click",
+                function() {
+                    document.getElementById("flechaSimulacion").style.transform = "rotate(90deg)";
+                    //document.querySelector('.flecha-inv').style.transform = "rotate(90deg)";
+                });
             }
         }
     })
@@ -61,7 +69,7 @@
             <p :id="`Simulacion_key`" @click="(e) => abrirMenu(e)" >
                 <img src="~/assets/stats.svg" class="img-icono">
                 <span class="menu-routes-element">Simulación</span>
-                <img src="~/assets/arrow.svg" class="flecha-inv">
+                <img id= "flechaSimulacion" src="~/assets/arrow.svg" class=" flecha flecha-inv" @click = "girarFlecha()">
 
                 <ul v-if="elementsObj['Simulacion']" class="submenu-routes-menu">
                     <p ><NuxtLink to="/operador/registrar-simulacion">Registrar simulacion</NuxtLink></p>
