@@ -34,7 +34,7 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
     private EntityManager entityManager;
 
     private List<Usuario> getListaUsuariosPorRut(EquipoEntityReq equipoEntityReq) {
-        String usuarioQuery = "FROM Usuario WHERE rut = :rut";
+        String usuarioQuery = "FROM Usuario WHERE rut = :rut AND estado = 'ACTIVO' ";
         return (List<Usuario>) entityManager.createQuery(usuarioQuery)
                 .setParameter("rut", equipoEntityReq.getRutConfigurador()).getResultList();
 

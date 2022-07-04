@@ -125,13 +125,13 @@ public final class WebCoreClientGrpcEquipo extends WebCoreClientGrpcBase {
 
     public String getEquipoOC(long id, String rut){
         Domain.IdElementoConRutReq idEquipoUsuario = Domain.IdElementoConRutReq.newBuilder().setId(id).setRut(rut).build();
-        Domain.EquipoEntityReply serverResponse = this.stub.getEquipoOperador(idEquipoUsuario);
+        Domain.EquipoEntityReply serverResponse = this.stub.getEquipoOC(idEquipoUsuario);
         return this.gson.toJson(serverResponse);
     }
 
     public String getEquiposOC(String rut){
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(rut).build();
-        Domain.EquiposEntityReply serverResponse = this.stub.getEquiposOperador(rutUsuario);
+        Domain.EquiposEntityReply serverResponse = this.stub.getEquiposOC(rutUsuario);
         return this.gson.toJson(serverResponse);
     }
     /**
