@@ -21,7 +21,8 @@ service WebCoreCommuService {
 
   rpc getEquipo(IdElementoReq)  returns (EquipoEntityReply) {}
   rpc getEquipos(EmptyReq)  returns (EquiposEntityReply) {}
-  rpc getValvulasEquipo(IdElementoReq) returns (ComponentesEquipoReply) {}
+  rpc getEquipoOC(IdElementoConRutReq) returns (EquipoEntityReply) {}
+  rpc getEquiposOC(RutEntityReq) returns (EquiposEntityReply) {}
 
   rpc uploadArchivo(stream ArchivoEntityReq)  returns (MensajeReply){}
   rpc getArchivos(IdElementoReq)  returns (stream ArchivosEntityReply){}
@@ -33,8 +34,8 @@ service WebCoreCommuService {
   rpc getSimulacion(IdElementoReq) returns (SimulacionReply){}
   rpc getSimulaciones(EmptyReq) returns (SimulacionesReply){}
 
-  // va de la mano con la funcion (1) del CoreBoardCommuService
-  rpc startSimulacion(StartSimulacionReq) returns (MensajeReply){}
+  // va de la mano con la funcion (1) del CoreRaspiCommuService
+  rpc startSimulacion(SimulacionReply) returns (MensajeReply){}
 
   // va de la mano con la funcion (2) del CoreBoardCommuService
   // esta funcion busca preguntarle al Raspberry que equipo y simulacion esta corriendo

@@ -34,7 +34,7 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
     private EntityManager entityManager;
 
     private List<Usuario> getListaUsuariosPorRut(EquipoEntityReq equipoEntityReq) {
-        String usuarioQuery = "FROM Usuario WHERE rut = :rut";
+        String usuarioQuery = "FROM Usuario WHERE rut = :rut AND estado = 'ACTIVO' ";
         return (List<Usuario>) entityManager.createQuery(usuarioQuery)
                 .setParameter("rut", equipoEntityReq.getRutConfigurador()).getResultList();
 
@@ -179,7 +179,6 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
         return "El equipo se ha agregado exitosamente";
     }
 
-
     @Override
     public String updateEquipo(EquipoEntityReq equipoEntityReq){
         Equipo equipoEditar = entityManager.find(Equipo.class, equipoEntityReq.getEquipo().getId());
@@ -189,13 +188,44 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
         equipoEditar.setUrlRepositorio(equipoEntityReq.getEquipo().getUrlRepositorio());
         equipoEditar.setEstado(equipoEntityReq.getEquipo().getEstado().name());
 
+        List<Domain.Placa> listaPlacas = equipoEntityReq.getEquipo().getPlacaList();
+        for(Domain.Placa placa : listaPlacas){
+            Placa placaGuardar = new Placa();
+            placaGuardar.setNombre(placa.getNombre());
+            placaGuardar.setDescripcion(placa.getDescripcion());
+            placaGuardar.setTipo(placa.getTipo().toString());
+            placaGuardar.setIdEquipo(equipoEditar.getId());
+            entityManager.merge(placaGuardar);
+        }
+
+        List<Domain.Componente> listaComponentes = equipoEntityReq.getEquipo().getComponenteList();
+        for(Domain.Componente componente : listaComponentes){
+            Componente componenteGuardar = new Componente();
+            componenteGuardar.setNombre(componente.getNombre());
+            componenteGuardar.setDescripcion(componente.getDescripcion());
+            componenteGuardar.setUrl(componente.getUrl());
+            componenteGuardar.setEstado(componente.getEstado().toString());
+            componenteGuardar.setTipo(componente.getTipo().toString());
+            componenteGuardar.setTipoPlaca(componente.getTipoPlaca().toString());
+
+            List<Domain.Pin> listaPines = componente.getPinComponenteList();
+            for(Domain.Pin pin : listaPines){
+                Pin pinGuardar = new Pin();
+                pinGuardar.setNombre(pin.getNombre());
+                pinGuardar.setDescripcion(pin.getDescripcion());
+                pinGuardar.setConexion(pin.getConexion().toString());
+                entityManager.merge(pinGuardar);
+            }
+
+            entityManager.merge(componenteGuardar);
+        }
+
         entityManager.merge(equipoEditar);
 
         String mensaje = "El equipo se ha actualizado exitosamente";
 
         return mensaje;
     }
-
 
     // ---- AUX PARA getEquipo ----
     @Override
@@ -241,6 +271,42 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
     @Override
     public List<Equipo> getEquipos(){
         String sqlQuery = "FROM Equipo";
+        return (List<Equipo>) entityManager.createQuery(sqlQuery).getResultList();
+    }
+
+    @Override
+    public Equipo getEquipoOperador(IdElementoConRutReq idEquipoUsuario){
+        String sqlQuery = "FROM Equipo WHERE id = :id AND estado = 'PROTOTIPO' ";
+        List listaResultado =entityManager.createQuery(sqlQuery)
+                .setParameter("id", idEquipoUsuario.getId()).getResultList();
+        if(listaResultado.isEmpty()) {
+            log.warn("La lista no contiene elementos");
+            return null;
+        }
+        return (Equipo) listaResultado.get(0);
+    }
+
+    @Override
+    public List<Equipo> getEquiposOperador(RutEntityReq rutUsuario){
+        String sqlQuery = "FROM Equipo WHERE estado = 'PROTOTIPO' ";
+        return (List<Equipo>) entityManager.createQuery(sqlQuery).getResultList();
+    }
+
+    @Override
+    public Equipo getEquipoConfigurador(IdElementoConRutReq idEquipoUsuario){
+        String sqlQuery = "FROM Equipo WHERE id = :id AND estado = 'CONSTRUCCION' ";
+        List listaResultado =entityManager.createQuery(sqlQuery)
+                .setParameter("id", idEquipoUsuario.getId()).getResultList();
+        if(listaResultado.isEmpty()) {
+            log.warn("La lista no contiene elementos");
+            return null;
+        }
+        return (Equipo) listaResultado.get(0);
+    }
+
+    @Override
+    public List<Equipo> getEquiposConfigurador(RutEntityReq rutUsuario){
+        String sqlQuery = "FROM Equipo WHERE estado = 'CONSTRUCCION' ";
         return (List<Equipo>) entityManager.createQuery(sqlQuery).getResultList();
     }
 
