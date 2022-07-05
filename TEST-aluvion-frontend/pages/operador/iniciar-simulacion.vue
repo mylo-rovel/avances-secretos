@@ -15,6 +15,7 @@
             "cancelbutton": "cancelar",
             "submitbutton": "guardar",
             simulaciones: [],
+            equipos:[],
             equipoSeleccionado: "",
             simulacionSeleccionada:""
             };
@@ -36,13 +37,34 @@
                 alert(serverResponse);
                 return true;
             },
-            obtenerEquipos(){
+            getSimulacionesEquipo(){
                 var equipoActual = document.getElementById('select_equipoSimulacion').selectedIndex;
                 for(let i = 0; i < simulaciones.length; i++ ){
                     document.getElementById('select_simulacion').value = simulaciones[equipoActual].nombre_;
                 }
             },
-
+            getEquipos(equipos) {
+                let selectIdEquipo = document.getElementById('select_equipoSimulacion');
+                for (let i = 0; i < equipos.length; i++) {
+                    let optionpet = document.createElement('option')
+                    optionpet.text = equipos[i].nombre_;
+                    selectidPet.add(optionpet)
+                }
+                console.log();
+            },
+            guardarEquipo(equipoSeleccionado){
+                equipoSeleccionado = document.getElementById('select_equipoSimulacion');
+                return equipoSeleccionado;
+            },
+            guardarSimulacion(simulacionSeleccionada){
+                simulacionSeleccionada = document.getElementById('select_simulacion');
+                return simulacionSeleccionada;
+            },
+            enviarSolicitud(){
+                let info = JSON.stringify({"equipo":equipoSeleccionado, "simulacion":simulacionSeleccionada});
+                return info;
+            }
+            
 
         }
     })
@@ -65,7 +87,7 @@
                             <div class="my-4 form-group row">
                                 <label for="equipo-simulacion" class="col-sm-4 col-form-label " >Seleccione un equipo</label>
                                 <div class="col-sm-6">
-                                    <select id="select_equipoSimulacion" name="equipo-simulacion" class="form-select" @click="obtenerEquipos()" aria-label="Equipo" required>
+                                    <select id="select_equipoSimulacion" name="equipo-simulacion" class="form-select" @click="getSimulacionesEquipo()" aria-label="Equipo" required>
                                         <!--<option value="" disabled selected></option>
                                             <option>Equipo simulador de lluvia </option>
                                             <option>Simulador 2.0</option>-->

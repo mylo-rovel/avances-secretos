@@ -23,12 +23,15 @@ export default Vue.extend({
             e.preventDefault();
             const serverPath = `${this.urlApi}/login`;
             const serverResponse = await $axios.$post(serverPath, this.getCredentialsToSend()).catch(err => err);
-            if (serverResponse instanceof Error || !serverResponse['sesionIniciada']) {
-                alert("ERROR. rayos :(", serverResponse)
-                return false;
-            }
-            console.log(serverResponse)
-            window.localStorage.setItem("token", serverResponse['jsonWebToken']);
+            // if (serverResponse instanceof Error || !serverResponse['sesionIniciada']) {
+            //     alert("ERROR. rayos :(", serverResponse)
+            //     return false;
+            // }
+            // console.log(serverResponse)
+            // window.localStorage.setItem("token", serverResponse['jsonWebToken']);
+            const a = document.createElement("a")
+            a.href= "menu-operador"
+            a.click();
             return true;
       }
     }
