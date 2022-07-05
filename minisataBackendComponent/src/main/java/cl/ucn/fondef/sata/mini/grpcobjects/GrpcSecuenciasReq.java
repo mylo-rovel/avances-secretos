@@ -7,22 +7,19 @@ import lombok.ToString;
 
 import java.util.List;
 
-/**
- * The type Grpc secuencia.
- */
 @ToString
 @EqualsAndHashCode
-public class GrpcSecuencia {
+public class GrpcSecuenciasReq {
 
     @Getter
     @Setter
-    private long idComponente;
+    private String nombreEquipo;
 
     @Getter
     @Setter
-    private String nombreComponente;
+    private String rutOperador;
 
     @Getter
     @Setter
-    private List<GrpcEvento> listaEventos;
+    private List<GrpcSecuencia> listaSecuencias;
 }

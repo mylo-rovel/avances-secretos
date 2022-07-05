@@ -25,8 +25,8 @@ import java.io.IOException;
  */
 @Slf4j
 @RestController
-//@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600, methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PATCH, RequestMethod.DELETE} )
-@CrossOrigin(origins = "*", maxAge = 3600, methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PATCH, RequestMethod.DELETE} )
+//@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600, methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PATCH} )
+@CrossOrigin(origins = "*", maxAge = 3600, methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PATCH} )
 public class WebController {
     // ESTE SERVIDOR ES EL PUENTE ENTRE EL WEBBROWSER Y EL "CENTRAL CORE"
     @Autowired
@@ -263,6 +263,16 @@ public class WebController {
 
     // ---- EQUIPOS      ------------------------------------------------------------------------------------
     // ---- SIMULACIONES ------------------------------------------------------------------------------------
+
+    // rpc addSecuencias(SecuenciasReq)  returns (MensajeReply){}
+    @RequestMapping(value = "api/simulaciones/secuencias/", method = RequestMethod.POST)
+//    public String addSecuencias(GrpcSecuenciasReq secuenciasReq, @RequestHeader(value="Authorization") String jwt){
+    public String addSecuencias(@RequestBody GrpcSecuenciasReq secuenciasReq){
+//        if (this.tokenEsValido(jwt)){
+//        }
+//        return "Error. Token invalido";
+        return webCoreClientGrpcSimulacion.addSecuencias(secuenciasReq);
+    }
 
 
     /**

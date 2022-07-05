@@ -27,4 +27,6 @@ public interface CoreDaoSimulacion {
      * @return the simulaciones
      */
     List<Simulacion> getSimulaciones();
+
+    String addSecuencias(SecuenciasReq secuenciasReq);
 }

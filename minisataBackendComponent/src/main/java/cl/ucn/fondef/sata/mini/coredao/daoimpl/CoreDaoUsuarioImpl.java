@@ -41,7 +41,7 @@ public class CoreDaoUsuarioImpl implements CoreDaoUsuario {
         String passwordUsuario = reqCredenciales.getPassword();
 
         try {
-            String sqlQuery = "FROM Usuario WHERE email = :email";
+            String sqlQuery = "FROM Usuario WHERE email = :email ";
             List listaResultado=  entityManager.createQuery(sqlQuery).setParameter("email", emailUsuario).getResultList();
 
             if (listaResultado.isEmpty()) { return false; }
