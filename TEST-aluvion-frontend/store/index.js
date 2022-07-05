@@ -49,11 +49,13 @@ export const state = () => ({
     // ]
     // DESPUÉS OBTENDREMOS LA CANTIDAD DE VALVULAS PARA INICIALIZAR EL ARRAY CON UNA CANTIDAD DE OBJETOS
     // EQUIVALENTE AL VALOR OBTENIDO
+    usuarioActual: null,
     secuencias: [
         {"listaEventos": []}, 
         {"listaEventos": []}, 
         {"listaEventos": []}
     ],
+    simulacion: []
 });
 
 // funciones asincronas
