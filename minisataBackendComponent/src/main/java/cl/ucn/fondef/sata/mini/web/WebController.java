@@ -342,6 +342,21 @@ public class WebController {
     // ---- EQUIPOS      ------------------------------------------------------------------------------------
     // ---- SIMULACIONES ------------------------------------------------------------------------------------
 
+    // rpc addSecuencias(SecuenciasReq)  returns (MensajeReply){}
+    @RequestMapping(value = "api/simulaciones/secuencias/", method = RequestMethod.POST)
+    public String addSecuencias(@RequestBody GrpcSecuenciasReq secuenciasReq, @RequestHeader(value="Authorization") String jwt){
+        if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
+        Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
+        Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
+
+        if(usuario!=null) {
+            if (usuario.getRol().equals("OPERADOR")) {
+                return webCoreClientGrpcSimulacion.addSecuencias(secuenciasReq);
+
+            }
+        }
+        return "Usuario sin permisos";
+    }
 
     /**
      * Gets simulacion.
