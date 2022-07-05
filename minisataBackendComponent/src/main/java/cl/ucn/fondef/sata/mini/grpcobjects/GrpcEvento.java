@@ -18,8 +18,4 @@ public class GrpcEvento {
     @Getter
     @Setter
     private int duracion;
-
-    @Getter
-    @Setter
-    private int posicion;
 }

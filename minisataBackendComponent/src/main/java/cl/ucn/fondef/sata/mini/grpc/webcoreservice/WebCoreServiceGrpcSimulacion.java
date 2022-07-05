@@ -81,4 +81,15 @@ public class WebCoreServiceGrpcSimulacion {
         }
         return listaRetornar.build();
     }
+
+    // rpc addSecuencias(SecuenciasReq)  returns (MensajeReply){}
+    public Domain.MensajeReply addSecuencias(Domain.SecuenciasReq secuenciasReq, StreamObserver<Domain.MensajeReply> responseObserver){
+        String mensajeResultado = coreDaoSimulacion.addSecuencias(secuenciasReq);
+
+        Domain.MensajeReply grpcResponse = Domain.MensajeReply.newBuilder()
+                .setMensajeTexto(mensajeResultado)
+                .build();
+
+        return grpcResponse;
+    }
 }

@@ -140,7 +140,6 @@ CREATE TABLE evento
     posicion            int(11)         NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (id_secuencia) REFERENCES secuencia (id),
-    FOREIGN KEY (id_ejecucion) REFERENCES ejecucion (id)
 );
 
 
@@ -152,4 +151,14 @@ CREATE TABLE simulacioncomponente
     PRIMARY KEY (id),
     FOREIGN KEY (id_simulacion) REFERENCES simulacion (id),
     FOREIGN KEY (id_componente) REFERENCES componente (id)
+);
+
+CREATE TABLE ejecucionsecuencia
+(
+    id                  bigint(20)      NOT NULL AUTO_INCREMENT,
+    id_ejecucion        bigint(20)      NOT NULL,
+    id_secuencia        bigint(20)      NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (id_ejecucion) REFERENCES ejecucion (id),
+    FOREIGN KEY (id_secuencia) REFERENCES secuencia (id)
 );

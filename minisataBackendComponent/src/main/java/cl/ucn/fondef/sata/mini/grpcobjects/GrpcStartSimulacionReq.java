@@ -5,24 +5,15 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.List;
-
-/**
- * The type Grpc secuencia.
- */
 @ToString
 @EqualsAndHashCode
-public class GrpcSecuencia {
+public class GrpcStartSimulacionReq {
 
     @Getter
     @Setter
-    private long idComponente;
+    private long id;
 
     @Getter
     @Setter
-    private String nombreComponente;
-
-    @Getter
-    @Setter
-    private List<GrpcEvento> listaEventos;
+    private String nombreEquipo;
 }

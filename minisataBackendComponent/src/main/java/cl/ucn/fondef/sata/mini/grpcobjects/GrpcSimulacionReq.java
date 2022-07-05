@@ -33,12 +33,4 @@ public class GrpcSimulacionReq {
     @Getter
     @Setter
     private String rutOperador;
-
-    @Getter
-    @Setter
-    private String fechaEjecucion;
-
-    @Getter
-    @Setter
-    private List<GrpcSecuencia> listaSecuencias;
 }

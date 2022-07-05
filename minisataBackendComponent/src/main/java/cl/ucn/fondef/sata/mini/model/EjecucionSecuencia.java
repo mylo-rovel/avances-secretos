@@ -7,15 +7,12 @@ import lombok.ToString;
 
 import javax.persistence.*;
 
-/**
- * The type Evento.
- */
+
 @Entity
-@Table(name = "evento")
+@Table(name = "ejecucionsecuencia")
 @ToString
 @EqualsAndHashCode
-public class Evento {
-
+public class EjecucionSecuencia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
@@ -25,21 +22,12 @@ public class Evento {
 
     @Getter
     @Setter
+    @Column(name = "id_ejecucion")
+    private long idEjecucion;
+
+    @Getter
+    @Setter
     @Column(name = "id_secuencia")
     private long idSecuencia;
-
-    @Getter
-    @Setter
-    @Column(name = "intensidad")
-    private int intensidad;
-
-    @Getter
-    @Setter
-    @Column(name = "duracion")
-    private int duracion;
-
-    @Getter
-    @Setter
-    @Column(name = "posicion")
-    private int posicion;
 }
+
