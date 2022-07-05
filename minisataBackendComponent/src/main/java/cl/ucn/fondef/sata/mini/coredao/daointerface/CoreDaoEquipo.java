@@ -4,6 +4,7 @@
 
 package cl.ucn.fondef.sata.mini.coredao.daointerface;
 
+import cl.ucn.fondef.sata.mini.grpc.Domain;
 import cl.ucn.fondef.sata.mini.model.Componente;
 import cl.ucn.fondef.sata.mini.model.Equipo;
 import cl.ucn.fondef.sata.mini.grpc.Domain.*;
@@ -27,17 +28,17 @@ public interface CoreDaoEquipo {
 
     List<Pin> getPines(long IdComponente);
 
-    Equipo getEquipo(IdElementoReq idEquipo);
+    Equipo getEquipo(IdElementoConRutReq idEquipoYrutUsuario);
 
-    List<Equipo> getEquipos();
+    List<Equipo> getEquipos(Domain.RutEntityReq rutEntityReq);
 
-    Equipo getEquipoOperador(IdElementoConRutReq idEquipoUsuario);
+/*    Equipo getEquipoOperador(IdElementoConRutReq idEquipoUsuario);
 
     List<Equipo> getEquiposOperador(RutEntityReq rutUsuario);
 
     Equipo getEquipoConfigurador(IdElementoConRutReq idEquipoUsuario);
 
-    List<Equipo> getEquiposConfigurador(RutEntityReq rutUsuario);
+    List<Equipo> getEquiposConfigurador(RutEntityReq rutUsuario);*/
 
     List<Componente> getValvulasEquipo(IdElementoReq idElementoReq);
 

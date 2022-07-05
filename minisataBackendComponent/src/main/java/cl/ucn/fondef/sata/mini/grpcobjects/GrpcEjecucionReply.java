@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2022 Fondef IDeA I+D.
- */
-
 package cl.ucn.fondef.sata.mini.grpcobjects;
 
 import lombok.EqualsAndHashCode;
@@ -11,12 +7,13 @@ import lombok.ToString;
 
 import java.util.List;
 
-/**
- * The type Grpc simulacion req.
- */
 @ToString
 @EqualsAndHashCode
-public class GrpcSimulacionReq {
+public class GrpcEjecucionReply {
+
+    @Getter
+    @Setter
+    private long id;
 
     @Getter
     @Setter
@@ -32,9 +29,17 @@ public class GrpcSimulacionReq {
 
     @Getter
     @Setter
-    private String rutOperador;
+    private String descripcionEquipo;
+
+    @Getter
+    @Setter
+    private String fechaEjecucion;
 
     @Getter
     @Setter
     private List<GrpcSecuencia> listaSecuencias;
+
+    @Getter
+    @Setter
+    private double aguaCaida;
 }

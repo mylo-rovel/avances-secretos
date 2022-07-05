@@ -19,23 +19,25 @@ service WebCoreCommuService {
   rpc addEquipo(EquipoEntityReq)  returns (MensajeReply){}
   rpc updateEquipo(EquipoEntityReq)  returns (MensajeReply){}
 
-  rpc getEquipo(IdElementoReq)  returns (EquipoEntityReply) {}
-  rpc getEquipos(EmptyReq)  returns (EquiposEntityReply) {}
-  rpc getEquipoOC(IdElementoConRutReq) returns (EquipoEntityReply) {}
-  rpc getEquiposOC(RutEntityReq) returns (EquiposEntityReply) {}
+  rpc getEquipo(IdElementoConRutReq)  returns (EquipoEntityReply) {}
+  rpc getEquipos(RutEntityReq)  returns (EquiposEntityReply) {}
+  rpc getValvulasEquipo(IdElementoReq) returns (ComponentesEquipoReply) {}
 
   rpc uploadArchivo(stream ArchivoEntityReq)  returns (MensajeReply){}
   rpc getArchivos(IdElementoReq)  returns (stream ArchivosEntityReply){}
 
+  rpc addSimulacion(SimulacionReq)  returns (MensajeReply){}
+  rpc getSimulacion(IdElementoConRutReq) returns (SimulacionReply){}
+  rpc getSimulaciones(RutEntityReq) returns (SimulacionesReply){}
   rpc getSecuenciasComponente(IdElementoReq) returns (SecuenciasComponenteEquipoReply) {}
-  rpc addSecuencias(SecuenciasReq)  returns (MensajeReply){}
+
+  rpc getEjecucion(IdElementoReq) returns (EjecucionReply){}
+  rpc getEjecuciones(EmptyReq) returns (EjecucionesReply){}
 
   rpc getRegistros(RutEntityReq) returns (RegistrosReply){}
-  rpc getSimulacion(IdElementoReq) returns (SimulacionReply){}
-  rpc getSimulaciones(EmptyReq) returns (SimulacionesReply){}
 
-  // va de la mano con la funcion (1) del CoreRaspiCommuService
-  rpc startSimulacion(SimulacionReply) returns (MensajeReply){}
+  // va de la mano con la funcion (1) del CoreBoardCommuService
+  rpc startSimulacion(StartSimulacionReq) returns (MensajeReply){}
 
   // va de la mano con la funcion (2) del CoreBoardCommuService
   // esta funcion busca preguntarle al Raspberry que equipo y simulacion esta corriendo

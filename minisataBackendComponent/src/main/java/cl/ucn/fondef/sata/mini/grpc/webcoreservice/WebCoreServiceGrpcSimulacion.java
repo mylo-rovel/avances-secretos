@@ -23,42 +23,30 @@ public class WebCoreServiceGrpcSimulacion {
     @Autowired
     private CoreDaoEquipo coreDaoEquipo;
 
-    /**
-     * Get simulacion domain . simulacion reply.
-     *
-     * @param idElemento       the id elemento
-     * @param responseObserver the response observer
-     * @return the domain . simulacion reply
-     */
-    public Domain.SimulacionReply getSimulacion(Domain.IdElementoReq idElemento, StreamObserver<Domain.SimulacionReply> responseObserver){
-        // Obtener la simulacion desde la base de datos
-        Simulacion simulacionGuardada = coreDaoSimulacion.getSimulacion(idElemento);
+
+    public Domain.SimulacionReply getSimulacion(Domain.IdElementoConRutReq idElementoConRutReq, StreamObserver<Domain.SimulacionReply> responseObserver){
+        // idElementoConRutReq => id (long) de la simulacion y rut del operador
+        Simulacion simulacionGuardada = coreDaoSimulacion.getSimulacion(idElementoConRutReq.getId());
         if (simulacionGuardada == null) {
             return Domain.SimulacionReply.newBuilder().build();
         }
 
-        Domain.IdElementoReq idEquipo = Domain.IdElementoReq.newBuilder().setId(simulacionGuardada.getIdEquipo()).build();
-        Equipo equipoAsociado = coreDaoEquipo.getEquipo(idEquipo);
+        Domain.IdElementoConRutReq idEquipoConRut = Domain.IdElementoConRutReq.newBuilder()
+                .setRut(idElementoConRutReq.getRut()).setId(simulacionGuardada.getIdEquipo()).build();
+
+        Equipo equipoAsociado = coreDaoEquipo.getEquipo(idEquipoConRut);
         Domain.SimulacionReply simulacionRetornar = Domain.SimulacionReply.newBuilder()
                 .setId(simulacionGuardada.getId())
                 .setNombre(simulacionGuardada.getNombre())
                 .setDescripcion(simulacionGuardada.getDescripcion())
                 .setNombreEquipo(equipoAsociado.getNombre())
                 .setDescripcionEquipo(equipoAsociado.getDescripcion())
-                .setFechaEjecucion(simulacionGuardada.getFechaCreacion())
                 .build();
 
         return simulacionRetornar;
     }
 
-    /**
-     * Get simulaciones domain . simulaciones reply.
-     *
-     * @param emptyReq         the empty req
-     * @param responseObserver the response observer
-     * @return the domain . simulaciones reply
-     */
-    public Domain.SimulacionesReply getSimulaciones(Domain.EmptyReq emptyReq, StreamObserver<Domain.SimulacionesReply> responseObserver){
+    public Domain.SimulacionesReply getSimulaciones(Domain.RutEntityReq rutEntityReq, StreamObserver<Domain.SimulacionesReply> responseObserver){
         List<Simulacion> listaSimuGuardadas = coreDaoSimulacion.getSimulaciones();
         Domain.SimulacionesReply.Builder listaRetornar = Domain.SimulacionesReply.newBuilder();
 
@@ -67,14 +55,13 @@ public class WebCoreServiceGrpcSimulacion {
         }
 
         for (Simulacion simulacion : listaSimuGuardadas) {
-            Domain.IdElementoReq idEquipo = Domain.IdElementoReq.newBuilder().setId(simulacion.getIdEquipo()).build();
-            Equipo equipoAsociado = coreDaoEquipo.getEquipo(idEquipo);
+            Domain.IdElementoConRutReq idEquipoConRut = Domain.IdElementoConRutReq.newBuilder().setRut(rutEntityReq.getRut()).setId(simulacion.getIdEquipo()).build();
+            Equipo equipoAsociado = coreDaoEquipo.getEquipo(idEquipoConRut);
 
             Domain.SimulacionAcotada simuRetornar = Domain.SimulacionAcotada.newBuilder()
                     .setId(simulacion.getId())
                     .setNombre(simulacion.getNombre())
                     .setNombreEquipo(equipoAsociado.getNombre())
-                    .setFechaEjecucion(equipoAsociado.getDescripcion())
                     .build();
 
             listaRetornar.addSimulacionAcotada(simuRetornar);
@@ -83,8 +70,8 @@ public class WebCoreServiceGrpcSimulacion {
     }
 
     // rpc addSecuencias(SecuenciasReq)  returns (MensajeReply){}
-    public Domain.MensajeReply addSecuencias(Domain.SecuenciasReq secuenciasReq, StreamObserver<Domain.MensajeReply> responseObserver){
-        String mensajeResultado = coreDaoSimulacion.addSecuencias(secuenciasReq);
+    public Domain.MensajeReply addSimulacion(Domain.SimulacionReq simulacionReq, StreamObserver<Domain.MensajeReply> responseObserver){
+        String mensajeResultado = coreDaoSimulacion.addSimulacion(simulacionReq);
 
         Domain.MensajeReply grpcResponse = Domain.MensajeReply.newBuilder()
                 .setMensajeTexto(mensajeResultado)

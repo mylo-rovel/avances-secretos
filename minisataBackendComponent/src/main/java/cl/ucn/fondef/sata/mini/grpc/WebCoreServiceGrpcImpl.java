@@ -84,15 +84,15 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
     }
 
     @Override
-    public void getEquipo(IdElementoReq idElementoReq, StreamObserver<EquipoEntityReply> responseObserver){
-        var grpcResponse = webCoreServiceGrpcEquipo.getEquipo(idElementoReq, responseObserver);
+    public void getEquipo(IdElementoConRutReq idElementoConRutReq, StreamObserver<EquipoEntityReply> responseObserver){
+        var grpcResponse = webCoreServiceGrpcEquipo.getEquipo(idElementoConRutReq, responseObserver);
         responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
         responseObserver.onCompleted(); //Terminar el proceso
     }
 
     @Override
-    public void getEquipos(EmptyReq emptyReq, StreamObserver<EquiposEntityReply> responseObserver){
-        var grpcResponse = webCoreServiceGrpcEquipo.getEquipos(emptyReq, responseObserver);
+    public void getEquipos(RutEntityReq rutEntityReq, StreamObserver<EquiposEntityReply> responseObserver){
+        var grpcResponse = webCoreServiceGrpcEquipo.getEquipos(rutEntityReq, responseObserver);
         responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
         responseObserver.onCompleted(); //Terminar el proceso
     }
@@ -106,8 +106,8 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
 
     // TODO: HACER EL INNER JOIN PARA OBTENER LAS "Secuencia" o eventos DE LA SIMULACION
     @Override
-    public void getSimulacion(IdElementoReq idElemento, StreamObserver<SimulacionReply> responseObserver){
-        var grpcResponse = webCoreServiceGrpcSimulacion.getSimulacion(idElemento, responseObserver);
+    public void getSimulacion(IdElementoConRutReq idElementoConRutReq, StreamObserver<SimulacionReply> responseObserver){
+        var grpcResponse = webCoreServiceGrpcSimulacion.getSimulacion(idElementoConRutReq, responseObserver);
         responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
         responseObserver.onCompleted(); //Terminar el proceso
     }
@@ -115,8 +115,15 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
     // TODO: OPTIMIZAR Y HACER UNA QUERY HACIENDO UN INNER JOIN PARA...
     // TODO: ... EVITAR HACER MULTIPLES QUERIES A LA BASE DE DATOS
     @Override
-    public void getSimulaciones(EmptyReq emptyReq, StreamObserver<SimulacionesReply> responseObserver){
-        var grpcResponse = webCoreServiceGrpcSimulacion.getSimulaciones(emptyReq, responseObserver);
+    public void getSimulaciones(RutEntityReq rutEntityReq, StreamObserver<SimulacionesReply> responseObserver){
+        var grpcResponse = webCoreServiceGrpcSimulacion.getSimulaciones(rutEntityReq, responseObserver);
+        responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
+        responseObserver.onCompleted(); //Terminar el proceso
+    }
+
+    @Override
+    public void addSimulacion(SimulacionReq simulacionReq, StreamObserver<MensajeReply> responseObserver){
+        var grpcResponse = webCoreServiceGrpcSimulacion.addSimulacion(simulacionReq, responseObserver);
         responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
         responseObserver.onCompleted(); //Terminar el proceso
     }
@@ -124,13 +131,6 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
     @Override
     public void getRegistros(RutEntityReq rutEntityReq, StreamObserver<RegistrosReply> responseObserver){
         var grpcResponse = webCoreServiceGrpcExtra.getRegistros(rutEntityReq, responseObserver);
-        responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
-        responseObserver.onCompleted(); //Terminar el proceso
-    }
-
-    @Override
-    public void addSecuencias(SecuenciasReq secuenciasReq, StreamObserver<MensajeReply> responseObserver){
-        var grpcResponse = webCoreServiceGrpcSimulacion.addSecuencias(secuenciasReq, responseObserver);
         responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
         responseObserver.onCompleted(); //Terminar el proceso
     }

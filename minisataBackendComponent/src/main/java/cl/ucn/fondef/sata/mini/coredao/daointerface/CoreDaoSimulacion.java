@@ -13,13 +13,8 @@ import java.util.List;
  * The interface Core dao simulacion.
  */
 public interface CoreDaoSimulacion {
-    /**
-     * Gets simulacion.
-     *
-     * @param idElemento the id elemento
-     * @return the simulacion
-     */
-    Simulacion getSimulacion(IdElementoReq idElemento);
+
+    Simulacion getSimulacion(long idSimulacion);
 
     /**
      * Gets simulaciones.
@@ -28,5 +23,5 @@ public interface CoreDaoSimulacion {
      */
     List<Simulacion> getSimulaciones();
 
-    String addSecuencias(SecuenciasReq secuenciasReq);
+    String addSimulacion(SimulacionReq simulacionReq);
 }

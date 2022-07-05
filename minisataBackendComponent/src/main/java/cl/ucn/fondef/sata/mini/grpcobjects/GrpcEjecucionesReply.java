@@ -9,17 +9,9 @@ import java.util.List;
 
 @ToString
 @EqualsAndHashCode
-public class GrpcSecuenciasReq {
+public class GrpcEjecucionesReply {
 
     @Getter
     @Setter
-    private String nombreEquipo;
-
-    @Getter
-    @Setter
-    private String rutOperador;
-
-    @Getter
-    @Setter
-    private List<GrpcSecuencia> listaSecuencias;
+    private List<GrpcEjecucionAcotada> listaEjecucionesAcotada;
 }

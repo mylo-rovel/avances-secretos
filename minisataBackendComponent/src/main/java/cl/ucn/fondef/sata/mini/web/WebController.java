@@ -232,12 +232,10 @@ public class WebController {
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
 
         if(usuario!=null){
-            if(this.tokenEsValido(jwt)){
-                if(usuario.getRol().equals("OPERADOR") || usuario.getRol().equals("CONFIGURADOR")){
-                    return webCoreClientGrpcEquipo.getEquipoOC(id, rutUsuario.getRut());
-                }
-                return webCoreClientGrpcEquipo.getEquipo(id);
+            if(usuario.getRol().equals("OPERADOR") || usuario.getRol().equals("CONFIGURADOR")){
+                return webCoreClientGrpcEquipo.getEquipo(id, rutUsuario.getRut());
             }
+//            return webCoreClientGrpcEquipo.getEquipoOC(id, rutUsuario.getRut());
         }
         return "Usario sin permisos";
     }
@@ -256,9 +254,9 @@ public class WebController {
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
 
         if(usuario.getRol().equals("OPERADOR") || usuario.getRol().equals("CONFIGURADOR")){
-            return webCoreClientGrpcEquipo.getEquiposOC(rutUsuario.getRut());
+//            return webCoreClientGrpcEquipo.getEquiposOC(rutUsuario.getRut());
         }
-        return webCoreClientGrpcEquipo.getEquipos();
+        return webCoreClientGrpcEquipo.getEquipos(rutUsuario.getRut());
     }
 
 // ***---- IMPLEMENTAR ----
@@ -340,16 +338,16 @@ public class WebController {
     // ---- EQUIPOS      ------------------------------------------------------------------------------------
     // ---- SIMULACIONES ------------------------------------------------------------------------------------
 
-    // rpc addSecuencias(SecuenciasReq)  returns (MensajeReply){}
+    // rpc addSimulacion(SimulacionReq)  returns (MensajeReply){}
     @RequestMapping(value = "api/simulaciones/secuencias/", method = RequestMethod.POST)
-    public String addSecuencias(@RequestBody GrpcSecuenciasReq secuenciasReq, @RequestHeader(value="Authorization") String jwt){
+    public String addSimulacion(@RequestBody GrpcSimulacionReq simulacionReq, @RequestHeader(value="Authorization") String jwt){
         if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
 
         if(usuario!=null) {
             if (usuario.getRol().equals("OPERADOR")) {
-                return webCoreClientGrpcSimulacion.addSecuencias(secuenciasReq);
+                return webCoreClientGrpcSimulacion.addSimulacion(simulacionReq);
 
             }
         }
@@ -372,7 +370,7 @@ public class WebController {
 
         if(usuario!=null) {
             if (usuario.getRol().equals("OPERADOR")) {
-                return webCoreClientGrpcSimulacion.getSimulacion(id);
+                return webCoreClientGrpcSimulacion.getSimulacion(id, this.getTokenKey(jwt));
             }
         }
         return "Usuario sin permisos";
@@ -394,7 +392,7 @@ public class WebController {
 
         if(usuario!=null) {
             if (usuario.getRol().equals("OPERADOR")) {
-                return webCoreClientGrpcSimulacion.getSimulaciones();
+                return webCoreClientGrpcSimulacion.getSimulaciones(this.getTokenKey(jwt));
             }
         }
         return "Usuario sin permisos";
@@ -409,7 +407,7 @@ public class WebController {
 // ***---- IMPLEMENTAR: TODO: ARREGLAR DOMAIN.PROTO => Sólo recibimos equipo y simulacion ----
     //   rpc startSimulacion(SimulacionReq) returns (MensajeReply){}
     @RequestMapping(value = "api/simulaciones", method = RequestMethod.POST)
-    public String startSimulacion(@RequestBody GrpcSimulacionReply simulacionNueva, @RequestHeader(value="Authorization") String jwt) {
+    public String startSimulacion(@RequestBody GrpcSimulacionReq simulacionNueva, @RequestHeader(value="Authorization") String jwt) {
         if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
 
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();

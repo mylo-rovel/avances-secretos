@@ -18,17 +18,13 @@ public class GrpcSimulacionAcotada {
 
     @Getter
     @Setter
+    private long id;
+
+    @Getter
+    @Setter
     private String nombre;
 
     @Getter
     @Setter
     private String nombreEquipo;
-
-    @Getter
-    @Setter
-    private String fechaEjecucion;
-
-    @Getter
-    @Setter
-    private Double aguaCaida;
 }

@@ -5,6 +5,7 @@
 package cl.ucn.fondef.sata.mini.coredao.daoimpl;
 
 import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoEquipo;
+import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoUsuario;
 import cl.ucn.fondef.sata.mini.grpc.Domain;
 import cl.ucn.fondef.sata.mini.model.Componente;
 import cl.ucn.fondef.sata.mini.model.Evento;
@@ -12,6 +13,7 @@ import cl.ucn.fondef.sata.mini.model.Pin;
 import cl.ucn.fondef.sata.mini.model.Placa;
 import cl.ucn.fondef.sata.mini.model.Secuencia;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import cl.ucn.fondef.sata.mini.model.*;
@@ -19,6 +21,7 @@ import cl.ucn.fondef.sata.mini.grpc.Domain.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.HashMap;
 import java.util.List;
 
@@ -32,6 +35,9 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Autowired
+    CoreDaoUsuario coreDaoUsuario;
 
     private List<Usuario> getListaUsuariosPorRut(EquipoEntityReq equipoEntityReq) {
         String usuarioQuery = "FROM Usuario WHERE rut = :rut AND estado = 'ACTIVO' ";
@@ -256,11 +262,24 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
                 .setParameter("id_componente", IdComponente).getResultList();
     }
 
+    private Query getEquipoQueryPorRolUsuario(IdElementoConRutReq idEquipoYrutUsuario) {
+        String rutUsuario = idEquipoYrutUsuario.getRut();
+        Usuario usuarioRequest = coreDaoUsuario.getUsuario(Domain.RutEntityReq.newBuilder().setRut(rutUsuario).build());
+        String sqlQuery = "";
+        if (usuarioRequest.getRol().equals(UsuarioEntity.RolUsuario.OPERADOR.name())){
+            sqlQuery = "FROM Equipo WHERE id = :id AND estado = 'PROTOTIPO'";
+        }
+        else {
+            sqlQuery = "FROM Equipo WHERE id = :id";
+        }
+        return entityManager.createQuery(sqlQuery).setParameter("id", idEquipoYrutUsuario.getId());
+    }
+
     @Override
-    public Equipo getEquipo(IdElementoReq idEquipo){
-        String sqlQuery = "FROM Equipo WHERE id = :id";
-        List listaResultado =entityManager.createQuery(sqlQuery)
-                .setParameter("id", idEquipo.getId()).getResultList();
+    public Equipo getEquipo(IdElementoConRutReq idEquipoYrutUsuario){
+        Query sqlQueryEquipo = this.getEquipoQueryPorRolUsuario(idEquipoYrutUsuario);
+        List listaResultado = sqlQueryEquipo.getResultList();
+
         if(listaResultado.isEmpty()) {
             log.warn("La lista no contiene elementos");
             return null;
@@ -268,13 +287,26 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
         return (Equipo) listaResultado.get(0);
     }
 
-    @Override
-    public List<Equipo> getEquipos(){
-        String sqlQuery = "FROM Equipo";
-        return (List<Equipo>) entityManager.createQuery(sqlQuery).getResultList();
+    private Query getEquiposQueryPorRolUsuario (Domain.RutEntityReq rutEntityReq) {
+        String rutUsuario = rutEntityReq.getRut();
+        Usuario usuarioRequest = coreDaoUsuario.getUsuario(Domain.RutEntityReq.newBuilder().setRut(rutUsuario).build());
+        String sqlQuery = "";
+        if (usuarioRequest.getRol().equals(UsuarioEntity.RolUsuario.OPERADOR.name())){
+            sqlQuery = "FROM Equipo WHERE estado = 'PROTOTIPO'";
+        }
+        else {
+            sqlQuery = "FROM Equipo";
+        }
+        return entityManager.createQuery(sqlQuery);
     }
 
     @Override
+    public List<Equipo> getEquipos(Domain.RutEntityReq rutEntityReq){
+        Query sqlQueryEquipos = getEquiposQueryPorRolUsuario(rutEntityReq);
+        return (List<Equipo>) sqlQueryEquipos.getResultList();
+    }
+
+/*    @Override
     public Equipo getEquipoOperador(IdElementoConRutReq idEquipoUsuario){
         String sqlQuery = "FROM Equipo WHERE id = :id AND estado = 'PROTOTIPO' ";
         List listaResultado =entityManager.createQuery(sqlQuery)
@@ -308,7 +340,7 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
     public List<Equipo> getEquiposConfigurador(RutEntityReq rutUsuario){
         String sqlQuery = "FROM Equipo WHERE estado = 'CONSTRUCCION' ";
         return (List<Equipo>) entityManager.createQuery(sqlQuery).getResultList();
-    }
+    }*/
 
     @Override
     public List<Componente> getValvulasEquipo(IdElementoReq idElementoReq){

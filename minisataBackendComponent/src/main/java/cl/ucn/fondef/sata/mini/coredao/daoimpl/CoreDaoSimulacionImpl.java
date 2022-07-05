@@ -31,10 +31,10 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
     private EntityManager entityManager;
 
     @Override
-    public Simulacion getSimulacion(IdElementoReq idElementoReq){
+    public Simulacion getSimulacion(long idSimulacion){
         String sqlQuery = "FROM Simulacion WHERE id = :idSimulacion";
         List listaResultado = entityManager.createQuery(sqlQuery)
-                .setParameter("idSimulacion", idElementoReq.getId()).getResultList();
+                .setParameter("idSimulacion", idSimulacion).getResultList();
         if(listaResultado.isEmpty()) {
             log.warn("La lista no contiene elementos");
             return null;
@@ -56,16 +56,17 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
 
 
     @Override
-    public String addSecuencias(SecuenciasReq secuenciasReq) {
-        String nombreEquipo = secuenciasReq.getNombreEquipo();
-        String rutOperador = secuenciasReq.getRutOperador();
-        // Chequear si existe el nombre del equipo y el operador
+    public String addSimulacion(SimulacionReq simulacionReq) {
+        String nombreSimulacion = simulacionReq.getNombre();
+        String descripcionSimulacion = simulacionReq.getDescripcion();
+        String nombreEquipo = simulacionReq.getNombreEquipo();
+        String rutOperador = simulacionReq.getRutOperador();
 
-        List<Domain.Secuencia> listaSecuencias = secuenciasReq.getSecuenciaList();
+//        Simulacion simulacionGuardar
+
+        List<Domain.Secuencia> listaSecuencias = simulacionReq.getSecuenciaList();
         for (int i = 0; i < listaSecuencias.size(); i++) {
             long idComponente = listaSecuencias.get(i).getIdComponente();
-            String nombreComponente = listaSecuencias.get(i).getNombreComponente();
-            // realmente necesitamos el nombre del componente?
             Secuencia secuenciaGuardar = new Secuencia();
             secuenciaGuardar.setIdComponente(idComponente);
             entityManager.persist(secuenciaGuardar);

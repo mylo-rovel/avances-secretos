@@ -64,7 +64,7 @@ public class CoreDaoUsuarioImpl implements CoreDaoUsuario {
     public Usuario getUsuarioPorCorreo(String emailUsuario) {
         // Usuario => con mayuscula porque se refiere a la clase models/Usuario
         // dentro de las clases de models se señala qué tabla y campo es cada clase y atributo
-        String sqlQuery = "FROM Usuario WHERE email = :email AND estado = 'ACTIVO' ";
+        String sqlQuery = "FROM Usuario WHERE email = :email";
         List listaResultado=  entityManager.createQuery(sqlQuery).setParameter("email", emailUsuario).getResultList();
         if (listaResultado.isEmpty()) { return null; }
         return (Usuario) listaResultado.get(0);
@@ -73,7 +73,7 @@ public class CoreDaoUsuarioImpl implements CoreDaoUsuario {
     @Override
     public String addUsuario(UsuarioEntityReq usuarioNuevo) {
         // Buscar si existe el rut o el correo => Si existe uno de los dos, existe el usuario
-        String sqlQueryUsuario = "FROM Usuario WHERE email = :emailUsuario OR rut = :rutUsuario AND estado = 'ACTIVO' ";
+        String sqlQueryUsuario = "FROM Usuario WHERE email = :emailUsuario OR rut = :rutUsuario";
         List listaUsuarios=  entityManager.createQuery(sqlQueryUsuario)
                 .setParameter("emailUsuario", usuarioNuevo.getUsuario().getEmail())
                 .setParameter("rutUsuario", usuarioNuevo.getUsuario().getRut())
@@ -93,7 +93,7 @@ public class CoreDaoUsuarioImpl implements CoreDaoUsuario {
             usuarioRegistrar.setEstado(usuarioNuevo.getUsuario().getEstado().name());
             entityManager.persist(usuarioRegistrar);
 
-            sqlQueryUsuario = "FROM Usuario WHERE email = :emailUsuario AND rut = :rutUsuario AND estado = 'ACTIVO' ";
+            sqlQueryUsuario = "FROM Usuario WHERE email = :emailUsuario AND rut = :rutUsuario";
             //noinspection unchecked
             List<Usuario> listaUsuariosEspecifica = entityManager.createQuery(sqlQueryUsuario)
                     .setParameter("emailUsuario", usuarioRegistrar.getEmail())
@@ -152,7 +152,7 @@ public class CoreDaoUsuarioImpl implements CoreDaoUsuario {
 
     @Override
     public Usuario getUsuario(RutEntityReq rutEntityReq){
-        String sqlQuery = "FROM Usuario WHERE rut = :rut AND estado = 'ACTIVO' ";
+        String sqlQuery = "FROM Usuario WHERE rut = :rut";
         List listaResultado = entityManager.createQuery(sqlQuery)
                 .setParameter("rut", rutEntityReq.getRut()).getResultList();
         if(listaResultado.isEmpty()) {
@@ -164,7 +164,7 @@ public class CoreDaoUsuarioImpl implements CoreDaoUsuario {
 
     @Override
     public List<Usuario> getUsuarios(){
-        String sqlQuery = "FROM Usuario WHERE 1=1 AND estado = 'ACTIVO' ";
+        String sqlQuery = "FROM Usuario";
         return (List<Usuario>) entityManager.createQuery(sqlQuery).getResultList();
     }
 }

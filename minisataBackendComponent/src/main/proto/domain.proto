@@ -228,14 +228,15 @@ message Evento {
 
 message Secuencia {
   int64 id_componente = 1;
-  string nombre_componente = 2;
-  repeated Evento evento = 3;
+  repeated Evento evento = 2;
 }
 
-message SecuenciasReq {
-  string nombre_equipo = 1;
-  string rut_operador = 2;
-  repeated Secuencia secuencia = 3;
+message SimulacionReq {
+  string nombre = 1;
+  string descripcion = 2;
+  string nombre_equipo = 3;
+  string rut_operador = 4;
+  repeated Secuencia secuencia = 5;
 }
 
 message SecuenciasComponente {
@@ -251,15 +252,29 @@ message StartSimulacionReq{
   string nombre_equipo = 2;
 }
 
-
-message SimulacionReq {
-  string nombre = 1;
-  string descripcion = 2;
-  string nombre_equipo = 3;
-  string rut_operador = 4;
+message SimulacionReply {
+  // usado en vista iniciar simulacion
+  int64 id = 1;
+  string nombre = 2;
+  string descripcion = 3;
+  string nombre_equipo = 4;
+  string descripcion_equipo = 5;
+  repeated Secuencia secuencia = 7;
 }
 
-message SimulacionReply {
+message SimulacionAcotada {
+  int64 id = 1;
+  string nombre = 2;
+  string nombre_equipo = 3;
+}
+
+message SimulacionesReply {
+  // Usado en listas desplegables de seleccion de simulacion
+  repeated SimulacionAcotada simulacion_acotada = 1;
+}
+
+message EjecucionReply {
+  // Usado como detalle de fila en el historial de ejecuciones
   int64 id = 1;
   string nombre = 2;
   string descripcion = 3;
@@ -270,17 +285,17 @@ message SimulacionReply {
   double agua_caida = 8;
 }
 
-message SimulacionAcotada {
+message EjecucionAcotada {
+  // Usado como fila en el historial de ejecuciones
   int64 id = 1;
-  string nombre = 2;
+  string nombre_simulacion = 2;
   string nombre_equipo = 3;
   string fecha_ejecucion = 4;
   double agua_caida = 5;
 }
 
-message SimulacionesReply {
-  // Usado en listas desplegables y filas de tablas
-  repeated SimulacionAcotada simulacion_acotada = 1;
+message EjecucionesReply {
+  repeated EjecucionAcotada ejecucion_acotada = 1;
 }
 
 message LecturaSensoresReply {
