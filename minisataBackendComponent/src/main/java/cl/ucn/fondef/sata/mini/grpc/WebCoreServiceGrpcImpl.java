@@ -129,6 +129,13 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
     }
 
     @Override
+    public void addSecuencias(SecuenciasReq secuenciasReq, StreamObserver<MensajeReply> responseObserver){
+        var grpcResponse = webCoreServiceGrpcSimulacion.addSecuencias(secuenciasReq, responseObserver);
+        responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
+        responseObserver.onCompleted(); //Terminar el proceso
+    }
+
+    @Override
     // rpc uploadArchivo(stream ArchivoEntityReq)  returns (MensajeReply){}
     public StreamObserver<ArchivoEntityReq> uploadArchivo(final StreamObserver<MensajeReply> responseObserver) {
         return new StreamObserver<ArchivoEntityReq>() {
