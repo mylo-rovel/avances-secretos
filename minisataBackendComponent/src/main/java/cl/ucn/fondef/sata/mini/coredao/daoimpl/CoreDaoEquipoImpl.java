@@ -37,7 +37,6 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
         String usuarioQuery = "FROM Usuario WHERE rut = :rut AND estado = 'ACTIVO' ";
         return (List<Usuario>) entityManager.createQuery(usuarioQuery)
                 .setParameter("rut", equipoEntityReq.getRutConfigurador()).getResultList();
-
     }
 
     private String isUnableToSave(EquipoEntityReq equipoEntityReq) {

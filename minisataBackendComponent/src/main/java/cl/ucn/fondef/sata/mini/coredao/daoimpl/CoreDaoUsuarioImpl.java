@@ -4,9 +4,11 @@
 
 package cl.ucn.fondef.sata.mini.coredao.daoimpl;
 
+import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoExtra;
 import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoUsuario;
 import cl.ucn.fondef.sata.mini.grpc.Domain;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import cl.ucn.fondef.sata.mini.model.*;
@@ -30,6 +32,8 @@ public class CoreDaoUsuarioImpl implements CoreDaoUsuario {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    private CoreDaoExtra coreDaoExtra;
 
     //TODO: PONER REGISTROS EN LOS RESPECTIVOS METODOS
 
@@ -102,6 +106,7 @@ public class CoreDaoUsuarioImpl implements CoreDaoUsuario {
 
             long idUsuario = listaUsuariosEspecifica.get(0).getId();
 
+
             Registro registroGuardado = new Registro();
             registroGuardado.setIdUsuario(idUsuario);
             registroGuardado.setTipoRegistro(Domain.Registro.TipoRegistro.CREACION_USUARIO.name());
@@ -112,6 +117,7 @@ public class CoreDaoUsuarioImpl implements CoreDaoUsuario {
             registroGuardado.setIdEntidad(1);
 
             entityManager.persist(registroGuardado);
+
 
             mensaje = "El usuario ha sido ingresado existosamente";
         }else{

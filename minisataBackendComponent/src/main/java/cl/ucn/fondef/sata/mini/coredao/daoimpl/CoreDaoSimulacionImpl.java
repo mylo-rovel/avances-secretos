@@ -49,4 +49,15 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
         }
         return listaResultado;
     }
+
+    public Ejecucion getEjecucion(IdElementoReq idElementoReq){
+        String sqlQuery = "FROM Ejecucion WHERE id = :id";
+        List listaResultado = entityManager.createQuery(sqlQuery)
+                .setParameter("id", idElementoReq.getId()).getResultList();
+        if(listaResultado.isEmpty()){
+            log.warn("La lista de ejecuciones no contiene elementos");
+            return null;
+        }
+        return (Ejecucion) listaResultado.get(0);
+    }
 }

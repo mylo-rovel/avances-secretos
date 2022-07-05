@@ -4,6 +4,7 @@
 
 package cl.ucn.fondef.sata.mini.web;
 
+import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoExtra;
 import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoUsuario;
 import cl.ucn.fondef.sata.mini.grpc.Domain;
 import cl.ucn.fondef.sata.mini.grpc.webcoreclient.*;
@@ -52,6 +53,9 @@ public class WebController {
     @Autowired
     private CoreDaoUsuario coreDaoUsuario;
 
+    @Autowired
+    private CoreDaoExtra coreDaoExtra;
+
     private String getTokenKey(String jsonwebtoken) {
         return jwtUtil.getKey(jsonwebtoken);
     }
@@ -88,10 +92,16 @@ public class WebController {
     public String addUsuario(@RequestBody GrpcUsuarioEntityReq usuarioNuevo, @RequestHeader(value="Authorization") String jwt) {
     //public String addUsuario(@RequestBody GrpcUsuarioEntityReq usuarioNuevo){
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
-        Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
-        if(usuario!=null){
-            if(this.tokenEsValido(jwt) && usuario.getRol().equals("ADMINISTRADOR")){
-                return webCoreClientGrpcUsuario.addUsuario(usuarioNuevo);
+        Usuario usuarioAdmin = coreDaoUsuario.getUsuario(rutUsuario);
+        if(usuarioAdmin!=null){
+            if(this.tokenEsValido(jwt) && usuarioAdmin.getRol().equals("ADMINISTRADOR")){
+                String json = webCoreClientGrpcUsuario.addUsuario(usuarioNuevo);
+                Domain.RutEntityReq rutUsuarioAgregado = Domain.RutEntityReq.newBuilder()
+                        .setRut(usuarioNuevo.getUsuario().getRut()).build();
+                Usuario usuarioAgregado = coreDaoUsuario.getUsuario(rutUsuarioAgregado);
+                coreDaoExtra.addRegistroCreacionUsuario(usuarioAgregado, usuarioAdmin);
+                return json;
+                //return webCoreClientGrpcUsuario.addUsuario(usuarioNuevo);
             }
         }
         return "Error. Token invalido";
