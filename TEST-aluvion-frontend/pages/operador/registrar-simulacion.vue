@@ -103,6 +103,13 @@
                 return true;
             },
 
+            enviarRegistro: function(event){
+                event.preventDefault();
+                let formulario = document.getElementById("form-registrar-simulacion");
+                let registros = JSON.stringify(formulario);
+                console.log(registros);
+            },
+
         }    
     })
 </script>
@@ -163,9 +170,8 @@
                                 <NuxtLink to="/menu-operador"><CancelButtom :cancelbutton = "cancelbutton"/></NuxtLink>
                             </div>                            
                             <div class="col-12 contenido-botones my-4">    
-                                <SubmitButton :submitbutton = "submitbutton" @click = "abrirModal()" />
-                                <Modal :infoContenido = "infoContenido"/>
-                                <div class="close-modal" @click = "cerrarModal()">+</div>
+                                <SubmitButton :submitbutton = "submitbutton" @click = "enviarRegistro()" />
+                                
                             </div>
                         </div> 
                     </form>
