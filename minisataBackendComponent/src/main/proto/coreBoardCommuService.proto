@@ -10,7 +10,7 @@ import "domain.proto";
 // y el Componente Raspi para manejar el hardware
 service CoreBoardCommuService {
   // (1)
-  rpc startSimulacion(SimulacionReq) returns (MensajeReply){}
+  rpc startSimulacion(SimulacionBoardReq) returns (MensajeReply){}
 
   // (2)
   rpc getSimulacionActual(EmptyReq) returns (SimulacionReply){}

@@ -30,6 +30,8 @@ public interface CoreDaoEquipo {
 
     Equipo getEquipo(IdElementoConRutReq idEquipoYrutUsuario);
 
+    Equipo getEquipoPorNombre(String nombreEquipo);
+
     List<Equipo> getEquipos(Domain.RutEntityReq rutEntityReq);
 
 /*    Equipo getEquipoOperador(IdElementoConRutReq idEquipoUsuario);

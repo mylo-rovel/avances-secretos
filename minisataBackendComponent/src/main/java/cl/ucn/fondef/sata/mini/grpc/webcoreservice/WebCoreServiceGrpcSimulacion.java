@@ -6,6 +6,7 @@ import cl.ucn.fondef.sata.mini.grpc.Domain;
 import cl.ucn.fondef.sata.mini.model.Equipo;
 import cl.ucn.fondef.sata.mini.model.Simulacion;
 import io.grpc.stub.StreamObserver;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.util.List;
 /**
  * The type Web core service grpc simulacion.
  */
+@Slf4j
 @Service
 public class WebCoreServiceGrpcSimulacion {
 
@@ -72,6 +74,17 @@ public class WebCoreServiceGrpcSimulacion {
     // rpc addSecuencias(SecuenciasReq)  returns (MensajeReply){}
     public Domain.MensajeReply addSimulacion(Domain.SimulacionReq simulacionReq, StreamObserver<Domain.MensajeReply> responseObserver){
         String mensajeResultado = coreDaoSimulacion.addSimulacion(simulacionReq);
+
+        Domain.MensajeReply grpcResponse = Domain.MensajeReply.newBuilder()
+                .setMensajeTexto(mensajeResultado)
+                .build();
+
+        return grpcResponse;
+    }
+
+    public Domain.MensajeReply startSimulacion(Domain.StartSimulacionReq startSimulacionReq, StreamObserver<Domain.MensajeReply> responseObserver){
+        log.info("startSimulacionReq = " + startSimulacionReq);
+        String mensajeResultado = coreDaoSimulacion.startSimulacion(startSimulacionReq);
 
         Domain.MensajeReply grpcResponse = Domain.MensajeReply.newBuilder()
                 .setMensajeTexto(mensajeResultado)

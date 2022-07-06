@@ -16,12 +16,9 @@ public interface CoreDaoSimulacion {
 
     Simulacion getSimulacion(long idSimulacion);
 
-    /**
-     * Gets simulaciones.
-     *
-     * @return the simulaciones
-     */
     List<Simulacion> getSimulaciones();
 
     String addSimulacion(SimulacionReq simulacionReq);
+
+    String startSimulacion(StartSimulacionReq startSimulacionReq);
 }

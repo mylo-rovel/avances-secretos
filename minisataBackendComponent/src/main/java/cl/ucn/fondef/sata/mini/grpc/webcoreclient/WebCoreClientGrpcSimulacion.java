@@ -3,6 +3,7 @@ package cl.ucn.fondef.sata.mini.grpc.webcoreclient;
 import cl.ucn.fondef.sata.mini.grpc.Domain;
 import cl.ucn.fondef.sata.mini.grpcobjects.*;
 import io.grpc.Grpc;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 /**
  * The type Web core client grpc simulacion.
  */
+@Slf4j
 @Service
 public final class WebCoreClientGrpcSimulacion extends WebCoreClientGrpcBase {
 
@@ -65,9 +67,11 @@ public final class WebCoreClientGrpcSimulacion extends WebCoreClientGrpcBase {
         return this.gson.toJson(serverResponse);
     }
 
-    public String startSimulacion(GrpcSimulacionReq simulacionNueva) {
-
-        return "";
+    public String startSimulacion(GrpcStartSimulacionReq startSimulacionReq) {
+        Domain.StartSimulacionReq requestObj = Domain.StartSimulacionReq.newBuilder()
+                .setIdSimulacion(startSimulacionReq.getId()).setNombreEquipo(startSimulacionReq.getNombreEquipo()).build();
+        Domain.MensajeReply serverResponse = this.stub.startSimulacion(requestObj);
+        return this.gson.toJson(serverResponse);
     }
 
     /**

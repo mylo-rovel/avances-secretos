@@ -252,6 +252,11 @@ message StartSimulacionReq{
   string nombre_equipo = 2;
 }
 
+message SimulacionBoardReq {
+  int64 id_simulacion = 1;
+  repeated Secuencia secuencia = 3;
+}
+
 message SimulacionReply {
   // usado en vista iniciar simulacion
   int64 id = 1;

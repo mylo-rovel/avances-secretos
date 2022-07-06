@@ -1,0 +1,45 @@
+{
+    "usuarios":[
+        {
+            "rutAdministrador": "12345678-9",
+            "usuario": {
+                "nombre": "donald",
+                "apellido": "trump",
+                "rut": "22334455-k",
+                "email": "donald@ucn.cl",
+                "password": "donald",
+                "rol": "OPERADOR",
+                "estado": "ACTIVO"
+            }
+        },
+        {
+            "rutAdministrador": "12345678-9",
+            "usuario": {
+                "nombre": "obama",
+                "apellido": "obamium",
+                "rut": "33445566-k",
+                "email": "obama@ucn.cl",
+                "password": "obama",
+                "rol": "CONFIGURADOR",
+                "estado": "ACTIVO"
+            }
+        },
+        {
+            "rutAdministrador": "12345678-9",
+            "usuario": {
+                "nombre": "eric",
+                "apellido": "cartman",
+                "rut": "44556677-k",
+                "email": "eric@ucn.cl",
+                "password": "eric",
+                "rol": "ADMINISTRADOR",
+                "estado": "ACTIVO"
+            }
+        }
+        
+    ]
+}
+
+// donald: eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyMjMzNDQ1NS1rIiwiaWF0IjoxNjU3MDcwNzMyLCJzdWIiOiJPUEVSQURPUiIsImlzcyI6Ik1haW4iLCJleHAiOjE2NTc2NzU1MzJ9.jLlZdoJUBjWm5grgCwe5aFeKZruQCoiMA_Tm39e3IOw
+// obama: eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIzMzQ0NTU2Ni1rIiwiaWF0IjoxNjU3MDcwNjczLCJzdWIiOiJDT05GSUdVUkFET1IiLCJpc3MiOiJNYWluIiwiZXhwIjoxNjU3Njc1NDczfQ.XMNTouklpYs75kpmyTpscuQNd7txzl7KiVSP7LN37Vg
+// eric: eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI0NDU1NjY3Ny1rIiwiaWF0IjoxNjU3MDcwNzQ3LCJzdWIiOiJBRE1JTklTVFJBRE9SIiwiaXNzIjoiTWFpbiIsImV4cCI6MTY1NzY3NTU0N30.aCjE0FmI7x9TP2V1JeA84NiRKZWS-eWMypnVs25uCx0

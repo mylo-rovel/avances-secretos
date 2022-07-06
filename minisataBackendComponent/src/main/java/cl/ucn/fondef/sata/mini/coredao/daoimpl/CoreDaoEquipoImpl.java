@@ -187,13 +187,15 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
 
     @Override
     public String updateEquipo(EquipoEntityReq equipoEntityReq){
-        Equipo equipoEditar = entityManager.find(Equipo.class, equipoEntityReq.getEquipo().getId());
+        /*Equipo equipoEditar = entityManager.find(Equipo.class, equipoEntityReq.getEquipo().getId());
 
-        equipoEditar.setNombre(equipoEntityReq.getEquipo().getNombre());
+        // TODO: equipo editar es null => hacer una query para obtener la id del equipo
+        // todo: luego, usamos el .find()
         equipoEditar.setDescripcion(equipoEntityReq.getEquipo().getDescripcion());
         equipoEditar.setUrlRepositorio(equipoEntityReq.getEquipo().getUrlRepositorio());
         equipoEditar.setEstado(equipoEntityReq.getEquipo().getEstado().name());
 
+        // TODO: OBTENER LAS PLACAS DEL CORE DAO USANDO LA ID DEL EQUIPO
         List<Domain.Placa> listaPlacas = equipoEntityReq.getEquipo().getPlacaList();
         for(Domain.Placa placa : listaPlacas){
             Placa placaGuardar = new Placa();
@@ -204,6 +206,7 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
             entityManager.merge(placaGuardar);
         }
 
+        // TODO: OBTENER LOS COMPONENTES DEL CORE DAO USANDO LA ID DEL EQUIPO
         List<Domain.Componente> listaComponentes = equipoEntityReq.getEquipo().getComponenteList();
         for(Domain.Componente componente : listaComponentes){
             Componente componenteGuardar = new Componente();
@@ -214,6 +217,7 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
             componenteGuardar.setTipo(componente.getTipo().toString());
             componenteGuardar.setTipoPlaca(componente.getTipoPlaca().toString());
 
+            // TODO: OBTENER LOS PINES DEL CORE DAO USANDO LA ID DEL COMPONENTE
             List<Domain.Pin> listaPines = componente.getPinComponenteList();
             for(Domain.Pin pin : listaPines){
                 Pin pinGuardar = new Pin();
@@ -226,7 +230,7 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
             entityManager.merge(componenteGuardar);
         }
 
-        entityManager.merge(equipoEditar);
+        entityManager.merge(equipoEditar);*/
 
         String mensaje = "El equipo se ha actualizado exitosamente";
 
@@ -279,6 +283,19 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
     public Equipo getEquipo(IdElementoConRutReq idEquipoYrutUsuario){
         Query sqlQueryEquipo = this.getEquipoQueryPorRolUsuario(idEquipoYrutUsuario);
         List listaResultado = sqlQueryEquipo.getResultList();
+
+        if(listaResultado.isEmpty()) {
+            log.warn("La lista no contiene elementos");
+            return null;
+        }
+        return (Equipo) listaResultado.get(0);
+    }
+
+    @Override
+    public Equipo getEquipoPorNombre(String nombreEquipo){
+        String sqlQueryEquipo = "FROM Equipo WHERE nombre = :nombre";
+        List listaResultado = entityManager.createQuery(sqlQueryEquipo)
+                .setParameter("nombre", nombreEquipo).getResultList();
 
         if(listaResultado.isEmpty()) {
             log.warn("La lista no contiene elementos");

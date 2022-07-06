@@ -5,11 +5,13 @@
 package cl.ucn.fondef.sata.mini.coredao.daoimpl;
 
 import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoSimulacion;
+import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoUsuario;
 import cl.ucn.fondef.sata.mini.grpc.Domain;
 import cl.ucn.fondef.sata.mini.model.Componente;
 import cl.ucn.fondef.sata.mini.model.Evento;
 import cl.ucn.fondef.sata.mini.model.Secuencia;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import cl.ucn.fondef.sata.mini.model.*;
@@ -29,6 +31,12 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Autowired
+    CoreDaoEquipoImpl coreDaoEquipo;
+
+    @Autowired
+    CoreDaoUsuario coreDaoUsuario;
 
     @Override
     public Simulacion getSimulacion(long idSimulacion){
@@ -57,12 +65,15 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
 
     @Override
     public String addSimulacion(SimulacionReq simulacionReq) {
-        String nombreSimulacion = simulacionReq.getNombre();
-        String descripcionSimulacion = simulacionReq.getDescripcion();
-        String nombreEquipo = simulacionReq.getNombreEquipo();
-        String rutOperador = simulacionReq.getRutOperador();
+        Usuario usuarioOperador = coreDaoUsuario.getUsuario(    Domain.RutEntityReq.newBuilder().setRut(simulacionReq.getRutOperador()).build());
+        Equipo equipoUsado = coreDaoEquipo.getEquipoPorNombre(  simulacionReq.getNombreEquipo());
 
-//        Simulacion simulacionGuardar
+        Simulacion simulacionGuardar = new Simulacion();
+        simulacionGuardar.setNombre(        simulacionReq.getNombre());
+        simulacionGuardar.setDescripcion(   simulacionReq.getDescripcion());
+        simulacionGuardar.setIdEquipo(      equipoUsado.getId());
+        simulacionGuardar.setIdOperador(    usuarioOperador.getId());
+        entityManager.persist(simulacionGuardar);
 
         List<Domain.Secuencia> listaSecuencias = simulacionReq.getSecuenciaList();
         for (int i = 0; i < listaSecuencias.size(); i++) {
@@ -70,7 +81,7 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
             Secuencia secuenciaGuardar = new Secuencia();
             secuenciaGuardar.setIdComponente(idComponente);
             entityManager.persist(secuenciaGuardar);
-            long idSecuencia =secuenciaGuardar.getId();
+            long idSecuencia = secuenciaGuardar.getId();
 
             List<Domain.Evento> listaEventos = listaSecuencias.get(i).getEventoList();
             for (int j = 0; j < listaEventos.size(); j ++) {
@@ -82,6 +93,19 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
                 entityManager.persist(eventoGuardar);
             }
         }
-        return "good";
+        return "Simulacion guardada";
+    }
+
+    public String startSimulacion(StartSimulacionReq startSimulacionReq) {
+        // todo: guardar en Ejecucion y EjecucionSecuencia
+        Simulacion simulacionEjecutar = this.getSimulacion(startSimulacionReq.getIdSimulacion());
+        if (simulacionEjecutar == null) { return "Simulacion no existente"; }
+
+        Ejecucion ejecucionNueva = new Ejecucion();
+        ejecucionNueva.setIdSimulacion(startSimulacionReq.getIdSimulacion());
+        ejecucionNueva.setAguaCaida(0.0);
+        entityManager.persist(ejecucionNueva);
+
+        return "Simulacion iniciada. IdEjecucion" + ejecucionNueva.getId();
     }
 }
