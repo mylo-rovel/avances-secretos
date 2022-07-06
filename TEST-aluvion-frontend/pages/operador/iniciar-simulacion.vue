@@ -114,9 +114,17 @@
             },
 
             //Metodo que enviar solicitud de iniciar simulacion
-            sendSolicitudSimulacion: function(){
-                let info = JSON.stringify({"equipo":equipoSeleccionado, "simulacion":simulacionSeleccionada});
-                return info;
+            async sendSolicitudSimulacion(){
+                // let info = JSON.stringify({"equipo":equipoSeleccionado, "simulacion":simulacionSeleccionada});
+
+                // document.getElementById("form_iniciarSimulacion").submit();
+                const POST_config = {
+                    'method': 'POST',
+                    'body': '',
+                    'authorization': 'sdzfdnfdsf'
+                };
+                const rawResponse = await fetch('https://jsonplaceholder.typicode.com/');
+                console.log(rawResponse);
             }
 
         }
@@ -134,7 +142,7 @@
                 <div>
                     <div class="row my-4">
                         <h3>Iniciar Simulación</h3>
-                        <!--<button @click="()=>getSimulaciones({$axios})">aaa</button>
+                        <!--<button @click="sendSolicitudSimulacion()">aaa</button>
                         <button @click="simus(simulaciones)">aaajjj</button>-->
                     </div>
                     <div class="row">
