@@ -83,7 +83,6 @@ public class WebCoreServiceGrpcSimulacion {
     }
 
     public Domain.MensajeReply startSimulacion(Domain.StartSimulacionReq startSimulacionReq, StreamObserver<Domain.MensajeReply> responseObserver){
-        log.info("startSimulacionReq = " + startSimulacionReq);
         String mensajeResultado = coreDaoSimulacion.startSimulacion(startSimulacionReq);
 
         Domain.MensajeReply grpcResponse = Domain.MensajeReply.newBuilder()
