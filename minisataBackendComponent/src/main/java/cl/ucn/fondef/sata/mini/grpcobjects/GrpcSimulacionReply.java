@@ -37,13 +37,5 @@ public class GrpcSimulacionReply {
 
     @Getter
     @Setter
-    private String fechaEjecucion;
-
-    @Getter
-    @Setter
     private List<GrpcSecuencia> listaSecuencias;
-
-    @Getter
-    @Setter
-    private double aguaCaida;
 }

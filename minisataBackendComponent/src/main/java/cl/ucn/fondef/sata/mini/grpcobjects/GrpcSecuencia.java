@@ -13,6 +13,15 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode
 public class GrpcSecuencia {
+
+    @Getter
+    @Setter
+    private long idComponente;
+
+    @Getter
+    @Setter
+    private String nombreComponente;
+
     @Getter
     @Setter
     private List<GrpcEvento> listaEventos;

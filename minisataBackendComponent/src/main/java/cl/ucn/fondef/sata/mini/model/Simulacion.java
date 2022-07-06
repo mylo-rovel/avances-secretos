@@ -29,7 +29,7 @@ public class Simulacion {
     @Getter
     @Setter
     @Column(name = "id_equipo")
-    private Long idEquipo;
+    private long idEquipo;
 
     @Getter
     @Setter

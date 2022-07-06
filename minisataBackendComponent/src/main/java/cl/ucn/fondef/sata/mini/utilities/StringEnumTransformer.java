@@ -65,12 +65,12 @@ public class StringEnumTransformer {
      * @param stringEvaluar the string evaluar
      * @return the enum tipo componente
      */
-    public Domain.ComponenteFisico.TipoComponente getEnumTipoComponente(String stringEvaluar) {
+    public Domain.Componente.TipoComponente getEnumTipoComponente(String stringEvaluar) {
         switch (stringEvaluar){
-            case "CAMARA": return Domain.ComponenteFisico.TipoComponente.CAMARA;
-            case "FLUJOMETRO": return Domain.ComponenteFisico.TipoComponente.FLUJOMETRO;
-            case "TERMOMETRO": return Domain.ComponenteFisico.TipoComponente.TERMOMETRO;
-            case "VALVULA": return Domain.ComponenteFisico.TipoComponente.VALVULA;
+            case "CAMARA": return Domain.Componente.TipoComponente.CAMARA;
+            case "FLUJOMETRO": return Domain.Componente.TipoComponente.FLUJOMETRO;
+            case "TERMOMETRO": return Domain.Componente.TipoComponente.TERMOMETRO;
+            case "VALVULA": return Domain.Componente.TipoComponente.VALVULA;
             default: return null;
         }
     }
@@ -81,12 +81,12 @@ public class StringEnumTransformer {
      * @param stringEvaluar the string evaluar
      * @return the enum estado componente
      */
-    public Domain.ComponenteFisico.EstadoComponente getEnumEstadoComponente(String stringEvaluar) {
+    public Domain.Componente.EstadoComponente getEnumEstadoComponente(String stringEvaluar) {
         switch (stringEvaluar){
-            case "ACTIVO": return Domain.ComponenteFisico.EstadoComponente.ACTIVO;
-            case "INACTIVO": return Domain.ComponenteFisico.EstadoComponente.INACTIVO;
-            case "FALLA": return Domain.ComponenteFisico.EstadoComponente.FALLA;
-            case "REPARACION": return Domain.ComponenteFisico.EstadoComponente.REPARACION;
+            case "ACTIVO": return Domain.Componente.EstadoComponente.ACTIVO;
+            case "INACTIVO": return Domain.Componente.EstadoComponente.INACTIVO;
+            case "FALLA": return Domain.Componente.EstadoComponente.FALLA;
+            case "REPARACION": return Domain.Componente.EstadoComponente.REPARACION;
             default: return null;
         }
     }
@@ -142,12 +142,12 @@ public class StringEnumTransformer {
      * @param stringEvaluar the string evaluar
      * @return the enum tipo archivo
      */
-    public Domain.ArchivoEquipoEntityReq.TipoArchivo getEnumTipoArchivo(String stringEvaluar) {
+    public Domain.ArchivoEntity.TipoArchivo getEnumTipoArchivo(String stringEvaluar) {
         switch (stringEvaluar){
-            case "PNG": return Domain.ArchivoEquipoEntityReq.TipoArchivo.PNG;
-            case "PDF": return Domain.ArchivoEquipoEntityReq.TipoArchivo.PDF;
-            case "JPG": return Domain.ArchivoEquipoEntityReq.TipoArchivo.JPG;
-            case "JPEG": return Domain.ArchivoEquipoEntityReq.TipoArchivo.JPEG;
+            case "PNG": return Domain.ArchivoEntity.TipoArchivo.PNG;
+            case "PDF": return Domain.ArchivoEntity.TipoArchivo.PDF;
+            case "JPG": return Domain.ArchivoEntity.TipoArchivo.JPG;
+            case "JPEG": return Domain.ArchivoEntity.TipoArchivo.JPEG;
             default: return null;
         }
     }

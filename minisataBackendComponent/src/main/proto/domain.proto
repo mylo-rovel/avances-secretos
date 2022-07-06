@@ -11,6 +11,11 @@ message EmptyReq {
   // se usa esto para las funciones que usan 0 argumentos
 }
 
+message IdElementoConRutReq {
+  int64 id = 1;
+  string rut = 2;
+}
+
 message IdElementoReq {
   int64 id = 1;
 }
@@ -121,7 +126,7 @@ enum TipoPlaca {
   ESP_32 = 1;
 }
 
-message ComponenteFisico {
+message Componente {
   enum EstadoComponente {
     ACTIVO = 0;
     INACTIVO = 1;
@@ -153,7 +158,7 @@ message Placa {
 }
 
 message ComponentesEquipoReply {
-  repeated ComponenteFisico componente_fisico = 1;
+  repeated Componente componente = 1;
 }
 
 enum EstadoEquipo {
@@ -168,7 +173,7 @@ message EquipoEntity {
   string url_repositorio = 4;
   EstadoEquipo estado = 5;
   repeated Placa placa = 6;
-  repeated ComponenteFisico componente_fisico = 7;
+  repeated Componente componente = 7;
 }
 
 message EquipoEntityReq {
@@ -180,7 +185,7 @@ message EquipoEntityReply {
   EquipoEntity equipo = 1;
 }
 
-message ArchivoEquipoEntityReq {
+message ArchivoEntity {
   enum TipoArchivo {
     PNG  = 0;
     PDF  = 1;
@@ -193,12 +198,12 @@ message ArchivoEquipoEntityReq {
   TipoArchivo tipo_archivo = 3;
 }
 
-message ArchivosEquipoEntityReq {
-  repeated ArchivoEquipoEntityReq archivo = 1;
+message ArchivoEntityReq {
+  ArchivoEntity archivo = 1;
 }
 
-message ArchivosEquipoEntityReply {
-  repeated ArchivoEquipoEntityReq archivo = 1;
+message ArchivosEntityReply {
+  ArchivoEntity archivo = 1;
 }
 
 message EquipoEntityAcotado {
@@ -223,8 +228,15 @@ message Evento {
 
 message Secuencia {
   int64 id_componente = 1;
-  string nombre_componente = 2;
-  repeated Evento evento = 3;
+  repeated Evento evento = 2;
+}
+
+message SimulacionReq {
+  string nombre = 1;
+  string descripcion = 2;
+  string nombre_equipo = 3;
+  string rut_operador = 4;
+  repeated Secuencia secuencia = 5;
 }
 
 message SecuenciasComponente {
@@ -235,16 +247,39 @@ message SecuenciasComponenteEquipoReply {
   repeated SecuenciasComponente secuencia_componente = 1;
 }
 
-message SimulacionReq {
-  string nombre = 1;
-  string descripcion = 2;
-  string nombre_equipo = 3;
-  string rut_operador = 4;
-  string fecha_ejecucion = 5;
-  repeated Secuencia secuencia = 6;
+message StartSimulacionReq{
+  int64 id_simulacion = 1;
+  string nombre_equipo = 2;
+}
+
+message SimulacionBoardReq {
+  int64 id_simulacion = 1;
+  repeated Secuencia secuencia = 3;
 }
 
 message SimulacionReply {
+  // usado en vista iniciar simulacion
+  int64 id = 1;
+  string nombre = 2;
+  string descripcion = 3;
+  string nombre_equipo = 4;
+  string descripcion_equipo = 5;
+  repeated Secuencia secuencia = 7;
+}
+
+message SimulacionAcotada {
+  int64 id = 1;
+  string nombre = 2;
+  string nombre_equipo = 3;
+}
+
+message SimulacionesReply {
+  // Usado en listas desplegables de seleccion de simulacion
+  repeated SimulacionAcotada simulacion_acotada = 1;
+}
+
+message EjecucionReply {
+  // Usado como detalle de fila en el historial de ejecuciones
   int64 id = 1;
   string nombre = 2;
   string descripcion = 3;
@@ -255,17 +290,17 @@ message SimulacionReply {
   double agua_caida = 8;
 }
 
-message SimulacionAcotada {
+message EjecucionAcotada {
+  // Usado como fila en el historial de ejecuciones
   int64 id = 1;
-  string nombre = 2;
+  string nombre_simulacion = 2;
   string nombre_equipo = 3;
   string fecha_ejecucion = 4;
   double agua_caida = 5;
 }
 
-message SimulacionesReply {
-  // Usado en listas desplegables y filas de tablas
-  repeated SimulacionAcotada simulacion_acotada = 1;
+message EjecucionesReply {
+  repeated EjecucionAcotada ejecucion_acotada = 1;
 }
 
 message LecturaSensoresReply {

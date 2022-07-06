@@ -7,20 +7,18 @@ package cl.ucn.fondef.sata.mini.coredao.daoimpl;
 import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoSimulacion;
 import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoUsuario;
 import cl.ucn.fondef.sata.mini.grpc.Domain;
-import cl.ucn.fondef.sata.mini.model.ComponenteFisico;
+import cl.ucn.fondef.sata.mini.model.Componente;
+import cl.ucn.fondef.sata.mini.model.Evento;
+import cl.ucn.fondef.sata.mini.model.Secuencia;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import cl.ucn.fondef.sata.mini.model.*;
-import cl.ucn.fondef.sata.mini.model.Registro;
-import de.mkammerer.argon2.Argon2;
-import de.mkammerer.argon2.Argon2Factory;
 import cl.ucn.fondef.sata.mini.grpc.Domain.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import java.text.MessageFormat;
 import java.util.List;
 
 /**
@@ -34,17 +32,22 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Override
-    public Simulacion getSimulacion(IdElementoReq idElementoReq){
-        String sqlQuery = "FROM Simulacion WHERE id = :idSimulacion";
+    @Autowired
+    CoreDaoEquipoImpl coreDaoEquipo;
 
+    @Autowired
+    CoreDaoUsuario coreDaoUsuario;
+
+    @Override
+    public Simulacion getSimulacion(long idSimulacion){
+        String sqlQuery = "FROM Simulacion WHERE id = :idSimulacion";
         List listaResultado = entityManager.createQuery(sqlQuery)
-                .setParameter("idSimulacion", idElementoReq.getId()).getResultList();
-        if(listaResultado.isEmpty()){
+                .setParameter("idSimulacion", idSimulacion).getResultList();
+        if(listaResultado.isEmpty()) {
+            log.warn("La lista no contiene elementos");
             return null;
-        }else{
-            return (Simulacion) listaResultado.get(0);
         }
+        return (Simulacion) listaResultado.get(0);
     }
 
     @Override
@@ -55,9 +58,54 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
         if(listaResultado.isEmpty()){
             log.warn("La lista no contiene elementos");
             return null;
-        }else{
-            return listaResultado;
         }
+        return listaResultado;
+    }
 
+
+    @Override
+    public String addSimulacion(SimulacionReq simulacionReq) {
+        Usuario usuarioOperador = coreDaoUsuario.getUsuario(    Domain.RutEntityReq.newBuilder().setRut(simulacionReq.getRutOperador()).build());
+        Equipo equipoUsado = coreDaoEquipo.getEquipoPorNombre(  simulacionReq.getNombreEquipo());
+
+        Simulacion simulacionGuardar = new Simulacion();
+        simulacionGuardar.setNombre(        simulacionReq.getNombre());
+        simulacionGuardar.setDescripcion(   simulacionReq.getDescripcion());
+        simulacionGuardar.setIdEquipo(      equipoUsado.getId());
+        simulacionGuardar.setIdOperador(    usuarioOperador.getId());
+        entityManager.persist(simulacionGuardar);
+
+        List<Domain.Secuencia> listaSecuencias = simulacionReq.getSecuenciaList();
+        for (int i = 0; i < listaSecuencias.size(); i++) {
+            long idComponente = listaSecuencias.get(i).getIdComponente();
+            Secuencia secuenciaGuardar = new Secuencia();
+            secuenciaGuardar.setIdComponente(idComponente);
+            entityManager.persist(secuenciaGuardar);
+            long idSecuencia = secuenciaGuardar.getId();
+
+            List<Domain.Evento> listaEventos = listaSecuencias.get(i).getEventoList();
+            for (int j = 0; j < listaEventos.size(); j ++) {
+                Evento eventoGuardar = new Evento();
+                eventoGuardar.setIntensidad(    listaEventos.get(j).getIntensidad());
+                eventoGuardar.setDuracion(      listaEventos.get(j).getDuracion());
+                eventoGuardar.setPosicion(      listaEventos.get(j).getPosicion());
+                eventoGuardar.setIdSecuencia(   idSecuencia);
+                entityManager.persist(eventoGuardar);
+            }
+        }
+        return "Simulacion guardada";
+    }
+
+    public String startSimulacion(StartSimulacionReq startSimulacionReq) {
+        // todo: guardar en Ejecucion y EjecucionSecuencia
+        Simulacion simulacionEjecutar = this.getSimulacion(startSimulacionReq.getIdSimulacion());
+        if (simulacionEjecutar == null) { return "Simulacion no existente"; }
+
+        Ejecucion ejecucionNueva = new Ejecucion();
+        ejecucionNueva.setIdSimulacion(startSimulacionReq.getIdSimulacion());
+        ejecucionNueva.setAguaCaida(0.0);
+        entityManager.persist(ejecucionNueva);
+
+        return "Simulacion iniciada. IdEjecucion" + ejecucionNueva.getId();
     }
 }

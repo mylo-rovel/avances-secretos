@@ -6,7 +6,6 @@ package cl.ucn.fondef.sata.mini.coredao.daoimpl;
 
 import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoUsuario;
 import cl.ucn.fondef.sata.mini.grpc.Domain;
-import cl.ucn.fondef.sata.mini.model.ComponenteFisico;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +17,6 @@ import cl.ucn.fondef.sata.mini.grpc.Domain.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import java.text.MessageFormat;
 import java.util.List;
 
@@ -43,7 +41,7 @@ public class CoreDaoUsuarioImpl implements CoreDaoUsuario {
         String passwordUsuario = reqCredenciales.getPassword();
 
         try {
-            String sqlQuery = "FROM Usuario WHERE email = :email";
+            String sqlQuery = "FROM Usuario WHERE email = :email AND estado = 'ACTIVO' ";
             List listaResultado=  entityManager.createQuery(sqlQuery).setParameter("email", emailUsuario).getResultList();
 
             if (listaResultado.isEmpty()) { return false; }
@@ -127,6 +125,9 @@ public class CoreDaoUsuarioImpl implements CoreDaoUsuario {
     public String updateUsuario(UsuarioEntityReq usuarioEntityReq){
         String sqlQuery = "FROM Usuario WHERE rut = :rut";
         List listaUsuarios = entityManager.createQuery(sqlQuery).setParameter("rut", usuarioEntityReq.getUsuario().getRut()).getResultList();
+        if (listaUsuarios.isEmpty()) {
+            return "No se pudo actualizar. No existe el usuario";
+        }
         Usuario usuarioEncontrado = (Usuario) listaUsuarios.get(0);
 
         Usuario usuarioEditar = entityManager.find(Usuario.class, usuarioEncontrado.getId());
@@ -152,13 +153,18 @@ public class CoreDaoUsuarioImpl implements CoreDaoUsuario {
     @Override
     public Usuario getUsuario(RutEntityReq rutEntityReq){
         String sqlQuery = "FROM Usuario WHERE rut = :rut";
-        return (Usuario) entityManager.createQuery(sqlQuery)
-                .setParameter("rut", rutEntityReq.getRut()).getResultList().get(0);
+        List listaResultado = entityManager.createQuery(sqlQuery)
+                .setParameter("rut", rutEntityReq.getRut()).getResultList();
+        if(listaResultado.isEmpty()) {
+            log.warn("La lista no contiene elementos");
+            return null;
+        }
+        return (Usuario) listaResultado.get(0);
     }
 
     @Override
     public List<Usuario> getUsuarios(){
-        String sqlQuery = "FROM Usuario WHERE 1=1";
+        String sqlQuery = "FROM Usuario";
         return (List<Usuario>) entityManager.createQuery(sqlQuery).getResultList();
     }
 }

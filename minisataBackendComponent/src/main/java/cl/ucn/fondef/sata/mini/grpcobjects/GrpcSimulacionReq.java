@@ -28,15 +28,11 @@ public class GrpcSimulacionReq {
 
     @Getter
     @Setter
-    private Long nombreEquipo;
+    private String nombreEquipo;
 
     @Getter
     @Setter
     private String rutOperador;
-
-    @Getter
-    @Setter
-    private String fechaEjecucion;
 
     @Getter
     @Setter

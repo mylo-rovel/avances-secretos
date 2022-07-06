@@ -30,11 +30,6 @@ public class Evento {
 
     @Getter
     @Setter
-    @Column(name = "id_ejecucion")
-    private long idEjecucion;
-
-    @Getter
-    @Setter
     @Column(name = "intensidad")
     private int intensidad;
 

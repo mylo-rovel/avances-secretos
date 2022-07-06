@@ -1,5 +1,6 @@
 package cl.ucn.fondef.sata.mini.grpc.webcoreservice;
 
+import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoExtra;
 import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoUsuario;
 import cl.ucn.fondef.sata.mini.grpc.Domain;
 import cl.ucn.fondef.sata.mini.model.Usuario;
@@ -22,6 +23,9 @@ public class WebCoreServiceGrpcUsuario {
     // OBTENER EL OBJETO QUE SE DEVOLVERA
     @Autowired
     private CoreDaoUsuario coreDaoUsuario;
+
+    @Autowired
+    private CoreDaoExtra coreDaoExtra;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -52,6 +56,8 @@ public class WebCoreServiceGrpcUsuario {
                 .setSesionIniciada(credencialesCorrectas)
                 .setJsonWebToken(jwtUsuario)
                 .build();
+
+        coreDaoExtra.addRegistroLoginUsuario(usuarioLogeado);
 
         return grpcResponse;
     }

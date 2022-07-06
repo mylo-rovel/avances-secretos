@@ -5,6 +5,7 @@ import cl.ucn.fondef.sata.mini.grpc.webcoreservice.WebCoreServiceGrpcUsuario;
 import cl.ucn.fondef.sata.mini.grpc.webcoreservice.WebCoreServiceGrpcSimulacion;
 import cl.ucn.fondef.sata.mini.grpc.webcoreservice.WebCoreServiceGrpcExtra;
 import io.grpc.stub.StreamObserver;
+import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import cl.ucn.fondef.sata.mini.grpc.Domain.*;
@@ -13,6 +14,7 @@ import cl.ucn.fondef.sata.mini.grpc.Domain.*;
 /**
  * The type Web core service grpc.
  */
+@Slf4j
 @GrpcService
 // SERVIDOR gRPC "Central Core"
 // Esta clase se usa para RECIBIR y RESPONDER peticiones desde el "Backend Appplication"
@@ -82,15 +84,15 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
     }
 
     @Override
-    public void getEquipo(IdElementoReq idElementoReq, StreamObserver<EquipoEntityReply> responseObserver){
-        var grpcResponse = webCoreServiceGrpcEquipo.getEquipo(idElementoReq, responseObserver);
+    public void getEquipo(IdElementoConRutReq idElementoConRutReq, StreamObserver<EquipoEntityReply> responseObserver){
+        var grpcResponse = webCoreServiceGrpcEquipo.getEquipo(idElementoConRutReq, responseObserver);
         responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
         responseObserver.onCompleted(); //Terminar el proceso
     }
 
     @Override
-    public void getEquipos(EmptyReq emptyReq, StreamObserver<EquiposEntityReply> responseObserver){
-        var grpcResponse = webCoreServiceGrpcEquipo.getEquipos(emptyReq, responseObserver);
+    public void getEquipos(RutEntityReq rutEntityReq, StreamObserver<EquiposEntityReply> responseObserver){
+        var grpcResponse = webCoreServiceGrpcEquipo.getEquipos(rutEntityReq, responseObserver);
         responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
         responseObserver.onCompleted(); //Terminar el proceso
     }
@@ -104,8 +106,8 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
 
     // TODO: HACER EL INNER JOIN PARA OBTENER LAS "Secuencia" o eventos DE LA SIMULACION
     @Override
-    public void getSimulacion(IdElementoReq idElemento, StreamObserver<SimulacionReply> responseObserver){
-        var grpcResponse = webCoreServiceGrpcSimulacion.getSimulacion(idElemento, responseObserver);
+    public void getSimulacion(IdElementoConRutReq idElementoConRutReq, StreamObserver<SimulacionReply> responseObserver){
+        var grpcResponse = webCoreServiceGrpcSimulacion.getSimulacion(idElementoConRutReq, responseObserver);
         responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
         responseObserver.onCompleted(); //Terminar el proceso
     }
@@ -113,9 +115,57 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
     // TODO: OPTIMIZAR Y HACER UNA QUERY HACIENDO UN INNER JOIN PARA...
     // TODO: ... EVITAR HACER MULTIPLES QUERIES A LA BASE DE DATOS
     @Override
-    public void getSimulaciones(EmptyReq emptyReq, StreamObserver<SimulacionesReply> responseObserver){
-        var grpcResponse = webCoreServiceGrpcSimulacion.getSimulaciones(emptyReq, responseObserver);
+    public void getSimulaciones(RutEntityReq rutEntityReq, StreamObserver<SimulacionesReply> responseObserver){
+        var grpcResponse = webCoreServiceGrpcSimulacion.getSimulaciones(rutEntityReq, responseObserver);
         responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
         responseObserver.onCompleted(); //Terminar el proceso
+    }
+
+    @Override
+    public void addSimulacion(SimulacionReq simulacionReq, StreamObserver<MensajeReply> responseObserver){
+        var grpcResponse = webCoreServiceGrpcSimulacion.addSimulacion(simulacionReq, responseObserver);
+        responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
+        responseObserver.onCompleted(); //Terminar el proceso
+    }
+
+    @Override
+    public void startSimulacion(StartSimulacionReq startSimulacionReq, StreamObserver<MensajeReply> responseObserver){
+        var grpcResponse = webCoreServiceGrpcSimulacion.startSimulacion(startSimulacionReq, responseObserver);
+        responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
+        responseObserver.onCompleted(); //Terminar el proceso
+    }
+
+    @Override
+    public void getRegistros(RutEntityReq rutEntityReq, StreamObserver<RegistrosReply> responseObserver){
+        var grpcResponse = webCoreServiceGrpcExtra.getRegistros(rutEntityReq, responseObserver);
+        responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
+        responseObserver.onCompleted(); //Terminar el proceso
+    }
+
+    @Override
+    // rpc uploadArchivo(stream ArchivoEntityReq)  returns (MensajeReply){}
+    public StreamObserver<ArchivoEntityReq> uploadArchivo(final StreamObserver<MensajeReply> responseObserver) {
+        return new StreamObserver<ArchivoEntityReq>() {
+
+            @Override
+            // here recibimos los archivos. los guardamos en algun
+            public void onNext(ArchivoEntityReq archivoValue) {
+                log.info("req recibida");
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                log.warn("Stream cancelado por un error");
+            }
+
+            @Override
+            public void onCompleted() {
+                MensajeReply grpcResponse = MensajeReply.newBuilder()
+                        .setMensajeTexto("Stream completado")
+                        .build();
+                responseObserver.onNext(grpcResponse);
+                responseObserver.onCompleted();
+            }
+        };
     }
 }

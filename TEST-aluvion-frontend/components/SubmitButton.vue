@@ -14,7 +14,7 @@
 
 <template>
   <section>
-    <button id="submit-btn" class="submit-button">{{submitbutton}}</button>
+    <button id="submit-btn" type = "submit" class="submit-button">{{submitbutton}}</button>
   </section>
 </template>
 

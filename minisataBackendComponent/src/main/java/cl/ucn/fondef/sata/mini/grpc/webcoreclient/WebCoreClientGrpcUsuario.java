@@ -8,7 +8,7 @@ import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 
 @Service
-public class WebCoreClientGrpcUsuario extends WebCoreClientGrpcBase {
+public final class WebCoreClientGrpcUsuario extends WebCoreClientGrpcBase {
 
     private Domain.UsuarioEntityReq getUsuarioGrpcReqObject (GrpcUsuarioEntityReq grpcUsuarioEntityReq, String password) {
         // CREAR EL OBJETO RPC QUE LLEVA LOS DATOS A ENVIAR
