@@ -5,6 +5,7 @@
     import CancelButtom from '~/components/CancelButtom.vue'
     import SubmitButton from '~/components/SubmitButton.vue'
     import NavbarPag from '~/components/NavbarPag.vue'
+    import {setListasDesplegables} from '~/utils/utility_functions.js'
 
 
     export default Vue.extend({
@@ -51,8 +52,11 @@
             };
         },
         async fetch(){
-            this.getEquipos(this.simulaciones);
-            this.getSimulacionesEquipo(this.simulaciones);
+            const rawResponse = await fetch('https://jsonplaceholder.typicode.com/');
+            const listaFeaSimus = rawResponse.json();
+            this.simulaciones = setListasDesplegables(listaFeaSimus);
+            // this.getEquipos(this.simulaciones);
+            // this.getSimulacionesEquipo(this.simulaciones);
         },
 
         methods: {
@@ -115,15 +119,15 @@
 
             //Metodo que enviar solicitud de iniciar simulacion
             async sendSolicitudSimulacion(){
-                // let info = JSON.stringify({"equipo":equipoSeleccionado, "simulacion":simulacionSeleccionada});
+                let info = JSON.stringify({"equipo":equipoSeleccionado, "simulacion":simulacionSeleccionada});
 
                 // document.getElementById("form_iniciarSimulacion").submit();
                 const POST_config = {
                     'method': 'POST',
-                    'body': '',
+                    'body': info,
                     'authorization': 'sdzfdnfdsf'
                 };
-                const rawResponse = await fetch('https://jsonplaceholder.typicode.com/');
+                const rawResponse = await fetch('https://jsonplaceholder.typicode.com/', POST_config);
                 console.log(rawResponse);
             }
 
