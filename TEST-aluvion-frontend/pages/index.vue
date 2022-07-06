@@ -577,8 +577,15 @@ export default Vue.extend({
     .bg2 {background: #1da1f2;}
     .bg3 {background: #cd201f;}
 
-    .img-container {
-        padding:0;
-        margin:0;
+    .fill {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden
+    }
+    .fill img {
+        flex-shrink: 0;
+        min-width: 100%;
+        min-height: 100%
     }
 </style>

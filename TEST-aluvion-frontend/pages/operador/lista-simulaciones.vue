@@ -18,10 +18,7 @@ export default Vue.extend({
   },
   computed: mapState(["urlApi"]) ,
   async fetch(){
-    this.simulaciones = await fetch(`${this.urlApi}/simulaciones`).then(res => {
-      console.log(res.json());
-      return res.json();
-    });
+    
   },
   head(){
     return{
