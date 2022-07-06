@@ -21,7 +21,7 @@
                 simulacionSeleccionada:"",
                 apiURL: "http://192.168.43.73:8081/api",
 
-                simulaciones: [
+                /*simulaciones: [
                     {
                     "id_": 1,
                     "nombre_": "simu1",
@@ -38,74 +38,94 @@
                     "aguaCaida_": 0.0,
                     "memoizedIsInitialized": -1,
                     }
-                ],
+                ],*/
+                simulaciones: [
+                    {
+                    id_: 1,
+                    nombre_: "simu1",
+                    nombreEquipo_: "simulador4",
+                    fechaEjecucion_: "AAAAAAAAAAAA",
+                    aguaCaida_: 0.0,
+                    }
+                ]
             };
         },
-        // async fetch(){
-        //     this.simulaciones = await fetch(`${this.urlApi}/simulaciones`).then(res => {
-        //     console.log(res.json());
-        //     return res.json();
-        //     });
-        // },
+        async fetch(){
+            this.getEquipos(this.simulaciones);
+            this.getSimulacionesEquipo(this.simulaciones);
+        },
+
         methods: {
             async getSimulaciones ({$axios}){//enviar peticion
                 console.clear();
-                 const serverPath = `${this.apiURL}/simulaciones`;
+                const serverPath = `${this.apiURL}/simulaciones`;
                 const serverResponse = await $axios.$get(serverPath).catch(err => err);
                 if (serverResponse instanceof Error) {
                     alert("ERROR. rayos :(", serverResponse)
                     return false;
                 }
                 console.log(serverResponse);
-                this.simulaciones = serverResponse["simulacionAcotada_"];
+                //this.simulaciones = serverResponse["simulacionAcotada_"];
                 return true;
             },
-            getSimulacionesEquipo: function(simulaciones){
-                var equipoActual = document.getElementById('select_equipoSimulacion').selectedIndex;
-                for(let i = 0; i < simulaciones.length; i++ ){
-                    document.getElementById('select_simulacion').value = simulaciones[equipoActual].nombre_;
-                }
-                console.log();
-            },
 
-            obtSimulaciones(simulaciones){
-                var equipoActual = document.getElementById('select_equipoSimulacion').selectedIndex;
-                for(let i = 0; i < simulaciones.length; i++ ){
-                    document.getElementById('select_simulacion').value = simulaciones[i].nombre_;
-                }
-                console.log("ok");
-                return equipoActual;
-
-            },
+            //Metodo que llena las opciones del select con los equipos
             getEquipos: function(simulaciones) {
                 let selectIdEquipo = document.getElementById('select_equipoSimulacion');
                 for (let i = 0; i < simulaciones.length; i++) {
                     let opcionEquipo = document.createElement('option');
                     opcionEquipo.text = simulaciones[i].nombreEquipo_;
-                    selectIdEquipo.add(opcionEquipo)
+                    selectIdEquipo.add(opcionEquipo);
                 }
                 console.log();
                 return selectIdEquipo;
             },
-            guardarEquipo(equipoSeleccionado){
+
+            //Metodo que llena las opciones del select con los id de simulaciones del equipo seleccionado
+            getSimulacionesEquipo: function(simulaciones){
+                var equipoActual = document.getElementById('select_equipoSimulacion').selectedIndex;
+                for(let i = 0; i < simulaciones.length; i++ ){
+                    document.getElementById('select_idSimulacion').value = simulaciones[equipoActual].id_;
+                }
+                console.log();
+            },
+
+            //Metodo que muestra el nombre de la simulacion dada la seleccion de un id 
+            displayNombreSimulacion: function() { 
+                var simulacionActual = document.getElementById('select_idSimulacion').selectedIndex;
+                document.getElementById('nombreSimulacion').value = this.simulaciones[simulacionActual].nombre_;
+                console.log(simulacionActual);
+            },
+
+            //Metodo que guarda el equipo seleccionada
+            saveEquipo: function(equipoSeleccionado){
                 equipoSeleccionado = document.getElementById('select_equipoSimulacion');
                 let opcion = equipoSeleccionado.selectedOptions[0].value;
                 console.log(opcion);
                 return opcion;
-
             },
-            guardarSimulacion(simulacionSeleccionada){
-                simulacionSeleccionada = document.getElementById('select_simulacion');
-                //alert(simulacionSeleccionada.options[simulacionSeleccionada.selectedIndex].value);
+
+            //Metodo que guarda la simulacion seleccionada
+            saveSimulacion: function(simulacionSeleccionada){
+                simulacionSeleccionada = document.getElementById('select_idSimulacion');
                 let opcion = simulacionSeleccionada.selectedOptions[0].value;
                 console.log(opcion);
                 return opcion;
             },
-            enviarSolicitud(){
-                let info = JSON.stringify({"equipo":equipoSeleccionado, "simulacion":simulacionSeleccionada});
-                return info;
+
+            //Metodo que enviar solicitud de iniciar simulacion
+            async sendSolicitudSimulacion(){
+                // let info = JSON.stringify({"equipo":equipoSeleccionado, "simulacion":simulacionSeleccionada});
+
+                // document.getElementById("form_iniciarSimulacion").submit();
+                const POST_config = {
+                    'method': 'POST',
+                    'body': '',
+                    'authorization': 'sdzfdnfdsf'
+                };
+                const rawResponse = await fetch('https://jsonplaceholder.typicode.com/');
+                console.log(rawResponse);
             }
-            
 
         }
     })
@@ -122,14 +142,15 @@
                 <div>
                     <div class="row my-4">
                         <h3>Iniciar Simulación</h3>
-                        <button @click="()=>getSimulaciones({$axios})">aaa</button>
+                        <!--<button @click="sendSolicitudSimulacion()">aaa</button>
+                        <button @click="simus(simulaciones)">aaajjj</button>-->
                     </div>
                     <div class="row">
                         <form id="form_iniciarSimulacion" method="post">
                             <div class="my-4 form-group row">
                                 <label for="equipo-simulacion" class="col-sm-4 col-form-label " >Seleccione un equipo</label>
                                 <div class="col-sm-6">
-                                    <select id="select_equipoSimulacion" name="equipo-simulacion" @change= "guardarEquipo()" class="form-select" aria-label="Equipo" required>
+                                    <select id="select_equipoSimulacion" name="equipo_simulacion" @change= "saveEquipo()" class="form-select" aria-label="Equipo" required>
                                         <!--<option value="" disabled selected></option>
                                             <option>Equipo simulador de lluvia </option>
                                             <option>Simulador 2.0</option>-->
@@ -139,11 +160,17 @@
                             <div class="my-4 form-group row">
                                 <label for="simulacion" class="col-sm-4 col-form-label" >Seleccione una simulación</label>
                                 <div class="col-sm-6">
-                                    <select id="select_simulacion" name="simulacion" class="form-select" @change= "guardarSimulacion()" aria-label="Simulacion" required>
-                                        <option value="" disabled selected></option>
-                                            <option>Simulación 1</option>
-                                            <option>Simulación 2</option>
+                                    <select id="select_idSimulacion" name="id_simulacion" class="form-select" @click= "displayNombreSimulacion()" @change= "saveSimulacion()" aria-label="Simulacion" required>
+                                        <!--<option value="" disabled selected></option>
+                                            <option>1</option>
+                                            <option>2</option>-->
                                     </select>
+                                </div>
+                            </div>
+                            <div class="my-4 form-group row">
+                                <label for="simulacion" class="col-sm-4 col-form-label" >Nombre simulación</label>
+                                <div class="col-sm-6">
+                                    <input id="nombreSimulacion" name="nombre_simulacion" class="form-control" aria-label="Simulacion" required>
                                 </div>
                             </div>
                             <div class = "row my-4 ">
@@ -151,7 +178,7 @@
                                     <NuxtLink to="/menu-operador"><CancelButtom :cancelbutton = "cancelbutton"/></NuxtLink>
                                 </div>                            
                                 <div class="col-12 contenido-botones my-4">    
-                                    <NuxtLink to="/menu-operador"><SubmitButton :submitbutton = "submitbutton" @click = "enviarSolicitud()"/></NuxtLink>
+                                    <NuxtLink to="/menu-operador"><SubmitButton :submitbutton = "submitbutton" @click = "sendSolicitudSimulacion()"/></NuxtLink>
                                 </div>
                             </div>
                         </form>
