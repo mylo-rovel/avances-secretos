@@ -79,6 +79,7 @@ public class WebController {
 // rpc addUsuario(UsuarioEntityReq)  returns (MensajeReply) {}
     @RequestMapping(value = "api/usuarios", method = RequestMethod.POST)
     public String addUsuario(@RequestBody GrpcUsuarioEntityReq usuarioNuevo, @RequestHeader(value="Authorization") String jwt) {
+//       return webCoreClientGrpcUsuario.addUsuario(usuarioNuevo);
         if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuarioAdmin = coreDaoUsuario.getUsuario(rutUsuario);

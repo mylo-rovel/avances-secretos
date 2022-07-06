@@ -62,6 +62,10 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
         return listaResultado;
     }
 
+/*    @Override
+    private void getSecuenciasSimulacion () {
+
+    }*/
 
     @Override
     public String addSimulacion(SimulacionReq simulacionReq) {
@@ -75,9 +79,18 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
         simulacionGuardar.setIdOperador(    usuarioOperador.getId());
         entityManager.persist(simulacionGuardar);
 
+        long idSimulacion = simulacionGuardar.getId();
+
         List<Domain.Secuencia> listaSecuencias = simulacionReq.getSecuenciaList();
         for (int i = 0; i < listaSecuencias.size(); i++) {
             long idComponente = listaSecuencias.get(i).getIdComponente();
+
+            // guardar en 'simulacioncomponente'
+            SimulacionComponente simCompGuardar = new SimulacionComponente();
+            simCompGuardar.setIdSimulacion(idSimulacion);
+            simCompGuardar.setIdComponente(idComponente);
+            entityManager.persist(simCompGuardar);
+
             Secuencia secuenciaGuardar = new Secuencia();
             secuenciaGuardar.setIdComponente(idComponente);
             entityManager.persist(secuenciaGuardar);
@@ -106,6 +119,10 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
         ejecucionNueva.setAguaCaida(0.0);
         entityManager.persist(ejecucionNueva);
 
+        // todo: obtener las id de los componentes asociados a la simulacion
+        // todo: => tabla 'simulacioncomponente'
+        // todo: luego obtener las secuencias de esos componentes
+        // ENVIAR LAS SECUENCIAS AL RASPI
         return "Simulacion iniciada. IdEjecucion" + ejecucionNueva.getId();
     }
 }
