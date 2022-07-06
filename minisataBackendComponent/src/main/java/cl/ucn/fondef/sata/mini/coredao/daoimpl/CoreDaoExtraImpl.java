@@ -6,6 +6,8 @@ package cl.ucn.fondef.sata.mini.coredao.daoimpl;
 
 import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoExtra;
 import cl.ucn.fondef.sata.mini.grpc.Domain;
+import cl.ucn.fondef.sata.mini.model.Equipo;
+import cl.ucn.fondef.sata.mini.model.Simulacion;
 import cl.ucn.fondef.sata.mini.model.Usuario;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.bridge.Message;
@@ -100,7 +102,7 @@ public class CoreDaoExtraImpl implements CoreDaoExtra {
 
     //TODO: CONSIDERAR SI SE DEBERIA INCLUIR LA SIMULACION ESPECIFICA EN LA DESCRIPCION
     @Override
-    public String addRegistroCreacionSimulacion(Usuario usuarioOperador){
+    public String addRegistroCreacionSimulacion(Usuario usuarioOperador, Domain.SimulacionReq simulacion){
         Registro registroGuardado = new Registro();
         registroGuardado.setIdUsuario(usuarioOperador.getId());
         registroGuardado.setIdEntidad(3);
@@ -109,8 +111,8 @@ public class CoreDaoExtraImpl implements CoreDaoExtra {
         String fechaHoy = fechaHoraActual();
         /*registroGuardado.setFecha(fechaHoy);*/
 
-        String format = "[ " + fechaHoy + " ] " + "El usuario {0} ha creado una simulación";
-        String descripcionRegistro = MessageFormat.format(format, usuarioOperador.getId());
+        String format = "[ " + fechaHoy + " ] " + "El usuario {0} ha creado la simulación {1}";
+        String descripcionRegistro = MessageFormat.format(format, usuarioOperador.getId(), simulacion.getNombre());
         registroGuardado.setDescripcion(descripcionRegistro);
 
         entityManager.persist(registroGuardado);
@@ -119,7 +121,7 @@ public class CoreDaoExtraImpl implements CoreDaoExtra {
     }
 
     @Override
-    public String addRegistroInicioSimulacion(Usuario usuarioOperador){
+    public String addRegistroInicioSimulacion(Usuario usuarioOperador, Simulacion simulacion){
         Registro registroGuardado = new Registro();
         registroGuardado.setIdUsuario(usuarioOperador.getId());
         registroGuardado.setIdEntidad(3);
@@ -128,8 +130,8 @@ public class CoreDaoExtraImpl implements CoreDaoExtra {
         String fechaHoy = fechaHoraActual();
         /*registroGuardado.setFecha(fechaHoy);*/
 
-        String format = "[ " + fechaHoy + " ] " + "El usuario {0} ha iniciado una simulación";
-        String descripcionRegistro = MessageFormat.format(format, usuarioOperador.getId());
+        String format = "[ " + fechaHoy + " ] " + "El usuario {0} ha iniciado la simulación";
+        String descripcionRegistro = MessageFormat.format(format, usuarioOperador.getId(), simulacion.getNombre());
         registroGuardado.setDescripcion(descripcionRegistro);
 
         entityManager.persist(registroGuardado);
@@ -143,7 +145,7 @@ public class CoreDaoExtraImpl implements CoreDaoExtra {
     }
 
     @Override
-    public String addRegistroCreacionEquipo(Usuario usuario){
+    public String addRegistroCreacionEquipo(Usuario usuario, Equipo equipo){
         Registro registroGuardado = new Registro();
         registroGuardado.setIdUsuario(usuario.getId());
         registroGuardado.setIdEntidad(2);
@@ -152,8 +154,8 @@ public class CoreDaoExtraImpl implements CoreDaoExtra {
         String fechaHoy = fechaHoraActual();
         /*registroGuardado.setFecha(fechaHoy);*/
 
-        String format = "[ " + fechaHoy + " ] " + "El usuario {0} ha creado un equipo";
-        String descripcionRegistro = MessageFormat.format(format, usuario.getId());
+        String format = "[ " + fechaHoy + " ] " + "El usuario {0} ha creado el equipo {1}";
+        String descripcionRegistro = MessageFormat.format(format, usuario.getId(), equipo.getNombre());
         registroGuardado.setDescripcion(descripcionRegistro);
 
         entityManager.persist(registroGuardado);
@@ -162,7 +164,7 @@ public class CoreDaoExtraImpl implements CoreDaoExtra {
     }
 
     @Override
-    public String addRegistroModificacionEquipo(Usuario usuarioConfigurador){
+    public String addRegistroModificacionEquipo(Usuario usuarioConfigurador, Equipo equipo){
         Registro registroGuardado = new Registro();
         registroGuardado.setIdUsuario(usuarioConfigurador.getId());
         registroGuardado.setIdEntidad(2);
@@ -171,8 +173,8 @@ public class CoreDaoExtraImpl implements CoreDaoExtra {
         String fechaHoy = fechaHoraActual();
         /*registroGuardado.setFecha(fechaHoy);*/
 
-        String format = "[ " + fechaHoy + " ] " + "El usuario {0} ha modificado un equipo";
-        String descripcionRegistro = MessageFormat.format(format, usuarioConfigurador.getId());
+        String format = "[ " + fechaHoy + " ] " + "El usuario {0} ha modificado el equipo {1}";
+        String descripcionRegistro = MessageFormat.format(format, usuarioConfigurador.getId(), equipo.getNombre());
         registroGuardado.setDescripcion(descripcionRegistro);
 
         entityManager.persist(registroGuardado);

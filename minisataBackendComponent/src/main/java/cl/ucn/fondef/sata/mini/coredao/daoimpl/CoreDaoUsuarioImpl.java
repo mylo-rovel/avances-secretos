@@ -102,6 +102,7 @@ public class CoreDaoUsuarioImpl implements CoreDaoUsuario {
 
             long idUsuario = listaUsuariosEspecifica.get(0).getId();
 
+            /*
             Registro registroGuardado = new Registro();
             registroGuardado.setIdUsuario(idUsuario);
             registroGuardado.setTipoRegistro(Domain.Registro.TipoRegistro.CREACION_USUARIO.name());
@@ -112,6 +113,7 @@ public class CoreDaoUsuarioImpl implements CoreDaoUsuario {
             registroGuardado.setIdEntidad(1);
 
             entityManager.persist(registroGuardado);
+            */
 
             mensaje = "El usuario ha sido ingresado existosamente";
         }else{

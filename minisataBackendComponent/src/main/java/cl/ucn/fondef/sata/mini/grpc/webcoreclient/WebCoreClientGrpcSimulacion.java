@@ -1,7 +1,12 @@
 package cl.ucn.fondef.sata.mini.grpc.webcoreclient;
 
+import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoExtra;
+import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoSimulacion;
+import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoUsuario;
 import cl.ucn.fondef.sata.mini.grpc.Domain;
 import cl.ucn.fondef.sata.mini.grpcobjects.*;
+import cl.ucn.fondef.sata.mini.model.Simulacion;
+import cl.ucn.fondef.sata.mini.model.Usuario;
 import io.grpc.Grpc;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,6 +19,11 @@ import java.util.List;
 @Slf4j
 @Service
 public final class WebCoreClientGrpcSimulacion extends WebCoreClientGrpcBase {
+
+    private CoreDaoExtra coreDaoExtra;
+    private CoreDaoUsuario coreDaoUsuario;
+
+    private CoreDaoSimulacion coreDaoSimulacion;
 
     /**
      * Get simulacion string.
@@ -63,6 +73,13 @@ public final class WebCoreClientGrpcSimulacion extends WebCoreClientGrpcBase {
             }
             nuevaSimulacionReq.addSecuencia(secuenciaEnviar);
         }
+
+        Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(simulacionReq.getRutOperador()).build();
+        Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
+
+        //meter aqui el registroCreacionSimulacion
+        coreDaoExtra.addRegistroCreacionSimulacion(usuario, nuevaSimulacionReq.build());
+
         Domain.MensajeReply serverResponse = this.stub.addSimulacion(nuevaSimulacionReq.build());
         return this.gson.toJson(serverResponse);
     }

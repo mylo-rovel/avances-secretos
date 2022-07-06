@@ -4,10 +4,14 @@
 
 package cl.ucn.fondef.sata.mini.web;
 
+import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoEquipo;
 import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoExtra;
+import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoSimulacion;
 import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoUsuario;
 import cl.ucn.fondef.sata.mini.grpc.Domain;
 import cl.ucn.fondef.sata.mini.grpc.webcoreclient.*;
+import cl.ucn.fondef.sata.mini.model.Equipo;
+import cl.ucn.fondef.sata.mini.model.Simulacion;
 import cl.ucn.fondef.sata.mini.model.Usuario;
 import cl.ucn.fondef.sata.mini.utilities.BytesChunker;
 import cl.ucn.fondef.sata.mini.utilities.EnumValuesResponse;
@@ -51,6 +55,12 @@ public class WebController {
     @Autowired
     private CoreDaoExtra coreDaoExtra;
 
+    @Autowired
+    private CoreDaoEquipo coreDaoEquipo;
+
+    @Autowired
+    private CoreDaoSimulacion coreDaoSimulacion;
+
     private String getTokenKey(String jsonwebtoken) {
         return jwtUtil.getKey(jsonwebtoken);
     }
@@ -72,6 +82,7 @@ public class WebController {
     // rpc authenticate(CredencialesEntityReq) returns (SesionEntityReply){}
     @RequestMapping(value = "api/login", method = RequestMethod.POST)
     public String authenticate(@RequestBody GrpcCredencialesEntityReq credenciales) {
+        //a diferencia de los demas requests, el request que deberia estar aca se puso en webCoreClientGrpcUsuario por conveniencia
         return webCoreClientGrpcUsuario.authenticate(credenciales);
     }
 
@@ -79,6 +90,8 @@ public class WebController {
 // rpc addUsuario(UsuarioEntityReq)  returns (MensajeReply) {}
     @RequestMapping(value = "api/usuarios", method = RequestMethod.POST)
     public String addUsuario(@RequestBody GrpcUsuarioEntityReq usuarioNuevo, @RequestHeader(value="Authorization") String jwt) {
+        //cuando no hayan usuarios en la base de datos descomentar la siguiente linea de codigo y comentar el resto
+        //return webCoreClientGrpcUsuario.addUsuario(usuarioNuevo);
         if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuarioAdmin = coreDaoUsuario.getUsuario(rutUsuario);
@@ -126,10 +139,13 @@ public class WebController {
     @RequestMapping(value = "api/usuarios", method = RequestMethod.PATCH)
     public String updateUsuario(@RequestBody GrpcUsuarioEntityReq usuarioModificar, @RequestHeader(value="Authorization") String jwt) {
         if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
-        Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
-        Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
-        if(usuario!=null) {
-            if (usuario.getRol().equals("ADMINISTRADOR")) {
+        Domain.RutEntityReq rutUsuarioAdmin = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
+        Usuario usuarioAdmin = coreDaoUsuario.getUsuario(rutUsuarioAdmin);
+        if(usuarioAdmin!=null) {
+            if (usuarioAdmin.getRol().equals("ADMINISTRADOR")) {
+                Domain.RutEntityReq rutUsuarioActualizado = Domain.RutEntityReq.newBuilder().setRut(usuarioModificar.getUsuario().getRut()).build();
+                Usuario usuarioActualizado = coreDaoUsuario.getUsuario(rutUsuarioActualizado);
+                coreDaoExtra.addRegistroModificacionUsuario(usuarioActualizado, usuarioAdmin);
                 return webCoreClientGrpcUsuario.updateUsuario(usuarioModificar);
             }
         }
@@ -141,6 +157,8 @@ public class WebController {
     // ---- EQUIPOS  ----------------------------------------------------------------------------------------
 
 
+    //TODO: Hice lo mismo que aquella vez donde asumi que la tabla de usuarios estaba poblada pero con los equipos, si algo sale mal revisar aqui
+
     //   rpc addEquipo(EquipoEntityReq)  returns (MensajeReply){}
     @RequestMapping(value = "api/equipos", method = RequestMethod.POST)
      public String addEquipo(@RequestBody GrpcEquipoEntityReq equipoNuevo, @RequestHeader(value="Authorization") String jwt){
@@ -149,8 +167,15 @@ public class WebController {
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {
             if (usuario.getRol().equals("CONFIGURADOR")) {
-                equipoNuevo.setRutConfigurador(this.getTokenKey(jwt));
-                return webCoreClientGrpcEquipo.addEquipo(equipoNuevo);
+                String json = webCoreClientGrpcEquipo.addEquipo(equipoNuevo);
+                equipoNuevo.setRutConfigurador(usuario.getRut());
+                Domain.IdElementoConRutReq idEquipo = Domain.IdElementoConRutReq.newBuilder()
+                        .setId(equipoNuevo.getEquipo().getId())
+                        .setRut(usuario.getRut()).build();
+                Equipo equipo = coreDaoEquipo.getEquipo(idEquipo);
+                coreDaoExtra.addRegistroCreacionEquipo(usuario, equipo);
+                return json;
+                //return webCoreClientGrpcEquipo.addEquipo(equipoNuevo);
             }
         }
         return "Error. Token invalido";
@@ -165,7 +190,12 @@ public class WebController {
         if(usuario!=null) {
             if (usuario.getRol().equals("CONFIGURADOR")) {
                 equipoModificado.setRutConfigurador(this.getTokenKey(jwt));
-                return webCoreClientGrpcEquipo.updateEquipo(equipoModificado);
+                Domain.IdElementoConRutReq idEquipo = Domain.IdElementoConRutReq.newBuilder()
+                        .setId(equipoModificado.getEquipo().getId())
+                        .setRut(usuario.getRut()).build();
+                Equipo equipo = coreDaoEquipo.getEquipo(idEquipo);
+                coreDaoExtra.addRegistroModificacionEquipo(usuario, equipo);
+                webCoreClientGrpcEquipo.updateEquipo(equipoModificado);
             }
         }
         return "Usuario sin permisos";
@@ -265,6 +295,9 @@ public class WebController {
         if(usuario!=null) {
             if (usuario.getRol().equals("OPERADOR")) {
                 simulacionReq.setRutOperador(this.getTokenKey(jwt));
+
+                //Registro movido a WebCoreClientGrpcSimulacion por conveniencia
+
                 return webCoreClientGrpcSimulacion.addSimulacion(simulacionReq);
             }
         }
@@ -308,6 +341,12 @@ public class WebController {
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {
             if (usuario.getRol().equals("OPERADOR")) {
+                Domain.IdElementoReq idSimulacion = Domain.IdElementoReq.newBuilder().setId(startSimulacionReq.getId()).build();
+
+                Simulacion simulacion = coreDaoSimulacion.getSimulacion(idSimulacion.getId());
+
+                coreDaoExtra.addRegistroInicioSimulacion(usuario, simulacion);
+
                 return webCoreClientGrpcSimulacion.startSimulacion(startSimulacionReq);
             }
         }
