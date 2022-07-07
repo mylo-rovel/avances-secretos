@@ -139,7 +139,7 @@ CREATE TABLE evento
     duracion            int(11)         NOT NULL,
     posicion            int(11)         NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (id_secuencia) REFERENCES secuencia (id),
+    FOREIGN KEY (id_secuencia) REFERENCES secuencia (id)
 );
 
 
