@@ -61,7 +61,6 @@
             const rawdata = await fetch(url_to_fetch, post_config).catch(err => err);
             const listaSimulacionesCrudas = await rawdata.json();
             this.simulaciones = setListasDesplegables(listaSimulacionesCrudas);
-
         },
 
         methods: {
@@ -124,15 +123,15 @@
 
             //Metodo que enviar solicitud de iniciar simulacion
             async sendSolicitudSimulacion(){
-                // let info = JSON.stringify({"equipo":equipoSeleccionado, "simulacion":simulacionSeleccionada});
+                let info = JSON.stringify({"equipo":equipoSeleccionado, "simulacion":simulacionSeleccionada});
 
                 // document.getElementById("form_iniciarSimulacion").submit();
                 const POST_config = {
                     'method': 'POST',
-                    'body': '',
+                    'body': info,
                     'authorization': 'sdzfdnfdsf'
                 };
-                const rawResponse = await fetch('https://jsonplaceholder.typicode.com/');
+                const rawResponse = await fetch('https://jsonplaceholder.typicode.com/', POST_config);
                 console.log(rawResponse);
             }
 
