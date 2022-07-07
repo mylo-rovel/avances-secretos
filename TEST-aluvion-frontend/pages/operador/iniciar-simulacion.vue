@@ -5,6 +5,7 @@
     import CancelButtom from '~/components/CancelButtom.vue'
     import SubmitButton from '~/components/SubmitButton.vue'
     import NavbarPag from '~/components/NavbarPag.vue'
+    import { setListasDesplegables } from '~/utils/utility_functions';
 
 
     export default Vue.extend({
@@ -19,7 +20,7 @@
                 //equipos:[],
                 equipoSeleccionado: "",
                 simulacionSeleccionada:"",
-                apiURL: "http://192.168.43.73:8081/api",
+                apiURL: "http://localhost:8081/api",
 
                 /*simulaciones: [
                     {
@@ -51,8 +52,16 @@
             };
         },
         async fetch(){
-            this.getEquipos(this.simulaciones);
-            this.getSimulacionesEquipo(this.simulaciones);
+            const JWTtoken = "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyMjMzNDQ1NS1rIiwiaWF0IjoxNjU3MDcwNzMyLCJzdWIiOiJPUEVSQURPUiIsImlzcyI6Ik1haW4iLCJleHAiOjE2NTc2NzU1MzJ9.jLlZdoJUBjWm5grgCwe5aFeKZruQCoiMA_Tm39e3IOw";
+            const post_config = { 
+                method: 'get', 
+                headers: {'authorization': JWTtoken}
+            };
+            const url_to_fetch = `http://localhost:8081/api/simulaciones/`;
+            const rawdata = await fetch(url_to_fetch, post_config).catch(err => err);
+            const listaSimulacionesCrudas = await rawdata.json();
+            this.simulaciones = setListasDesplegables(listaSimulacionesCrudas);
+
         },
 
         methods: {
@@ -70,16 +79,16 @@
             },
 
             //Metodo que llena las opciones del select con los equipos
-            getEquipos: function(simulaciones) {
-                let selectIdEquipo = document.getElementById('select_equipoSimulacion');
-                for (let i = 0; i < simulaciones.length; i++) {
-                    let opcionEquipo = document.createElement('option');
-                    opcionEquipo.text = simulaciones[i].nombreEquipo_;
-                    selectIdEquipo.add(opcionEquipo);
-                }
-                console.log();
-                return selectIdEquipo;
-            },
+            // getEquipos: function(simulaciones) {
+            //     let selectIdEquipo = document.getElementById('select_equipoSimulacion');
+            //     for (let i = 0; i < simulaciones.length; i++) {
+            //         let opcionEquipo = document.createElement('option');
+            //         opcionEquipo.text = simulaciones[i].nombreEquipo_;
+            //         selectIdEquipo.add(opcionEquipo);
+            //     }
+            //     console.log();
+            //     return selectIdEquipo;
+            // },
 
             //Metodo que llena las opciones del select con los id de simulaciones del equipo seleccionado
             getSimulacionesEquipo: function(simulaciones){
