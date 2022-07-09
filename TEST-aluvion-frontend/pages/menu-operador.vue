@@ -1,18 +1,12 @@
 <script>
     import Vue from 'vue'
     // import {mapState, mapMutations} from "vuex";
-    // import {addGlobalEventListener} from "~/utils/utility_functions.js";
-    // addGlobalEventListener("click", ".plus-button", e => console.log("\n\n\naaaa\n\n\n",e))
 
     export default Vue.extend({
         name: "MenuOperador",
         data() {
             return {
                 elementsObj : {
-                    // Inicio: {esDesplegable:false},
-                    // Perfil: {esDesplegable:false},
-                    // Simulacion: {esDesplegable:false},
-                    // Contacto: {esDesplegable:false},
                     Inicio: false,
                     Perfil:  false,
                     Simulacion:  false,
@@ -20,10 +14,26 @@
                 }
             }
         },
+        async fetch(){
+            this.checkIfUserShouldBeHere();
+        },
         methods: {
+            checkIfUserShouldBeHere() {
+                const rolUsuario = window.localStorage.getItem("rol");
+                const tokenUsuario = window.localStorage.getItem("token");
+                if ( rolUsuario !== "OPERADORa" || !tokenUsuario) {
+                    console.clear();
+                    console.log("aaaa");
+                    window.localStorage.clear();
+                    const anchorElement = document.createElement("a");
+                    anchorElement.href= "";
+                    anchorElement.click();
+                }
+            },
+
             abrirMenu(eventObj){
                 const idRouteTitle = eventObj.currentTarget.id.toString().split("_key")[0];
-                console.log(idRouteTitle)
+                // console.log(idRouteTitle)
                 // this.elementsObj[idRouteTitle].esDesplegable = !this.elementsObj[idRouteTitle].esDesplegable;
                 this.elementsObj[idRouteTitle] = !this.elementsObj[idRouteTitle];
             },
@@ -103,6 +113,10 @@
     p, a {
         color:rgb(65, 65, 65);
         text-decoration: none;
+    }
+    
+    span {
+        cursor: pointer;
     }
 
     .left-menu-panel {

@@ -32,36 +32,9 @@
                 this.updateIntensidadTotalListaEventos();
             },
 
-            async guardarListaEventos({$axios}){
+            async guardarListaEventos(){
                 console.clear()
                 this.setListaEventos();
-                // const serverPath = `${this.urlApi}/simulacion`;
-                const serverPath ='http://localhost:8081/api/simulaciones';
-
-                let objectToSend = {
-                    idSimulador: "1",
-                    rutOperador: "10000000-0",
-                    nombre: "simulacion1998",
-                    descripcion: "prueba1 hola mundo",
-                    listaSecuencias: [... this.secuencias]
-                };
-                objectToSend = JSON.stringify(objectToSend);
-                console.log(objectToSend);
-
-                const otherHeaders = {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJjb3JyZW90ZXN0ZW8yQGpvdG1haWwuY29tIiwiaWF0IjoxNjU1MDU1MjAyLCJzdWIiOiJPcGVyYWRvciIsImlzcyI6Ik1haW4iLCJleHAiOjE2NTUxNDE2MDJ9.woGqMNxHLqywEZw9W_RBqf6dRECPMaDtNkQ0gg91bw8',
-                    }
-                }
-        
-                const serverResponse = await this.$axios.$post(serverPath, objectToSend, otherHeaders).catch(err => err);
-                if (serverResponse instanceof Error) {
-                    alert("ERROR. rayos :(", serverResponse)
-                    return false;
-                }
-                alert(serverResponse);
-                return true;
             }
         }
     })
@@ -97,7 +70,7 @@
                 <p class="total-duration-time-row"><span class="total-duration-number">{{duracionTotalListaEventos}}</span>minutos</p>
             </div>
             <div class="col-6 contenido-botones my-4">
-                <NuxtLink to= "/operador/registrar-simulacion"><SubmitButton :submitbutton ="submitbutton" @click="guardarListaEventos"/></NuxtLink>
+                <NuxtLink to= "/operador/registrar-simulacion"><SubmitButton :submitbutton ="submitbutton"/></NuxtLink>
             </div>
         </article>
     </section>
