@@ -124,27 +124,6 @@ CREATE TABLE pin
 
 CREATE TABLE secuencia
 (
-    id                  bigint(20)         NOT NULL AUTO_INCREMENT,
-    id_componente       bigint(20)         NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (id_componente) REFERENCES componente (id)
-);
-
-CREATE TABLE evento
-(
-    id                  bigint(20)      NOT NULL AUTO_INCREMENT,
-    id_secuencia        bigint(20)      NOT NULL,
-    id_ejecucion        bigint(20)      NOT NULL,
-    intensidad          int(11)         NOT NULL,
-    duracion            int(11)         NOT NULL,
-    posicion            int(11)         NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (id_secuencia) REFERENCES secuencia (id)
-);
-
-
-CREATE TABLE simulacioncomponente
-(
     id                  bigint(20)      NOT NULL AUTO_INCREMENT,
     id_simulacion       bigint(20)      NOT NULL,
     id_componente       bigint(20)      NOT NULL,
@@ -152,6 +131,18 @@ CREATE TABLE simulacioncomponente
     FOREIGN KEY (id_simulacion) REFERENCES simulacion (id),
     FOREIGN KEY (id_componente) REFERENCES componente (id)
 );
+
+CREATE TABLE evento
+(
+    id                  bigint(20)      NOT NULL AUTO_INCREMENT,
+    id_secuencia        bigint(20)      NOT NULL,
+    intensidad          int(11)         NOT NULL,
+    duracion            int(11)         NOT NULL,
+    posicion            int(11)         NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (id_secuencia) REFERENCES secuencia (id)
+);
+
 
 CREATE TABLE ejecucionsecuencia
 (

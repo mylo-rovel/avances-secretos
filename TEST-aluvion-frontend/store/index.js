@@ -2,14 +2,8 @@ import { secuenciasStateMethods } from "~/store/secuenciasStateMethods.js";
 
 // El estado corresponde
 export const state = () => ({
-    // solo para entender cómo funciona el store o 'estado global'
-    counter:0,
-    
-    urlApi: "http://192.168.43.73:8081/api",
+    urlApi: "http://localhost:8081/api",
     //192.168.43.73 emilio
-    //10.20.109.227 red alumnos
-
-    
 
     // EL PROPOSITO DE ESTE ARRAY ES FACILITAR EL GUARDADO DE LAS FILAS SIMPLEMENTE USANDO 1 ARRAY A LA VEZ
     // esta lista obtendrá una copia del contenido del array secuencias en el indice 'currentSecuencia'
@@ -54,8 +48,7 @@ export const state = () => ({
         {"listaEventos": []}, 
         {"listaEventos": []}, 
         {"listaEventos": []}
-    ],
-    simulacion: []
+    ]
 });
 
 // funciones asincronas
@@ -67,14 +60,6 @@ export const actions = {
 }
 
 export const mutations = {
-    // solo para entender cómo funciona el store o 'estado global'
-    increase_counter(state, increment = 1) {
-        state.counter += increment;
-    },
-    
-    // esta sintaxis indica que estamos entregando las funciones del objeto secuenciasStateMethods
-    // importado desde el archivo '~/store/secuenciasStateMethods.js' para ocuparlas dentro de este
-    // objeto que manipula el estado. así mantenemos separadas las funciones según su pertinencia
     ... secuenciasStateMethods,
     
     // buscamos modificar el indice currentSecuencia para poder acceder a los eventos de cualquier valvula rapidamente

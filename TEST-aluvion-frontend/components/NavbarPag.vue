@@ -31,7 +31,7 @@ export default {
               </ul>-->
             </li>
             <li class="nav-item">
-              <a class="nav-link active" href="/#/">Cerrar Sesión</a>
+              <a class="nav-link active" href="/">Cerrar Sesión</a>
             </li>
           </ul>
         </div>

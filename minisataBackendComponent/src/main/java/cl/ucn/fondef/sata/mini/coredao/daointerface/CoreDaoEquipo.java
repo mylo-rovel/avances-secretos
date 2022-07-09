@@ -20,13 +20,13 @@ public interface CoreDaoEquipo {
 
     String updateEquipo(EquipoEntityReq equipoEntityReq);
 
-    List<Placa> getPlacas(IdElementoReq idEquipo);
+    List<Placa> getPlacasPorIdEquipo(IdElementoReq idEquipo);
 
-    Componente getComponente(IdElementoReq idElementoReq);
+    Componente getComponentePorId(IdElementoReq idElementoReq);
 
-    List<Componente> getComponentes(IdElementoReq idElementoReq);
+    List<Componente> getComponentesPorIdEquipo(IdElementoReq idElementoReq);
 
-    List<Pin> getPines(long IdComponente);
+    List<Pin> getPinesPorIdComponente(long IdComponente);
 
     Equipo getEquipo(IdElementoConRutReq idEquipoYrutUsuario);
 
@@ -34,17 +34,9 @@ public interface CoreDaoEquipo {
 
     List<Equipo> getEquipos(Domain.RutEntityReq rutEntityReq);
 
-/*    Equipo getEquipoOperador(IdElementoConRutReq idEquipoUsuario);
-
-    List<Equipo> getEquiposOperador(RutEntityReq rutUsuario);
-
-    Equipo getEquipoConfigurador(IdElementoConRutReq idEquipoUsuario);
-
-    List<Equipo> getEquiposConfigurador(RutEntityReq rutUsuario);*/
-
     List<Componente> getValvulasEquipo(IdElementoReq idElementoReq);
 
-    List<Secuencia> getSecuenciasComponente(IdElementoReq idElementoReq);
-
     List<Evento> getEventos(long idSecuencia);
+
+    List<Secuencia> getSecuenciasComponente(IdElementoReq idElementoReq);
 }

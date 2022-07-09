@@ -6,12 +6,11 @@ package cl.ucn.fondef.sata.mini.coredao.daoimpl;
 
 import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoExtra;
 import cl.ucn.fondef.sata.mini.grpc.Domain;
-import cl.ucn.fondef.sata.mini.model.Usuario;
+import cl.ucn.fondef.sata.mini.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.bridge.Message;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import cl.ucn.fondef.sata.mini.model.Registro;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -201,14 +200,14 @@ public class CoreDaoExtraImpl implements CoreDaoExtra {
 
     @Override
     public List<Registro> getRegistros(Domain.RutEntityReq rutEntityReq) {
-        String queryUsuarioRut = "FROM Usuario WHERE rut = :rut";
+        String queryUsuarioRut = "SELECT usuario FROM Usuario usuario WHERE usuario.rut = :rut";
         List<Usuario> listaUsuarios = entityManager.createQuery(queryUsuarioRut)
                 .setParameter("rut", rutEntityReq.getRut()).getResultList();
         if (listaUsuarios.isEmpty()) {
             log.warn("La lista no contiene elementos");
             return null;
         }
-        String queryRegistros = "FROM Registro WHERE id_usuario = :id_usuario";
+        String queryRegistros = "SELECT registro FROM Registro as registro WHERE registro.idUsuario = :id_usuario";
         List listaResultado = entityManager.createQuery(queryRegistros)
                 .setParameter("id_usuario", listaUsuarios.get(0).getId()).getResultList();
         if (listaResultado.isEmpty()) {
@@ -216,5 +215,22 @@ public class CoreDaoExtraImpl implements CoreDaoExtra {
             return null;
         }
         return listaResultado;
+    }
+
+    @Override
+    public String getInnerJoin() {
+        String query =
+                "select secuencia, evento from  Secuencia as secuencia, Evento as evento " +
+                        "where secuencia.idSimulacion = 3 AND secuencia.id = evento.idSecuencia";
+        List<Object[]> results = entityManager.createQuery(query).getResultList();
+        System.out.println("results = " + results);
+        for (Object[] secuenciaANDevento: results) {
+            System.out.println("\n");
+            Secuencia secuencia = (Secuencia) secuenciaANDevento[0];
+            Evento evento = (Evento) secuenciaANDevento[1];
+            System.out.println("secuencia = " + secuencia);
+            System.out.println("evento = " + evento);
+        }
+        return "hola";
     }
 }

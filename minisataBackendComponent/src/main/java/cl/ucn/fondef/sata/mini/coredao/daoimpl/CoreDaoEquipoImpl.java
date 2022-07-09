@@ -40,7 +40,7 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
     CoreDaoUsuario coreDaoUsuario;
 
     private List<Usuario> getListaUsuariosPorRut(EquipoEntityReq equipoEntityReq) {
-        String usuarioQuery = "FROM Usuario WHERE rut = :rut AND estado = 'ACTIVO' ";
+        String usuarioQuery = "SELECT usuario FROM Usuario as usuario WHERE usuario.rut = :rut AND usuario.estado = 'ACTIVO' ";
         return (List<Usuario>) entityManager.createQuery(usuarioQuery)
                 .setParameter("rut", equipoEntityReq.getRutConfigurador()).getResultList();
 
@@ -60,7 +60,7 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
         }
 
         // CHEQUEAR SI EL NOMBRE DEL EQUIPO YA EXISTE
-        String sqlQuery = "FROM Equipo WHERE nombre = :nombre";
+        String sqlQuery = "SELECT equipo FROM Equipo as equipo WHERE equipo.nombre = :nombre";
         List listaResultado = entityManager.createQuery(sqlQuery)
                 .setParameter("nombre", equipoEntityReq.getEquipo().getNombre()).getResultList();
         if(!listaResultado.isEmpty()){
@@ -70,7 +70,7 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
     }
 
     private  HashMap<String, String> getDatosEquipoHashMap (EquipoEntityReq equipoEntityReq) {
-        String queryEquipo = "FROM Equipo WHERE nombre = :nombre";
+        String queryEquipo = "SELECT equipo FROM Equipo as equipo WHERE equipo.nombre = :nombre";
         List<Equipo> equiposGuardados = entityManager.createQuery(queryEquipo)
                 .setParameter("nombre", equipoEntityReq.getEquipo().getNombre()).getResultList();
 
@@ -113,7 +113,7 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
     private HashMap<String, Long> actualizarPlacasIdHashMap (HashMap<String, Long> placasIdHashMap, long idEquipo){
         // Obtenemos las id de las placas del equipo a guardado para reemplazar
         // el valor temporal que dejamos anteriormente: long -1
-        String queryPlacas = "FROM Placa WHERE id_equipo = :id_equipo";
+        String queryPlacas = "SELECT placa FROM Placa as placa WHERE placa.idEquipo = :id_equipo";
         List<Placa> placasGuardadas = entityManager.createQuery(queryPlacas)
                 .setParameter("id_equipo", idEquipo).getResultList();
 
@@ -138,7 +138,7 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
         return componente;
     }
     private void guardarPines(Domain.Componente componenteTurno, String nombreComponente, HashMap<String, Long> placasIdHashMap) {
-        String queryComponente = "FROM Componente WHERE nombre = :nombre";
+        String queryComponente = "SELECT componente FROM Componente as componente WHERE componente.nombre = :nombre";
         List<Componente> componentesGuardados = entityManager.createQuery(queryComponente).setParameter("nombre", nombreComponente).getResultList();
 
         // for loop para guardar los pines
@@ -239,29 +239,29 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
 
     // ---- AUX PARA getEquipo ----
     @Override
-    public List<Placa> getPlacas(IdElementoReq idEquipo) {
-        String sqlQuery = "FROM Placa WHERE id_equipo = :id_equipo";
+    public List<Placa> getPlacasPorIdEquipo(IdElementoReq idEquipo) {
+        String sqlQuery = "SELECT placa FROM Placa as placa WHERE placa.idEquipo = :id_equipo";
         return (List<Placa>) entityManager.createQuery(sqlQuery)
                 .setParameter("id_equipo", idEquipo.getId()).getResultList();
     }
 
     @Override
-    public Componente getComponente(IdElementoReq idElementoReq){
-        String sqlQuery = "FROM Componente WHERE id = :id";
+    public Componente getComponentePorId(IdElementoReq idElementoReq){
+        String sqlQuery = "SELECT componente FROM Componente as componente WHERE componente.id = :id";
         return (Componente) entityManager.createQuery(sqlQuery)
                 .setParameter("id", idElementoReq.getId()).getResultList().get(0);
     }
 
     @Override
-    public List<Componente> getComponentes(IdElementoReq idElementoReq){
-        String sqlQuery = "FROM Componente WHERE id_equipo = :id_equipo";
+    public List<Componente> getComponentesPorIdEquipo(IdElementoReq idElementoReq){
+        String sqlQuery = "SELECT componente FROM Componente as componente WHERE componente.idEquipo = :id_equipo";
         return (List<Componente>) entityManager.createQuery(sqlQuery)
                 .setParameter("id_equipo", idElementoReq.getId()).getResultList();
     }
 
     @Override
-    public List<Pin> getPines(long IdComponente){
-        String sqlQuery = "FROM Pin WHERE id_componente = :id_componente";
+    public List<Pin> getPinesPorIdComponente(long IdComponente){
+        String sqlQuery = "SELECT pin FROM Pin as pin WHERE pin.idComponente = :id_componente";
         return (List<Pin>) entityManager.createQuery(sqlQuery)
                 .setParameter("id_componente", IdComponente).getResultList();
     }
@@ -271,10 +271,10 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
         Usuario usuarioRequest = coreDaoUsuario.getUsuario(Domain.RutEntityReq.newBuilder().setRut(rutUsuario).build());
         String sqlQuery = "";
         if (usuarioRequest.getRol().equals(UsuarioEntity.RolUsuario.OPERADOR.name())){
-            sqlQuery = "FROM Equipo WHERE id = :id AND estado = 'PROTOTIPO'";
+            sqlQuery = "SELECT equipo FROM Equipo as equipo WHERE equipo.id = :id AND equipo.estado = 'PROTOTIPO'";
         }
         else {
-            sqlQuery = "FROM Equipo WHERE id = :id";
+            sqlQuery = "SELECT equipo FROM Equipo as equipo WHERE equipo.id = :id";
         }
         return entityManager.createQuery(sqlQuery).setParameter("id", idEquipoYrutUsuario.getId());
     }
@@ -293,7 +293,7 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
 
     @Override
     public Equipo getEquipoPorNombre(String nombreEquipo){
-        String sqlQueryEquipo = "FROM Equipo WHERE nombre = :nombre";
+        String sqlQueryEquipo = "SELECT equipo FROM Equipo as equipo WHERE equipo.nombre = :nombre";
         List listaResultado = entityManager.createQuery(sqlQueryEquipo)
                 .setParameter("nombre", nombreEquipo).getResultList();
 
@@ -309,10 +309,10 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
         Usuario usuarioRequest = coreDaoUsuario.getUsuario(Domain.RutEntityReq.newBuilder().setRut(rutUsuario).build());
         String sqlQuery = "";
         if (usuarioRequest.getRol().equals(UsuarioEntity.RolUsuario.OPERADOR.name())){
-            sqlQuery = "FROM Equipo WHERE estado = 'PROTOTIPO'";
+            sqlQuery = "SELECT equipo FROM Equipo as equipo WHERE equipo.estado = 'PROTOTIPO'";
         }
         else {
-            sqlQuery = "FROM Equipo";
+            sqlQuery = "SELECT equipo FROM Equipo as equipo";
         }
         return entityManager.createQuery(sqlQuery);
     }
@@ -323,53 +323,19 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
         return (List<Equipo>) sqlQueryEquipos.getResultList();
     }
 
-/*    @Override
-    public Equipo getEquipoOperador(IdElementoConRutReq idEquipoUsuario){
-        String sqlQuery = "FROM Equipo WHERE id = :id AND estado = 'PROTOTIPO' ";
-        List listaResultado =entityManager.createQuery(sqlQuery)
-                .setParameter("id", idEquipoUsuario.getId()).getResultList();
-        if(listaResultado.isEmpty()) {
-            log.warn("La lista no contiene elementos");
-            return null;
-        }
-        return (Equipo) listaResultado.get(0);
-    }
-
-    @Override
-    public List<Equipo> getEquiposOperador(RutEntityReq rutUsuario){
-        String sqlQuery = "FROM Equipo WHERE estado = 'PROTOTIPO' ";
-        return (List<Equipo>) entityManager.createQuery(sqlQuery).getResultList();
-    }
-
-    @Override
-    public Equipo getEquipoConfigurador(IdElementoConRutReq idEquipoUsuario){
-        String sqlQuery = "FROM Equipo WHERE id = :id AND estado = 'CONSTRUCCION' ";
-        List listaResultado =entityManager.createQuery(sqlQuery)
-                .setParameter("id", idEquipoUsuario.getId()).getResultList();
-        if(listaResultado.isEmpty()) {
-            log.warn("La lista no contiene elementos");
-            return null;
-        }
-        return (Equipo) listaResultado.get(0);
-    }
-
-    @Override
-    public List<Equipo> getEquiposConfigurador(RutEntityReq rutUsuario){
-        String sqlQuery = "FROM Equipo WHERE estado = 'CONSTRUCCION' ";
-        return (List<Equipo>) entityManager.createQuery(sqlQuery).getResultList();
-    }*/
-
     @Override
     public List<Componente> getValvulasEquipo(IdElementoReq idElementoReq){
-        String sqlQuery = "FROM Componente WHERE id_equipo = :id_equipo AND tipo = :tipo";
+        String sqlQuery = "SELECT componente FROM Componente as componente " +
+                "WHERE componente.idEquipo = :id_equipo AND componente.tipo = :tipo";
         return (List<Componente>) entityManager.createQuery(sqlQuery)
                 .setParameter("id_equipo", idElementoReq.getId())
                 .setParameter("tipo", "VALVULA")
                 .getResultList();
     }
 
+    @Override
     public List<Evento> getEventos(long idSecuencia){
-        String sqlQuery = "FROM Evento WHERE id_secuencia = :id_secuencia";
+        String sqlQuery = "SELECT evento FROM Evento as evento WHERE evento.idSecuencia = :id_secuencia";
         return (List<Evento>) entityManager.createQuery(sqlQuery)
                 .setParameter("id_secuencia", idSecuencia).getResultList();
     }
@@ -377,11 +343,13 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
     @Override
     public List<Secuencia> getSecuenciasComponente(IdElementoReq idElementoReq){
         //se obtienen las secuencias de la id de un equipo dado utilizando la id_equipo de componenteFisico
-        String sqlQuery = "FROM Secuencia s,ComponenteFisico c WHERE c.id_equipo = :id_equipo AND s.id_componente = c.id";
+        String sqlQuery = "SELECT s, c FROM Secuencia s, Componente c WHERE c.idEquipo = :id_equipo AND s.idComponente = c.id";
         return (List<Secuencia>) entityManager.createQuery(sqlQuery)
                 .setParameter("id_equipo", idElementoReq.getId())
                 .getResultList();
     }
+
+
 
     /*public String uploadArchivo(ArchivosEntityReq archivosEntityReq){
 

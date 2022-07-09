@@ -27,4 +27,9 @@ public class Secuencia {
     @Setter
     @Column(name = "id_componente")
     private long idComponente;
+
+    @Getter
+    @Setter
+    @Column(name = "id_simulacion")
+    private long idSimulacion;
 }

@@ -79,12 +79,12 @@ public class WebController {
 // rpc addUsuario(UsuarioEntityReq)  returns (MensajeReply) {}
     @RequestMapping(value = "api/usuarios", method = RequestMethod.POST)
     public String addUsuario(@RequestBody GrpcUsuarioEntityReq usuarioNuevo, @RequestHeader(value="Authorization") String jwt) {
-//       return webCoreClientGrpcUsuario.addUsuario(usuarioNuevo);
-        if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
+       return webCoreClientGrpcUsuario.addUsuario(usuarioNuevo);
+  /*      if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuarioAdmin = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuarioAdmin!=null){
-            if(usuarioAdmin.getRol().equals("ADMINISTRADOR")){
+            if(usuarioAdmin.getRol().equals(Domain.UsuarioEntity.RolUsuario.ADMINISTRADOR.name())){
                 String json = webCoreClientGrpcUsuario.addUsuario(usuarioNuevo);
                 Domain.RutEntityReq rutUsuarioAgregado = Domain.RutEntityReq.newBuilder().setRut(usuarioNuevo.getUsuario().getRut()).build();
                 Usuario usuarioAgregado = coreDaoUsuario.getUsuario(rutUsuarioAgregado);
@@ -92,7 +92,7 @@ public class WebController {
                 return json;
             }
         }
-        return "Usuario sin permisos";
+        return "Usuario sin permisos";*/
     }
 
     // rpc getUsuario(RutEntityReq)  returns (UsuarioEntityReply) {}
@@ -102,7 +102,7 @@ public class WebController {
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null){
-            if (usuario.getRol().equals("ADMINISTRADOR")){
+            if (usuario.getRol().equals(Domain.UsuarioEntity.RolUsuario.ADMINISTRADOR.name())){
                 return webCoreClientGrpcUsuario.getUsuario(rut);
             }
         }
@@ -116,7 +116,7 @@ public class WebController {
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null){
-            if (usuario.getRol().equals("ADMINISTRADOR")) {
+            if (usuario.getRol().equals(Domain.UsuarioEntity.RolUsuario.ADMINISTRADOR.name())) {
                 return webCoreClientGrpcUsuario.getUsuarios();
             }
         }
@@ -130,7 +130,7 @@ public class WebController {
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {
-            if (usuario.getRol().equals("ADMINISTRADOR")) {
+            if (usuario.getRol().equals(Domain.UsuarioEntity.RolUsuario.ADMINISTRADOR.name())) {
                 return webCoreClientGrpcUsuario.updateUsuario(usuarioModificar);
             }
         }
@@ -149,7 +149,7 @@ public class WebController {
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {
-            if (usuario.getRol().equals("CONFIGURADOR")) {
+            if (usuario.getRol().equals(Domain.UsuarioEntity.RolUsuario.CONFIGURADOR.name())) {
                 equipoNuevo.setRutConfigurador(this.getTokenKey(jwt));
                 return webCoreClientGrpcEquipo.addEquipo(equipoNuevo);
             }
@@ -164,7 +164,7 @@ public class WebController {
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {
-            if (usuario.getRol().equals("CONFIGURADOR")) {
+            if (usuario.getRol().equals(Domain.UsuarioEntity.RolUsuario.CONFIGURADOR.name())) {
                 equipoModificado.setRutConfigurador(this.getTokenKey(jwt));
                 return webCoreClientGrpcEquipo.updateEquipo(equipoModificado);
             }
@@ -179,7 +179,8 @@ public class WebController {
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null){
-            if(usuario.getRol().equals("OPERADOR") || usuario.getRol().equals("CONFIGURADOR")){
+            if(usuario.getRol().equals(Domain.UsuarioEntity.RolUsuario.OPERADOR.name())
+                    || usuario.getRol().equals(Domain.UsuarioEntity.RolUsuario.CONFIGURADOR.name())){
                 return webCoreClientGrpcEquipo.getEquipo(id, rutUsuario.getRut());
             }
         }
@@ -192,8 +193,10 @@ public class WebController {
         if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
-        if(usuario.getRol().equals("OPERADOR") || usuario.getRol().equals("CONFIGURADOR")){
-            return webCoreClientGrpcEquipo.getEquipos(rutUsuario.getRut());
+        if(usuario!=null){
+            if(usuario.getRol().equals(Domain.UsuarioEntity.RolUsuario.OPERADOR.name()) || usuario.getRol().equals(Domain.UsuarioEntity.RolUsuario.CONFIGURADOR.name())){
+                return webCoreClientGrpcEquipo.getEquipos(rutUsuario.getRut());
+            }
         }
         return "Usario sin permisos";
     }
@@ -206,8 +209,10 @@ public class WebController {
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {
-            webCoreStreamClientGrpc.uploadArchivo(file);
-            return file.getOriginalFilename();
+            if (usuario.getRol().equals(Domain.UsuarioEntity.RolUsuario.OPERADOR.name()) ||  usuario.getRol().equals(Domain.UsuarioEntity.RolUsuario.CONFIGURADOR.name())) {
+                webCoreStreamClientGrpc.uploadArchivo(file);
+                return file.getOriginalFilename();
+            }
         }
         return "Usuario sin permisos";
         //        ResponseEntity<?>
@@ -222,7 +227,9 @@ public class WebController {
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {
-            return webCoreClientGrpcEquipo.getArchivos(idEquipo);
+            if (usuario.getRol().equals(Domain.UsuarioEntity.RolUsuario.OPERADOR.name()) ||  usuario.getRol().equals(Domain.UsuarioEntity.RolUsuario.CONFIGURADOR.name())) {
+                return webCoreClientGrpcEquipo.getArchivos(idEquipo);
+            }
         }
         return "Usuario sin permisos";
     }
@@ -234,7 +241,9 @@ public class WebController {
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {
-            return webCoreClientGrpcEquipo.getValvulasEquipo(idEquipo);
+            if (usuario.getRol().equals(Domain.UsuarioEntity.RolUsuario.OPERADOR.name()) ||  usuario.getRol().equals(Domain.UsuarioEntity.RolUsuario.CONFIGURADOR.name())) {
+                return webCoreClientGrpcEquipo.getValvulasEquipo(idEquipo);
+            }
         }
         return "Usuario sin permisos";
     }
@@ -248,7 +257,9 @@ public class WebController {
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {
-            return webCoreClientGrpcEquipo.getSecuenciasComponente(idComponente);
+            if (usuario.getRol().equals(Domain.UsuarioEntity.RolUsuario.OPERADOR.name()) ||  usuario.getRol().equals(Domain.UsuarioEntity.RolUsuario.CONFIGURADOR.name())) {
+                return webCoreClientGrpcEquipo.getSecuenciasComponente(idComponente);
+            }
         }
         return "Usuario sin permisos";
     }
@@ -264,7 +275,7 @@ public class WebController {
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {
-            if (usuario.getRol().equals("OPERADOR")) {
+            if (usuario.getRol().equals(Domain.UsuarioEntity.RolUsuario.OPERADOR.name())) {
                 simulacionReq.setRutOperador(this.getTokenKey(jwt));
                 return webCoreClientGrpcSimulacion.addSimulacion(simulacionReq);
             }
@@ -279,7 +290,7 @@ public class WebController {
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {
-            if (usuario.getRol().equals("OPERADOR")) {
+            if (usuario.getRol().equals(Domain.UsuarioEntity.RolUsuario.OPERADOR.name())) {
                 return webCoreClientGrpcSimulacion.getSimulacion(id, this.getTokenKey(jwt));
             }
         }
@@ -293,7 +304,7 @@ public class WebController {
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {
-            if (usuario.getRol().equals("OPERADOR")) {
+            if (usuario.getRol().equals(Domain.UsuarioEntity.RolUsuario.OPERADOR.name())) {
                 return webCoreClientGrpcSimulacion.getSimulaciones(this.getTokenKey(jwt));
             }
         }
@@ -308,7 +319,7 @@ public class WebController {
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {
-            if (usuario.getRol().equals("OPERADOR")) {
+            if (usuario.getRol().equals(Domain.UsuarioEntity.RolUsuario.OPERADOR.name())) {
                 return webCoreClientGrpcSimulacion.startSimulacion(startSimulacionReq);
             }
         }
@@ -324,8 +335,38 @@ public class WebController {
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {
-            if (usuario.getRol().equals("OPERADOR")) {
+            if (usuario.getRol().equals(Domain.UsuarioEntity.RolUsuario.OPERADOR.name())) {
                 return webCoreClientGrpcSimulacion.getSimulacionActual();
+            }
+        }
+        return "Usuario sin permisos";
+    }
+
+    // ***---- IMPLEMENTAR ----
+    //   rpc getEjecucion(IdElementoReq) returns (EjecucionReply){}
+    @RequestMapping(value = "api/ejecuciones/{id}", method = RequestMethod.GET)
+    public String getEjecucion(@PathVariable long id, @RequestHeader(value="Authorization") String jwt) {
+        if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
+        Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
+        Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
+        if(usuario!=null) {
+            if (usuario.getRol().equals(Domain.UsuarioEntity.RolUsuario.OPERADOR.name())) {
+                return webCoreClientGrpcSimulacion.getEjecucion(id, this.getTokenKey(jwt));
+            }
+        }
+        return "Usuario sin permisos";
+    }
+
+    // ***---- IMPLEMENTAR ----
+    //   rpc getEjecuciones(EmptyReq) returns (EjecucionesReply){}
+    @RequestMapping(value = "api/ejecuciones/", method = RequestMethod.GET)
+    public String getEjecuciones(@RequestHeader(value="Authorization") String jwt) {
+        if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
+        Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
+        Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
+        if(usuario!=null) {
+            if (usuario.getRol().equals(Domain.UsuarioEntity.RolUsuario.OPERADOR.name())) {
+                return webCoreClientGrpcSimulacion.getEjecuciones(this.getTokenKey(jwt));
             }
         }
         return "Usuario sin permisos";
@@ -343,7 +384,7 @@ public class WebController {
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {
-            if (usuario.getRol().equals("OPERADOR")) {
+            if (usuario.getRol().equals(Domain.UsuarioEntity.RolUsuario.OPERADOR.name())) {
                 return webCoreClientGrpcExtra.getLecturaSensores(id);
             }
         }
@@ -357,7 +398,7 @@ public class WebController {
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {
-            if (usuario.getRol().equals("ADMINISTRADOR")) {
+            if (usuario.getRol().equals(Domain.UsuarioEntity.RolUsuario.ADMINISTRADOR.name())) {
                 return webCoreClientGrpcExtra.getRegistros(rut);
             }
         }

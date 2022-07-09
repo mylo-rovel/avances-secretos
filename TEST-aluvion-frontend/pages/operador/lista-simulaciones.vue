@@ -29,6 +29,17 @@ export default Vue.extend({
       }],
     }
   },
+  async fetch() {
+    const serverPath = `${this.urlApi}/login`;
+    const postConfig = { 
+      method: 'post', 
+      body: this.getCredenciales(),
+      headers: {
+        'Content-Type': 'application/json'
+        }
+    };
+    await fetch(serverPath, postConfig).catch(err => err);
+  },
   methods: {
   
     //FUNCION EN LA QUE RELLENA LAS FILAS DE LA TABLA CON LOS DATOS DE SIMULACION (ID, NOMBRE, EQUIPO)

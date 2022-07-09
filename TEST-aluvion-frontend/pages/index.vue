@@ -12,28 +12,46 @@ export default Vue.extend({
     },
     computed: mapState(["urlApi"]),
     methods: {
-       getCredentialsToSend() {
-         return {
-           correo: document.getElementById("loginCorreo").value, 
-           contrasena: document.getElementById("loginContrasena").value
-           };
-       },
+        getCredenciales() {
+            return JSON.stringify({
+                        email: document.getElementById("loginCorreo").value,
+                        password: document.getElementById("loginContrasena").value
+            })
+        },
 
-        async enviarOrdenEncender({$axios, e}) {
-            e.preventDefault();
+        async performAuthentication() {
             const serverPath = `${this.urlApi}/login`;
-            const serverResponse = await $axios.$post(serverPath, this.getCredentialsToSend()).catch(err => err);
-            // if (serverResponse instanceof Error || !serverResponse['sesionIniciada']) {
-            //     alert("ERROR. rayos :(", serverResponse)
-            //     return false;
-            // }
-            // console.log(serverResponse)
-            // window.localStorage.setItem("token", serverResponse['jsonWebToken']);
-            const a = document.createElement("a")
-            a.href= "menu-operador"
-            a.click();
+            const postConfig = { 
+                method: 'post', 
+                body: this.getCredenciales(),
+                headers: {
+                        'Content-Type': 'application/json'
+                    }
+            };
+            return await fetch(serverPath, postConfig).catch(err => err);
+        },
+
+        async enviarDatosLogin(e) {
+            e.preventDefault();
+            console.clear();
+            const rawServerResponse = await this.performAuthentication();
+            if (rawServerResponse instanceof Error) {
+                alert("No se pudo iniciar sesion");
+                console.log(rawServerResponse);
+                return false;
+            }
+            const objetoSesion = await rawServerResponse.json();
+            if (!objetoSesion["sesionIniciada_"]){
+                alert("Credenciales incorrectas");
+                return false; 
+            }
+            window.localStorage.setItem("token", objetoSesion['jsonWebToken_']);
+            window.localStorage.setItem("rol", objetoSesion['rolUsuario_']);
+            const anchorElement = document.createElement("a");
+            anchorElement.href= "menu-operador";
+            anchorElement.click();
             return true;
-      }
+        }
     }
 
 })
@@ -45,6 +63,9 @@ export default Vue.extend({
         <div class="limiter">         
             <div class="container-login100">
                 <div class="wrap-login100">
+                    <div class="fill">
+                        <img :src="require('~/assets/img/cerro.png?url')"/>
+                    </div>
                     <form class="login100-form validate-form">
                         <span class="login100-form-title p-b-43">Iniciar Sesión</span>
                         <div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
@@ -65,14 +86,11 @@ export default Vue.extend({
                             </div>
                         </div>
                         <div class="container-login100-form-btn">
-                            <button @click="(e) => enviarOrdenEncender({$axios,e})" class="login100-form-btn">
-                                <NuxtLink to="/menu-operador"> INGRESAR</NuxtLink>
+                            <button @click="(e) => enviarDatosLogin(e)" class="login100-form-btn">
+                            INGRESAR
                             </button>
                         </div>
                     </form>   
-                    <div class="login100-more img-container">
-                        <img width="806" height="610" :src="require('~/assets/img/cerro.png?url')"/>
-                    </div>
                 </div>   
             </div>
         </div>
@@ -172,16 +190,18 @@ export default Vue.extend({
         display: -webkit-flex;
         display: -moz-box;
         display: -ms-flexbox;
-        display: flex;
+        /*display: flex;
         flex-wrap: wrap;
         align-items: stretch;
-        flex-direction: row-reverse;
+        flex-direction: row-reverse;*/
+        display:grid;
+        grid-template-columns: 60% 40%;
     }
 
     .login100-form {
-        width: 560px;
         min-height: 100vh;
         display: block;
+        /*background-color: #f7f7f7;*/
         background-color: #f7f7f7;
         padding: 173px 55px 55px 55px;
     }
@@ -412,7 +432,18 @@ export default Vue.extend({
 
     /*------------------------------------------------------------------
     [ Responsive ]*/
+     @media (max-width: 900px) {
+        .wrap-login100 {
+            display: flex;
+            flex-direction: column-reverse;
+            height: 100vh;
+        }
+        .fill, .fill img {
+            display:none;
+        }
 
+    }
+/*
     @media (max-width: 992px) {
         .login100-form {
             width: 50%;
@@ -442,7 +473,7 @@ export default Vue.extend({
         }
     }
 
-
+*/
     /*------------------------------------------------------------------
     [ Alert validate ]*/
 
@@ -581,11 +612,12 @@ export default Vue.extend({
         display: flex;
         justify-content: center;
         align-items: center;
-        overflow: hidden
+        overflow: hidden;
+        height: 100%;
     }
     .fill img {
-        flex-shrink: 0;
         min-width: 100%;
-        min-height: 100%
+        min-height: 100%;
+        object-fit: cover;
     }
 </style>

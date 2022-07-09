@@ -39,6 +39,7 @@ message CredencialesEntityReq {
 message SesionEntityReply {
   bool sesion_iniciada = 1;
   string json_web_token = 2;
+  string rol_usuario = 3;
 }
 
 message RutEntityReq {
