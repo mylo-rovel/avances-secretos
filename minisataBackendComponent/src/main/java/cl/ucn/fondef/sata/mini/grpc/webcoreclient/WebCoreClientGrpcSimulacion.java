@@ -83,4 +83,17 @@ public final class WebCoreClientGrpcSimulacion extends WebCoreClientGrpcBase {
         return "";
     }
 
+    public String getEjecucion(long idEjecucion, String rut) {
+        Domain.IdElementoConRutReq idElementoConRutReq = Domain.IdElementoConRutReq.newBuilder()
+                .setId( idEjecucion ).setRut(rut).build();
+        Domain.EjecucionReply serverResponse = this.stub.getEjecucion(idElementoConRutReq);
+        return this.gson.toJson(serverResponse);
+    }
+
+    public String getEjecuciones(String rut) {
+        Domain.RutEntityReq rutReq = Domain.RutEntityReq.newBuilder().setRut(rut).build();
+        Domain.EjecucionesReply serverResponse = this.stub.getEjecuciones(rutReq);
+        return this.gson.toJson(serverResponse);
+    }
+
 }

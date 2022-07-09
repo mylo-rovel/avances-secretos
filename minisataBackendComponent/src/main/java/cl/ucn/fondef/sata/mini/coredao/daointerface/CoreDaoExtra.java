@@ -34,4 +34,6 @@ public interface CoreDaoExtra {
     String addRegistroModificacionEquipo(Usuario usuarioConfigurador);
 
     List<Registro> getRegistros(Domain.RutEntityReq rutEntityReq);
+
+    String getInnerJoin();
 }

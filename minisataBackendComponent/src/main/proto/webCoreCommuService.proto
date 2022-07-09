@@ -31,8 +31,8 @@ service WebCoreCommuService {
   rpc getSimulaciones(RutEntityReq) returns (SimulacionesReply){}
   rpc getSecuenciasComponente(IdElementoReq) returns (SecuenciasComponenteEquipoReply) {}
 
-  rpc getEjecucion(IdElementoReq) returns (EjecucionReply){}
-  rpc getEjecuciones(EmptyReq) returns (EjecucionesReply){}
+  rpc getEjecucion(IdElementoConRutReq) returns (EjecucionReply){}
+  rpc getEjecuciones(RutEntityReq) returns (EjecucionesReply){}
 
   rpc getRegistros(RutEntityReq) returns (RegistrosReply){}
 

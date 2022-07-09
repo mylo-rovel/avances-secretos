@@ -47,14 +47,17 @@ public class WebCoreServiceGrpcUsuario {
         // Llamar a coreDaoUsuario para hacer el proceso relacionado a la base de datos
         boolean credencialesCorrectas = coreDaoUsuario.credencialesSonCorrectas(reqCredenciales);
         Usuario usuarioLogeado = coreDaoUsuario.getUsuarioPorCorreo(reqCredenciales.getEmail());
+        if (usuarioLogeado == null) { return Domain.SesionEntityReply.newBuilder().build(); }
 
-        String jwtUsuario = (credencialesCorrectas && (usuarioLogeado != null )) ?
-                jwtUtil.create(usuarioLogeado.getRut(), usuarioLogeado.getRol())
-                : "";
+        String jwtUsuario = (credencialesCorrectas) ?
+                jwtUtil.create(usuarioLogeado.getRut(), usuarioLogeado.getRol()) : "";
+
+        String rolUsuario = (credencialesCorrectas) ? usuarioLogeado.getRol(): "";
 
         Domain.SesionEntityReply grpcResponse = Domain.SesionEntityReply.newBuilder()
                 .setSesionIniciada(credencialesCorrectas)
                 .setJsonWebToken(jwtUsuario)
+                .setRolUsuario(rolUsuario)
                 .build();
 
         coreDaoExtra.addRegistroLoginUsuario(usuarioLogeado);
