@@ -60,6 +60,17 @@ export const actions = {
 }
 
 export const mutations = {
+    checkIfUserShouldBeHere(state, rolesApropiados) {
+        const rolUsuario = window.localStorage.getItem("rol");
+        const tokenUsuario = window.localStorage.getItem("token");
+        if ( !(rolesApropiados.includes(rolUsuario))  || !tokenUsuario) {
+            console.clear();
+            window.localStorage.clear();
+            const anchorElement = document.createElement("a");
+            anchorElement.href= "/";
+            anchorElement.click();
+        }
+    },
     ... secuenciasStateMethods,
     
     // buscamos modificar el indice currentSecuencia para poder acceder a los eventos de cualquier valvula rapidamente

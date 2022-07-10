@@ -1,6 +1,6 @@
 <script>
     import Vue from 'vue'
-    // import {mapState, mapMutations} from "vuex";
+    import {mapState, mapMutations} from "vuex";
 
     export default Vue.extend({
         name: "MenuOperador",
@@ -14,22 +14,12 @@
                 }
             }
         },
-        async fetch(){
-            this.checkIfUserShouldBeHere();
+        mounted() {
+            console.clear();
+            this.checkIfUserShouldBeHere(["OPERADOR"]);
         },
         methods: {
-            checkIfUserShouldBeHere() {
-                const rolUsuario = window.localStorage.getItem("rol");
-                const tokenUsuario = window.localStorage.getItem("token");
-                if ( rolUsuario !== "OPERADORa" || !tokenUsuario) {
-                    console.clear();
-                    console.log("aaaa");
-                    window.localStorage.clear();
-                    const anchorElement = document.createElement("a");
-                    anchorElement.href= "";
-                    anchorElement.click();
-                }
-            },
+            ...mapMutations(["checkIfUserShouldBeHere"]),
 
             abrirMenu(eventObj){
                 const idRouteTitle = eventObj.currentTarget.id.toString().split("_key")[0];
