@@ -1,9 +1,11 @@
 <script lang="js">
     import Vue from 'vue';
-    import {mapState, mapMutations} from "vuex";
+    import {mapState} from "vuex";
     import PageHeader from '~/components/PageHeader.vue'
     import SubmitButton from '~/components/SubmitButton.vue'
     import Modal from '~/components/Modal.vue'
+    import { checkIfUserShouldBeHere } from '~/utils/utility_functions.js';
+
 
     export default Vue.extend({
       name: "ListaSimulaciones",
@@ -28,8 +30,7 @@
       computed: mapState(["urlApi"]) ,
 
       async mounted() {
-          console.clear()
-          this.checkIfUserShouldBeHere(["OPERADOR"]);
+          checkIfUserShouldBeHere(["OPERADOR"]);
           const request_config = { 
               method: 'get',
               headers: {'authorization': window.localStorage.getItem("token")}
@@ -41,8 +42,6 @@
           this.simulacionesEjecutadas = ejecucionesAcotadas["ejecucionAcotada_"];
       },
       methods: {
-        ...mapMutations(["checkIfUserShouldBeHere"]),
-
         logSimulacionesEjecutadas() {
           console.log(this);
           console.log(this.simulacionesEjecutadas);

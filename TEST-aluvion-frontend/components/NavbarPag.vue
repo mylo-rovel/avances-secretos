@@ -1,7 +1,30 @@
 <script>
 export default {
   name: 'NavbarPag',
-  props:["tituloPag" ]
+  props:["tituloPag" ],
+  data() {
+    return { 
+      rolUsuario: "" ,
+      linkInicio: "",
+      linkPerfil: "",
+      linkOpciones: "",
+      };
+  },
+  mounted() {
+    let rolGuardado = window.localStorage.getItem("rol");
+    if (rolGuardado) {
+      rolGuardado = rolGuardado.toLowerCase();
+      this.rolUsuario = rolGuardado;
+      return true;
+    };
+  },
+  methods: {
+    setLinksNavbarPag(rolUsar) {
+      this.linkInicio = `${rolUsuario}/menu-${rolUsuario}`;
+      this.linkPerfil = `/perfil-usuario`;
+      this.linkOpciones = `${rolUsuario}/opciones-${rolUsuario}`;
+    }
+  }
 }
 </script>
 <template>
@@ -14,13 +37,13 @@ export default {
         <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="/menu-operador">Inicio</a>
+              <a class="nav-link" aria-current="page" :href="linkInicio">Inicio</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="/operador/encender">Perfil</a>
+              <a class="nav-link" aria-current="page" :href="linkPerfil">Perfil</a>
             </li>
             <li class="nav-item dropdown">
-              <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <a class="nav-link active dropdown-toggle" :href="linkOpciones" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Opciones
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">

@@ -1,4 +1,4 @@
-import { secuenciasStateMethods } from "~/store/secuenciasStateMethods.js";
+import { secuenciasMethods } from "~/store/secuenciasMethods.js";
 
 // El estado corresponde
 export const state = () => ({
@@ -60,18 +60,8 @@ export const actions = {
 }
 
 export const mutations = {
-    checkIfUserShouldBeHere(state, rolesApropiados) {
-        const rolUsuario = window.localStorage.getItem("rol");
-        const tokenUsuario = window.localStorage.getItem("token");
-        if ( !(rolesApropiados.includes(rolUsuario))  || !tokenUsuario) {
-            console.clear();
-            window.localStorage.clear();
-            const anchorElement = document.createElement("a");
-            anchorElement.href= "/";
-            anchorElement.click();
-        }
-    },
-    ... secuenciasStateMethods,
+
+    ... secuenciasMethods,
     
     // buscamos modificar el indice currentSecuencia para poder acceder a los eventos de cualquier valvula rapidamente
     // ? OJO: buscamos utilizar esta función en los botones de la vista crear simulacion

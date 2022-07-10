@@ -2,6 +2,7 @@
 import Vue from 'vue'
 import Styles from '~/components/Styles.vue'
 import PageHeader from '~/components/PageHeader.vue'
+import { checkIfUserShouldBeHere } from '~/utils/utility_functions.js';
 
 export default Vue.extend({
     name: "main-configurador",

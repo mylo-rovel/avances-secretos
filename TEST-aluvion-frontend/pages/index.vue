@@ -3,7 +3,7 @@
 // ESTE ES LA PAGINA LOGIN
 import Vue from 'vue'
 import {mapState} from "vuex";
-
+import { checkIfUserShouldBeHere, getQuickAccessEnumsDict } from '~/utils/utility_functions.js'
 
 export default Vue.extend({
     name: "IndexPage",
@@ -11,6 +11,21 @@ export default Vue.extend({
         return { }
     },
     computed: mapState(["urlApi"]),
+
+    mounted() {
+        console.clear();
+        let rolUsuario = window.localStorage.getItem("rol");
+        if (["OPERADOR", "CONFIGURADOR", "ADMNISTRADOR"].includes(rolUsuario)) {
+            const anchorElement = document.createElement("a");
+            rolUsuario = rolUsuario.toLowerCase();
+            anchorElement.href= `${rolUsuario}/menu-${rolUsuario}`;
+            anchorElement.click();
+            return true;
+        };
+        window.localStorage.clear();
+        return false;
+    },
+
     methods: {
         getCredenciales() {
             return JSON.stringify({
@@ -19,16 +34,36 @@ export default Vue.extend({
             })
         },
 
+        async fetchEnumeracionesDict (jwt) {
+            console.clear();
+            const serverPath = `${this.urlApi}/extras/enums`;
+            const request_config = { method: 'get', headers: {'authorization': jwt} };
+            const rawServerResponse = await fetch(serverPath, request_config).catch(err => err);
+            if (rawServerResponse instanceof Error) return;
+            const enumDictsData = await rawServerResponse.json();
+            if (!(enumDictsData["listaItemsEnum"])) return;
+            window.localStorage.setItem("listaItemsEnum", JSON.stringify(
+                getQuickAccessEnumsDict(enumDictsData["listaItemsEnum"]))
+            );
+        },
+
         async performAuthentication() {
             const serverPath = `${this.urlApi}/login`;
             const postConfig = { 
                 method: 'post', 
                 body: this.getCredenciales(),
-                headers: {
-                        'Content-Type': 'application/json'
-                    }
-            };
+                headers: { 'Content-Type': 'application/json' }};
             return await fetch(serverPath, postConfig).catch(err => err);
+        },
+
+        guardarItemsYRedireccionar(objetoSesion) {
+            let [ token, rol ] = [ objetoSesion['jsonWebToken_'], objetoSesion['rolUsuario_'] ]
+            window.localStorage.setItem("token", token);
+            window.localStorage.setItem("rol", rol );
+            const anchorElement = document.createElement("a");
+            rol = rol.toLowerCase()
+            anchorElement.href= `${rol}/menu-${rol}`;
+            anchorElement.click();
         },
 
         async enviarDatosLogin(e) {
@@ -45,11 +80,8 @@ export default Vue.extend({
                 alert("Credenciales incorrectas");
                 return false; 
             }
-            window.localStorage.setItem("token", objetoSesion['jsonWebToken_']);
-            window.localStorage.setItem("rol", objetoSesion['rolUsuario_']);
-            const anchorElement = document.createElement("a");
-            anchorElement.href= "menu-operador";
-            anchorElement.click();
+            await this.fetchEnumeracionesDict(objetoSesion['jsonWebToken_']);
+            this.guardarItemsYRedireccionar(objetoSesion);
             return true;
         }
     }

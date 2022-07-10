@@ -1,4 +1,4 @@
-export const secuenciasStateMethods = {
+export const secuenciasMethods = {
     // añade una fila a la tabla
     addEvento(state, indexToInsert) {
         // arr => sólo para obtener los elementos rapidamente.

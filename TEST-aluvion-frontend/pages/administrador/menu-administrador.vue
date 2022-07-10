@@ -1,6 +1,6 @@
 <script>
-    import Vue from 'vue'
-    import {mapState, mapMutations} from "vuex";
+    import Vue from 'vue';
+    import { checkIfUserShouldBeHere } from '~/utils/utility_functions.js';
 
     export default Vue.extend({
         name: "MenuOperador",
@@ -15,12 +15,9 @@
             }
         },
         mounted() {
-            console.clear();
-            this.checkIfUserShouldBeHere(["OPERADOR"]);
+            checkIfUserShouldBeHere(["ADMINISTRADOR"]);
         },
         methods: {
-            ...mapMutations(["checkIfUserShouldBeHere"]),
-
             abrirMenu(eventObj){
                 const idRouteTitle = eventObj.currentTarget.id.toString().split("_key")[0];
                 // console.log(idRouteTitle)
