@@ -6,7 +6,7 @@ import coreBoardCommuService_pb2 as coreBoardCommuService__pb2
 
 
 class CoreBoardCommuServiceStub(object):
-    """python3 -m grpc_tools.protoc -I /home/emilio/Documents/Capstone/Code/testing/pythonSATA_testing/src/proto_files --python_out=/home/emilio/Documents/Capstone/Code/testing/pythonSATA_testing/src/ --grpc_python_out=/home/emilio/Documents/Capstone/Code/testing/pythonSATA_testing/src/ /home/emilio/Documents/Capstone/Code/testing/pythonSATA_testing/src/proto_files/coreBoardCommuService.proto
+    """python3 -m grpc_tools.protoc -I /home/emilio/Documents/Capstone/Code/avances-secretos/sataBoardServicer/src/proto_files --python_out=/home/emilio/Documents/Capstone/Code/avances-secretos/sataBoardServicer/src/ --grpc_python_out=/home/emilio/Documents/Capstone/Code/avances-secretos/sataBoardServicer/src/ /home/emilio/Documents/Capstone/Code/avances-secretos/sataBoardServicer/src/proto_files/coreBoardCommuService.proto
 
     Then the compiler also creates a separate .java file for each top-level message,
     enumeration, and service declared in the .proto file.
@@ -44,7 +44,7 @@ class CoreBoardCommuServiceStub(object):
 
 
 class CoreBoardCommuServiceServicer(object):
-    """python3 -m grpc_tools.protoc -I /home/emilio/Documents/Capstone/Code/testing/pythonSATA_testing/src/proto_files --python_out=/home/emilio/Documents/Capstone/Code/testing/pythonSATA_testing/src/ --grpc_python_out=/home/emilio/Documents/Capstone/Code/testing/pythonSATA_testing/src/ /home/emilio/Documents/Capstone/Code/testing/pythonSATA_testing/src/proto_files/coreBoardCommuService.proto
+    """python3 -m grpc_tools.protoc -I /home/emilio/Documents/Capstone/Code/avances-secretos/sataBoardServicer/src/proto_files --python_out=/home/emilio/Documents/Capstone/Code/avances-secretos/sataBoardServicer/src/ --grpc_python_out=/home/emilio/Documents/Capstone/Code/avances-secretos/sataBoardServicer/src/ /home/emilio/Documents/Capstone/Code/avances-secretos/sataBoardServicer/src/proto_files/coreBoardCommuService.proto
 
     Then the compiler also creates a separate .java file for each top-level message,
     enumeration, and service declared in the .proto file.
@@ -112,7 +112,7 @@ def add_CoreBoardCommuServiceServicer_to_server(servicer, server):
 
  # This class is part of an EXPERIMENTAL API.
 class CoreBoardCommuService(object):
-    """python3 -m grpc_tools.protoc -I /home/emilio/Documents/Capstone/Code/testing/pythonSATA_testing/src/proto_files --python_out=/home/emilio/Documents/Capstone/Code/testing/pythonSATA_testing/src/ --grpc_python_out=/home/emilio/Documents/Capstone/Code/testing/pythonSATA_testing/src/ /home/emilio/Documents/Capstone/Code/testing/pythonSATA_testing/src/proto_files/coreBoardCommuService.proto
+    """python3 -m grpc_tools.protoc -I /home/emilio/Documents/Capstone/Code/avances-secretos/sataBoardServicer/src/proto_files --python_out=/home/emilio/Documents/Capstone/Code/avances-secretos/sataBoardServicer/src/ --grpc_python_out=/home/emilio/Documents/Capstone/Code/avances-secretos/sataBoardServicer/src/ /home/emilio/Documents/Capstone/Code/avances-secretos/sataBoardServicer/src/proto_files/coreBoardCommuService.proto
 
     Then the compiler also creates a separate .java file for each top-level message,
     enumeration, and service declared in the .proto file.
