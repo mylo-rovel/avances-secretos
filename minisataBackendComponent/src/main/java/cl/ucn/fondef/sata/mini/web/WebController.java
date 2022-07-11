@@ -79,8 +79,8 @@ public class WebController {
 // rpc addUsuario(UsuarioEntityReq)  returns (MensajeReply) {}
     @RequestMapping(value = "api/usuarios", method = RequestMethod.POST)
     public String addUsuario(@RequestBody GrpcUsuarioEntityReq usuarioNuevo, @RequestHeader(value="Authorization") String jwt) {
-//       return webCoreClientGrpcUsuario.addUsuario(usuarioNuevo);
-        if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
+       return webCoreClientGrpcUsuario.addUsuario(usuarioNuevo);
+        /*if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuarioAdmin = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuarioAdmin!=null){
@@ -92,7 +92,7 @@ public class WebController {
                 return json;
             }
         }
-        return "Usuario sin permisos";
+        return "Usuario sin permisos";*/
     }
 
     // rpc getUsuario(RutEntityReq)  returns (UsuarioEntityReply) {}
@@ -145,6 +145,7 @@ public class WebController {
     //   rpc addEquipo(EquipoEntityReq)  returns (MensajeReply){}
     @RequestMapping(value = "api/equipos", method = RequestMethod.POST)
      public String addEquipo(@RequestBody GrpcEquipoEntityReq equipoNuevo, @RequestHeader(value="Authorization") String jwt){
+        //return webCoreClientGrpcEquipo.addEquipo(equipoNuevo); crear equipo sin conf
         if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
