@@ -76,6 +76,8 @@
         <div class="row my-4">
           <h4>Simulaciones</h4>       
         </div> 
+
+        
         <div class="my-4 table-responsive table-container">
           <table id="tablaSimulaciones" class=" tabla-simulacion table table-lifht table-bordered table-hover table-striped">
             <thead class=" text-white">
@@ -94,6 +96,8 @@
             </tbody>
           </table>
         </div>
+
+
         <button id="boton_prueba" type="button" class="btn btn-primary" @click = "logSimulacionesEjecutadas()" >probar modal</button> 
         <div class= "back-modal">
           <div class="modal-content my-4">

@@ -1,31 +1,36 @@
 <script>
-export default {
-  name: 'NavbarPag',
-  props:["tituloPag" ],
-  data() {
-    return { 
-      rolUsuario: "" ,
-      linkInicio: "",
-      linkPerfil: "",
-      linkOpciones: "",
+  import { cerrarSesionUsuario } from '~/utils/utility_functions.js';
+
+  export default {
+    name: 'NavbarPag',
+    props:["tituloPag" ],
+    data() {
+      return { 
+        rolUsuario: "" ,
+        linkInicio: "",
+        linkPerfil: "",
+        linkOpciones: "",
+        };
+    },
+    mounted() {
+      let rolGuardado = window.localStorage.getItem("rol");
+      if (rolGuardado) {
+        rolGuardado = rolGuardado.toLowerCase();
+        this.rolUsuario = rolGuardado;
+        return true;
       };
-  },
-  mounted() {
-    let rolGuardado = window.localStorage.getItem("rol");
-    if (rolGuardado) {
-      rolGuardado = rolGuardado.toLowerCase();
-      this.rolUsuario = rolGuardado;
-      return true;
-    };
-  },
-  methods: {
-    setLinksNavbarPag(rolUsar) {
-      this.linkInicio = `${rolUsuario}/menu-${rolUsuario}`;
-      this.linkPerfil = `/perfil-usuario`;
-      this.linkOpciones = `${rolUsuario}/opciones-${rolUsuario}`;
+    },
+    methods: {
+      setLinksNavbarPag(rolUsar) {
+        this.linkInicio = `${rolUsuario}/menu-${rolUsuario}`;
+        this.linkPerfil = `/perfil-usuario`;
+        this.linkOpciones = `${rolUsuario}/opciones-${rolUsuario}`;
+      },
+      cerrarSesion(e) {
+        cerrarSesionUsuario();
+      }
     }
   }
-}
 </script>
 <template>
     <nav class="navbar navbar-expand-lg" style="background-color: #f1f1f1;">
@@ -43,7 +48,7 @@ export default {
               <a class="nav-link" aria-current="page" :href="linkPerfil">Perfil</a>
             </li>
             <li class="nav-item dropdown">
-              <a class="nav-link active dropdown-toggle" :href="linkOpciones" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <a class="nav-link active dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Opciones
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -54,7 +59,7 @@ export default {
               </ul>-->
             </li>
             <li class="nav-item">
-              <a class="nav-link active" href="/">Cerrar Sesión</a>
+              <a class="nav-link active cerrar-sesion-p"  v-on:click="(e) => cerrarSesion(e)"><span>Cerrar Sesión</span></a>
             </li>
           </ul>
         </div>
@@ -62,3 +67,10 @@ export default {
     </nav>
   </div>
 </template>
+
+<style>
+  .cerrar-sesion-p {
+    cursor: pointer;
+    height:min-content;
+  }
+</style>

@@ -27,3 +27,10 @@ export const getQuickAccessEnumsDict = (enumArr) => {
 	  return {...acc, [item["nombreEnum"]]: item["valoresEnum"]}
 	}, {});
 }
+
+export const cerrarSesionUsuario = () => {
+	window.localStorage.clear();
+	const anchorElement = document.createElement("a");
+	anchorElement.href= "/";
+	anchorElement.click();
+}

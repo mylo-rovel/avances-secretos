@@ -44,7 +44,20 @@ export const secuenciasMethods = {
         return true;
     },
 
-    async setListaEventos (state) {
+    setListaEventos (state) {
         state.secuencias[state.currentSecuencia]['listaEventos'] = [... state.listaEventos];
-    }
+    },
+
+    // buscamos modificar el indice currentSecuencia para poder acceder a los eventos de cualquier valvula rapidamente
+    // ? OJO: buscamos utilizar esta función en los botones de la vista crear simulacion
+    setSecuenciaModificar(state, indiceValvula) {
+        if (typeof indiceValvula !== 'number') {return false;}
+        // si no es un número no podemos compararlo con 0
+        if (indiceValvula < 0 || indiceValvula >= secuencias.length) {return false;}
+
+        state.currentSecuencia = indiceValvula;
+        // entregamos una copia del array guardado asociado a la válvula seccionada
+        state.listaEventos = [... state.secuencias[state.currentSecuencia]];
+        return true;
+    },
 }

@@ -1,36 +1,37 @@
 <script>
     import Vue from 'vue';
+    import PageHeader from '~/components/PageHeader.vue'
+    import SubmitButton from '~/components/SubmitButton.vue'
+    import NavbarPag from '~/components/NavbarPag.vue'
     import { checkIfUserShouldBeHere } from '~/utils/utility_functions.js';
 
     export default Vue.extend({
         name: "MenuOperador",
+        components: { PageHeader, SubmitButton, NavbarPag },
         data() {
             return {
+                tituloPag: "Menu configurador", 
                 elementsObj : {
                     Inicio: false,
                     Perfil:  false,
-                    Simulacion:  false,
+                    Equipo:  false,
                     Contacto: false,
                 }
             }
         },
         mounted() {
             checkIfUserShouldBeHere(["CONFIGURADOR"]);
+            document.getElementById("flechaEquipo").addEventListener("click", () => {
+                    document.getElementById("flechaEquipo").style.transform = "rotate(90deg)";
+            });
         },
         methods: {
             abrirMenu(eventObj){
                 const idRouteTitle = eventObj.currentTarget.id.toString().split("_key")[0];
-                // console.log(idRouteTitle)
-                // this.elementsObj[idRouteTitle].esDesplegable = !this.elementsObj[idRouteTitle].esDesplegable;
                 this.elementsObj[idRouteTitle] = !this.elementsObj[idRouteTitle];
             },
             girarFlecha(){
-                //let flecha = document.getElementById("");
-                document.getElementById("flechaSimulacion").addEventListener("click",
-                function() {
-                    document.getElementById("flechaSimulacion").style.transform = "rotate(90deg)";
-                    //document.querySelector('.flecha-inv').style.transform = "rotate(90deg)";
-                });
+
             }
         }
     })
@@ -38,20 +39,8 @@
 
 <template>
     <section class="left-menu-panel">
+
         <article class="menu-routes-row-container">
-            <!-- <p v-for="element in Object.entries(elementsObj)" :key="`${element[0]}_key`"> 
-                <span :id="`${element[0]}_key`" @click="(e) => abrirMenu(e)"> 
-                    <span class="menu-routes-element">
-                        {{element[0]}}
-                    </span>
-                    <ul v-if="element[1].esDesplegable && element[0]==='Simulación'" class="submenu-routes-menu">
-                        <p ><NuxtLink to="/operador/">Registrar simulacion</NuxtLink></p>
-                        <p ><NuxtLink to="/operador/">Iniciar simulacion</NuxtLink></p>
-                        <p ><NuxtLink to="/operador/">Ver simulacion</NuxtLink></p>
-                        <p ><NuxtLink to="/operador/">Historial de simulaciones</NuxtLink></p>
-                    </ul>
-                </span>
-            </p> -->
             <p :id="`Inicio_key`" @click="(e) => {}">
                 <span class="menu-routes-element underlined-element lista-items">
                     <img src="~/assets/home.svg" class="img-icono">
@@ -63,16 +52,15 @@
                         <img src="~/assets/profile.svg" class="img-icono"><NuxtLink to="/operador/">Perfil</NuxtLink>
                     </span>
             </p>
-            <p :id="`Simulacion_key`" @click="(e) => abrirMenu(e)" >
+            <p :id="`Equipo_key`" @click="(e) => abrirMenu(e)" >
                 <img src="~/assets/stats.svg" class="img-icono">
-                <span class="menu-routes-element">Simulación</span>
-                <img id= "flechaSimulacion" src="~/assets/arrow.svg" class=" flecha flecha-inv" @click = "girarFlecha()">
+                <span class="menu-routes-element">Equipo</span>
+                <img id= "flechaEquipo" src="~/assets/arrow.svg" class=" flecha flecha-inv" @click = "girarFlecha">
 
-                <ul v-if="elementsObj['Simulacion']" class="submenu-routes-menu">
-                    <p ><NuxtLink to="/operador/registrar-simulacion">Registrar simulacion</NuxtLink></p>
-                    <p ><NuxtLink to="/operador/iniciar-simulacion">Iniciar simulacion</NuxtLink></p>
-                    <p ><NuxtLink to="/operador/ver-simulacion">Ver simulacion</NuxtLink></p>
-                    <p ><NuxtLink to="/operador/lista-simulaciones">Historial de simulaciones</NuxtLink></p>
+                <ul v-if="elementsObj['Equipo']" class="submenu-routes-menu">
+                    <p ><NuxtLink to="/configurador/registrar-equipo">Registrar equipo</NuxtLink></p>
+                    <p ><NuxtLink to="/configurador/iniciar-simulacion">Editar equipo</NuxtLink></p>
+                    <p ><NuxtLink to="/configurador/ver-simulacion">Visualizar equipo</NuxtLink></p>
                 </ul>
             </p>
             <p :id="`Contacto_key`" @click="(e) => {}" class="row">
