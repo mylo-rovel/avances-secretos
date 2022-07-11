@@ -15,7 +15,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1b\x63oreBoardCommuService.proto\"\n\n\x08\x45mptyReq\"\x1b\n\rIdElementoReq\x12\n\n\x02id\x18\x01 \x01(\x03\"#\n\nMensajeReq\x12\x15\n\rmensaje_texto\x18\x01 \x01(\t\"%\n\x0cMensajeReply\x12\x15\n\rmensaje_texto\x18\x01 \x01(\t\"8\n\x15\x43redencialesEntityReq\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"D\n\x11SesionEntityReply\x12\x17\n\x0fsesion_iniciada\x18\x01 \x01(\x08\x12\x16\n\x0ejson_web_token\x18\x02 \x01(\t\"\x1b\n\x0cRutEntityReq\x12\x0b\n\x03rut\x18\x01 \x01(\t\"\xa1\x02\n\rUsuarioEntity\x12\x0e\n\x06nombre\x18\x01 \x01(\t\x12\x10\n\x08\x61pellido\x18\x02 \x01(\t\x12\x0b\n\x03rut\x18\x03 \x01(\t\x12\r\n\x05\x65mail\x18\x04 \x01(\t\x12\x10\n\x08password\x18\x05 \x01(\t\x12&\n\x03rol\x18\x06 \x01(\x0e\x32\x19.UsuarioEntity.RolUsuario\x12,\n\x06\x65stado\x18\x07 \x01(\x0e\x32\x1c.UsuarioEntity.EstadoUsuario\")\n\rEstadoUsuario\x12\n\n\x06\x41\x43TIVO\x10\x00\x12\x0c\n\x08INACTIVO\x10\x01\"?\n\nRolUsuario\x12\x0c\n\x08OPERADOR\x10\x00\x12\x10\n\x0c\x43ONFIGURADOR\x10\x01\x12\x11\n\rADMINISTRADOR\x10\x02\"N\n\x10UsuarioEntityReq\x12\x19\n\x11rut_administrador\x18\x01 \x01(\t\x12\x1f\n\x07usuario\x18\x02 \x01(\x0b\x32\x0e.UsuarioEntity\"A\n\x12UsuarioEntityReply\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x1f\n\x07usuario\x18\x02 \x01(\x0b\x32\x0e.UsuarioEntity\"6\n\x13UsuariosEntityReply\x12\x1f\n\x07usuario\x18\x01 \x03(\x0b\x32\x0e.UsuarioEntity\"\xdf\x02\n\x08Registro\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x12\n\nid_entidad\x18\x02 \x01(\x03\x12\x11\n\ttimestamp\x18\x03 \x01(\t\x12\x13\n\x0b\x64\x65scripcion\x18\x04 \x01(\t\x12$\n\x04tipo\x18\x05 \x01(\x0e\x32\x16.Registro.TipoRegistro\x12\x1f\n\x07usuario\x18\x06 \x01(\x0b\x32\x0e.UsuarioEntity\"\xc3\x01\n\x0cTipoRegistro\x12\x14\n\x10\x43REACION_USUARIO\x10\x00\x12\x11\n\rLOGIN_USUARIO\x10\x01\x12\x18\n\x14MODIFICACION_USUARIO\x10\x02\x12\x17\n\x13\x43REACION_SIMULACION\x10\x03\x12\x15\n\x11INICIO_SIMULACION\x10\x04\x12\x12\n\x0eUPLOAD_ARCHIVO\x10\x05\x12\x13\n\x0f\x43REACION_EQUIPO\x10\x06\x12\x17\n\x13MODIFICACION_EQUIPO\x10\x07\"-\n\x0eRegistrosReply\x12\x1b\n\x08registro\x18\x01 \x03(\x0b\x32\t.Registro\"\xbf\x01\n\x03Pin\x12\x0e\n\x06numero\x18\x01 \x01(\x05\x12\x0e\n\x06nombre\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scripcion\x18\x03 \x01(\t\x12\"\n\x08\x63onexion\x18\x04 \x01(\x0e\x32\x10.Pin.ConexionPin\"_\n\x0b\x43onexionPin\x12\x13\n\x0fINPUT_ANALOGICO\x10\x00\x12\x11\n\rINPUT_DIGITAL\x10\x01\x12\x14\n\x10OUTPUT_ANALOGICO\x10\x02\x12\x12\n\x0eOUTPUT_DIGITAL\x10\x03\"\xf4\x02\n\nComponente\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x0e\n\x06nombre\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scripcion\x18\x03 \x01(\t\x12\x0b\n\x03url\x18\x04 \x01(\t\x12,\n\x06\x65stado\x18\x05 \x01(\x0e\x32\x1c.Componente.EstadoComponente\x12(\n\x04tipo\x18\x06 \x01(\x0e\x32\x1a.Componente.TipoComponente\x12\x1e\n\ntipo_placa\x18\x07 \x01(\x0e\x32\n.TipoPlaca\x12\x1c\n\x0epin_componente\x18\x08 \x03(\x0b\x32\x04.Pin\"G\n\x10\x45stadoComponente\x12\n\n\x06\x41\x43TIVO\x10\x00\x12\x0c\n\x08INACTIVO\x10\x01\x12\t\n\x05\x46\x41LLA\x10\x02\x12\x0e\n\nREPARACION\x10\x03\"I\n\x0eTipoComponente\x12\n\n\x06\x43\x41MARA\x10\x00\x12\x0e\n\nFLUJOMETRO\x10\x01\x12\x0e\n\nTERMOMETRO\x10\x02\x12\x0b\n\x07VALVULA\x10\x03\"F\n\x05Placa\x12\x0e\n\x06nombre\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scripcion\x18\x02 \x01(\t\x12\x18\n\x04tipo\x18\x03 \x01(\x0e\x32\n.TipoPlaca\"9\n\x16\x43omponentesEquipoReply\x12\x1f\n\ncomponente\x18\x01 \x03(\x0b\x32\x0b.Componente\"\xaf\x01\n\x0c\x45quipoEntity\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x0e\n\x06nombre\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scripcion\x18\x03 \x01(\t\x12\x17\n\x0furl_repositorio\x18\x04 \x01(\t\x12\x1d\n\x06\x65stado\x18\x05 \x01(\x0e\x32\r.EstadoEquipo\x12\x15\n\x05placa\x18\x06 \x03(\x0b\x32\x06.Placa\x12\x1f\n\ncomponente\x18\x07 \x03(\x0b\x32\x0b.Componente\"J\n\x0f\x45quipoEntityReq\x12\x18\n\x10rut_configurador\x18\x01 \x01(\t\x12\x1d\n\x06\x65quipo\x18\x02 \x01(\x0b\x32\r.EquipoEntity\"2\n\x11\x45quipoEntityReply\x12\x1d\n\x06\x65quipo\x18\x01 \x01(\x0b\x32\r.EquipoEntity\"\x9d\x01\n\rArchivoEntity\x12\x15\n\rnombre_equipo\x18\x01 \x01(\t\x12\x0f\n\x07\x61rchivo\x18\x02 \x01(\x0c\x12\x30\n\x0ctipo_archivo\x18\x03 \x01(\x0e\x32\x1a.ArchivoEntity.TipoArchivo\"2\n\x0bTipoArchivo\x12\x07\n\x03PNG\x10\x00\x12\x07\n\x03PDF\x10\x01\x12\x07\n\x03JPG\x10\x02\x12\x08\n\x04JPEG\x10\x03\"3\n\x10\x41rchivoEntityReq\x12\x1f\n\x07\x61rchivo\x18\x01 \x01(\x0b\x32\x0e.ArchivoEntity\"6\n\x13\x41rchivosEntityReply\x12\x1f\n\x07\x61rchivo\x18\x01 \x01(\x0b\x32\x0e.ArchivoEntity\"P\n\x13\x45quipoEntityAcotado\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x0e\n\x06nombre\x18\x02 \x01(\t\x12\x1d\n\x06\x65stado\x18\x03 \x01(\x0e\x32\r.EstadoEquipo\"B\n\x12\x45quiposEntityReply\x12,\n\x0e\x65quipo_acotado\x18\x01 \x03(\x0b\x32\x14.EquipoEntityAcotado\"@\n\x06\x45vento\x12\x12\n\nintensidad\x18\x01 \x01(\x05\x12\x10\n\x08\x64uracion\x18\x02 \x01(\x05\x12\x10\n\x08posicion\x18\x03 \x01(\x05\"V\n\tSecuencia\x12\x15\n\rid_componente\x18\x01 \x01(\x03\x12\x19\n\x11nombre_componente\x18\x02 \x01(\t\x12\x17\n\x06\x65vento\x18\x03 \x03(\x0b\x32\x07.Evento\"[\n\rSecuenciasReq\x12\x15\n\rnombre_equipo\x18\x01 \x01(\t\x12\x14\n\x0crut_operador\x18\x02 \x01(\t\x12\x1d\n\tsecuencia\x18\x03 \x03(\x0b\x32\n.Secuencia\"@\n\x14SecuenciasComponente\x12(\n\x14secuencia_componente\x18\x01 \x03(\x0b\x32\n.Secuencia\"V\n\x1fSecuenciasComponenteEquipoReply\x12\x33\n\x14secuencia_componente\x18\x01 \x03(\x0b\x32\x15.SecuenciasComponente\"B\n\x12StartSimulacionReq\x12\x15\n\rid_simulacion\x18\x01 \x01(\x03\x12\x15\n\rnombre_equipo\x18\x02 \x01(\t\"J\n\x12SimulacionBoardReq\x12\x15\n\rid_simulacion\x18\x01 \x01(\x03\x12\x1d\n\tsecuencia\x18\x03 \x03(\x0b\x32\n.Secuencia\"\xc1\x01\n\x0fSimulacionReply\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x0e\n\x06nombre\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scripcion\x18\x03 \x01(\t\x12\x15\n\rnombre_equipo\x18\x04 \x01(\t\x12\x1a\n\x12\x64\x65scripcion_equipo\x18\x05 \x01(\t\x12\x17\n\x0f\x66\x65\x63ha_ejecucion\x18\x06 \x01(\t\x12\x1d\n\tsecuencia\x18\x07 \x03(\x0b\x32\n.Secuencia\x12\x12\n\nagua_caida\x18\x08 \x01(\x01\"s\n\x11SimulacionAcotada\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x0e\n\x06nombre\x18\x02 \x01(\t\x12\x15\n\rnombre_equipo\x18\x03 \x01(\t\x12\x17\n\x0f\x66\x65\x63ha_ejecucion\x18\x04 \x01(\t\x12\x12\n\nagua_caida\x18\x05 \x01(\x01\"C\n\x11SimulacionesReply\x12.\n\x12simulacion_acotada\x18\x01 \x03(\x0b\x32\x12.SimulacionAcotada\"{\n\x14LecturaSensoresReply\x12\x19\n\x11nombre_simulacion\x18\x01 \x01(\t\x12\x15\n\rnombre_equipo\x18\x02 \x01(\t\x12\x14\n\x0c\x66lujo_medido\x18\x03 \x01(\x01\x12\x1b\n\x13tiempo_transcurrido\x18\x04 \x01(\x01*)\n\tTipoPlaca\x12\x10\n\x0c\x41RDUINO_2560\x10\x00\x12\n\n\x06\x45SP_32\x10\x01*/\n\x0c\x45stadoEquipo\x12\r\n\tPROTOTIPO\x10\x00\x12\x10\n\x0c\x43ONSTRUCCION\x10\x01\x32\xf9\x01\n\x15\x43oreBoardCommuService\x12\x37\n\x0fstartSimulacion\x12\x13.SimulacionBoardReq\x1a\r.MensajeReply\"\x00\x12\x34\n\x13getSimulacionActual\x12\t.EmptyReq\x1a\x10.SimulacionReply\"\x00\x12;\n\x13getLecturasSensores\x12\t.EmptyReq\x1a\x15.LecturaSensoresReply\"\x00\x30\x01\x12\x34\n\x14sendMensajeEncendido\x12\x0b.MensajeReq\x1a\r.MensajeReply\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1b\x63oreBoardCommuService.proto\"\n\n\x08\x45mptyReq\".\n\x13IdElementoConRutReq\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x0b\n\x03rut\x18\x02 \x01(\t\"\x1b\n\rIdElementoReq\x12\n\n\x02id\x18\x01 \x01(\x03\"#\n\nMensajeReq\x12\x15\n\rmensaje_texto\x18\x01 \x01(\t\"%\n\x0cMensajeReply\x12\x15\n\rmensaje_texto\x18\x01 \x01(\t\"8\n\x15\x43redencialesEntityReq\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"Y\n\x11SesionEntityReply\x12\x17\n\x0fsesion_iniciada\x18\x01 \x01(\x08\x12\x16\n\x0ejson_web_token\x18\x02 \x01(\t\x12\x13\n\x0brol_usuario\x18\x03 \x01(\t\"\x1b\n\x0cRutEntityReq\x12\x0b\n\x03rut\x18\x01 \x01(\t\"\xa1\x02\n\rUsuarioEntity\x12\x0e\n\x06nombre\x18\x01 \x01(\t\x12\x10\n\x08\x61pellido\x18\x02 \x01(\t\x12\x0b\n\x03rut\x18\x03 \x01(\t\x12\r\n\x05\x65mail\x18\x04 \x01(\t\x12\x10\n\x08password\x18\x05 \x01(\t\x12&\n\x03rol\x18\x06 \x01(\x0e\x32\x19.UsuarioEntity.RolUsuario\x12,\n\x06\x65stado\x18\x07 \x01(\x0e\x32\x1c.UsuarioEntity.EstadoUsuario\")\n\rEstadoUsuario\x12\n\n\x06\x41\x43TIVO\x10\x00\x12\x0c\n\x08INACTIVO\x10\x01\"?\n\nRolUsuario\x12\x0c\n\x08OPERADOR\x10\x00\x12\x10\n\x0c\x43ONFIGURADOR\x10\x01\x12\x11\n\rADMINISTRADOR\x10\x02\"N\n\x10UsuarioEntityReq\x12\x19\n\x11rut_administrador\x18\x01 \x01(\t\x12\x1f\n\x07usuario\x18\x02 \x01(\x0b\x32\x0e.UsuarioEntity\"A\n\x12UsuarioEntityReply\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x1f\n\x07usuario\x18\x02 \x01(\x0b\x32\x0e.UsuarioEntity\"6\n\x13UsuariosEntityReply\x12\x1f\n\x07usuario\x18\x01 \x03(\x0b\x32\x0e.UsuarioEntity\"\xdf\x02\n\x08Registro\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x12\n\nid_entidad\x18\x02 \x01(\x03\x12\x11\n\ttimestamp\x18\x03 \x01(\t\x12\x13\n\x0b\x64\x65scripcion\x18\x04 \x01(\t\x12$\n\x04tipo\x18\x05 \x01(\x0e\x32\x16.Registro.TipoRegistro\x12\x1f\n\x07usuario\x18\x06 \x01(\x0b\x32\x0e.UsuarioEntity\"\xc3\x01\n\x0cTipoRegistro\x12\x14\n\x10\x43REACION_USUARIO\x10\x00\x12\x11\n\rLOGIN_USUARIO\x10\x01\x12\x18\n\x14MODIFICACION_USUARIO\x10\x02\x12\x17\n\x13\x43REACION_SIMULACION\x10\x03\x12\x15\n\x11INICIO_SIMULACION\x10\x04\x12\x12\n\x0eUPLOAD_ARCHIVO\x10\x05\x12\x13\n\x0f\x43REACION_EQUIPO\x10\x06\x12\x17\n\x13MODIFICACION_EQUIPO\x10\x07\"-\n\x0eRegistrosReply\x12\x1b\n\x08registro\x18\x01 \x03(\x0b\x32\t.Registro\"\xbf\x01\n\x03Pin\x12\x0e\n\x06numero\x18\x01 \x01(\x05\x12\x0e\n\x06nombre\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scripcion\x18\x03 \x01(\t\x12\"\n\x08\x63onexion\x18\x04 \x01(\x0e\x32\x10.Pin.ConexionPin\"_\n\x0b\x43onexionPin\x12\x13\n\x0fINPUT_ANALOGICO\x10\x00\x12\x11\n\rINPUT_DIGITAL\x10\x01\x12\x14\n\x10OUTPUT_ANALOGICO\x10\x02\x12\x12\n\x0eOUTPUT_DIGITAL\x10\x03\"\xf4\x02\n\nComponente\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x0e\n\x06nombre\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scripcion\x18\x03 \x01(\t\x12\x0b\n\x03url\x18\x04 \x01(\t\x12,\n\x06\x65stado\x18\x05 \x01(\x0e\x32\x1c.Componente.EstadoComponente\x12(\n\x04tipo\x18\x06 \x01(\x0e\x32\x1a.Componente.TipoComponente\x12\x1e\n\ntipo_placa\x18\x07 \x01(\x0e\x32\n.TipoPlaca\x12\x1c\n\x0epin_componente\x18\x08 \x03(\x0b\x32\x04.Pin\"G\n\x10\x45stadoComponente\x12\n\n\x06\x41\x43TIVO\x10\x00\x12\x0c\n\x08INACTIVO\x10\x01\x12\t\n\x05\x46\x41LLA\x10\x02\x12\x0e\n\nREPARACION\x10\x03\"I\n\x0eTipoComponente\x12\n\n\x06\x43\x41MARA\x10\x00\x12\x0e\n\nFLUJOMETRO\x10\x01\x12\x0e\n\nTERMOMETRO\x10\x02\x12\x0b\n\x07VALVULA\x10\x03\"F\n\x05Placa\x12\x0e\n\x06nombre\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scripcion\x18\x02 \x01(\t\x12\x18\n\x04tipo\x18\x03 \x01(\x0e\x32\n.TipoPlaca\"9\n\x16\x43omponentesEquipoReply\x12\x1f\n\ncomponente\x18\x01 \x03(\x0b\x32\x0b.Componente\"\xaf\x01\n\x0c\x45quipoEntity\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x0e\n\x06nombre\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scripcion\x18\x03 \x01(\t\x12\x17\n\x0furl_repositorio\x18\x04 \x01(\t\x12\x1d\n\x06\x65stado\x18\x05 \x01(\x0e\x32\r.EstadoEquipo\x12\x15\n\x05placa\x18\x06 \x03(\x0b\x32\x06.Placa\x12\x1f\n\ncomponente\x18\x07 \x03(\x0b\x32\x0b.Componente\"J\n\x0f\x45quipoEntityReq\x12\x18\n\x10rut_configurador\x18\x01 \x01(\t\x12\x1d\n\x06\x65quipo\x18\x02 \x01(\x0b\x32\r.EquipoEntity\"2\n\x11\x45quipoEntityReply\x12\x1d\n\x06\x65quipo\x18\x01 \x01(\x0b\x32\r.EquipoEntity\"\x9d\x01\n\rArchivoEntity\x12\x15\n\rnombre_equipo\x18\x01 \x01(\t\x12\x0f\n\x07\x61rchivo\x18\x02 \x01(\x0c\x12\x30\n\x0ctipo_archivo\x18\x03 \x01(\x0e\x32\x1a.ArchivoEntity.TipoArchivo\"2\n\x0bTipoArchivo\x12\x07\n\x03PNG\x10\x00\x12\x07\n\x03PDF\x10\x01\x12\x07\n\x03JPG\x10\x02\x12\x08\n\x04JPEG\x10\x03\"3\n\x10\x41rchivoEntityReq\x12\x1f\n\x07\x61rchivo\x18\x01 \x01(\x0b\x32\x0e.ArchivoEntity\"6\n\x13\x41rchivosEntityReply\x12\x1f\n\x07\x61rchivo\x18\x01 \x01(\x0b\x32\x0e.ArchivoEntity\"P\n\x13\x45quipoEntityAcotado\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x0e\n\x06nombre\x18\x02 \x01(\t\x12\x1d\n\x06\x65stado\x18\x03 \x01(\x0e\x32\r.EstadoEquipo\"B\n\x12\x45quiposEntityReply\x12,\n\x0e\x65quipo_acotado\x18\x01 \x03(\x0b\x32\x14.EquipoEntityAcotado\"@\n\x06\x45vento\x12\x12\n\nintensidad\x18\x01 \x01(\x05\x12\x10\n\x08\x64uracion\x18\x02 \x01(\x05\x12\x10\n\x08posicion\x18\x03 \x01(\x05\";\n\tSecuencia\x12\x15\n\rid_componente\x18\x01 \x01(\x03\x12\x17\n\x06\x65vento\x18\x02 \x03(\x0b\x32\x07.Evento\"\x80\x01\n\rSimulacionReq\x12\x0e\n\x06nombre\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scripcion\x18\x02 \x01(\t\x12\x15\n\rnombre_equipo\x18\x03 \x01(\t\x12\x14\n\x0crut_operador\x18\x04 \x01(\t\x12\x1d\n\tsecuencia\x18\x05 \x03(\x0b\x32\n.Secuencia\"@\n\x14SecuenciasComponente\x12(\n\x14secuencia_componente\x18\x01 \x03(\x0b\x32\n.Secuencia\"V\n\x1fSecuenciasComponenteEquipoReply\x12\x33\n\x14secuencia_componente\x18\x01 \x03(\x0b\x32\x15.SecuenciasComponente\"B\n\x12StartSimulacionReq\x12\x15\n\rid_simulacion\x18\x01 \x01(\x03\x12\x15\n\rnombre_equipo\x18\x02 \x01(\t\"J\n\x12SimulacionBoardReq\x12\x15\n\rid_simulacion\x18\x01 \x01(\x03\x12\x1d\n\tsecuencia\x18\x03 \x03(\x0b\x32\n.Secuencia\"\x94\x01\n\x0fSimulacionReply\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x0e\n\x06nombre\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scripcion\x18\x03 \x01(\t\x12\x15\n\rnombre_equipo\x18\x04 \x01(\t\x12\x1a\n\x12\x64\x65scripcion_equipo\x18\x05 \x01(\t\x12\x1d\n\tsecuencia\x18\x07 \x03(\x0b\x32\n.Secuencia\"F\n\x11SimulacionAcotada\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x0e\n\x06nombre\x18\x02 \x01(\t\x12\x15\n\rnombre_equipo\x18\x03 \x01(\t\"C\n\x11SimulacionesReply\x12.\n\x12simulacion_acotada\x18\x01 \x03(\x0b\x32\x12.SimulacionAcotada\"\xc0\x01\n\x0e\x45jecucionReply\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x0e\n\x06nombre\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scripcion\x18\x03 \x01(\t\x12\x15\n\rnombre_equipo\x18\x04 \x01(\t\x12\x1a\n\x12\x64\x65scripcion_equipo\x18\x05 \x01(\t\x12\x17\n\x0f\x66\x65\x63ha_ejecucion\x18\x06 \x01(\t\x12\x1d\n\tsecuencia\x18\x07 \x03(\x0b\x32\n.Secuencia\x12\x12\n\nagua_caida\x18\x08 \x01(\x01\"}\n\x10\x45jecucionAcotada\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x19\n\x11nombre_simulacion\x18\x02 \x01(\t\x12\x15\n\rnombre_equipo\x18\x03 \x01(\t\x12\x17\n\x0f\x66\x65\x63ha_ejecucion\x18\x04 \x01(\t\x12\x12\n\nagua_caida\x18\x05 \x01(\x01\"@\n\x10\x45jecucionesReply\x12,\n\x11\x65jecucion_acotada\x18\x01 \x03(\x0b\x32\x11.EjecucionAcotada\"{\n\x14LecturaSensoresReply\x12\x19\n\x11nombre_simulacion\x18\x01 \x01(\t\x12\x15\n\rnombre_equipo\x18\x02 \x01(\t\x12\x14\n\x0c\x66lujo_medido\x18\x03 \x01(\x01\x12\x1b\n\x13tiempo_transcurrido\x18\x04 \x01(\x01*)\n\tTipoPlaca\x12\x10\n\x0c\x41RDUINO_2560\x10\x00\x12\n\n\x06\x45SP_32\x10\x01*/\n\x0c\x45stadoEquipo\x12\r\n\tPROTOTIPO\x10\x00\x12\x10\n\x0c\x43ONSTRUCCION\x10\x01\x32\xf9\x01\n\x15\x43oreBoardCommuService\x12\x37\n\x0fstartSimulacion\x12\x13.SimulacionBoardReq\x1a\r.MensajeReply\"\x00\x12\x34\n\x13getSimulacionActual\x12\t.EmptyReq\x1a\x10.SimulacionReply\"\x00\x12;\n\x13getLecturasSensores\x12\t.EmptyReq\x1a\x15.LecturaSensoresReply\"\x00\x30\x01\x12\x34\n\x14sendMensajeEncendido\x12\x0b.MensajeReq\x1a\r.MensajeReply\"\x00\x62\x06proto3')
 
 _TIPOPLACA = DESCRIPTOR.enum_types_by_name['TipoPlaca']
 TipoPlaca = enum_type_wrapper.EnumTypeWrapper(_TIPOPLACA)
@@ -28,6 +28,7 @@ CONSTRUCCION = 1
 
 
 _EMPTYREQ = DESCRIPTOR.message_types_by_name['EmptyReq']
+_IDELEMENTOCONRUTREQ = DESCRIPTOR.message_types_by_name['IdElementoConRutReq']
 _IDELEMENTOREQ = DESCRIPTOR.message_types_by_name['IdElementoReq']
 _MENSAJEREQ = DESCRIPTOR.message_types_by_name['MensajeReq']
 _MENSAJEREPLY = DESCRIPTOR.message_types_by_name['MensajeReply']
@@ -54,7 +55,7 @@ _EQUIPOENTITYACOTADO = DESCRIPTOR.message_types_by_name['EquipoEntityAcotado']
 _EQUIPOSENTITYREPLY = DESCRIPTOR.message_types_by_name['EquiposEntityReply']
 _EVENTO = DESCRIPTOR.message_types_by_name['Evento']
 _SECUENCIA = DESCRIPTOR.message_types_by_name['Secuencia']
-_SECUENCIASREQ = DESCRIPTOR.message_types_by_name['SecuenciasReq']
+_SIMULACIONREQ = DESCRIPTOR.message_types_by_name['SimulacionReq']
 _SECUENCIASCOMPONENTE = DESCRIPTOR.message_types_by_name['SecuenciasComponente']
 _SECUENCIASCOMPONENTEEQUIPOREPLY = DESCRIPTOR.message_types_by_name['SecuenciasComponenteEquipoReply']
 _STARTSIMULACIONREQ = DESCRIPTOR.message_types_by_name['StartSimulacionReq']
@@ -62,6 +63,9 @@ _SIMULACIONBOARDREQ = DESCRIPTOR.message_types_by_name['SimulacionBoardReq']
 _SIMULACIONREPLY = DESCRIPTOR.message_types_by_name['SimulacionReply']
 _SIMULACIONACOTADA = DESCRIPTOR.message_types_by_name['SimulacionAcotada']
 _SIMULACIONESREPLY = DESCRIPTOR.message_types_by_name['SimulacionesReply']
+_EJECUCIONREPLY = DESCRIPTOR.message_types_by_name['EjecucionReply']
+_EJECUCIONACOTADA = DESCRIPTOR.message_types_by_name['EjecucionAcotada']
+_EJECUCIONESREPLY = DESCRIPTOR.message_types_by_name['EjecucionesReply']
 _LECTURASENSORESREPLY = DESCRIPTOR.message_types_by_name['LecturaSensoresReply']
 _USUARIOENTITY_ESTADOUSUARIO = _USUARIOENTITY.enum_types_by_name['EstadoUsuario']
 _USUARIOENTITY_ROLUSUARIO = _USUARIOENTITY.enum_types_by_name['RolUsuario']
@@ -76,6 +80,13 @@ EmptyReq = _reflection.GeneratedProtocolMessageType('EmptyReq', (_message.Messag
   # @@protoc_insertion_point(class_scope:EmptyReq)
   })
 _sym_db.RegisterMessage(EmptyReq)
+
+IdElementoConRutReq = _reflection.GeneratedProtocolMessageType('IdElementoConRutReq', (_message.Message,), {
+  'DESCRIPTOR' : _IDELEMENTOCONRUTREQ,
+  '__module__' : 'coreBoardCommuService_pb2'
+  # @@protoc_insertion_point(class_scope:IdElementoConRutReq)
+  })
+_sym_db.RegisterMessage(IdElementoConRutReq)
 
 IdElementoReq = _reflection.GeneratedProtocolMessageType('IdElementoReq', (_message.Message,), {
   'DESCRIPTOR' : _IDELEMENTOREQ,
@@ -259,12 +270,12 @@ Secuencia = _reflection.GeneratedProtocolMessageType('Secuencia', (_message.Mess
   })
 _sym_db.RegisterMessage(Secuencia)
 
-SecuenciasReq = _reflection.GeneratedProtocolMessageType('SecuenciasReq', (_message.Message,), {
-  'DESCRIPTOR' : _SECUENCIASREQ,
+SimulacionReq = _reflection.GeneratedProtocolMessageType('SimulacionReq', (_message.Message,), {
+  'DESCRIPTOR' : _SIMULACIONREQ,
   '__module__' : 'coreBoardCommuService_pb2'
-  # @@protoc_insertion_point(class_scope:SecuenciasReq)
+  # @@protoc_insertion_point(class_scope:SimulacionReq)
   })
-_sym_db.RegisterMessage(SecuenciasReq)
+_sym_db.RegisterMessage(SimulacionReq)
 
 SecuenciasComponente = _reflection.GeneratedProtocolMessageType('SecuenciasComponente', (_message.Message,), {
   'DESCRIPTOR' : _SECUENCIASCOMPONENTE,
@@ -315,6 +326,27 @@ SimulacionesReply = _reflection.GeneratedProtocolMessageType('SimulacionesReply'
   })
 _sym_db.RegisterMessage(SimulacionesReply)
 
+EjecucionReply = _reflection.GeneratedProtocolMessageType('EjecucionReply', (_message.Message,), {
+  'DESCRIPTOR' : _EJECUCIONREPLY,
+  '__module__' : 'coreBoardCommuService_pb2'
+  # @@protoc_insertion_point(class_scope:EjecucionReply)
+  })
+_sym_db.RegisterMessage(EjecucionReply)
+
+EjecucionAcotada = _reflection.GeneratedProtocolMessageType('EjecucionAcotada', (_message.Message,), {
+  'DESCRIPTOR' : _EJECUCIONACOTADA,
+  '__module__' : 'coreBoardCommuService_pb2'
+  # @@protoc_insertion_point(class_scope:EjecucionAcotada)
+  })
+_sym_db.RegisterMessage(EjecucionAcotada)
+
+EjecucionesReply = _reflection.GeneratedProtocolMessageType('EjecucionesReply', (_message.Message,), {
+  'DESCRIPTOR' : _EJECUCIONESREPLY,
+  '__module__' : 'coreBoardCommuService_pb2'
+  # @@protoc_insertion_point(class_scope:EjecucionesReply)
+  })
+_sym_db.RegisterMessage(EjecucionesReply)
+
 LecturaSensoresReply = _reflection.GeneratedProtocolMessageType('LecturaSensoresReply', (_message.Message,), {
   'DESCRIPTOR' : _LECTURASENSORESREPLY,
   '__module__' : 'coreBoardCommuService_pb2'
@@ -326,96 +358,104 @@ _COREBOARDCOMMUSERVICE = DESCRIPTOR.services_by_name['CoreBoardCommuService']
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
-  _TIPOPLACA._serialized_start=3678
-  _TIPOPLACA._serialized_end=3719
-  _ESTADOEQUIPO._serialized_start=3721
-  _ESTADOEQUIPO._serialized_end=3768
+  _TIPOPLACA._serialized_start=4056
+  _TIPOPLACA._serialized_end=4097
+  _ESTADOEQUIPO._serialized_start=4099
+  _ESTADOEQUIPO._serialized_end=4146
   _EMPTYREQ._serialized_start=31
   _EMPTYREQ._serialized_end=41
-  _IDELEMENTOREQ._serialized_start=43
-  _IDELEMENTOREQ._serialized_end=70
-  _MENSAJEREQ._serialized_start=72
-  _MENSAJEREQ._serialized_end=107
-  _MENSAJEREPLY._serialized_start=109
-  _MENSAJEREPLY._serialized_end=146
-  _CREDENCIALESENTITYREQ._serialized_start=148
-  _CREDENCIALESENTITYREQ._serialized_end=204
-  _SESIONENTITYREPLY._serialized_start=206
-  _SESIONENTITYREPLY._serialized_end=274
-  _RUTENTITYREQ._serialized_start=276
-  _RUTENTITYREQ._serialized_end=303
-  _USUARIOENTITY._serialized_start=306
-  _USUARIOENTITY._serialized_end=595
-  _USUARIOENTITY_ESTADOUSUARIO._serialized_start=489
-  _USUARIOENTITY_ESTADOUSUARIO._serialized_end=530
-  _USUARIOENTITY_ROLUSUARIO._serialized_start=532
-  _USUARIOENTITY_ROLUSUARIO._serialized_end=595
-  _USUARIOENTITYREQ._serialized_start=597
-  _USUARIOENTITYREQ._serialized_end=675
-  _USUARIOENTITYREPLY._serialized_start=677
-  _USUARIOENTITYREPLY._serialized_end=742
-  _USUARIOSENTITYREPLY._serialized_start=744
-  _USUARIOSENTITYREPLY._serialized_end=798
-  _REGISTRO._serialized_start=801
-  _REGISTRO._serialized_end=1152
-  _REGISTRO_TIPOREGISTRO._serialized_start=957
-  _REGISTRO_TIPOREGISTRO._serialized_end=1152
-  _REGISTROSREPLY._serialized_start=1154
-  _REGISTROSREPLY._serialized_end=1199
-  _PIN._serialized_start=1202
-  _PIN._serialized_end=1393
-  _PIN_CONEXIONPIN._serialized_start=1298
-  _PIN_CONEXIONPIN._serialized_end=1393
-  _COMPONENTE._serialized_start=1396
-  _COMPONENTE._serialized_end=1768
-  _COMPONENTE_ESTADOCOMPONENTE._serialized_start=1622
-  _COMPONENTE_ESTADOCOMPONENTE._serialized_end=1693
-  _COMPONENTE_TIPOCOMPONENTE._serialized_start=1695
-  _COMPONENTE_TIPOCOMPONENTE._serialized_end=1768
-  _PLACA._serialized_start=1770
-  _PLACA._serialized_end=1840
-  _COMPONENTESEQUIPOREPLY._serialized_start=1842
-  _COMPONENTESEQUIPOREPLY._serialized_end=1899
-  _EQUIPOENTITY._serialized_start=1902
-  _EQUIPOENTITY._serialized_end=2077
-  _EQUIPOENTITYREQ._serialized_start=2079
-  _EQUIPOENTITYREQ._serialized_end=2153
-  _EQUIPOENTITYREPLY._serialized_start=2155
-  _EQUIPOENTITYREPLY._serialized_end=2205
-  _ARCHIVOENTITY._serialized_start=2208
-  _ARCHIVOENTITY._serialized_end=2365
-  _ARCHIVOENTITY_TIPOARCHIVO._serialized_start=2315
-  _ARCHIVOENTITY_TIPOARCHIVO._serialized_end=2365
-  _ARCHIVOENTITYREQ._serialized_start=2367
-  _ARCHIVOENTITYREQ._serialized_end=2418
-  _ARCHIVOSENTITYREPLY._serialized_start=2420
-  _ARCHIVOSENTITYREPLY._serialized_end=2474
-  _EQUIPOENTITYACOTADO._serialized_start=2476
-  _EQUIPOENTITYACOTADO._serialized_end=2556
-  _EQUIPOSENTITYREPLY._serialized_start=2558
-  _EQUIPOSENTITYREPLY._serialized_end=2624
-  _EVENTO._serialized_start=2626
-  _EVENTO._serialized_end=2690
-  _SECUENCIA._serialized_start=2692
-  _SECUENCIA._serialized_end=2778
-  _SECUENCIASREQ._serialized_start=2780
-  _SECUENCIASREQ._serialized_end=2871
-  _SECUENCIASCOMPONENTE._serialized_start=2873
-  _SECUENCIASCOMPONENTE._serialized_end=2937
-  _SECUENCIASCOMPONENTEEQUIPOREPLY._serialized_start=2939
-  _SECUENCIASCOMPONENTEEQUIPOREPLY._serialized_end=3025
-  _STARTSIMULACIONREQ._serialized_start=3027
-  _STARTSIMULACIONREQ._serialized_end=3093
-  _SIMULACIONBOARDREQ._serialized_start=3095
-  _SIMULACIONBOARDREQ._serialized_end=3169
-  _SIMULACIONREPLY._serialized_start=3172
-  _SIMULACIONREPLY._serialized_end=3365
-  _SIMULACIONACOTADA._serialized_start=3367
-  _SIMULACIONACOTADA._serialized_end=3482
-  _SIMULACIONESREPLY._serialized_start=3484
-  _SIMULACIONESREPLY._serialized_end=3551
-  _LECTURASENSORESREPLY._serialized_start=3553
-  _LECTURASENSORESREPLY._serialized_end=3676
-  _COREBOARDCOMMUSERVICE._serialized_start=3771
-  _COREBOARDCOMMUSERVICE._serialized_end=4020
+  _IDELEMENTOCONRUTREQ._serialized_start=43
+  _IDELEMENTOCONRUTREQ._serialized_end=89
+  _IDELEMENTOREQ._serialized_start=91
+  _IDELEMENTOREQ._serialized_end=118
+  _MENSAJEREQ._serialized_start=120
+  _MENSAJEREQ._serialized_end=155
+  _MENSAJEREPLY._serialized_start=157
+  _MENSAJEREPLY._serialized_end=194
+  _CREDENCIALESENTITYREQ._serialized_start=196
+  _CREDENCIALESENTITYREQ._serialized_end=252
+  _SESIONENTITYREPLY._serialized_start=254
+  _SESIONENTITYREPLY._serialized_end=343
+  _RUTENTITYREQ._serialized_start=345
+  _RUTENTITYREQ._serialized_end=372
+  _USUARIOENTITY._serialized_start=375
+  _USUARIOENTITY._serialized_end=664
+  _USUARIOENTITY_ESTADOUSUARIO._serialized_start=558
+  _USUARIOENTITY_ESTADOUSUARIO._serialized_end=599
+  _USUARIOENTITY_ROLUSUARIO._serialized_start=601
+  _USUARIOENTITY_ROLUSUARIO._serialized_end=664
+  _USUARIOENTITYREQ._serialized_start=666
+  _USUARIOENTITYREQ._serialized_end=744
+  _USUARIOENTITYREPLY._serialized_start=746
+  _USUARIOENTITYREPLY._serialized_end=811
+  _USUARIOSENTITYREPLY._serialized_start=813
+  _USUARIOSENTITYREPLY._serialized_end=867
+  _REGISTRO._serialized_start=870
+  _REGISTRO._serialized_end=1221
+  _REGISTRO_TIPOREGISTRO._serialized_start=1026
+  _REGISTRO_TIPOREGISTRO._serialized_end=1221
+  _REGISTROSREPLY._serialized_start=1223
+  _REGISTROSREPLY._serialized_end=1268
+  _PIN._serialized_start=1271
+  _PIN._serialized_end=1462
+  _PIN_CONEXIONPIN._serialized_start=1367
+  _PIN_CONEXIONPIN._serialized_end=1462
+  _COMPONENTE._serialized_start=1465
+  _COMPONENTE._serialized_end=1837
+  _COMPONENTE_ESTADOCOMPONENTE._serialized_start=1691
+  _COMPONENTE_ESTADOCOMPONENTE._serialized_end=1762
+  _COMPONENTE_TIPOCOMPONENTE._serialized_start=1764
+  _COMPONENTE_TIPOCOMPONENTE._serialized_end=1837
+  _PLACA._serialized_start=1839
+  _PLACA._serialized_end=1909
+  _COMPONENTESEQUIPOREPLY._serialized_start=1911
+  _COMPONENTESEQUIPOREPLY._serialized_end=1968
+  _EQUIPOENTITY._serialized_start=1971
+  _EQUIPOENTITY._serialized_end=2146
+  _EQUIPOENTITYREQ._serialized_start=2148
+  _EQUIPOENTITYREQ._serialized_end=2222
+  _EQUIPOENTITYREPLY._serialized_start=2224
+  _EQUIPOENTITYREPLY._serialized_end=2274
+  _ARCHIVOENTITY._serialized_start=2277
+  _ARCHIVOENTITY._serialized_end=2434
+  _ARCHIVOENTITY_TIPOARCHIVO._serialized_start=2384
+  _ARCHIVOENTITY_TIPOARCHIVO._serialized_end=2434
+  _ARCHIVOENTITYREQ._serialized_start=2436
+  _ARCHIVOENTITYREQ._serialized_end=2487
+  _ARCHIVOSENTITYREPLY._serialized_start=2489
+  _ARCHIVOSENTITYREPLY._serialized_end=2543
+  _EQUIPOENTITYACOTADO._serialized_start=2545
+  _EQUIPOENTITYACOTADO._serialized_end=2625
+  _EQUIPOSENTITYREPLY._serialized_start=2627
+  _EQUIPOSENTITYREPLY._serialized_end=2693
+  _EVENTO._serialized_start=2695
+  _EVENTO._serialized_end=2759
+  _SECUENCIA._serialized_start=2761
+  _SECUENCIA._serialized_end=2820
+  _SIMULACIONREQ._serialized_start=2823
+  _SIMULACIONREQ._serialized_end=2951
+  _SECUENCIASCOMPONENTE._serialized_start=2953
+  _SECUENCIASCOMPONENTE._serialized_end=3017
+  _SECUENCIASCOMPONENTEEQUIPOREPLY._serialized_start=3019
+  _SECUENCIASCOMPONENTEEQUIPOREPLY._serialized_end=3105
+  _STARTSIMULACIONREQ._serialized_start=3107
+  _STARTSIMULACIONREQ._serialized_end=3173
+  _SIMULACIONBOARDREQ._serialized_start=3175
+  _SIMULACIONBOARDREQ._serialized_end=3249
+  _SIMULACIONREPLY._serialized_start=3252
+  _SIMULACIONREPLY._serialized_end=3400
+  _SIMULACIONACOTADA._serialized_start=3402
+  _SIMULACIONACOTADA._serialized_end=3472
+  _SIMULACIONESREPLY._serialized_start=3474
+  _SIMULACIONESREPLY._serialized_end=3541
+  _EJECUCIONREPLY._serialized_start=3544
+  _EJECUCIONREPLY._serialized_end=3736
+  _EJECUCIONACOTADA._serialized_start=3738
+  _EJECUCIONACOTADA._serialized_end=3863
+  _EJECUCIONESREPLY._serialized_start=3865
+  _EJECUCIONESREPLY._serialized_end=3929
+  _LECTURASENSORESREPLY._serialized_start=3931
+  _LECTURASENSORESREPLY._serialized_end=4054
+  _COREBOARDCOMMUSERVICE._serialized_start=4149
+  _COREBOARDCOMMUSERVICE._serialized_end=4398
 # @@protoc_insertion_point(module_scope)
