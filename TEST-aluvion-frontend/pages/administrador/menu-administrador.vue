@@ -1,6 +1,6 @@
 <script>
-    import Vue from 'vue'
-    // import {mapState, mapMutations} from "vuex";
+    import Vue from 'vue';
+    import { checkIfUserShouldBeHere } from '~/utils/utility_functions.js';
 
     export default Vue.extend({
         name: "MenuOperador",
@@ -14,23 +14,10 @@
                 }
             }
         },
-        async fetch(){
-            this.checkIfUserShouldBeHere();
+        mounted() {
+            checkIfUserShouldBeHere(["ADMINISTRADOR"]);
         },
         methods: {
-            checkIfUserShouldBeHere() {
-                const rolUsuario = window.localStorage.getItem("rol");
-                const tokenUsuario = window.localStorage.getItem("token");
-                if ( rolUsuario !== "OPERADORa" || !tokenUsuario) {
-                    console.clear();
-                    console.log("aaaa");
-                    window.localStorage.clear();
-                    const anchorElement = document.createElement("a");
-                    anchorElement.href= "";
-                    anchorElement.click();
-                }
-            },
-
             abrirMenu(eventObj){
                 const idRouteTitle = eventObj.currentTarget.id.toString().split("_key")[0];
                 // console.log(idRouteTitle)
