@@ -4,10 +4,12 @@ from concurrent import futures
 import logging
 import datetime
 from dotenv import dotenv_values
+import json
 
 import grpc
 import coreBoardCommuService_pb2 as ReqResModule
 import coreBoardCommuService_pb2_grpc as ClientServerModule
+# from boardArduinoCommunicator import BoardArduinoCommunicator
 
 venv_dict = dict(dotenv_values(".env"))
 
@@ -18,8 +20,9 @@ print(venv_dict)
 class CoreBoardCommuServiceServicer(ClientServerModule.CoreBoardCommuServiceServicer):
     """Provides methods that implement functionality of testing server."""
 
-    # def __init__(self):
-    #     self.db = route_guide_resources.read_route_guide_database()
+    def __init__(self):
+        pass
+        # self.boardArduinoCommunicator = BoardArduinoCommunicator();
 
     # PODRIAMOS CREAR UNA CLASE QUE SE COMUNIQUE CON EL ARDUINO => SERVIRIA COMO PUENTE
     # ENTRE EL RASPI gRPC Y EL ARDUINO
@@ -41,7 +44,7 @@ class CoreBoardCommuServiceServicer(ClientServerModule.CoreBoardCommuServiceServ
         for x in request.secuencia:
             dictSecuencias[str(x.id_componente)] = self._getHandyEventsList(x.evento)
         print(dictSecuencias)
-
+        print(json.dumps(dictSecuencias))
         responseMessage = "IT WOOOORKS"
         return ReqResModule.MensajeReply(
             mensaje_texto = responseMessage
