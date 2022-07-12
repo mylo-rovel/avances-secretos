@@ -1,0 +1,332 @@
+syntax = "proto3";
+
+// Estas son las peticiones que se enviaran entre el "Central Core"
+// y el Componente Raspi para manejar el hardware
+service CoreBoardCommuService {
+  // (1)
+  rpc startSimulacion(SimulacionBoardReq) returns (MensajeReply){}
+
+  // (2)
+  rpc getSimulacionActual(EmptyReq) returns (SimulacionReply){}
+
+  // (3)
+  rpc getLecturasSensores(EmptyReq) returns (stream LecturaSensoresReply) {}
+
+  // Esta llamada se ejecuta al iniciar el servicio del board(raspberry)
+  rpc sendMensajeEncendido (SaludoBoardReq)  returns (SaludoBoardReply) {}
+}
+
+
+message EmptyReq {
+  // se usa esto para las funciones que usan 0 argumentos
+}
+
+message IdElementoConRutReq {
+  int64 id = 1;
+  string rut = 2;
+}
+
+message IdElementoReq {
+  int64 id = 1;
+}
+
+message MensajeReq {
+  string mensaje_texto = 1;
+}
+
+message MensajeReply {
+  string mensaje_texto = 1;
+}
+
+// General  - - - - - - - - - - - - - -
+// Usuario  - - - - - - - - - - - - - -
+
+message CredencialesEntityReq {
+  string email = 1;
+  string password = 2;
+}
+
+message SesionEntityReply {
+  bool sesion_iniciada = 1;
+  string json_web_token = 2;
+  string rol_usuario = 3;
+}
+
+message RutEntityReq {
+  string rut = 1;
+}
+
+message UsuarioEntity {
+  enum EstadoUsuario {
+    ACTIVO = 0;
+    INACTIVO = 1;
+  }
+
+  enum RolUsuario {
+    OPERADOR = 0;
+    CONFIGURADOR = 1;
+    ADMINISTRADOR = 2;
+  }
+
+  string nombre = 1;
+  string apellido = 2;
+  string rut = 3;
+  string email = 4;
+  string password = 5;
+  RolUsuario rol = 6;
+  EstadoUsuario estado = 7;
+}
+
+message UsuarioEntityReq {
+  string rut_administrador = 1;
+  UsuarioEntity usuario = 2;
+}
+
+message UsuarioEntityReply {
+  int64 id = 1;
+  UsuarioEntity usuario = 2;
+}
+
+message UsuariosEntityReply {
+  repeated UsuarioEntity usuario = 1;
+}
+
+message Registro {
+  enum TipoRegistro {
+    CREACION_USUARIO = 0;
+    LOGIN_USUARIO = 1;
+    MODIFICACION_USUARIO = 2;
+    CREACION_SIMULACION = 3;
+    INICIO_SIMULACION = 4;
+    UPLOAD_ARCHIVO = 5;
+    CREACION_EQUIPO = 6;
+    MODIFICACION_EQUIPO = 7;
+  }
+
+  int64 id = 1;
+  int64 id_entidad = 2;
+  string timestamp = 3;
+  string descripcion = 4;
+  TipoRegistro tipo = 5;
+  UsuarioEntity usuario = 6;
+}
+
+message RegistrosReply {
+  repeated Registro registro = 1;
+}
+
+// Usuario  - - - - - - - - - - - - - -
+// Equipo   - - - - - - - - - - - - - -
+
+message Pin {
+  enum ConexionPin {
+    INPUT_ANALOGICO  = 0;
+    INPUT_DIGITAL = 1;
+    OUTPUT_ANALOGICO = 2;
+    OUTPUT_DIGITAL = 3;
+  }
+
+  int32 numero = 1;
+  string nombre = 2;
+  string descripcion = 3;
+  ConexionPin conexion = 4;
+}
+
+enum TipoPlaca {
+  ARDUINO_2560 = 0;
+  ESP_32 = 1;
+}
+
+message Componente {
+  enum EstadoComponente {
+    ACTIVO = 0;
+    INACTIVO = 1;
+    FALLA = 2;
+    REPARACION = 3;
+  }
+
+  enum TipoComponente {
+    CAMARA = 0;
+    FLUJOMETRO = 1;
+    TERMOMETRO = 2;
+    VALVULA = 3;
+  }
+
+  int64 id = 1;
+  string nombre = 2;
+  string descripcion = 3;
+  string url = 4; // para webcams, string url. para otros componentes, null
+  EstadoComponente estado = 5;
+  TipoComponente tipo = 6;
+  TipoPlaca tipo_placa = 7;
+  repeated Pin pin_componente = 8;
+}
+
+message Placa {
+  string nombre = 1;
+  string descripcion = 2;
+  TipoPlaca tipo = 3;
+}
+
+message ComponentesEquipoReply {
+  repeated Componente componente = 1;
+}
+
+enum EstadoEquipo {
+  PROTOTIPO = 0;
+  CONSTRUCCION = 1;
+}
+
+message EquipoEntity {
+  int64 id = 1;
+  string nombre = 2;
+  string descripcion = 3;
+  string url_repositorio = 4;
+  EstadoEquipo estado = 5;
+  repeated Placa placa = 6;
+  repeated Componente componente = 7;
+}
+
+message EquipoEntityReq {
+  string rut_configurador = 1;
+  EquipoEntity equipo = 2;
+}
+
+message EquipoEntityReply {
+  EquipoEntity equipo = 1;
+}
+
+message ArchivoEntity {
+  enum TipoArchivo {
+    PNG  = 0;
+    PDF  = 1;
+    JPG  = 2;
+    JPEG = 3;
+  }
+
+  string nombre_equipo = 1;
+  bytes archivo = 2;
+  TipoArchivo tipo_archivo = 3;
+}
+
+message ArchivoEntityReq {
+  ArchivoEntity archivo = 1;
+}
+
+message ArchivosEntityReply {
+  ArchivoEntity archivo = 1;
+}
+
+message EquipoEntityAcotado {
+  int64 id = 1;
+  string nombre = 2;
+  EstadoEquipo estado = 3;
+}
+
+message EquiposEntityReply {
+  // Usado en listas desplegables y filas de tablas
+  repeated EquipoEntityAcotado equipo_acotado = 1;
+}
+
+// Equipo       - - - - - - - - - - - - - -
+// Simulacion   - - - - - - - - - - - - - -
+
+message Evento {
+  int32 intensidad = 1;
+  int32 duracion = 2;
+  int32 posicion = 3;
+}
+
+message Secuencia {
+  int64 id_componente = 1;
+  repeated Evento evento = 2;
+}
+
+message SimulacionReq {
+  string nombre = 1;
+  string descripcion = 2;
+  string nombre_equipo = 3;
+  string rut_operador = 4;
+  repeated Secuencia secuencia = 5;
+}
+
+message SecuenciasComponente {
+  repeated Secuencia secuencia_componente = 1;
+}
+
+message SecuenciasComponenteEquipoReply {
+  repeated SecuenciasComponente secuencia_componente = 1;
+}
+
+message StartSimulacionReq{
+  int64 id_simulacion = 1;
+  string nombre_equipo = 2;
+}
+
+message SimulacionBoardReq {
+  int64 id_simulacion = 1;
+  repeated Secuencia secuencia = 3;
+}
+
+message SimulacionReply {
+  // usado en vista iniciar simulacion
+  int64 id = 1;
+  string nombre = 2;
+  string descripcion = 3;
+  string nombre_equipo = 4;
+  string descripcion_equipo = 5;
+  repeated Secuencia secuencia = 7;
+}
+
+message SimulacionAcotada {
+  int64 id = 1;
+  string nombre = 2;
+  string nombre_equipo = 3;
+}
+
+message SimulacionesReply {
+  // Usado en listas desplegables de seleccion de simulacion
+  repeated SimulacionAcotada simulacion_acotada = 1;
+}
+
+message EjecucionReply {
+  // Usado como detalle de fila en el historial de ejecuciones
+  int64 id = 1;
+  string nombre = 2;
+  string descripcion = 3;
+  string nombre_equipo = 4;
+  string descripcion_equipo = 5;
+  string fecha_ejecucion = 6;
+  repeated Secuencia secuencia = 7;
+  double agua_caida = 8;
+}
+
+message EjecucionAcotada {
+  // Usado como fila en el historial de ejecuciones
+  int64 id = 1;
+  string nombre_simulacion = 2;
+  string nombre_equipo = 3;
+  string fecha_ejecucion = 4;
+  double agua_caida = 5;
+}
+
+message EjecucionesReply {
+  repeated EjecucionAcotada ejecucion_acotada = 1;
+}
+
+message LecturaSensoresReply {
+  string nombre_simulacion = 1;
+  string nombre_equipo = 2;
+  double flujo_medido = 3;
+  double tiempo_transcurrido = 4;
+}
+
+
+message SaludoBoardReq {
+  int64 id_equipo = 1;
+  string nombre_equipo = 2;
+}
+
+message SaludoBoardReply {
+  EquipoEntity equipo = 1;
+}
