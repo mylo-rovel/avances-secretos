@@ -1,11 +1,5 @@
 syntax = "proto3";
 
-// Then the compiler also creates a separate .java file for each top-level message,
-// enumeration, and service declared in the .proto file.
-option java_package = "cl.ucn.fondef.sata.mini.grpc";
-
-import "domain.proto";
-
 // Estas son las peticiones que se enviaran entre el "Central Core"
 // y el Componente Raspi para manejar el hardware
 service CoreBoardCommuService {
