@@ -7,9 +7,10 @@ package cl.ucn.fondef.sata.mini.coredao.daoimpl;
 import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoSimulacion;
 import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoUsuario;
 import cl.ucn.fondef.sata.mini.grpc.Domain;
-import cl.ucn.fondef.sata.mini.grpc.coreboardclient.CoreBoardClientGrpcBoard;
+import cl.ucn.fondef.sata.mini.grpc.coreboardclient.CoreBoardClientGrpcBase;
 import cl.ucn.fondef.sata.mini.model.Evento;
 import cl.ucn.fondef.sata.mini.model.Secuencia;
+import cl.ucn.fondef.sata.mini.utilities.InformacionEjecucion;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -20,6 +21,7 @@ import cl.ucn.fondef.sata.mini.grpc.Domain.*;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -38,9 +40,6 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
 
     @Autowired
     CoreDaoUsuario coreDaoUsuario;
-
-    @Autowired
-    CoreBoardClientGrpcBoard coreBoardClientGrpcBoard;
 
     private Domain.Secuencia createSecuenciaGrpc(long idComponente, List<Evento> listaEventosDB) {
         Domain.Secuencia.Builder secuenciaEnviar = Domain.Secuencia.newBuilder();
@@ -147,57 +146,6 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
 
 
 
-    private List<Secuencia> getListaIdsSecuencias (Domain.IdElementoReq idSimulacionReq) {
-        String sqlQuery = "SELECT secuencia FROM Secuencia as secuencia WHERE secuencia.idSimulacion = :idSimulacion";
-        List listaResultado = entityManager.createQuery(sqlQuery).setParameter("idSimulacion", idSimulacionReq.getId()).getResultList();
-        if(listaResultado.isEmpty()){
-            log.warn("getSimulaciones: La lista no contiene elementos");
-            return null;
-        }
-        return listaResultado;
-    }
-    private void addMultiEjecucionSecuencia(long idEjecucion, Domain.IdElementoReq idSimulacionReq) {
-        List<Secuencia> listaIdsSecuencias = this.getListaIdsSecuencias(idSimulacionReq);
-        if (listaIdsSecuencias != null) {
-            for (int i = 0; i < listaIdsSecuencias.size(); i++) {
-                EjecucionSecuencia ejecucionSecuenciaGuardar = new EjecucionSecuencia();
-                ejecucionSecuenciaGuardar.setIdEjecucion(idEjecucion);
-                ejecucionSecuenciaGuardar.setIdSecuencia(listaIdsSecuencias.get(i).getId());
-                entityManager.persist(ejecucionSecuenciaGuardar);
-            }
-        }
-    }
-    @Override
-    public String startSimulacion(StartSimulacionReq startSimulacionReq) {
-        // todo: guardar en Ejecucion y EjecucionSecuencia
-        Domain.IdElementoReq idSimulacionReq = IdElementoReq.newBuilder().setId(startSimulacionReq.getIdSimulacion()).build();
-        Simulacion simulacionEjecutar = this.getSimulacionDB(idSimulacionReq);
-        if (simulacionEjecutar == null) { return "Simulacion no existente"; }
-
-        Ejecucion ejecucionNueva = new Ejecucion();
-        ejecucionNueva.setIdSimulacion(startSimulacionReq.getIdSimulacion());
-        ejecucionNueva.setAguaCaida(0.0);
-        entityManager.persist(ejecucionNueva);
-        long idEjecucion = ejecucionNueva.getId();
-        this.addMultiEjecucionSecuencia(idEjecucion, idSimulacionReq);
-
-        // ENVIAR LAS SECUENCIAS AL RASPI
-        List<Domain.Secuencia> listaSecuenciasGrpc = this.getGrpcSecuenciasSimulacion(idSimulacionReq);
-//        System.out.println("listaSecuenciasGrpc = " + listaSecuenciasGrpc);
-//        System.out.println("\n\n\n");
-        Domain.SimulacionBoardReq simulacionBoardReq = SimulacionBoardReq.newBuilder()
-                .setIdSimulacion(idSimulacionReq.getId())
-                .addAllSecuencia(listaSecuenciasGrpc)
-                .build();
-
-        Domain.MensajeReply mensajeBoard = coreBoardClientGrpcBoard.startSimulacion(simulacionBoardReq);
-        return "Simulacion iniciada. IdEjecucion" + ejecucionNueva.getId()
-                + "Mensaje board:\n" + mensajeBoard.getMensajeTexto();
-    }
-
-
-
-
 
     @Override
     public Ejecucion getEjecucionDB(Domain.IdElementoReq idSimulacionReq) {
@@ -220,6 +168,62 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
             return null;
         }
         return listaResultado;
+    }
+
+
+
+
+
+    private List<Secuencia> getListaIdsSecuencias (Domain.IdElementoReq idSimulacionReq) {
+        String sqlQuery = "SELECT secuencia FROM Secuencia as secuencia WHERE secuencia.idSimulacion = :idSimulacion";
+        List listaResultado = entityManager.createQuery(sqlQuery).setParameter("idSimulacion", idSimulacionReq.getId()).getResultList();
+        if(listaResultado.isEmpty()){
+            log.warn("getSimulaciones: La lista no contiene elementos");
+            return null;
+        }
+        return listaResultado;
+    }
+    private void addMultiEjecucionSecuencia(long idEjecucion, Domain.IdElementoReq idSimulacionReq) {
+        List<Secuencia> listaIdsSecuencias = this.getListaIdsSecuencias(idSimulacionReq);
+        if (listaIdsSecuencias != null) {
+            for (int i = 0; i < listaIdsSecuencias.size(); i++) {
+                EjecucionSecuencia ejecucionSecuenciaGuardar = new EjecucionSecuencia();
+                ejecucionSecuenciaGuardar.setIdEjecucion(idEjecucion);
+                ejecucionSecuenciaGuardar.setIdSecuencia(listaIdsSecuencias.get(i).getId());
+                entityManager.persist(ejecucionSecuenciaGuardar);
+            }
+        }
+    }
+    @Override
+    public String startSimulacion(StartSimulacionReq startSimulacionReq, HashMap<String, InformacionEjecucion> ejecucionesEquipo) {
+        // todo: guardar en Ejecucion y EjecucionSecuencia
+        Domain.IdElementoReq idSimulacionReq = IdElementoReq.newBuilder().setId(startSimulacionReq.getIdSimulacion()).build();
+        Simulacion simulacionEjecutar = this.getSimulacionDB(idSimulacionReq);
+        if (simulacionEjecutar == null) { return "Simulacion no existente"; }
+
+        Ejecucion ejecucionNueva = new Ejecucion();
+        ejecucionNueva.setIdSimulacion(startSimulacionReq.getIdSimulacion());
+        ejecucionNueva.setAguaCaida(0.0);
+        entityManager.persist(ejecucionNueva);
+        long idEjecucion = ejecucionNueva.getId();
+        this.addMultiEjecucionSecuencia(idEjecucion, idSimulacionReq);
+
+        // ENVIAR LAS SECUENCIAS AL RASPI
+        List<Domain.Secuencia> listaSecuenciasGrpc = this.getGrpcSecuenciasSimulacion(idSimulacionReq);
+//        System.out.println("listaSecuenciasGrpc = " + listaSecuenciasGrpc);
+//        System.out.println("\n\n\n");
+        Domain.SimulacionBoardReq simulacionBoardReq = SimulacionBoardReq.newBuilder()
+                .setIdSimulacion(idSimulacionReq.getId())
+                .addAllSecuencia(listaSecuenciasGrpc)
+                .build();
+
+        String nombreEquipo = startSimulacionReq.getNombreEquipo();
+        var algunNombreEquipo = ejecucionesEquipo.get(nombreEquipo);
+        var coreBoardClient = algunNombreEquipo.getCoreBoardClient();
+
+        MensajeReply mensajeBoard = coreBoardClient.startSimulacion(simulacionBoardReq);
+        return "Simulacion iniciada. IdEjecucion" + ejecucionNueva.getId()
+                + "Mensaje board:\n" + mensajeBoard.getMensajeTexto();
     }
 
 }

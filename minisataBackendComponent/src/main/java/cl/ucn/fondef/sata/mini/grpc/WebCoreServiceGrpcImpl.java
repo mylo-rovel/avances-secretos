@@ -10,7 +10,6 @@ import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import cl.ucn.fondef.sata.mini.grpc.Domain.*;
 
-
 /**
  * The type Web core service grpc.
  */
