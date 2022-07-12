@@ -53,7 +53,7 @@ export default Vue.extend({
                 method: 'post', 
                 body: this.getCredenciales(),
                 headers: { 'Content-Type': 'application/json' }};
-            return await fetch(serverPath, postConfig).catch(err => err);
+            return fetch(serverPath, postConfig).catch(err => err);
         },
 
         guardarItemsYRedireccionar(objetoSesion) {
@@ -69,6 +69,7 @@ export default Vue.extend({
         async enviarDatosLogin(e) {
             e.preventDefault();
             console.clear();
+            console.log("iniciando sesion...")
             const rawServerResponse = await this.performAuthentication();
             if (rawServerResponse instanceof Error) {
                 alert("No se pudo iniciar sesion");

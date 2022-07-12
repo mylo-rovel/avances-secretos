@@ -5,13 +5,14 @@ import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoSimulacion;
 import cl.ucn.fondef.sata.mini.grpc.Domain;
 import cl.ucn.fondef.sata.mini.model.Ejecucion;
 import cl.ucn.fondef.sata.mini.model.Equipo;
-import cl.ucn.fondef.sata.mini.model.Secuencia;
 import cl.ucn.fondef.sata.mini.model.Simulacion;
+import cl.ucn.fondef.sata.mini.utilities.InformacionEjecucion;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -20,6 +21,8 @@ import java.util.List;
 @Slf4j
 @Service
 public class WebCoreServiceGrpcSimulacion {
+
+    private final HashMap<String, InformacionEjecucion> ejecucionesEquipo = new HashMap<>();
 
     @Autowired
     private CoreDaoSimulacion coreDaoSimulacion;
@@ -92,12 +95,6 @@ public class WebCoreServiceGrpcSimulacion {
         return Domain.MensajeReply.newBuilder().setMensajeTexto(mensajeResultado).build();
     }
 
-    public Domain.MensajeReply startSimulacion(Domain.StartSimulacionReq startSimulacionReq, StreamObserver<Domain.MensajeReply> responseObserver){
-        String mensajeResultado = coreDaoSimulacion.startSimulacion(startSimulacionReq);
-        return Domain.MensajeReply.newBuilder().setMensajeTexto(mensajeResultado).build();
-    }
-
-
 
 
 //    rpc getEjecucion(IdElementoReq) returns (EjecucionReply){}
@@ -153,5 +150,13 @@ public class WebCoreServiceGrpcSimulacion {
         Domain.EjecucionesReply.Builder listaAcotadaEjecuciones = Domain.EjecucionesReply.newBuilder();
         this.attachDataToEjecucionesAcotadas(listaAcotadaEjecuciones, listaEjecuciones, rutEntityReq);
         return listaAcotadaEjecuciones.build();
+    }
+
+
+
+
+    public Domain.MensajeReply startSimulacion(Domain.StartSimulacionReq startSimulacionReq, StreamObserver<Domain.MensajeReply> responseObserver){
+        String mensajeResultado = coreDaoSimulacion.startSimulacion(startSimulacionReq, ejecucionesEquipo);
+        return Domain.MensajeReply.newBuilder().setMensajeTexto(mensajeResultado).build();
     }
 }

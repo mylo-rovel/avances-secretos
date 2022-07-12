@@ -19,5 +19,5 @@ service CoreBoardCommuService {
   rpc getLecturasSensores(EmptyReq) returns (stream LecturaSensoresReply) {}
 
   // Esta llamada se ejecuta al iniciar el servicio del board(raspberry)
-  rpc sendMensajeEncendido (MensajeReq)  returns (MensajeReply) {}
+  rpc sendMensajeEncendido (SaludoBoardReq)  returns (SaludoBoardReply) {}
 }

@@ -10,15 +10,22 @@
         components: { PageHeader, Styles },
         data(){
             return {
+                filesList: [],
                 tituloPag: "Registrar nuevo equipo",
                 indexPaginaRenderizada: 0,
                 enumeracionesDict: {},
+                currentObjects : {
+                    currentPlaca: null,
+                    currentComponente: null,
+                    currentPin: null
+                },
                 equipo: {
                     nombre:"",
                     descripcion: "",
                     urlRepositorio: "",
                     estado: "",
-                    listaPlacas: []
+                    listaPlacas: [],
+                    listaComponentes: []
                 }
             };
         },
@@ -28,7 +35,7 @@
         },
         methods: {
             logState() {
-                console.log({...this.equipo})
+                console.log({...this})
             },
             updateTextField(stateField) {
                 // const thisReference = this; es para no perder la referencia al 'this' al hacer una high order function
@@ -38,7 +45,25 @@
                     // if ( si el nuevo input matchea una regex) {}
                     thisReference.equipo[stateField] = newValue;
                 }
-            }
+            },
+            updateFileReceived(e) {
+                var files = e.target.files || e.dataTransfer.files;
+                if (!files.length) return;
+                console.log(files);
+                this.filesList = files;
+            },
+            goToNextPage() {
+                const maxIndexPagina = 1;
+                if ( this.indexPaginaRenderizada >= maxIndexPagina ) return;
+                this.indexPaginaRenderizada += 1 
+            },
+            goToPrevPage() { 
+                if ( this.indexPaginaRenderizada <= 0 ) return;
+                this.indexPaginaRenderizada -= 1 
+            },
+
+
+            // acá va algo pero no recuerdo
         }
 
     })
@@ -53,6 +78,7 @@
             <PageHeader />
         </div>
         <h1 class="pageTitle">Registrar equipo</h1>
+        <!-- Primera parte: Primeros datos del equipo -->
         <div v-if="0 === indexPaginaRenderizada">
             <article class="lista-contenedores">
                 <article class="contenedor-input">
@@ -81,16 +107,69 @@
 
                 <article class="contenedor-input">
                     <label htmlFor="file-upload" className="custom-file-upload">Subir PDF</label>
-                    <input class="inputBox" id="file-upload" type="file" onChange={handleFileInput} accept=".pdf"/>        
+                    <input class="inputBox" id="file-upload" type="file" @change="(e) => updateFileReceived(e)" multiple="multiple"/>        
                 </article> 
                 
-                <button @click="logState"> aaa </button>
             </article>
         </div>
+
+        <!-- Segunda parte: Datos de las placas a usar -->
+        <div v-if="3 === indexPaginaRenderizada">
+            <article class="lista-contenedores">
+                <article class="contenedor-input">
+                    <label for="inputNuevoNombreEquipo">Nombre placa</label>
+                    <input class="inputBox" id="inputNuevoNombreEquipo" type="text"  @input="(e) => updateTextField('nombre')(e)">
+                </article>
+
+                <article class="contenedor-input">
+                    <label for="inputNuevoDescripcionEquipo">Descripción placa</label>
+                    <textarea class="inputBox" rows="4" id="inputNuevoDescripcionEquipo"  @input="(e) => updateTextField('descripcion')(e)"></textarea>
+                </article>
+
+                <article class="contenedor-input">
+                    <label for="dropdownTipoPlaca">TipoComponente:</label>
+                    <select v-model="equipo.listaPlacas" class="inputBox" name="dropdownTipoPlaca" id="dropdownTipoPlaca">
+                        <option v-for="(estado, rowIndex) in enumeracionesDict['TipoPlaca']" :value="estado">
+                            {{estado}}
+                        </option>
+                    </select>
+                </article>
+                
+            </article>
+        </div>
+
+        <article class="page-control-ribbon">
+            <button @click="logState"> LogState </button>
+            <button @click="goToNextPage"> Siguiente </button>
+            <button @click="goToPrevPage"> Atrás </button>
+        </article>
     </section>
 </template>
 
 <style>
+
+.page-control-ribbon {
+    display:flex;
+    width: fit-content;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+
+.page-control-ribbon button{
+    margin: 0 2rem;
+    background-color: #ececec;
+    border: 1px solid #666666;
+    padding: 0.25rem 0.85rem;
+    border-radius: 10px;
+}
+
+.page-control-ribbon button:last-child,
+.page-control-ribbon button:first-child {
+    margin: 0;
+}
+
+
+
 .pageTitle {
     margin-top: 0.5rem;
     width: fit-content;
@@ -113,7 +192,7 @@
     flex-wrap: wrap;
     width: 85vw;
     margin: 0 auto;
-    height: clamp(300px, calc(800px - 45vw), 650px);
+    height: clamp(300px, calc(800px - 45vw), 550px);
 }
 
 .lista-contenedores .contenedor-input {
