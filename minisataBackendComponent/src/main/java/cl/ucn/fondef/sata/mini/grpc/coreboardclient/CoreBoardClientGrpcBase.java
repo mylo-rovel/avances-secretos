@@ -24,4 +24,8 @@ public class CoreBoardClientGrpcBase {
     public Domain.MensajeReply startSimulacion (Domain.SimulacionBoardReq simulacionBoardReq){
         return stub.startSimulacion(simulacionBoardReq);
     }
+    
+    public Domain.SaludoBoardReply sendMensajeEncendido(Domain.SaludoBoardReq saludoBoardReq){
+        return stub.sendMensajeEncendido(saludoBoardReq);
+    }
 }

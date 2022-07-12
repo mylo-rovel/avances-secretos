@@ -159,4 +159,18 @@ public class WebCoreServiceGrpcSimulacion {
         String mensajeResultado = coreDaoSimulacion.startSimulacion(startSimulacionReq, ejecucionesEquipo);
         return Domain.MensajeReply.newBuilder().setMensajeTexto(mensajeResultado).build();
     }
+
+    public Domain.SaludoBoardReply sendMensajeEncendido(Domain.SaludoBoardReq saludoBoardReq, StreamObserver<Domain.SaludoBoardReply> responseObserver){
+        //aqui se deberia actualizar el HashMap para que ahora tenga el nombre del equipo y un nuevo InformacionEjecucion
+        //que sera construido en esta funcion
+        Equipo equipo = coreDaoEquipo.getEquipoPorNombre(saludoBoardReq.getNombreEquipo());
+        InformacionEjecucion informacionEjecucionNueva = new InformacionEjecucion("localhost:50050");
+        ejecucionesEquipo.replace(equipo.getNombre(),informacionEjecucionNueva);
+
+        //todo: convertir el equipo a equipoEntity
+        Domain.SaludoBoardReply equipoEnviar = Domain.SaludoBoardReply.newBuilder().build();
+
+        return equipoEnviar;
+    }
+
 }
