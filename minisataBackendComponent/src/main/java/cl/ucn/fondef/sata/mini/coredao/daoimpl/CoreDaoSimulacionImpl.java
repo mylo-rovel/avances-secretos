@@ -7,6 +7,7 @@ package cl.ucn.fondef.sata.mini.coredao.daoimpl;
 import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoSimulacion;
 import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoUsuario;
 import cl.ucn.fondef.sata.mini.grpc.Domain;
+import cl.ucn.fondef.sata.mini.grpc.coreboardclient.CoreBoardClientGrpcBoard;
 import cl.ucn.fondef.sata.mini.model.Evento;
 import cl.ucn.fondef.sata.mini.model.Secuencia;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +38,9 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
 
     @Autowired
     CoreDaoUsuario coreDaoUsuario;
+
+    @Autowired
+    CoreBoardClientGrpcBoard coreBoardClientGrpcBoard;
 
     private Domain.Secuencia createSecuenciaGrpc(long idComponente, List<Evento> listaEventosDB) {
         Domain.Secuencia.Builder secuenciaEnviar = Domain.Secuencia.newBuilder();
@@ -133,7 +137,7 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
                 Evento eventoGuardar = new Evento();
                 eventoGuardar.setIntensidad(    listaEventos.get(j).getIntensidad());
                 eventoGuardar.setDuracion(      listaEventos.get(j).getDuracion());
-                eventoGuardar.setPosicion(      listaEventos.get(j).getPosicion());
+                eventoGuardar.setPosicion(      listaEventos.get(j).getPosicion()+1);
                 eventoGuardar.setIdSecuencia(   idSecuencia);
                 entityManager.persist(eventoGuardar);
             }
@@ -179,12 +183,16 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
 
         // ENVIAR LAS SECUENCIAS AL RASPI
         List<Domain.Secuencia> listaSecuenciasGrpc = this.getGrpcSecuenciasSimulacion(idSimulacionReq);
+//        System.out.println("listaSecuenciasGrpc = " + listaSecuenciasGrpc);
+//        System.out.println("\n\n\n");
         Domain.SimulacionBoardReq simulacionBoardReq = SimulacionBoardReq.newBuilder()
                 .setIdSimulacion(idSimulacionReq.getId())
                 .addAllSecuencia(listaSecuenciasGrpc)
                 .build();
 
-        return "Simulacion iniciada. IdEjecucion" + ejecucionNueva.getId();
+        Domain.MensajeReply mensajeBoard = coreBoardClientGrpcBoard.startSimulacion(simulacionBoardReq);
+        return "Simulacion iniciada. IdEjecucion" + ejecucionNueva.getId()
+                + "Mensaje board:\n" + mensajeBoard.getMensajeTexto();
     }
 
 

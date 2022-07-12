@@ -183,8 +183,8 @@ public class WebCoreServiceGrpcEquipo {
 
 
     public Domain.SecuenciasComponenteEquipoReply getSecuenciasComponente(Domain.IdElementoReq idRequest, StreamObserver<Domain.SecuenciasComponenteEquipoReply> responseObserver){
-        return Domain.SecuenciasComponenteEquipoReply.newBuilder().build();
-/*        List<Secuencia> listaSecuencias = coreDaoEquipo.getSecuenciasComponente(idRequest);
+//        return Domain.SecuenciasComponenteEquipoReply.newBuilder().build();
+        List<Secuencia> listaSecuencias = coreDaoEquipo.getSecuenciasComponente(idRequest);
         if(listaSecuencias == null){
             return Domain.SecuenciasComponenteEquipoReply.newBuilder().build();
         }
@@ -213,6 +213,6 @@ public class WebCoreServiceGrpcEquipo {
         //
         grpcResponse.addSecuenciaComponente(secuenciasComponente.build());
         //
-        return grpcResponse.build();*/
+        return grpcResponse.build();
     }
 }

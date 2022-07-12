@@ -5,7 +5,6 @@ import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoSimulacion;
 import cl.ucn.fondef.sata.mini.grpc.Domain;
 import cl.ucn.fondef.sata.mini.model.Ejecucion;
 import cl.ucn.fondef.sata.mini.model.Equipo;
-import cl.ucn.fondef.sata.mini.model.Secuencia;
 import cl.ucn.fondef.sata.mini.model.Simulacion;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
