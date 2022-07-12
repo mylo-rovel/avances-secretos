@@ -313,6 +313,7 @@ message LecturaSensoresReply {
 
 message SaludoBoardReq {
   int64 id_equipo = 1;
+  string nombre_equipo = 2;
 }
 
 message SaludoBoardReply {

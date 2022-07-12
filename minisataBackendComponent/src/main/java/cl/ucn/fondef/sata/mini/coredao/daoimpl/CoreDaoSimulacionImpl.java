@@ -226,4 +226,5 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
                 + "Mensaje board:\n" + mensajeBoard.getMensajeTexto();
     }
 
+
 }
