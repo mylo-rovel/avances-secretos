@@ -190,8 +190,9 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
                 .addAllSecuencia(listaSecuenciasGrpc)
                 .build();
 
-        coreBoardClientGrpcBoard.startSimulacion(simulacionBoardReq);
-        return "Simulacion iniciada. IdEjecucion" + ejecucionNueva.getId();
+        Domain.MensajeReply mensajeBoard = coreBoardClientGrpcBoard.startSimulacion(simulacionBoardReq);
+        return "Simulacion iniciada. IdEjecucion" + ejecucionNueva.getId()
+                + "Mensaje board:\n" + mensajeBoard.getMensajeTexto();
     }
 
 
