@@ -9,7 +9,9 @@ import cl.ucn.fondef.sata.mini.model.Ejecucion;
 import cl.ucn.fondef.sata.mini.model.Secuencia;
 import cl.ucn.fondef.sata.mini.model.Simulacion;
 import cl.ucn.fondef.sata.mini.grpc.Domain.*;
+import cl.ucn.fondef.sata.mini.utilities.InformacionEjecucion;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -23,11 +25,11 @@ public interface CoreDaoSimulacion {
 
     String addSimulacion(SimulacionReq simulacionReq);
 
-    String startSimulacion(StartSimulacionReq startSimulacionReq);
-
     List<Domain.Secuencia> getGrpcSecuenciasSimulacion(IdElementoReq idSimulacionReq);
 
     Ejecucion getEjecucionDB(Domain.IdElementoReq idSimulacionReq);
 
     List<Ejecucion> getEjecucionesDB();
+
+    String startSimulacion(StartSimulacionReq startSimulacionReq, HashMap<String, InformacionEjecucion> ejecucionesEquipo);
 }

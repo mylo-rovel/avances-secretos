@@ -310,3 +310,11 @@ message LecturaSensoresReply {
   double flujo_medido = 3;
   double tiempo_transcurrido = 4;
 }
+
+message SaludoBoardReq {
+  int64 id_equipo = 1;
+}
+
+message SaludoBoardReply {
+  EquipoEntity equipo = 1;
+}
