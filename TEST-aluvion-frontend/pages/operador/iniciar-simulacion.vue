@@ -16,43 +16,17 @@
                 "cancelbutton": "cancelar",
                 "tituloPag": "Sistema de Alerta Temprana Aluvional",
                 "submitbutton": "guardar",
-                //simulaciones: [],
-                //equipos:[],
+                simulacionesDisponibles: [],
+                equiposDisponibles:[],
                 equipoSeleccionado: "",
                 simulacionSeleccionada:"",
                 apiURL: "http://localhost:8081/api",
 
-                /*simulaciones: [
-                    {
-                    "id_": 1,
-                    "nombre_": "simu1",
-                    "nombreEquipo_": "simulador4",
-                    "fechaEjecucion_": "AAAAAAAAAAAA",
-                    "aguaCaida_": 0.0,
-                    "memoizedIsInitialized": -1,
-                    },
-                    {
-                    "id_": 2,
-                    "nombre_": "simu2",
-                    "nombreEquipo_": "simulador4",
-                    "fechaEjecucion_": "AAAAAAAAAAAA",
-                    "aguaCaida_": 0.0,
-                    "memoizedIsInitialized": -1,
-                    }
-                ],*/
-                simulaciones: [
-                    {
-                    id_: 1,
-                    nombre_: "simu1",
-                    nombreEquipo_: "simulador4",
-                    fechaEjecucion_: "AAAAAAAAAAAA",
-                    aguaCaida_: 0.0,
-                    }
-                ]
+                simulaciones: []
             };
         },
-        async fetch(){
-            const JWTtoken = "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyMjMzNDQ1NS1rIiwiaWF0IjoxNjU3MDcwNzMyLCJzdWIiOiJPUEVSQURPUiIsImlzcyI6Ik1haW4iLCJleHAiOjE2NTc2NzU1MzJ9.jLlZdoJUBjWm5grgCwe5aFeKZruQCoiMA_Tm39e3IOw";
+        async mounted(){
+            const JWTtoken = window.localStorage.getItem("token");
             const post_config = { 
                 method: 'get', 
                 headers: {'authorization': JWTtoken}
@@ -61,6 +35,12 @@
             const rawdata = await fetch(url_to_fetch, post_config).catch(err => err);
             const listaSimulacionesCrudas = await rawdata.json();
             this.simulaciones = setListasDesplegables(listaSimulacionesCrudas);
+            this.equiposDisponibles = Object.keys(setListasDesplegables(listaSimulacionesCrudas));
+            console.log(this.equiposDisponibles);
+           // console.log(Object.keys(setListasDesplegables(listaSimulacionesCrudas)));
+            this.simulacionesDisponibles = setListasDesplegables(listaSimulacionesCrudas)[this.equiposDisponibles];
+            console.log(this.simulacionesDisponibles);
+            console.log();
         },
 
         methods: {
@@ -90,7 +70,7 @@
             // },
 
             //Metodo que llena las opciones del select con los id de simulaciones del equipo seleccionado
-            getSimulacionesEquipo: function(simulaciones){
+            getSimulacionesEquipo: function(){
                 var equipoActual = document.getElementById('select_equipoSimulacion').selectedIndex;
                 for(let i = 0; i < simulaciones.length; i++ ){
                     document.getElementById('select_idSimulacion').value = simulaciones[equipoActual].id_;
@@ -158,32 +138,28 @@
                             <div class="my-4 form-group row">
                                 <label for="equipo-simulacion" class="col-sm-4 col-form-label " >Seleccione un equipo</label>
                                 <div class="col-sm-6">
-                                    <select id="select_equipoSimulacion" name="equipo_simulacion" @change= "saveEquipo()" class="form-select" aria-label="Equipo" required>
-                                        <!--<option value="" disabled selected></option>
-                                            <option>Equipo simulador de lluvia </option>
-                                            <option>Simulador 2.0</option>-->
+                                    <select id="select_equipoSimulacion" v-model="equipoSeleccionado" @change= "saveEquipo()" class="form-select" aria-label="Equipo" required>
+                                        <option v-for="i in equiposDisponibles" :value="i">{{i}}</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="my-4 form-group row">
                                 <label for="simulacion" class="col-sm-4 col-form-label" >Seleccione una simulación</label>
-                                <div class="col-sm-6">
-                                    <select id="select_idSimulacion" name="id_simulacion" class="form-select" @click= "displayNombreSimulacion()" @change= "saveSimulacion()" aria-label="Simulacion" required>
-                                        <!--<option value="" disabled selected></option>
-                                            <option>1</option>
-                                            <option>2</option>-->
+                                <div  v-if= "" class="col-sm-6">
+                                    <select id="select_idSimulacion" v-model="simulacionSeleccionada" class="form-select" @change= "saveSimulacion()" aria-label="Simulacion" required>
+                                         <option v-for="i in simulaciones" :value="i">{{i}}</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="my-4 form-group row">
+                            <!--<div class="my-4 form-group row">
                                 <label for="simulacion" class="col-sm-4 col-form-label" >Nombre simulación</label>
                                 <div class="col-sm-6">
                                     <input id="nombreSimulacion" name="nombre_simulacion" class="form-control" aria-label="Simulacion" required>
                                 </div>
-                            </div>
+                            </div>-->
                             <div class = "row my-4 ">
                                 <div class= "col-12 contenido-botones my-4">
-                                    <NuxtLink to="/menu-operador"><CancelButtom :cancelbutton = "cancelbutton"/></NuxtLink>
+                                    <NuxtLink to="/operador/menu-operador"><CancelButtom :cancelbutton = "cancelbutton"/></NuxtLink>
                                 </div>                            
                                 <div class="col-12 contenido-botones my-4">    
                                     <NuxtLink to="/menu-operador"><SubmitButton :submitbutton = "submitbutton" @click = "sendSolicitudSimulacion()"/></NuxtLink>
