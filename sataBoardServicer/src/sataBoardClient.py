@@ -43,7 +43,8 @@ class SataBoardClient:
                 nombre_equipo = nombreEquipo,
                 direccion_ip_equipo = direccionIpEquipo
         ))
-        return
+        print("Saludo enviado")
+        return None
 
 
 # def run():
