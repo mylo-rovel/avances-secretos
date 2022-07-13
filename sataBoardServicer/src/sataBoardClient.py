@@ -26,28 +26,36 @@ import coreBoardCommuService_pb2 as ReqResModule
 import coreBoardCommuService_pb2_grpc as ClientServerModule
 
 venv_dict = dict(dotenv_values(".env"))
-print(f'Servidor a alcanzar: {venv_dict["SERVER_ADDRESS"]}:{venv_dict["PORT"]}')
 
 
-def sendHelloWorldToCentralCore(stub):
-    messageToSend = "Estoy acá. Espero recibir mi objeto de configuracion"
-    serverResponse = stub.sendMensajeEncendido(
-        ReqResModule.MensajeReq(
-            mensaje_texto = messageToSend
-    ))
-    print(f'The server response is \n{serverResponse}')
+class SataBoardClient:
+    def __init__(self):
+        self.channel = grpc.insecure_channel(f'{venv_dict["CENTRAL_CORE_ADDRESS"]}:{venv_dict["CENTRAL_CORE_PORT"]}')
+        self.stub = ClientServerModule.CoreBoardCommuServiceStub(self.channel)
+        print(f'Servidor a alcanzar: {venv_dict["CENTRAL_CORE_ADDRESS"]}:{venv_dict["CENTRAL_CORE_PORT"]}')
 
 
-def run():
-    # NOTE(gRPC Python Team): .close() is possible on a channel and should be
-    # used in circumstances in which the with statement does not fit the needs
-    # of the code.
+    def sendHelloWorldToCentralCore(self):
+        nombreEquipo = venv_dict["NOMBRE_EQUIPO"]
+        direccionIpEquipo = 'f{venv_dict["BOARD_ADDRESS"]}:{venv_dict["BOARD_PORT"]}'
+        serverResponse = self.stub.sendMensajeEncendido(
+            ReqResModule.SaludoBoardReq(
+                nombre_equipo = nombreEquipo,
+                direccion_ip_equipo = direccionIpEquipo
+        ))
+        return
 
-    with grpc.insecure_channel(f'{venv_dict["SERVER_ADDRESS"]}:{venv_dict["PORT"]}') as channel:
-        # stub is the client object
-        stub = ClientServerModule.CoreBoardCommuServiceStub(channel)
-        sendHelloWorldToCentralCore(stub)
 
-if __name__ == '__main__':
-    logging.basicConfig()
-    run()
+# def run():
+#     # NOTE(gRPC Python Team): .close() is possible on a channel and should be
+#     # used in circumstances in which the with statement does not fit the needs
+#     # of the code.
+
+#     with grpc.insecure_channel(f'{venv_dict["SERVER_ADDRESS"]}:{venv_dict["PORT"]}') as channel:
+#         # stub is the client object
+#         stub = ClientServerModule.CoreBoardCommuServiceStub(channel)
+#         sendHelloWorldToCentralCore(stub)
+
+# if __name__ == '__main__':
+#     logging.basicConfig()
+#     run()
