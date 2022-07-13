@@ -32,6 +32,9 @@ public class WebCoreServiceGrpcSimulacion {
     @Autowired
     private CoreDaoEquipo coreDaoEquipo;
 
+    @Autowired
+    private WebCoreServiceGrpcEquipo webCoreServiceGrpcEquipo;
+
     private Equipo getEquipoAsociadoASimulacion(Domain.IdElementoConRutReq idElementoConRutReq, Simulacion simulacionGuardada) {
         Domain.IdElementoConRutReq idEquipoConRut = Domain.IdElementoConRutReq.newBuilder()
                 .setRut(idElementoConRutReq.getRut()).setId(simulacionGuardada.getIdEquipo()).build();
@@ -191,10 +194,37 @@ public class WebCoreServiceGrpcSimulacion {
             ejecucionesEquipo.put(equipoGuardadoDB.getNombre(), informacionBoardNueva);
         }
 
-        //todo: convertir el equipo a equipoEntity
-        Domain.SaludoBoardReply equipoEnviar = Domain.SaludoBoardReply.newBuilder().build();
+        //aqui esta el proceso de convertir equipoGuardadoDB a un equipoEntity para enviarlo
+        Domain.EquipoEntity.Builder equipoEnte = webCoreServiceGrpcEquipo.getEquipoEntityBuilder(equipoGuardadoDB);
+        Domain.IdElementoReq idEquipoReq = Domain.IdElementoReq.newBuilder().setId(equipoGuardadoDB.getId()).build();
+        webCoreServiceGrpcEquipo.addPlacasToEquipo(equipoEnte, idEquipoReq);
+        webCoreServiceGrpcEquipo.addComponentesYPinesToEquipo(equipoEnte,idEquipoReq);
+
+        Domain.SaludoBoardReply equipoEnviar = Domain.SaludoBoardReply.newBuilder().setEquipo(equipoEnte.build()).build();
+        //Domain.SaludoBoardReply equipoEnviar = Domain.SaludoBoardReply.newBuilder().build();
 
         return equipoEnviar;
+    }
+
+    public Domain.EquiposEntityReply getEquiposTrabajando(Domain.EmptyReq emptyReq, StreamObserver<Domain.EquiposEntityReply> streamObserver){
+
+        //construir un equiposEntityReply, utilizar la funcion setKey de ejecucionesEquipo para retornar todos los nombres de los
+        //equipos del hashmap
+
+        Domain.EquiposEntityReply.Builder equiposEnviar = Domain.EquiposEntityReply.newBuilder();
+        for(String nombreEquipo : ejecucionesEquipo.keySet()){
+            if(ejecucionesEquipo.get(nombreEquipo).isEstaEjecutandose()){
+                Equipo equipo = coreDaoEquipo.getEquipoPorNombre(nombreEquipo);
+                Domain.EquipoEntityAcotado equipoAgregar = Domain.EquipoEntityAcotado.newBuilder()
+                        .setId(equipo.getId())
+                        .setNombre(equipo.getNombre())
+                        .setEstado(Domain.EstadoEquipo.valueOf(equipo.getEstado()))
+                        .build();
+                equiposEnviar.addEquipoAcotado(equipoAgregar);
+            }
+        }
+
+        return equiposEnviar.build();
     }
 
 }
