@@ -148,6 +148,11 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         responseObserver.onCompleted(); //Terminar el proceso
     }
 
+    public void getEquiposTrabajando(EmptyReq emptyReq, StreamObserver<EquiposEntityReply> responseObserver){
+        var grpcResponse = webCoreServiceGrpcSimulacion.getEquiposTrabajando(emptyReq, responseObserver);
+        responseObserver.onNext(grpcResponse);
+        responseObserver.onCompleted();
+    }
     @Override
     public void getRegistros(RutEntityReq rutEntityReq, StreamObserver<RegistrosReply> responseObserver){
         var grpcResponse = webCoreServiceGrpcExtra.getRegistros(rutEntityReq, responseObserver);

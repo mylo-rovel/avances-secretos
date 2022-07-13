@@ -197,4 +197,25 @@ public class WebCoreServiceGrpcSimulacion {
         return equipoEnviar;
     }
 
+    public Domain.EquiposEntityReply getEquiposTrabajando(Domain.EmptyReq emptyReq, StreamObserver<Domain.EquiposEntityReply> streamObserver){
+
+        //construir un equiposEntityReply, utilizar la funcion setKey de ejecucionesEquipo para retornar todos los nombres de los
+        //equipos del hashmap
+
+        Domain.EquiposEntityReply.Builder equiposEnviar = Domain.EquiposEntityReply.newBuilder();
+        for(String nombreEquipo : ejecucionesEquipo.keySet()){
+            if(ejecucionesEquipo.get(nombreEquipo).isEstaEjecutandose()){
+                Equipo equipo = coreDaoEquipo.getEquipoPorNombre(nombreEquipo);
+                Domain.EquipoEntityAcotado equipoAgregar = Domain.EquipoEntityAcotado.newBuilder()
+                        .setId(equipo.getId())
+                        .setNombre(equipo.getNombre())
+                        .setEstado(Domain.EstadoEquipo.valueOf(equipo.getEstado()))
+                        .build();
+                equiposEnviar.addEquipoAcotado(equipoAgregar);
+            }
+        }
+
+        return equiposEnviar.build();
+    }
+
 }
