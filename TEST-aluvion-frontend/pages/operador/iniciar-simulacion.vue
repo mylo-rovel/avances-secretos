@@ -89,13 +89,14 @@
                 const POST_config = {
                     'method': 'POST',
                     'body': solicitud,
-                    'authorization': tokenUsuario
+                    'headers':{
+                        'Content-Type':'application/json',
+                        'authorization': tokenUsuario,}
                 };
-                //const respuesta = await fetch(`${this.urlApi}/simulaciones/`, POST_config);
-                //console.log(respuesta);
+
+                const respuesta = await fetch(`${this.urlApi}/simulaciones/`, POST_config);
+                console.log(respuesta);
             }
-
-
         }
     })
 </script>
