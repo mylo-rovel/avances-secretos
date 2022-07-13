@@ -71,7 +71,7 @@ public class WebCoreServiceGrpcEquipo {
 
 
 
-    private Domain.EquipoEntity.Builder getEquipoEntityBuilder (Equipo equipoGuardado){
+    public Domain.EquipoEntity.Builder getEquipoEntityBuilder (Equipo equipoGuardado){
         Domain.EquipoEntity.Builder equipoEnte = Domain.EquipoEntity.newBuilder()
                 .setId(equipoGuardado.getId())
                 .setNombre(equipoGuardado.getNombre())
@@ -80,7 +80,7 @@ public class WebCoreServiceGrpcEquipo {
                 .setEstado(stringEnumTransformer.getEnumEstadoEquipo(equipoGuardado.getEstado()));
         return equipoEnte;
     }
-    private void addPlacasToEquipo(Domain.EquipoEntity.Builder equipoEnte, Domain.IdElementoReq idEquipoReq) {
+    public void addPlacasToEquipo(Domain.EquipoEntity.Builder equipoEnte, Domain.IdElementoReq idEquipoReq) {
         List<Placa> placasGuardadas = coreDaoEquipo.getPlacasPorIdEquipo(idEquipoReq);
         // ITERAR PARA CREAR CADA PROTOBUF DE "Placa"
         for (int i = 0; i < placasGuardadas.size(); i++) {
@@ -93,7 +93,7 @@ public class WebCoreServiceGrpcEquipo {
         }
         /*return equipoEnte;*/
     }
-    private void addComponentesYPinesToEquipo(Domain.EquipoEntity.Builder equipoEnte, Domain.IdElementoReq idEquipoReq) {
+    public void addComponentesYPinesToEquipo(Domain.EquipoEntity.Builder equipoEnte, Domain.IdElementoReq idEquipoReq) {
         List<Componente> componentesGuardados = coreDaoEquipo.getComponentesPorIdEquipo(idEquipoReq);
         // ITERAR PARA CREAR CADA PROTOBUF DE "Componente"
         for (int i = 0; i < componentesGuardados.size(); i++) {

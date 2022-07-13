@@ -32,6 +32,9 @@ public class WebCoreServiceGrpcSimulacion {
     @Autowired
     private CoreDaoEquipo coreDaoEquipo;
 
+    @Autowired
+    private WebCoreServiceGrpcEquipo webCoreServiceGrpcEquipo;
+
     private Equipo getEquipoAsociadoASimulacion(Domain.IdElementoConRutReq idElementoConRutReq, Simulacion simulacionGuardada) {
         Domain.IdElementoConRutReq idEquipoConRut = Domain.IdElementoConRutReq.newBuilder()
                 .setRut(idElementoConRutReq.getRut()).setId(simulacionGuardada.getIdEquipo()).build();
@@ -191,8 +194,14 @@ public class WebCoreServiceGrpcSimulacion {
             ejecucionesEquipo.put(equipoGuardadoDB.getNombre(), informacionBoardNueva);
         }
 
-        //todo: convertir el equipo a equipoEntity
-        Domain.SaludoBoardReply equipoEnviar = Domain.SaludoBoardReply.newBuilder().build();
+        //aqui esta el proceso de convertir equipoGuardadoDB a un equipoEntity para enviarlo
+        Domain.EquipoEntity.Builder equipoEnte = webCoreServiceGrpcEquipo.getEquipoEntityBuilder(equipoGuardadoDB);
+        Domain.IdElementoReq idEquipoReq = Domain.IdElementoReq.newBuilder().setId(equipoGuardadoDB.getId()).build();
+        webCoreServiceGrpcEquipo.addPlacasToEquipo(equipoEnte, idEquipoReq);
+        webCoreServiceGrpcEquipo.addComponentesYPinesToEquipo(equipoEnte,idEquipoReq);
+
+        Domain.SaludoBoardReply equipoEnviar = Domain.SaludoBoardReply.newBuilder().setEquipo(equipoEnte.build()).build();
+        //Domain.SaludoBoardReply equipoEnviar = Domain.SaludoBoardReply.newBuilder().build();
 
         return equipoEnviar;
     }
