@@ -10,7 +10,7 @@ import cl.ucn.fondef.sata.mini.grpc.Domain;
 import cl.ucn.fondef.sata.mini.grpc.coreboardclient.CoreBoardClientGrpcBase;
 import cl.ucn.fondef.sata.mini.model.Evento;
 import cl.ucn.fondef.sata.mini.model.Secuencia;
-import cl.ucn.fondef.sata.mini.utilities.InformacionEjecucion;
+import cl.ucn.fondef.sata.mini.utilities.InformacionBoard;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -105,12 +105,20 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
 
 
 
-
+    @Override
+    public boolean yaExisteNombreSimulacionEnDB(String nombreSimulacion){
+        String sqlQuery = "SELECT simulacion FROM Simulacion as simulacion WHERE simulacion.nombre = :nombreSimulacion";
+        List listaResultado = entityManager.createQuery(sqlQuery)
+                .setParameter("nombreSimulacion", nombreSimulacion).getResultList();
+        return (!listaResultado.isEmpty());
+    }
     @Override
     public String addSimulacion(SimulacionReq simulacionReq) {
         Usuario usuarioOperador = coreDaoUsuario.getUsuario(    Domain.RutEntityReq.newBuilder().setRut(simulacionReq.getRutOperador()).build());
         Equipo equipoUsado = coreDaoEquipo.getEquipoPorNombre(  simulacionReq.getNombreEquipo());
         if (equipoUsado == null ) {return "Simulacion no guardada";}
+        // CHEQUEAR SI EL NOMBRE DE LA SIMULACION YA FUE TOMADO
+        if(this.yaExisteNombreSimulacionEnDB(simulacionReq.getNombre())){return "Nombre simulacion ya existe";}
 
         Simulacion simulacionGuardar = new Simulacion();
         simulacionGuardar.setNombre(        simulacionReq.getNombre());
@@ -195,8 +203,11 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
         }
     }
     @Override
-    public String startSimulacion(StartSimulacionReq startSimulacionReq, HashMap<String, InformacionEjecucion> ejecucionesEquipo) {
-        // todo: guardar en Ejecucion y EjecucionSecuencia
+    public String startSimulacion(StartSimulacionReq startSimulacionReq, HashMap<String, InformacionBoard> ejecucionesEquipo) {
+        // SI EL EQUIPO NO ESTA EN EL HASHMAP, NO ESTA ENCENDIDO => NO CONTINUAR CON EL PROCESO
+        if (!(ejecucionesEquipo.containsKey(startSimulacionReq.getNombreEquipo()))){
+            return "Equipo no disponible para operar";
+        }
         Domain.IdElementoReq idSimulacionReq = IdElementoReq.newBuilder().setId(startSimulacionReq.getIdSimulacion()).build();
         Simulacion simulacionEjecutar = this.getSimulacionDB(idSimulacionReq);
         if (simulacionEjecutar == null) { return "Simulacion no existente"; }
@@ -208,20 +219,24 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
         long idEjecucion = ejecucionNueva.getId();
         this.addMultiEjecucionSecuencia(idEjecucion, idSimulacionReq);
 
-        // ENVIAR LAS SECUENCIAS AL RASPI
+        // PREPARAR LAS SECUENCIAS A ENVIAR AL RASPI
         List<Domain.Secuencia> listaSecuenciasGrpc = this.getGrpcSecuenciasSimulacion(idSimulacionReq);
-//        System.out.println("listaSecuenciasGrpc = " + listaSecuenciasGrpc);
-//        System.out.println("\n\n\n");
         Domain.SimulacionBoardReq simulacionBoardReq = SimulacionBoardReq.newBuilder()
                 .setIdSimulacion(idSimulacionReq.getId())
                 .addAllSecuencia(listaSecuenciasGrpc)
                 .build();
 
-        String nombreEquipo = startSimulacionReq.getNombreEquipo();
-        var algunNombreEquipo = ejecucionesEquipo.get(nombreEquipo);
-        var coreBoardClient = algunNombreEquipo.getCoreBoardClient();
+        // OBTENIENDO EL OBJETO QUE CONTIENE EL OBJETO QUE PUEDE HACER LAS LLAMADAS GRPC AL EQUIPO SELECCIONADO
+        InformacionBoard objetoEquipoDisponible = ejecucionesEquipo.get(startSimulacionReq.getNombreEquipo());
+        CoreBoardClientGrpcBase coreBoardClient = objetoEquipoDisponible.getCoreBoardClient();
 
+        // HACIENDO LA LLAMADA GRPC AL EQUIPO
         MensajeReply mensajeBoard = coreBoardClient.startSimulacion(simulacionBoardReq);
+
+        objetoEquipoDisponible.setEstaEjecutandose(true);
+        if (mensajeBoard.getMensajeTexto().equals("Error al intentar conectar con la placa")) {
+            return "Error al intentar conectar con la placa";
+        }
         return "Simulacion iniciada. IdEjecucion" + ejecucionNueva.getId()
                 + "Mensaje board:\n" + mensajeBoard.getMensajeTexto();
     }

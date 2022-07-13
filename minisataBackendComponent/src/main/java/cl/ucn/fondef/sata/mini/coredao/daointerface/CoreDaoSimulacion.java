@@ -6,10 +6,9 @@ package cl.ucn.fondef.sata.mini.coredao.daointerface;
 
 import cl.ucn.fondef.sata.mini.grpc.Domain;
 import cl.ucn.fondef.sata.mini.model.Ejecucion;
-import cl.ucn.fondef.sata.mini.model.Secuencia;
 import cl.ucn.fondef.sata.mini.model.Simulacion;
 import cl.ucn.fondef.sata.mini.grpc.Domain.*;
-import cl.ucn.fondef.sata.mini.utilities.InformacionEjecucion;
+import cl.ucn.fondef.sata.mini.utilities.InformacionBoard;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,5 +30,7 @@ public interface CoreDaoSimulacion {
 
     List<Ejecucion> getEjecucionesDB();
 
-    String startSimulacion(StartSimulacionReq startSimulacionReq, HashMap<String, InformacionEjecucion> ejecucionesEquipo);
+    boolean yaExisteNombreSimulacionEnDB(String nombreSimulacion);
+
+    String startSimulacion(StartSimulacionReq startSimulacionReq, HashMap<String, InformacionBoard> ejecucionesEquipo);
 }

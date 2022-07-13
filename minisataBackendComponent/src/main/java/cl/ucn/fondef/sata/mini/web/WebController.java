@@ -327,22 +327,21 @@ public class WebController {
     }
 
     // ***---- IMPLEMENTAR ----
-    //   rpc getSimulacionActual(IdElementoReq) returns (SimulacionReply){}
-    //TODO: REVISAR GETSIMULACIONACTUAL
-    @RequestMapping(value = "api/ejecuciones/actual/{id}", method = RequestMethod.GET)
-    public String getSimulacionActual(@PathVariable long id, @RequestHeader(value="Authorization") String jwt) {
+    //   rpc getEquiposTrabajando(EmptyReq) returns (EquiposEntityReply){}
+    @RequestMapping(value = "api/ejecuciones/actual/", method = RequestMethod.GET)
+    public String getEquiposTrabajando(@RequestHeader(value="Authorization") String jwt) {
         if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {
             if (usuario.getRol().equals(Domain.UsuarioEntity.RolUsuario.OPERADOR.name())) {
-                return webCoreClientGrpcSimulacion.getSimulacionActual();
+                return webCoreClientGrpcSimulacion.getEquiposTrabajando();
             }
         }
         return "Usuario sin permisos";
     }
 
-    // ***---- IMPLEMENTAR ----
+    // TODO: ARREGLAR => ESTAMOS ENTREGANDO LA ID DE LA EJECUCION, NO DE LA SIMULACION
     //   rpc getEjecucion(IdElementoReq) returns (EjecucionReply){}
     @RequestMapping(value = "api/ejecuciones/{id}", method = RequestMethod.GET)
     public String getEjecucion(@PathVariable long id, @RequestHeader(value="Authorization") String jwt) {
@@ -357,7 +356,6 @@ public class WebController {
         return "Usuario sin permisos";
     }
 
-    // ***---- IMPLEMENTAR ----
     //   rpc getEjecuciones(EmptyReq) returns (EjecucionesReply){}
     @RequestMapping(value = "api/ejecuciones/", method = RequestMethod.GET)
     public String getEjecuciones(@RequestHeader(value="Authorization") String jwt) {

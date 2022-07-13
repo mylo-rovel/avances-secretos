@@ -9,6 +9,7 @@
 @font-face {
   font-family: Poppins-Medium;
   src: url('../fonts/poppins/Poppins-Medium.ttf'); 
+  background-color: #666666;
 }
 
 @font-face {

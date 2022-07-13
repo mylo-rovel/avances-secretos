@@ -43,8 +43,9 @@ class CoreBoardCommuServiceServicer(ClientServerModule.CoreBoardCommuServiceServ
         dictSecuencias = {}
         for x in request.secuencia:
             dictSecuencias[str(x.id_componente)] = self._getHandyEventsList(x.evento)
-        print(dictSecuencias)
+
         print(json.dumps(dictSecuencias))
+        
         responseMessage = "IT WOOOORKS"
         return ReqResModule.MensajeReply(
             mensaje_texto = responseMessage

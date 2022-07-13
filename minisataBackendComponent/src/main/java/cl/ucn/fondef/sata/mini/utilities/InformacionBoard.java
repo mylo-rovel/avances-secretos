@@ -6,11 +6,12 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @ToString
 @EqualsAndHashCode
-public class InformacionEjecucion {
+public class InformacionBoard {
 
     @Getter
     @Setter
@@ -28,7 +29,10 @@ public class InformacionEjecucion {
     @Setter
     private CoreBoardClientGrpcBase coreBoardClient;
 
-    public InformacionEjecucion(String direccion) {
+    public InformacionBoard(String direccion) {
         this.coreBoardClient = new CoreBoardClientGrpcBase(direccion);
+        this.aguaCaidaActual = 0.0;
+        this.estaEjecutandose = false;
+        this.valoresGrafico = new ArrayList<Double>();
     }
 }

@@ -79,7 +79,7 @@ public final class WebCoreClientGrpcSimulacion extends WebCoreClientGrpcBase {
      *
      * @return the simulacion actual
      */
-    public String getSimulacionActual() {
+    public String getEquiposTrabajando() {
         return "";
     }
 

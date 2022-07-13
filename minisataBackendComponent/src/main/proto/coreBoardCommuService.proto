@@ -13,11 +13,11 @@ service CoreBoardCommuService {
   rpc startSimulacion(SimulacionBoardReq) returns (MensajeReply){}
 
   // (2)
-  rpc getSimulacionActual(EmptyReq) returns (SimulacionReply){}
-
-  // (3)
   rpc getLecturasSensores(EmptyReq) returns (stream LecturaSensoresReply) {}
 
   // Esta llamada se ejecuta al iniciar el servicio del board(raspberry)
   rpc sendMensajeEncendido (SaludoBoardReq)  returns (SaludoBoardReply) {}
+
+  // Esta llamada se ejecuta al terminar la ejecucion planeada
+  rpc sendMensajeTerminoEjecucion (AvisoTerminoEjecucionReq)  returns (EmptyReq) {}
 }

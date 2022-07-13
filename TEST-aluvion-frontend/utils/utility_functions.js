@@ -2,9 +2,10 @@ export const setListasDesplegables = (listaRawSimulaciones) => {
 	const listaSimulacionesCrudas = listaRawSimulaciones["simulacionAcotada_"];
 	return listaSimulacionesCrudas.reduce( (acc, item) => {
 		if (!(item['nombreEquipo_'] in acc)) {
-			acc = {...acc, [item['nombreEquipo_']]: []};
+			acc = {...acc, [item['nombreEquipo_']]: {listaSimulaciones:[], listaIds:[]}};
 		}
-		acc[item['nombreEquipo_']].push(item['nombre_']);
+		acc[item['nombreEquipo_']]["listaSimulaciones"].push(item['nombre_']);
+		acc[item['nombreEquipo_']]["listaIds"].push(item['id_']);
 		return acc;
 	}, {})
 }

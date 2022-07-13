@@ -6,8 +6,10 @@ import cl.ucn.fondef.sata.mini.grpc.Domain;
 import cl.ucn.fondef.sata.mini.model.Ejecucion;
 import cl.ucn.fondef.sata.mini.model.Equipo;
 import cl.ucn.fondef.sata.mini.model.Simulacion;
-import cl.ucn.fondef.sata.mini.utilities.InformacionEjecucion;
+import cl.ucn.fondef.sata.mini.utilities.InformacionBoard;
 import io.grpc.stub.StreamObserver;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +24,7 @@ import java.util.List;
 @Service
 public class WebCoreServiceGrpcSimulacion {
 
-    private final HashMap<String, InformacionEjecucion> ejecucionesEquipo = new HashMap<>();
+    public final HashMap<String, InformacionBoard> ejecucionesEquipo = new HashMap<>();
 
     @Autowired
     private CoreDaoSimulacion coreDaoSimulacion;
@@ -104,6 +106,8 @@ public class WebCoreServiceGrpcSimulacion {
         Ejecucion ejecucionDB = coreDaoSimulacion.getEjecucionDB(idSimulacionReq);
         List<Domain.Secuencia> listaSecuenciasGrpc = coreDaoSimulacion.getGrpcSecuenciasSimulacion(idSimulacionReq);
 
+        if (simulacionDB == null || ejecucionDB == null) { return Domain.EjecucionReply.newBuilder().build(); }
+
         Domain.IdElementoConRutReq idSimulacionConRutReq = Domain.IdElementoConRutReq.newBuilder().setId( simulacionDB.getIdEquipo() ).setRut( idElementoConRutReq.getRut() ).build();
         Equipo equipoDB = coreDaoEquipo.getEquipo(idSimulacionConRutReq);
 
@@ -156,16 +160,36 @@ public class WebCoreServiceGrpcSimulacion {
 
 
     public Domain.MensajeReply startSimulacion(Domain.StartSimulacionReq startSimulacionReq, StreamObserver<Domain.MensajeReply> responseObserver){
+        // le pasamos el hashmap ejecucionesEquipo a la funcion para que podamos recuperar de la estructura
+        // el objeto de informacion de cierto equipo en segun del nombre enviado por el frontend
+        // el objeto que hace las llamads grpc hacia cierta placa que corre un servidor grpc está dentro
+        // del objeto que constituye el valor del par llave valor: nombreEquipo, InformacionBoard
         String mensajeResultado = coreDaoSimulacion.startSimulacion(startSimulacionReq, ejecucionesEquipo);
         return Domain.MensajeReply.newBuilder().setMensajeTexto(mensajeResultado).build();
     }
 
+
+
+    // --------------- RESPUESTA A LA LLAMADA 'sendMensajeEncendido(SaludoBoardReq)' -------------
+    // ESTA FUNCION ES EJECUTADA DESDE EL 'CoreBoardServiceGrpcImpl'
+    // cuando el raspberry es enchufado, envía una llamada al central core y el 'CoreBoardServiceGrpcImpl'
+    // responde esas peticiones (es el encargado de la comunicacion CentralCore <--> Raspberry)
+    // "ejecucionesEquipo" es una estructura que guarda los equipos que están encendidos en forma de
+    // objetos de tipo "InformacionBoard" (disponible en el paquete 'utilities'
     public Domain.SaludoBoardReply sendMensajeEncendido(Domain.SaludoBoardReq saludoBoardReq, StreamObserver<Domain.SaludoBoardReply> responseObserver){
-        //aqui se deberia actualizar el HashMap para que ahora tenga el nombre del equipo y un nuevo InformacionEjecucion
+        //aqui se deberia actualizar el HashMap para que ahora tenga el nombre del equipo y un nuevo InformacionBoard
         //que sera construido en esta funcion
-        Equipo equipo = coreDaoEquipo.getEquipoPorNombre(saludoBoardReq.getNombreEquipo());
-        InformacionEjecucion informacionEjecucionNueva = new InformacionEjecucion("localhost:50050");
-        ejecucionesEquipo.replace(equipo.getNombre(),informacionEjecucionNueva);
+        // BUSCAMOS EL EQUIPO PARA QUE EL RASPBERRY OBTENGA LA CONFIGURACION GUARDADA EN LA DB
+        Equipo equipoGuardadoDB = coreDaoEquipo.getEquipoPorNombre(saludoBoardReq.getNombreEquipo());
+        if (equipoGuardadoDB == null) {return Domain.SaludoBoardReply.newBuilder().build();}
+        log.info("EQUIPO ENCENDIDO");
+        log.info("equipo = " + equipoGuardadoDB);
+
+        // SI NO ESTA DENTRO DEL HASHMAP DE EQUIPOS DISPONIBLES, LO AGREGAMOS
+        if (!(ejecucionesEquipo.containsKey(saludoBoardReq.getNombreEquipo()))){
+            InformacionBoard informacionBoardNueva = new InformacionBoard("localhost:50050");
+            ejecucionesEquipo.put(equipoGuardadoDB.getNombre(), informacionBoardNueva);
+        }
 
         //todo: convertir el equipo a equipoEntity
         Domain.SaludoBoardReply equipoEnviar = Domain.SaludoBoardReply.newBuilder().build();
