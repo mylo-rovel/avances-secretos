@@ -38,52 +38,75 @@
 </script>
 
 <template>
-    <section class="left-menu-panel">
-        <article class="menu-routes-row-container">
-            <!-- <p v-for="element in Object.entries(elementsObj)" :key="`${element[0]}_key`"> 
-                <span :id="`${element[0]}_key`" @click="(e) => abrirMenu(e)"> 
-                    <span class="menu-routes-element">
-                        {{element[0]}}
+    <section class="row">
+        <div>
+            <NavbarPag/> 
+        </div>
+        <div class="container-header">
+            <PageHeader />
+        </div>
+        <section class="left-menu-panel col-6">
+            <article class="menu-routes-row-container">
+                <!-- <p v-for="element in Object.entries(elementsObj)" :key="`${element[0]}_key`"> 
+                    <span :id="`${element[0]}_key`" @click="(e) => abrirMenu(e)"> 
+                        <span class="menu-routes-element">
+                            {{element[0]}}
+                        </span>
+                        <ul v-if="element[1].esDesplegable && element[0]==='Simulación'" class="submenu-routes-menu">
+                            <p ><NuxtLink to="/operador/">Registrar simulacion</NuxtLink></p>
+                            <p ><NuxtLink to="/operador/">Iniciar simulacion</NuxtLink></p>
+                            <p ><NuxtLink to="/operador/">Ver simulacion</NuxtLink></p>
+                            <p ><NuxtLink to="/operador/">Historial de simulaciones</NuxtLink></p>
+                        </ul>
                     </span>
-                    <ul v-if="element[1].esDesplegable && element[0]==='Simulación'" class="submenu-routes-menu">
-                        <p ><NuxtLink to="/operador/">Registrar simulacion</NuxtLink></p>
-                        <p ><NuxtLink to="/operador/">Iniciar simulacion</NuxtLink></p>
-                        <p ><NuxtLink to="/operador/">Ver simulacion</NuxtLink></p>
-                        <p ><NuxtLink to="/operador/">Historial de simulaciones</NuxtLink></p>
+                </p> -->
+                <p :id="`Inicio_key`" @click="(e) => {}">
+                    <span class="menu-routes-element underlined-element lista-items row">
+                        <div class="col-3"><img src="~/assets/home.svg" class="img-icono"></div>
+                        <div class="col-3"><NuxtLink to="/operador/menu-operador">Inicio</NuxtLink></div>
+                        <!--<img src="~/assets/home.svg" class="img-icono">
+                        <NuxtLink to="/menu-operador">Inicio</NuxtLink>-->
+                    </span>
+                </p>
+                <p :id="`Perfil_key`" @click="(e) => {}">
+                    <span class="menu-routes-element row">
+                        <div class="col-3"><img src="~/assets/profile.svg" class="img-icono"></div>  
+                        <div class="col-3"><NuxtLink to="/operador/">Perfil</NuxtLink></div>    
+                    </span>
+                </p>
+                <p :id="`Simulacion_key`" @click="(e) => abrirMenu(e)" >
+
+                    <img src="~/assets/stats.svg" class=" img-icono">
+                    <span class="menu-routes-element " @click = "girarFlecha()">Simulación</span>
+                    <img id= "flechaSimulacion" src="~/assets/arrow.svg" class=" flecha flecha-inv" @click = "girarFlecha()">
+
+                    <ul v-if="elementsObj['Simulacion']" class="submenu-routes-menu">
+                        <p ><NuxtLink to="/operador/registrar-simulacion">Registrar simulacion</NuxtLink></p>
+                        <p ><NuxtLink to="/operador/iniciar-simulacion">Iniciar simulacion</NuxtLink></p>
+                        <p ><NuxtLink to="/operador/ver-simulacion">Ver simulacion</NuxtLink></p>
+                        <p ><NuxtLink to="/operador/lista-simulaciones">Historial de simulaciones</NuxtLink></p>
                     </ul>
-                </span>
-            </p> -->
-            <p :id="`Inicio_key`" @click="(e) => {}">
-                <span class="menu-routes-element underlined-element lista-items">
-                    <img src="~/assets/home.svg" class="img-icono">
-                    <NuxtLink to="/menu-operador">Inicio</NuxtLink>
-                </span>
-            </p>
-            <p :id="`Perfil_key`" @click="(e) => {}">
-                    <span class="menu-routes-element">    
-                        <img src="~/assets/profile.svg" class="img-icono"><NuxtLink to="/operador/">Perfil</NuxtLink>
+                </p>
+            <!-- <p :id="`Contacto_key`" @click="(e) => {}" class="row">
+                    <span class="menu-routes-element">
+                        <img src="~/assets/message.svg" class="img-icono">
+                        <NuxtLink to="/operador/">Contacto</NuxtLink>
                     </span>
-            </p>
-            <p :id="`Simulacion_key`" @click="(e) => abrirMenu(e)" >
-                <img src="~/assets/stats.svg" class="img-icono">
-                <span class="menu-routes-element">Simulación</span>
-                <img id= "flechaSimulacion" src="~/assets/arrow.svg" class=" flecha flecha-inv" @click = "girarFlecha()">
+                </p>-->
 
-                <ul v-if="elementsObj['Simulacion']" class="submenu-routes-menu">
-                    <p ><NuxtLink to="/operador/registrar-simulacion">Registrar simulacion</NuxtLink></p>
-                    <p ><NuxtLink to="/operador/iniciar-simulacion">Iniciar simulacion</NuxtLink></p>
-                    <p ><NuxtLink to="/operador/ver-simulacion">Ver simulacion</NuxtLink></p>
-                    <p ><NuxtLink to="/operador/lista-simulaciones">Historial de simulaciones</NuxtLink></p>
-                </ul>
-            </p>
-            <p :id="`Contacto_key`" @click="(e) => {}" class="row">
-                <span class="menu-routes-element">
-                    <img src="~/assets/message.svg" class="img-icono">
-                    <NuxtLink to="/operador/">Contacto</NuxtLink>
-                </span>
-            </p>
-
-        </article>
+            </article>
+        </section>
+        <section class="col-6 container my-4">
+            <article class = "my-4">
+                <h3>Sistema de Alerta Temprana Aluvional</h3>
+            </article>
+            <article>
+                <p class="my-4">Bienvenido a SATA
+                                
+                </p>
+            </article>
+            
+        </section>
     </section>
 </template>
 
