@@ -7,13 +7,13 @@ service CoreBoardCommuService {
   rpc startSimulacion(SimulacionBoardReq) returns (MensajeReply){}
 
   // (2)
-  rpc getSimulacionActual(EmptyReq) returns (SimulacionReply){}
-
-  // (3)
   rpc getLecturasSensores(EmptyReq) returns (stream LecturaSensoresReply) {}
 
   // Esta llamada se ejecuta al iniciar el servicio del board(raspberry)
   rpc sendMensajeEncendido (SaludoBoardReq)  returns (SaludoBoardReply) {}
+
+  // Esta llamada se ejecuta al terminar la ejecucion planeada
+  rpc sendMensajeTerminoEjecucion (AvisoTerminoEjecucionReq)  returns (EmptyReq) {}
 }
 
 
@@ -315,18 +315,23 @@ message EjecucionesReply {
 }
 
 message LecturaSensoresReply {
-  string nombre_simulacion = 1;
+  int64 id_simulacion = 1;
   string nombre_equipo = 2;
   double flujo_medido = 3;
   double tiempo_transcurrido = 4;
 }
 
-
 message SaludoBoardReq {
   int64 id_equipo = 1;
   string nombre_equipo = 2;
+  string direccion_ip_equipo = 3;
 }
 
 message SaludoBoardReply {
   EquipoEntity equipo = 1;
+}
+
+message AvisoTerminoEjecucionReq {
+  EquipoEntity equipo = 1;
+  double agua_caida = 2;
 }
