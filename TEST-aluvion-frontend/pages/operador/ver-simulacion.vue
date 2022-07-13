@@ -55,7 +55,7 @@
                 console.log("hola");
                 
             },
-            async sendSolicitudSimulacion(){
+            async sendSolicitudVerSimulacion(){
                 let solicitud = JSON.stringify({"nombreEquipo":this.equipoSeleccionado, "id":this.idSimulacionSeleccionada});
                 console.log(solicitud);
 
