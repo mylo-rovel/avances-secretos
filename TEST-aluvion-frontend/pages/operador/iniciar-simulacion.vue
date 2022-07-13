@@ -22,7 +22,6 @@
 
                 equiposDisponibles:[],
                 equipoSeleccionado: "",
-
                 idSimulacionSeleccionada:0,
 
                 // simulaciones: [],
@@ -40,79 +39,45 @@
             const url_to_fetch = `http://localhost:8081/api/simulaciones/`;
             const rawdata = await fetch(url_to_fetch, post_config).catch(err => err);
             const listaSimulacionesCrudas = await rawdata.json();
+
             this.equiposDisponibles = Object.keys(setListasDesplegables(listaSimulacionesCrudas));
             this.dictEquiposSimulaciones = {...setListasDesplegables(listaSimulacionesCrudas)};
 
-            // this.simulacionesDisponibles = setListasDesplegables(listaSimulacionesCrudas);
-            // this.listaIdsDisponibles = setListasDesplegables(listaSimulacionesCrudas)[this.equiposDisponibles]['listaIds'];
-            // console.log(this.equiposDisponibles);
+            //this.simulacionesDisponibles = setListasDesplegables(listaSimulacionesCrudas);
+            //this.equiposDisponibles = Object.keys(setListasDesplegables(listaSimulacionesCrudas));
+            //console.log(this.equiposDisponibles);
+            //console.log(listaSimulacionesCrudas);
             //console.log(setListasDesplegables(listaSimulacionesCrudas)[this.equiposDisponibles]['listaIds']);
+            //this.listaIdsDisponibles = setListasDesplegables(listaSimulacionesCrudas)[this.equiposDisponibles]['listaIds'];
             
-            // console.log(this.listaIdsDisponibles);
+            //console.log(this.listaIdsDisponibles);
            // console.log(Object.keys(setListasDesplegables(listaSimulacionesCrudas)));
             // this.simulacionesDisponibles = setListasDesplegables(listaSimulacionesCrudas)[this.equiposDisponibles];
             // console.log(this.simulacionesDisponibles);
             // console.log();
         },
 
+        
+
         methods: {
-            // async getSimulaciones ({$axios}){//enviar peticion
-            //     console.clear();
-            //     const serverPath = `${this.apiURL}/simulaciones`;
-            //     const serverResponse = await $axios.$get(serverPath).catch(err => err);
-            //     if (serverResponse instanceof Error) {
-            //         alert("ERROR. rayos :(", serverResponse)
-            //         return false;
-            //     }
-            //     console.log(serverResponse);
-            //     //this.simulaciones = serverResponse["simulacionAcotada_"];
-            //     return true;
-            // },
-
-            // //Metodo que llena las opciones del select con los id de simulaciones del equipo seleccionado
-            // getSimulacionesEquipo: function(){
-            //     var equipoActual = document.getElementById('select_equipoSimulacion').selectedIndex;
-            //     for(let i = 0; i < simulaciones.length; i++ ){
-            //         document.getElementById('select_idSimulacion').value = simulaciones[equipoActual].id_;
-            //     }
-            //     console.log();
-            // },
-
-            // //Metodo que muestra el nombre de la simulacion dada la seleccion de un id 
-            // displayNombreSimulacion: function() { 
-            //     var simulacionActual = document.getElementById('select_idSimulacion').selectedIndex;
-            //     document.getElementById('nombreSimulacion').value = this.simulaciones[simulacionActual].nombre_;
-            //     console.log(simulacionActual);
-            // },
-
             //Metodo que guarda el equipo seleccionada
             saveEquipo: function(equipoSeleccionado){
                 let opcionSeleccionada = document.getElementById('select_equipoSimulacion').selectedOptions[0].value;
                 this.simulacionesDisponibles = this.dictEquiposSimulaciones[opcionSeleccionada]["listaSimulaciones"];
                 this.listaIdsDisponibles = this.dictEquiposSimulaciones[opcionSeleccionada]["listaIds"];
                 return opcionSeleccionada;
+                console.log(opcionSeleccionada);
             },
 
-            // //Metodo que guarda la simulacion seleccionada
-            // saveSimulacion: function(idSimulacionSeleccionada){
-            //     let opcionSeleccionada = document.getElementById('select_idSimulacion').selectedOptions[0].value;
-            //     return opcionSeleccionada;
-            // },
+            //Metodo que guarda la simulacion seleccionada
+            saveSimulacion: function(simulacionSeleccionada){
+                simulacionSeleccionada = document.getElementById('select_idSimulacion');
+                let opcion = simulacionSeleccionada.selectedOptions[0].value;
+                console.log(opcion);
+                return opcion;
+            },
 
-    //         async fun(){
-    // //quiero acceder al id del equipo, ya que para enviar la peticion POST (abajo) necesito los id de equipo y simulacion
-    //             let equipo = this.equipoSeleccionado;
-    //             let n = this.simulacionesDisponibles;
-
-    //             console.log(n);
-    //             for(let i=0; i<this.equiposDisponibles.length;i++){
-    //                 if(equipo === 'equipoAcotado_'[i].nombre_){
-    //                     console.log('equipoAcotado_'[i].id_);
-    //                 }
-    //                 console.log("hola");
-    //             }
             
-    //         },
             
 
 //Metodo que enviar solicitud de iniciar simulacion SE TIENE QUE ENVIAR LA ID DEL EQUIPO Y SIMULACION , NO NOMBRES
@@ -126,8 +91,8 @@
                     'body': solicitud,
                     'authorization': tokenUsuario
                 };
-                // const respuesta = await fetch(`${this.urlApi}/simulaciones/`, POST_config);
-                // console.log(respuesta);
+                //const respuesta = await fetch(`${this.urlApi}/simulaciones/`, POST_config);
+                //console.log(respuesta);
             }
 
 
@@ -146,8 +111,6 @@
                 <div>
                     <div class="row my-4">
                         <h3>Iniciar Simulación</h3>
-                        <!--<button @click="sendSolicitudSimulacion()">aaa</button>
-                        <button @click="simus(simulaciones)">aaajjj</button>-->
                     </div>
                     <div class="row">
                         <form id="form_iniciarSimulacion" method="post">
@@ -159,6 +122,7 @@
                                     </select>
                                 </div>
                             </div>
+                           
                             <div class="my-4 form-group row">
                                 <label for="simulacion" class="col-sm-4 col-form-label" >Seleccione una simulación</label>
                                 <div  class="col-sm-6">
@@ -169,18 +133,13 @@
                                     </select>
                                 </div>
                             </div>
-                            <!--<div class="my-4 form-group row">
-                                <label for="simulacion" class="col-sm-4 col-form-label" >Nombre simulación</label>
-                                <div class="col-sm-6">
-                                    <input id="nombreSimulacion" name="nombre_simulacion" class="form-control" aria-label="Simulacion" required>
-                                </div>
-                            </div>-->
+
                             <div class = "row my-4 ">
                                 <div class= "col-12 contenido-botones my-4">
                                     <NuxtLink to="/operador/menu-operador"><CancelButtom :cancelbutton = "cancelbutton"/></NuxtLink>
                                 </div>                            
                                 <div class="col-12 contenido-botones my-4">    
-                                    <NuxtLink to=""><SubmitButton :submitbutton = "submitbutton" @click = "sendSolicitudSimulacion()"/></NuxtLink>
+                                    <NuxtLink to="/menu-operador"><SubmitButton :submitbutton = "submitbutton" @click = "sendSolicitudSimulacion()"/></NuxtLink>
                                 </div>
                             </div>
                         </form>
