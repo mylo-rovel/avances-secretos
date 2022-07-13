@@ -37,7 +37,7 @@ class SataBoardClient:
 
     def sendHelloWorldToCentralCore(self):
         nombreEquipo = venv_dict["NOMBRE_EQUIPO"]
-        direccionIpEquipo = 'f{venv_dict["BOARD_ADDRESS"]}:{venv_dict["BOARD_PORT"]}'
+        direccionIpEquipo = f'{venv_dict["BOARD_ADDRESS"]}:{venv_dict["BOARD_PORT"]}'
         serverResponse = self.stub.sendMensajeEncendido(
             ReqResModule.SaludoBoardReq(
                 nombre_equipo = nombreEquipo,

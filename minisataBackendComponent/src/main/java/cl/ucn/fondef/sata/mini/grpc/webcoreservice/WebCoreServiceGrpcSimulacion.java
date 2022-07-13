@@ -187,7 +187,7 @@ public class WebCoreServiceGrpcSimulacion {
 
         // SI NO ESTA DENTRO DEL HASHMAP DE EQUIPOS DISPONIBLES, LO AGREGAMOS
         if (!(ejecucionesEquipo.containsKey(saludoBoardReq.getNombreEquipo()))){
-            InformacionBoard informacionBoardNueva = new InformacionBoard("localhost:50050");
+            InformacionBoard informacionBoardNueva = new InformacionBoard(saludoBoardReq.getDireccionIpEquipo());
             ejecucionesEquipo.put(equipoGuardadoDB.getNombre(), informacionBoardNueva);
         }
 
