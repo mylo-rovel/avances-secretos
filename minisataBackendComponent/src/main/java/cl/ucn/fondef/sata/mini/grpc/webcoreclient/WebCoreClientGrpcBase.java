@@ -31,6 +31,9 @@ public class WebCoreClientGrpcBase {
      * The Stub.
      */
     protected final WebCoreCommuServiceGrpc.WebCoreCommuServiceBlockingStub stub = WebCoreCommuServiceGrpc.newBlockingStub(this.channel);
+    /**
+     * The Async stub.
+     */
     protected final WebCoreCommuServiceGrpc.WebCoreCommuServiceStub asyncStub = WebCoreCommuServiceGrpc.newStub(this.channel);;
 
 }

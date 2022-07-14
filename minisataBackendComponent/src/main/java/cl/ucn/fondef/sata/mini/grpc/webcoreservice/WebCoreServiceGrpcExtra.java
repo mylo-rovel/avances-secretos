@@ -24,6 +24,9 @@ public class WebCoreServiceGrpcExtra {
     @Autowired
     private CoreDaoUsuario coreDaoUsuario;
 
+    /**
+     * The String enum transformer.
+     */
     @Autowired
     StringEnumTransformer stringEnumTransformer;
 
@@ -50,6 +53,13 @@ public class WebCoreServiceGrpcExtra {
         }
     }
 
+    /**
+     * Get registros domain . registros reply.
+     *
+     * @param rutEntityReq     the rut entity req
+     * @param responseObserver the response observer
+     * @return the domain . registros reply
+     */
     public Domain.RegistrosReply getRegistros(Domain.RutEntityReq rutEntityReq, StreamObserver<Domain.RegistrosReply> responseObserver){
         List<Registro> listaRegistros = coreDaoExtra.getRegistros(rutEntityReq);
         Domain.RegistrosReply.Builder grpcResponse = Domain.RegistrosReply.newBuilder();

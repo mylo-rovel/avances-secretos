@@ -109,10 +109,10 @@ public class StringEnumTransformer {
 
 
     /**
-     * Gets enum placa pin.
+     * Gets enum tipo placa.
      *
      * @param stringEvaluar the string evaluar
-     * @return the enum placa pin
+     * @return the enum tipo placa
      */
     public Domain.TipoPlaca getEnumTipoPlaca(String stringEvaluar) {
         switch (stringEvaluar){

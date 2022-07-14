@@ -5,8 +5,18 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Arrays;
 
+/**
+ * The type Bytes chunker.
+ */
 public final class BytesChunker {
-    // Queremos obtener un array de arrays (chunks de bytes) de maximo 4194304 bytes cada uno
+    /**
+     * Get bytes chunks array byte [ ] [ ].
+     *
+     * @param fileToChunk the file to chunk
+     * @return the byte [ ] [ ]
+     * @throws IOException the io exception
+     */
+// Queremos obtener un array de arrays (chunks de bytes) de maximo 4194304 bytes cada uno
     // El objetivo es evitar este error:
     // RESOURCE_EXHAUSTED: gRPC message exceeds maximum size 4194304: ...
     public static byte[][] getBytesChunksArray (MultipartFile fileToChunk) throws IOException {

@@ -36,6 +36,9 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
     @PersistenceContext
     private EntityManager entityManager;
 
+    /**
+     * The Core dao usuario.
+     */
     @Autowired
     CoreDaoUsuario coreDaoUsuario;
 

@@ -7,6 +7,9 @@ import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
+/**
+ * The type Core board service grpc.
+ */
 @Slf4j
 @GrpcService
 public class CoreBoardServiceGrpcImpl extends CoreBoardCommuServiceGrpc.CoreBoardCommuServiceImplBase{

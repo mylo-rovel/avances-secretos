@@ -35,9 +35,15 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
     @PersistenceContext
     private EntityManager entityManager;
 
+    /**
+     * The Core dao equipo.
+     */
     @Autowired
     CoreDaoEquipoImpl coreDaoEquipo;
 
+    /**
+     * The Core dao usuario.
+     */
     @Autowired
     CoreDaoUsuario coreDaoUsuario;
 
@@ -238,7 +244,7 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
             return "Error al intentar conectar con la placa";
         }
         return "Simulacion iniciada. IdEjecucion" + ejecucionNueva.getId()
-                + "Mensaje board:\n" + mensajeBoard.getMensajeTexto();
+                + "Mensaje board:" + mensajeBoard.getMensajeTexto();
     }
 
 

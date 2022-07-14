@@ -24,6 +24,9 @@ import java.util.List;
 @Service
 public class WebCoreServiceGrpcSimulacion {
 
+    /**
+     * The Ejecuciones equipo.
+     */
     public final HashMap<String, InformacionBoard> ejecucionesEquipo = new HashMap<>();
 
     @Autowired
@@ -51,6 +54,14 @@ public class WebCoreServiceGrpcSimulacion {
                 .setDescripcionEquipo(equipoAsociado.getDescripcion())
                 .addAllSecuencia(secuenciasGrpcEnviar);
     }
+
+    /**
+     * Get simulacion domain . simulacion reply.
+     *
+     * @param idElementoConRutReq the id elemento con rut req
+     * @param responseObserver    the response observer
+     * @return the domain . simulacion reply
+     */
     public Domain.SimulacionReply getSimulacion(Domain.IdElementoConRutReq idElementoConRutReq, StreamObserver<Domain.SimulacionReply> responseObserver){
         // idElementoConRutReq => id (long) de la simulacion y rut del operador
         Domain.IdElementoReq idSimulacionReq = Domain.IdElementoReq.newBuilder().setId(idElementoConRutReq.getId()).build();
@@ -69,8 +80,13 @@ public class WebCoreServiceGrpcSimulacion {
     }
 
 
-
-
+    /**
+     * Get simulaciones domain . simulaciones reply.
+     *
+     * @param rutEntityReq     the rut entity req
+     * @param responseObserver the response observer
+     * @return the domain . simulaciones reply
+     */
     public Domain.SimulacionesReply getSimulaciones(Domain.RutEntityReq rutEntityReq, StreamObserver<Domain.SimulacionesReply> responseObserver){
         List<Simulacion> listaSimuGuardadas = coreDaoSimulacion.getSimulaciones();
         Domain.SimulacionesReply.Builder listaRetornar = Domain.SimulacionesReply.newBuilder();
@@ -92,16 +108,27 @@ public class WebCoreServiceGrpcSimulacion {
     }
 
 
-
-
-    // rpc addSecuencias(SecuenciasReq)  returns (MensajeReply){}
+    /**
+     * Add simulacion domain . mensaje reply.
+     *
+     * @param simulacionReq    the simulacion req
+     * @param responseObserver the response observer
+     * @return the domain . mensaje reply
+     */
+// rpc addSecuencias(SecuenciasReq)  returns (MensajeReply){}
     public Domain.MensajeReply addSimulacion(Domain.SimulacionReq simulacionReq, StreamObserver<Domain.MensajeReply> responseObserver){
         String mensajeResultado = coreDaoSimulacion.addSimulacion(simulacionReq);
         return Domain.MensajeReply.newBuilder().setMensajeTexto(mensajeResultado).build();
     }
 
 
-
+    /**
+     * Gets ejecucion.
+     *
+     * @param idElementoConRutReq the id elemento con rut req
+     * @param responseObserver    the response observer
+     * @return the ejecucion
+     */
 //    rpc getEjecucion(IdElementoReq) returns (EjecucionReply){}
     public Domain.EjecucionReply getEjecucion(Domain.IdElementoConRutReq idElementoConRutReq, StreamObserver<Domain.EjecucionReply> responseObserver) {
         Domain.IdElementoReq idSimulacionReq = Domain.IdElementoReq.newBuilder().setId(idElementoConRutReq.getId()).build();
@@ -151,6 +178,13 @@ public class WebCoreServiceGrpcSimulacion {
         }
     }
 
+    /**
+     * Gets ejecuciones.
+     *
+     * @param rutEntityReq     the rut entity req
+     * @param responseObserver the response observer
+     * @return the ejecuciones
+     */
 //    rpc getEjecuciones(EmptyReq) returns (EjecucionesReply){}
     public Domain.EjecucionesReply getEjecuciones(Domain.RutEntityReq rutEntityReq, StreamObserver<Domain.EjecucionesReply> responseObserver) {
         List<Ejecucion> listaEjecuciones = coreDaoSimulacion.getEjecucionesDB();
@@ -160,8 +194,13 @@ public class WebCoreServiceGrpcSimulacion {
     }
 
 
-
-
+    /**
+     * Start simulacion domain . mensaje reply.
+     *
+     * @param startSimulacionReq the start simulacion req
+     * @param responseObserver   the response observer
+     * @return the domain . mensaje reply
+     */
     public Domain.MensajeReply startSimulacion(Domain.StartSimulacionReq startSimulacionReq, StreamObserver<Domain.MensajeReply> responseObserver){
         // le pasamos el hashmap ejecucionesEquipo a la funcion para que podamos recuperar de la estructura
         // el objeto de informacion de cierto equipo en segun del nombre enviado por el frontend
@@ -172,8 +211,14 @@ public class WebCoreServiceGrpcSimulacion {
     }
 
 
-
-    // --------------- RESPUESTA A LA LLAMADA 'sendMensajeEncendido(SaludoBoardReq)' -------------
+    /**
+     * Send mensaje encendido domain . saludo board reply.
+     *
+     * @param saludoBoardReq   the saludo board req
+     * @param responseObserver the response observer
+     * @return the domain . saludo board reply
+     */
+// --------------- RESPUESTA A LA LLAMADA 'sendMensajeEncendido(SaludoBoardReq)' -------------
     // ESTA FUNCION ES EJECUTADA DESDE EL 'CoreBoardServiceGrpcImpl'
     // cuando el raspberry es enchufado, envía una llamada al central core y el 'CoreBoardServiceGrpcImpl'
     // responde esas peticiones (es el encargado de la comunicacion CentralCore <--> Raspberry)
@@ -206,6 +251,13 @@ public class WebCoreServiceGrpcSimulacion {
         return equipoEnviar;
     }
 
+    /**
+     * Get equipos trabajando domain . equipos entity reply.
+     *
+     * @param emptyReq       the empty req
+     * @param streamObserver the stream observer
+     * @return the domain . equipos entity reply
+     */
     public Domain.EquiposEntityReply getEquiposTrabajando(Domain.EmptyReq emptyReq, StreamObserver<Domain.EquiposEntityReply> streamObserver){
 
         //construir un equiposEntityReply, utilizar la funcion setKey de ejecucionesEquipo para retornar todos los nombres de los

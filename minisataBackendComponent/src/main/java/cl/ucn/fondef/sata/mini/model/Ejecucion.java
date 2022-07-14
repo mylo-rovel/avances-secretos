@@ -8,6 +8,9 @@ import lombok.ToString;
 import javax.persistence.*;
 
 
+/**
+ * The type Ejecucion.
+ */
 @Entity
 @Table(name = "ejecucion")
 @ToString

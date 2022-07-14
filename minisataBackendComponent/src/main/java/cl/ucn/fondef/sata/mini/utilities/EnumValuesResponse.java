@@ -29,9 +29,9 @@ public class EnumValuesResponse {
     /**
      * Add enum list.
      *
-     * @param <ArrayEnum>        the type parameter
-     * @param nombreEnum the nombre enum
-     * @param enumArr    the enum arr
+     * @param <ArrayEnum> the type parameter
+     * @param nombreEnum  the nombre enum
+     * @param enumArr     the enum arr
      */
     public <ArrayEnum> void addEnumList(String nombreEnum, ArrayEnum[] enumArr){
         EnumValuesItem enumValuesItemList = new EnumValuesItem();
