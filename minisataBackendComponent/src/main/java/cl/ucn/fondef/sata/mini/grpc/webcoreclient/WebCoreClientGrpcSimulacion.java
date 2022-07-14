@@ -80,7 +80,9 @@ public final class WebCoreClientGrpcSimulacion extends WebCoreClientGrpcBase {
      * @return the simulacion actual
      */
     public String getEquiposTrabajando() {
-        return "";
+        Domain.EmptyReq emptyReq = Domain.EmptyReq.newBuilder().build();
+        Domain.EquiposEntityReply serverResponse = this.stub.getEquiposTrabajando(emptyReq);
+        return this.gson.toJson(serverResponse);
     }
 
     public String getEjecucion(long idEjecucion, String rut) {
