@@ -109,9 +109,9 @@ public final class WebCoreClientGrpcSimulacion extends WebCoreClientGrpcBase {
      * @return the ejecucion
      */
     public String getEjecucion(long idEjecucion, String rut) {
-        Domain.IdElementoConRutReq idElementoConRutReq = Domain.IdElementoConRutReq.newBuilder()
+        Domain.IdElementoConRutReq idEjecucionConRutReq = Domain.IdElementoConRutReq.newBuilder()
                 .setId( idEjecucion ).setRut(rut).build();
-        Domain.EjecucionReply serverResponse = this.stub.getEjecucion(idElementoConRutReq);
+        Domain.EjecucionReply serverResponse = this.stub.getEjecucion(idEjecucionConRutReq);
         return this.gson.toJson(serverResponse);
     }
 

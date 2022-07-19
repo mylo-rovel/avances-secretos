@@ -23,9 +23,8 @@ public class CoreBoardServiceGrpcImpl extends CoreBoardCommuServiceGrpc.CoreBoar
 
     @Override
     public void sendMensajeEncendido(Domain.SaludoBoardReq saludoBoardReq, StreamObserver<Domain.SaludoBoardReply> responseObserver){
-        log.info("\n\nSaludo recibido desde el equipo: " + saludoBoardReq.getNombreEquipo() + "\n");
+        log.info("\n\nSaludo recibido desde el equipo: " + saludoBoardReq.getNombreEquipo());
         Domain.SaludoBoardReply grpcResponse = webCoreServiceGrpcSimulacion.sendMensajeEncendido(saludoBoardReq, responseObserver);
-        log.info("ejecucionesEquipo en grpc.CoreBoardServiceGrpcImpl = " + webCoreServiceGrpcSimulacion.ejecucionesEquipo + "\n\n");
         responseObserver.onNext(grpcResponse);
         responseObserver.onCompleted();
     }

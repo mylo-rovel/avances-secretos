@@ -10,14 +10,18 @@ import "domain.proto";
 // y el Componente Raspi para manejar el hardware
 service CoreBoardCommuService {
   // (1)
+  // cliente: central core
   rpc startSimulacion(SimulacionBoardReq) returns (MensajeReply){}
 
   // (2)
-  rpc getLecturasSensores(EmptyReq) returns (stream LecturaSensoresReply) {}
+  // cliente: raspberry
+  rpc sendLecturasSensores(stream LecturaSensoresReply) returns (EmptyReq) {}
 
   // Esta llamada se ejecuta al iniciar el servicio del board(raspberry)
+  // cliente: raspberry
   rpc sendMensajeEncendido (SaludoBoardReq)  returns (SaludoBoardReply) {}
 
   // Esta llamada se ejecuta al terminar la ejecucion planeada
+  // cliente: raspberry
   rpc sendMensajeTerminoEjecucion (AvisoTerminoEjecucionReq)  returns (EmptyReq) {}
 }

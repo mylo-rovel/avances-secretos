@@ -73,4 +73,7 @@
     cursor: pointer;
     height:min-content;
   }
+  .container-fluid {
+    background-color: rgb(33,37,41);
+  }
 </style>

@@ -125,20 +125,29 @@ public class WebCoreServiceGrpcSimulacion {
     /**
      * Gets ejecucion.
      *
-     * @param idElementoConRutReq the id elemento con rut req
+     * @param idEjecucionConRutReq the id elemento con rut req
      * @param responseObserver    the response observer
      * @return the ejecucion
      */
 //    rpc getEjecucion(IdElementoReq) returns (EjecucionReply){}
-    public Domain.EjecucionReply getEjecucion(Domain.IdElementoConRutReq idElementoConRutReq, StreamObserver<Domain.EjecucionReply> responseObserver) {
-        Domain.IdElementoReq idSimulacionReq = Domain.IdElementoReq.newBuilder().setId(idElementoConRutReq.getId()).build();
+    public Domain.EjecucionReply getEjecucion(Domain.IdElementoConRutReq idEjecucionConRutReq, StreamObserver<Domain.EjecucionReply> responseObserver) {
+        Domain.IdElementoReq idEjecucionReq = Domain.IdElementoReq.newBuilder().setId(idEjecucionConRutReq.getId()).build();
+        Ejecucion ejecucionDB = coreDaoSimulacion.getEjecucionDB(idEjecucionReq);
+        if (ejecucionDB == null) {
+            log.warn("Ejecucion de id "+idEjecucionReq.getId()+" no existe");
+            return Domain.EjecucionReply.newBuilder().build();
+        }
+
+        Domain.IdElementoReq idSimulacionReq = Domain.IdElementoReq.newBuilder().setId(ejecucionDB.getIdSimulacion()).build();
         Simulacion simulacionDB = coreDaoSimulacion.getSimulacionDB(idSimulacionReq);
-        Ejecucion ejecucionDB = coreDaoSimulacion.getEjecucionDB(idSimulacionReq);
+        if (simulacionDB == null) {
+            log.warn("Simulacion de id "+idSimulacionReq.getId()+" no existe");
+            return Domain.EjecucionReply.newBuilder().build();
+        }
+
         List<Domain.Secuencia> listaSecuenciasGrpc = coreDaoSimulacion.getGrpcSecuenciasSimulacion(idSimulacionReq);
-
-        if (simulacionDB == null || ejecucionDB == null) { return Domain.EjecucionReply.newBuilder().build(); }
-
-        Domain.IdElementoConRutReq idSimulacionConRutReq = Domain.IdElementoConRutReq.newBuilder().setId( simulacionDB.getIdEquipo() ).setRut( idElementoConRutReq.getRut() ).build();
+        Domain.IdElementoConRutReq idSimulacionConRutReq = Domain.IdElementoConRutReq.newBuilder()
+                .setId( simulacionDB.getIdEquipo() ).setRut( idEjecucionConRutReq.getRut() ).build();
         Equipo equipoDB = coreDaoEquipo.getEquipo(idSimulacionConRutReq);
 
         return Domain.EjecucionReply.newBuilder()
@@ -229,14 +238,22 @@ public class WebCoreServiceGrpcSimulacion {
         //que sera construido en esta funcion
         // BUSCAMOS EL EQUIPO PARA QUE EL RASPBERRY OBTENGA LA CONFIGURACION GUARDADA EN LA DB
         Equipo equipoGuardadoDB = coreDaoEquipo.getEquipoPorNombre(saludoBoardReq.getNombreEquipo());
-        if (equipoGuardadoDB == null) {return Domain.SaludoBoardReply.newBuilder().build();}
+        if (equipoGuardadoDB == null) {
+            log.warn("El equipo no existe en la DB");
+            return Domain.SaludoBoardReply.newBuilder().setRespuestaSaludo("Equipo no existente").build();
+        }
         log.info("EQUIPO ENCENDIDO");
         log.info("equipo = " + equipoGuardadoDB);
 
+        InformacionBoard informacionBoardNueva = new InformacionBoard(saludoBoardReq.getDireccionIpEquipo());
         // SI NO ESTA DENTRO DEL HASHMAP DE EQUIPOS DISPONIBLES, LO AGREGAMOS
         if (!(ejecucionesEquipo.containsKey(saludoBoardReq.getNombreEquipo()))){
-            InformacionBoard informacionBoardNueva = new InformacionBoard(saludoBoardReq.getDireccionIpEquipo());
             ejecucionesEquipo.put(equipoGuardadoDB.getNombre(), informacionBoardNueva);
+        }
+        // Y SI ESTÁ, ACTUALIZAMOS SU IP POR CAMBIA SU VALOR EN EL ARCHIVO .env
+        else {
+            InformacionBoard entradaEquipoOLD = ejecucionesEquipo.get(equipoGuardadoDB.getNombre());
+            entradaEquipoOLD.setCoreBoardClient(informacionBoardNueva.getCoreBoardClient());
         }
 
         //aqui esta el proceso de convertir equipoGuardadoDB a un equipoEntity para enviarlo
@@ -245,8 +262,9 @@ public class WebCoreServiceGrpcSimulacion {
         webCoreServiceGrpcEquipo.addPlacasToEquipo(equipoEnte, idEquipoReq);
         webCoreServiceGrpcEquipo.addComponentesYPinesToEquipo(equipoEnte,idEquipoReq);
 
-        Domain.SaludoBoardReply equipoEnviar = Domain.SaludoBoardReply.newBuilder().setEquipo(equipoEnte.build()).build();
-        //Domain.SaludoBoardReply equipoEnviar = Domain.SaludoBoardReply.newBuilder().build();
+        Domain.SaludoBoardReply equipoEnviar = Domain.SaludoBoardReply.newBuilder()
+                .setRespuestaSaludo("EXITO EN LA OPERACION")
+                .setEquipo(equipoEnte.build()).build();
 
         return equipoEnviar;
     }
@@ -262,15 +280,15 @@ public class WebCoreServiceGrpcSimulacion {
 
         //construir un equiposEntityReply, utilizar la funcion setKey de ejecucionesEquipo para retornar todos los nombres de los
         //equipos del hashmap
-
         Domain.EquiposEntityReply.Builder equiposEnviar = Domain.EquiposEntityReply.newBuilder();
         for(String nombreEquipo : ejecucionesEquipo.keySet()){
             if(ejecucionesEquipo.get(nombreEquipo).isEstaEjecutandose()){
-                Equipo equipo = coreDaoEquipo.getEquipoPorNombre(nombreEquipo);
+//                Equipo equipo = coreDaoEquipo.getEquipoPorNombre(nombreEquipo);
                 Domain.EquipoEntityAcotado equipoAgregar = Domain.EquipoEntityAcotado.newBuilder()
-                        .setId(equipo.getId())
-                        .setNombre(equipo.getNombre())
-                        .setEstado(Domain.EstadoEquipo.valueOf(equipo.getEstado()))
+//                        .setId(equipo.getId())
+//                        .setNombre(equipo.getNombre())
+//                        .setEstado(Domain.EstadoEquipo.valueOf(equipo.getEstado()))
+                        .setNombre(nombreEquipo)
                         .build();
                 equiposEnviar.addEquipoAcotado(equipoAgregar);
             }

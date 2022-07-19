@@ -27,12 +27,12 @@ public class Ejecucion {
     @Getter
     @Setter
     @Column(name = "id_simulacion")
-    private Long idSimulacion;
+    private long idSimulacion;
 
     @Getter
     @Setter
     @Column(name = "agua_caida")
-    private Double aguaCaida;
+    private double aguaCaida;
 
     @Getter
     @Setter

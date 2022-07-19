@@ -452,7 +452,7 @@ public class WebController {
      */
 // ***---- IMPLEMENTAR ----
     //   rpc getEquiposTrabajando(EmptyReq) returns (EquiposEntityReply){}
-    @RequestMapping(value = "api/ejecuciones/actual/", method = RequestMethod.GET)
+    @RequestMapping(value = "api/equipos/trabajando", method = RequestMethod.GET)
     public String getEquiposTrabajando(@RequestHeader(value="Authorization") String jwt) {
         if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();

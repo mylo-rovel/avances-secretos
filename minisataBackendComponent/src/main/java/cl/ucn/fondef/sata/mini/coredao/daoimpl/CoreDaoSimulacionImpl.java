@@ -162,10 +162,10 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
 
 
     @Override
-    public Ejecucion getEjecucionDB(Domain.IdElementoReq idSimulacionReq) {
-        String sqlQuery = "SELECT ejecucion FROM Ejecucion as ejecucion WHERE ejecucion.idSimulacion = :idSimulacion";
+    public Ejecucion getEjecucionDB(Domain.IdElementoReq idEjecucionReq) {
+        String sqlQuery = "SELECT ejecucion FROM Ejecucion as ejecucion WHERE ejecucion.id = :idEjecucion";
         List listaResultado = entityManager.createQuery(sqlQuery)
-                .setParameter("idSimulacion", idSimulacionReq.getId()).getResultList();
+                .setParameter("idEjecucion", idEjecucionReq.getId()).getResultList();
         if(listaResultado.isEmpty()) {
             log.warn("getEjecucionDB: La lista no contiene elementos");
             return null;
@@ -197,7 +197,7 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
         }
         return listaResultado;
     }
-    private void addMultiEjecucionSecuencia(long idEjecucion, Domain.IdElementoReq idSimulacionReq) {
+    private void saveIntoDBMultiEjecucionSecuencia(long idEjecucion, Domain.IdElementoReq idSimulacionReq) {
         List<Secuencia> listaIdsSecuencias = this.getListaIdsSecuencias(idSimulacionReq);
         if (listaIdsSecuencias != null) {
             for (int i = 0; i < listaIdsSecuencias.size(); i++) {
@@ -223,7 +223,7 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
         ejecucionNueva.setAguaCaida(0.0);
         entityManager.persist(ejecucionNueva);
         long idEjecucion = ejecucionNueva.getId();
-        this.addMultiEjecucionSecuencia(idEjecucion, idSimulacionReq);
+        this.saveIntoDBMultiEjecucionSecuencia(idEjecucion, idSimulacionReq);
 
         // PREPARAR LAS SECUENCIAS A ENVIAR AL RASPI
         List<Domain.Secuencia> listaSecuenciasGrpc = this.getGrpcSecuenciasSimulacion(idSimulacionReq);

@@ -45,18 +45,3 @@ class SataBoardClient:
         ))
         print("Saludo enviado")
         return None
-
-
-# def run():
-#     # NOTE(gRPC Python Team): .close() is possible on a channel and should be
-#     # used in circumstances in which the with statement does not fit the needs
-#     # of the code.
-
-#     with grpc.insecure_channel(f'{venv_dict["SERVER_ADDRESS"]}:{venv_dict["PORT"]}') as channel:
-#         # stub is the client object
-#         stub = ClientServerModule.CoreBoardCommuServiceStub(channel)
-#         sendHelloWorldToCentralCore(stub)
-
-# if __name__ == '__main__':
-#     logging.basicConfig()
-#     run()

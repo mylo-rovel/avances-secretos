@@ -312,9 +312,8 @@ message LecturaSensoresReply {
 }
 
 message SaludoBoardReq {
-  int64 id_equipo = 1;
-  string nombre_equipo = 2;
-  string direccion_ip_equipo = 3;
+  string nombre_equipo = 1;
+  string direccion_ip_equipo = 2;
 }
 
 message SaludoBoardReply {

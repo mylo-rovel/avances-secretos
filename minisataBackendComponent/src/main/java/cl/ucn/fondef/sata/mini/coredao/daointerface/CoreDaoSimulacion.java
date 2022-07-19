@@ -52,10 +52,10 @@ public interface CoreDaoSimulacion {
     /**
      * Gets ejecucion db.
      *
-     * @param idSimulacionReq the id simulacion req
+     * @param idEjecucionReq the id ejecucion req
      * @return the ejecucion db
      */
-    Ejecucion getEjecucionDB(Domain.IdElementoReq idSimulacionReq);
+    Ejecucion getEjecucionDB(Domain.IdElementoReq idEjecucionReq);
 
     /**
      * Gets ejecuciones db.

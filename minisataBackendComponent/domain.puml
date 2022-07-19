@@ -3,37 +3,40 @@ left to right direction
 
 interface MiniSataWeb <<services>> {
     + authenticate(login, password): Usuario
-    + addUsuario(usuario): Usuario
-    + updateUsuario(usuario): Usuario
+    + addUsuario(usuario): String
+    + updateUsuario(usuario): String
     + getUsuario(rut): Usuario
     + getUsuarios(): List<Usuario>
     ..
-    + addEquipo(equipo): Equipo
-    + updateEquipo(equipo): Equipo
-    + getEquipo(id): Equipo
-    + getEquipos(): List<Equipo>
-    + uploadArchivo(archivo, id): Archivo
-    + getArchivos(id): List<Archivo>
+    + addEquipo(equipo): String
+    + updateEquipo(equipo): String
+    + getEquipo(id, rut): Equipo
+    + getEquipos(rut): List<Equipo>
     + getValvulasEquipo(id): List<Actuador>
+    + uploadArchivo(archivo, id): String
+    + getArchivos(id): List<Archivo>
+    + getEquiposTrabajando(): List<Equipo>
     ..
-    + getSimulaciones(): List<Simulacion>
-    + getSimulacion(id): Simulacion
+    + addSimulacion(simulacion): String
+    + getSimulacion(id, rut): Simulacion
+    + getSimulaciones(rut): List<Simulacion>
+    + getSecuenciasComponente(id): List<Secuencia>
+    + getEjecucion(id, rut): Ejecucion
+    + getEjecuciones(rut): List<Ejecucion>
+    + startSimulacion(simulacion): Simulacion
     ..
     + getRegistros(rut): Registro
-    ..
-    + startSimulacion(simulacion): Simulacion
-    + getSimulacionActual(idEquipo): Simulacion
     + getLecturaSensores(idEquipo): Simulacion
+    ..
 }
 
 interface MiniSataBoard <<services>> {
     /'+ retrieveComponente(id): Componente
     ..'/
-    + startSimulacion(simulacion): Simulacion
-    + getSimulacionActual(): Simulacion
+    + startSimulacion(simulacion): String
     + getLecturasSensores(): Simulacion
-    ..
-    + sendMensajeEncendido(): String
+    + sendMensajeEncendido(nombreEquipo, ipEquipo): String
+    + sendMensajeTerminoEjecucion(equipo, aguaCaida): Null
 
 }
 
@@ -210,12 +213,15 @@ Componente <|-- Actuador
 Actuador *--> "1" TipoActuador: tipo
 Sensor *--> "1" TipoSensor: tipo
 
-Actuador --> "1" Secuencia: secuencia
 Secuencia --> "* {sorted}" Evento: evento
+'
+'Simulacion *--> "*" Componente: componentes
+'Actuador --> "1" Secuencia: secuencia
+Simulacion *--> "*" Secuencia: secuencias
+Actuador *--> "*" Secuencia: secuencias
 
-Simulacion *--> "*" Componente: componentes
 Simulacion --> "*" Ejecucion: ejecuciones
-Ejecucion o--> "*" Evento: eventos
+Ejecucion "*"<-->"*" Secuencia: eventos
 
 Registro *--> "1" Usuario: usuario
 Registro *--> "1" TipoRegistro: tipo
