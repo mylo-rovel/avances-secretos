@@ -21,10 +21,10 @@ class CoreBoardCommuServiceStub(object):
                 request_serializer=coreBoardCommuService__pb2.SimulacionBoardReq.SerializeToString,
                 response_deserializer=coreBoardCommuService__pb2.MensajeReply.FromString,
                 )
-        self.getLecturasSensores = channel.unary_stream(
-                '/CoreBoardCommuService/getLecturasSensores',
-                request_serializer=coreBoardCommuService__pb2.EmptyReq.SerializeToString,
-                response_deserializer=coreBoardCommuService__pb2.LecturaSensoresReply.FromString,
+        self.sendLecturasSensores = channel.stream_unary(
+                '/CoreBoardCommuService/sendLecturasSensores',
+                request_serializer=coreBoardCommuService__pb2.LecturaSensoresReply.SerializeToString,
+                response_deserializer=coreBoardCommuService__pb2.EmptyReq.FromString,
                 )
         self.sendMensajeEncendido = channel.unary_unary(
                 '/CoreBoardCommuService/sendMensajeEncendido',
@@ -45,13 +45,15 @@ class CoreBoardCommuServiceServicer(object):
 
     def startSimulacion(self, request, context):
         """(1)
+        cliente: central core
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def getLecturasSensores(self, request, context):
+    def sendLecturasSensores(self, request_iterator, context):
         """(2)
+        cliente: raspberry
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -59,6 +61,7 @@ class CoreBoardCommuServiceServicer(object):
 
     def sendMensajeEncendido(self, request, context):
         """Esta llamada se ejecuta al iniciar el servicio del board(raspberry)
+        cliente: raspberry
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -66,6 +69,7 @@ class CoreBoardCommuServiceServicer(object):
 
     def sendMensajeTerminoEjecucion(self, request, context):
         """Esta llamada se ejecuta al terminar la ejecucion planeada
+        cliente: raspberry
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -79,10 +83,10 @@ def add_CoreBoardCommuServiceServicer_to_server(servicer, server):
                     request_deserializer=coreBoardCommuService__pb2.SimulacionBoardReq.FromString,
                     response_serializer=coreBoardCommuService__pb2.MensajeReply.SerializeToString,
             ),
-            'getLecturasSensores': grpc.unary_stream_rpc_method_handler(
-                    servicer.getLecturasSensores,
-                    request_deserializer=coreBoardCommuService__pb2.EmptyReq.FromString,
-                    response_serializer=coreBoardCommuService__pb2.LecturaSensoresReply.SerializeToString,
+            'sendLecturasSensores': grpc.stream_unary_rpc_method_handler(
+                    servicer.sendLecturasSensores,
+                    request_deserializer=coreBoardCommuService__pb2.LecturaSensoresReply.FromString,
+                    response_serializer=coreBoardCommuService__pb2.EmptyReq.SerializeToString,
             ),
             'sendMensajeEncendido': grpc.unary_unary_rpc_method_handler(
                     servicer.sendMensajeEncendido,
@@ -124,7 +128,7 @@ class CoreBoardCommuService(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def getLecturasSensores(request,
+    def sendLecturasSensores(request_iterator,
             target,
             options=(),
             channel_credentials=None,
@@ -134,9 +138,9 @@ class CoreBoardCommuService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_stream(request, target, '/CoreBoardCommuService/getLecturasSensores',
-            coreBoardCommuService__pb2.EmptyReq.SerializeToString,
-            coreBoardCommuService__pb2.LecturaSensoresReply.FromString,
+        return grpc.experimental.stream_unary(request_iterator, target, '/CoreBoardCommuService/sendLecturasSensores',
+            coreBoardCommuService__pb2.LecturaSensoresReply.SerializeToString,
+            coreBoardCommuService__pb2.EmptyReq.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
