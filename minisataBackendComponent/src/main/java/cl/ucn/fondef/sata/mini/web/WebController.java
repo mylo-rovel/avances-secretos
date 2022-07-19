@@ -9,21 +9,22 @@ import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoUsuario;
 import cl.ucn.fondef.sata.mini.grpc.Domain;
 import cl.ucn.fondef.sata.mini.grpc.webcoreclient.*;
 import cl.ucn.fondef.sata.mini.model.Usuario;
-import cl.ucn.fondef.sata.mini.utilities.BytesChunker;
 import cl.ucn.fondef.sata.mini.utilities.EnumValuesResponse;
+import cl.ucn.fondef.sata.mini.utilities.webrequests.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import cl.ucn.fondef.sata.mini.utilities.JwtUtil;
-import cl.ucn.fondef.sata.mini.grpcobjects.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
 
+/**
+ * The type Web controller.
+ */
 @Slf4j
 @RestController
-//@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600, methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PATCH} )
 @CrossOrigin(origins = "*", maxAge = 3600, methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PATCH} )
 public class WebController {
     // ESTE SERVIDOR ES EL PUENTE ENTRE EL WEBBROWSER Y EL "CENTRAL CORE"
@@ -55,32 +56,46 @@ public class WebController {
         return jwtUtil.getKey(jsonwebtoken);
     }
 
-     private boolean tokenEsValido(String jsonwebtoken) {
+     private boolean tokenEsInvalido(String jsonwebtoken) {
         try {
-            if (jsonwebtoken == null) {return false;}
-            // si al obtener la llave del token (el correo) se retorna null, entonces el token está malo
-            return jwtUtil.getKey(jsonwebtoken) != null;
+            if (jsonwebtoken == null) {return true;}
+            // si al obtener la llave del token (el rut) se retorna null, entonces el token está malo
+            return jwtUtil.getKey(jsonwebtoken) == null;
         }
         catch (Exception ex) {
             log.warn("Error al validar el token");
             log.warn(ex.getMessage());
-            return false;
+            return true;
         }
      }
 
-    // ---- USUARIOS ----------------------------------------------------------------------------------------
-    // rpc authenticate(CredencialesEntityReq) returns (SesionEntityReply){}
+    /**
+     * Authenticate string.
+     *
+     * @param credenciales the credenciales
+     * @return the string
+     */
+// ---- USUARIOS ----------------------------------------------------------------------------------------
+    // rpc authenticate(WebReqCredencialesReq) returns (SesionEntityReply){}
     @RequestMapping(value = "api/login", method = RequestMethod.POST)
-    public String authenticate(@RequestBody GrpcCredencialesEntityReq credenciales) {
+    public String authenticate(@RequestBody WebReqCredencialesReq credenciales) {
         return webCoreClientGrpcUsuario.authenticate(credenciales);
     }
 
 
+    /**
+     * Add usuario string.
+     *
+     * @param usuarioNuevo the usuario nuevo
+     * @param jwt          the jwt
+     * @return the string
+     */
 // rpc addUsuario(UsuarioEntityReq)  returns (MensajeReply) {}
     @RequestMapping(value = "api/usuarios", method = RequestMethod.POST)
-    public String addUsuario(@RequestBody GrpcUsuarioEntityReq usuarioNuevo, @RequestHeader(value="Authorization") String jwt) {
-       return webCoreClientGrpcUsuario.addUsuario(usuarioNuevo);
-  /*      if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
+    public String addUsuario(@RequestBody WebReqUsuarioReq usuarioNuevo, @RequestHeader(value="Authorization") String jwt) {
+/*//        SOLO USAR CUANDO LA BASE DE DATOS ESTA VACIA
+       return webCoreClientGrpcUsuario.addUsuario(usuarioNuevo);*/
+        if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuarioAdmin = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuarioAdmin!=null){
@@ -92,13 +107,20 @@ public class WebController {
                 return json;
             }
         }
-        return "Usuario sin permisos";*/
+        return "Usuario sin permisos";
     }
 
-    // rpc getUsuario(RutEntityReq)  returns (UsuarioEntityReply) {}
+    /**
+     * Gets usuario.
+     *
+     * @param rut the rut
+     * @param jwt the jwt
+     * @return the usuario
+     */
+// rpc getUsuario(RutEntityReq)  returns (UsuarioEntityReply) {}
     @RequestMapping(value = "api/usuarios/{rut}", method = RequestMethod.GET)
     public String getUsuario(@PathVariable String rut, @RequestHeader(value="Authorization") String jwt) {
-        if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
+        if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null){
@@ -106,13 +128,19 @@ public class WebController {
                 return webCoreClientGrpcUsuario.getUsuario(rut);
             }
         }
-        return "Error. Token invalido";
+        return "Usuario sin permisos";
     }
 
-    // rpc getUsuarios(EmptyReq) returns (UsuariosEntityReply) {}
+    /**
+     * Gets usuarios.
+     *
+     * @param jwt the jwt
+     * @return the usuarios
+     */
+// rpc getUsuarios(EmptyReq) returns (UsuariosEntityReply) {}
     @RequestMapping(value = "api/usuarios", method = RequestMethod.GET)
      public String getUsuarios(@RequestHeader(value="Authorization") String jwt) {
-        if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
+        if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null){
@@ -123,10 +151,17 @@ public class WebController {
         return "Usuario sin permisos";
     }
 
-    // rpc updateUsuario(UsuarioEntityReq)  returns (MensajeReply) {}
+    /**
+     * Update usuario string.
+     *
+     * @param usuarioModificar the usuario modificar
+     * @param jwt              the jwt
+     * @return the string
+     */
+// rpc updateUsuario(UsuarioEntityReq)  returns (MensajeReply) {}
     @RequestMapping(value = "api/usuarios", method = RequestMethod.PATCH)
-    public String updateUsuario(@RequestBody GrpcUsuarioEntityReq usuarioModificar, @RequestHeader(value="Authorization") String jwt) {
-        if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
+    public String updateUsuario(@RequestBody WebReqUsuarioReq usuarioModificar, @RequestHeader(value="Authorization") String jwt) {
+        if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {
@@ -142,10 +177,17 @@ public class WebController {
     // ---- EQUIPOS  ----------------------------------------------------------------------------------------
 
 
-    //   rpc addEquipo(EquipoEntityReq)  returns (MensajeReply){}
+    /**
+     * Add equipo string.
+     *
+     * @param equipoNuevo the equipo nuevo
+     * @param jwt         the jwt
+     * @return the string
+     */
+//   rpc addEquipo(EquipoEntityReq)  returns (MensajeReply){}
     @RequestMapping(value = "api/equipos", method = RequestMethod.POST)
-     public String addEquipo(@RequestBody GrpcEquipoEntityReq equipoNuevo, @RequestHeader(value="Authorization") String jwt){
-        if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
+     public String addEquipo(@RequestBody WebReqEquipoReq equipoNuevo, @RequestHeader(value="Authorization") String jwt){
+        if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {
@@ -157,10 +199,17 @@ public class WebController {
         return "Error. Token invalido";
     }
 
-    //   rpc updateEquipo(EquipoEntityReq)  returns (MensajeReply){}
+    /**
+     * Update equipo string.
+     *
+     * @param equipoModificado the equipo modificado
+     * @param jwt              the jwt
+     * @return the string
+     */
+//   rpc updateEquipo(EquipoEntityReq)  returns (MensajeReply){}
     @RequestMapping(value = "api/equipos", method = RequestMethod.PATCH)
-    public String updateEquipo(@RequestBody GrpcEquipoEntityReq equipoModificado, @RequestHeader(value="Authorization") String jwt){
-        if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
+    public String updateEquipo(@RequestBody WebReqEquipoReq equipoModificado, @RequestHeader(value="Authorization") String jwt){
+        if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {
@@ -172,10 +221,17 @@ public class WebController {
         return "Usuario sin permisos";
     }
 
-    //   rpc getEquipo(IdElementoReq)  returns (EquipoEntityReply) {}
+    /**
+     * Gets equipo.
+     *
+     * @param id  the id
+     * @param jwt the jwt
+     * @return the equipo
+     */
+//   rpc getEquipo(IdElementoReq)  returns (EquipoEntityReply) {}
     @RequestMapping(value = "api/equipos/{id}", method = RequestMethod.GET)
     public String getEquipo(@PathVariable long id, @RequestHeader(value="Authorization") String jwt) {
-        if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
+        if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null){
@@ -187,10 +243,16 @@ public class WebController {
         return "Usario sin permisos";
     }
 
-    //   rpc getEquipos(EmptyReq)  returns (EquiposEntityReply) {}
+    /**
+     * Gets equipos.
+     *
+     * @param jwt the jwt
+     * @return the equipos
+     */
+//   rpc getEquipos(EmptyReq)  returns (EquiposEntityReply) {}
     @RequestMapping(value = "api/equipos", method = RequestMethod.GET)
     public String getEquipos(@RequestHeader(value="Authorization") String jwt) {
-        if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
+        if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null){
@@ -201,11 +263,21 @@ public class WebController {
         return "Usario sin permisos";
     }
 
+    /**
+     * Upload archivo string.
+     *
+     * @param file the file
+     * @param jwt  the jwt
+     * @return the string
+     * @throws IOException          the io exception
+     * @throws InterruptedException the interrupted exception
+     */
 // ***---- IMPLEMENTAR ----
     //   rpc uploadArchivo(stream ArchivosEquipoEntityReq)  returns (MensajeReply){}
     @RequestMapping(value = "api/equipos/archivos", method = RequestMethod.POST)
     public String uploadArchivo(@RequestParam("file") MultipartFile file, @RequestHeader(value="Authorization") String jwt) throws IOException, InterruptedException {
-        if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
+//        ESTE ENDPOINT ESTA A MEDIAS. ENVIA LOS ARCHIVOS POR CHUNKS
+        if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {
@@ -215,29 +287,41 @@ public class WebController {
             }
         }
         return "Usuario sin permisos";
-        //        ResponseEntity<?>
-        //        ResponseEntity.status(HttpStatus.BAD_GATEWAY).build();
     }
 
-    // ***---- IMPLEMENTAR ----
+    /**
+     * Gets archivos.
+     *
+     * @param idEquipo the id equipo
+     * @param jwt      the jwt
+     * @return the archivos
+     */
+// ***---- IMPLEMENTAR ----
     //   rpc getArchivos(IdElementoReq)  returns (ArchivosEquipoEntityReply){}
     @RequestMapping(value = "api/equipos/archivo/{idEquipo}", method = RequestMethod.GET)
     public String getArchivos(@PathVariable long idEquipo, @RequestHeader(value="Authorization") String jwt) {
-        if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
+        if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {
             if (usuario.getRol().equals(Domain.UsuarioEntity.RolUsuario.OPERADOR.name()) ||  usuario.getRol().equals(Domain.UsuarioEntity.RolUsuario.CONFIGURADOR.name())) {
-                return webCoreClientGrpcEquipo.getArchivos(idEquipo);
+                return "Aun no implementado";//webCoreClientGrpcEquipo.getArchivos(idEquipo);
             }
         }
         return "Usuario sin permisos";
     }
 
-    //   rpc getValvulasEquipo(IdElementoReq) returns (ComponentesEquipoReply) {}
+    /**
+     * Gets valvulas equipo.
+     *
+     * @param idEquipo the id equipo
+     * @param jwt      the jwt
+     * @return the valvulas equipo
+     */
+//   rpc getValvulasEquipo(IdElementoReq) returns (ComponentesEquipoReply) {}
     @RequestMapping(value = "api/equipos/valvulas/{idEquipo}", method = RequestMethod.GET)
     public String getValvulasEquipo(@PathVariable long idEquipo, @RequestHeader(value="Authorization") String jwt) {
-        if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
+        if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {
@@ -249,11 +333,18 @@ public class WebController {
     }
 
 
-    // ***---- TESTEAR ----
+    /**
+     * Gets secuencias componente.
+     *
+     * @param idComponente the id componente
+     * @param jwt          the jwt
+     * @return the secuencias componente
+     */
+// ***---- ACTUALIZAR ----
     //    rpc getSecuenciasComponente(IdElementoReq) returns (SecuenciasComponenteReply) {}
     @RequestMapping(value = "api/equipos/secuencias/{idComponente}", method = RequestMethod.GET)
     public String getSecuenciasComponente(@PathVariable long idComponente, @RequestHeader(value="Authorization") String jwt) {
-        if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
+        if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {
@@ -268,10 +359,17 @@ public class WebController {
     // ---- EQUIPOS      ------------------------------------------------------------------------------------
     // ---- SIMULACIONES ------------------------------------------------------------------------------------
 
-    // rpc addSimulacion(SimulacionReq)  returns (MensajeReply){}
+    /**
+     * Add simulacion string.
+     *
+     * @param simulacionReq the simulacion req
+     * @param jwt           the jwt
+     * @return the string
+     */
+// rpc addSimulacion(SimulacionReq)  returns (MensajeReply){}
     @RequestMapping(value = "api/simulaciones/secuencias/", method = RequestMethod.POST)
-    public String addSimulacion(@RequestBody GrpcSimulacionReq simulacionReq, @RequestHeader(value="Authorization") String jwt){
-        if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
+    public String addSimulacion(@RequestBody WebReqSimulacionReq simulacionReq, @RequestHeader(value="Authorization") String jwt){
+        if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {
@@ -283,10 +381,17 @@ public class WebController {
         return "Usuario sin permisos";
     }
 
-    //   rpc getSimulacion(IdElementoReq) returns (SimulacionReply){}
+    /**
+     * Gets simulacion.
+     *
+     * @param id  the id
+     * @param jwt the jwt
+     * @return the simulacion
+     */
+//   rpc getSimulacion(IdElementoReq) returns (SimulacionReply){}
     @RequestMapping(value = "api/simulaciones/{id}", method = RequestMethod.GET)
     public String getSimulacion(@PathVariable long id, @RequestHeader(value="Authorization") String jwt){
-        if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
+        if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {
@@ -297,10 +402,16 @@ public class WebController {
         return "Usuario sin permisos";
     }
 
-    //   rpc getSimulaciones(EmptyReq) returns (SimulacionesReply){}
+    /**
+     * Gets simulaciones.
+     *
+     * @param jwt the jwt
+     * @return the simulaciones
+     */
+//   rpc getSimulaciones(EmptyReq) returns (SimulacionesReply){}
     @RequestMapping(value = "api/simulaciones", method = RequestMethod.GET)
     public String getSimulaciones(@RequestHeader(value="Authorization") String jwt) {
-        if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
+        if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {
@@ -311,11 +422,18 @@ public class WebController {
         return "Usuario sin permisos";
     }
 
-    // ***---- IMPLEMENTAR: TODO: ARREGLAR DOMAIN.PROTO => Sólo recibimos equipo y simulacion ----
+    /**
+     * Start simulacion string.
+     *
+     * @param startSimulacionReq the start simulacion req
+     * @param jwt                the jwt
+     * @return the string
+     */
+// ***---- IMPLEMENTAR => TODO: ARREGLAR DOMAIN.PROTO => Sólo recibimos equipo y simulacion ----
     //   rpc startSimulacion(SimulacionReq) returns (MensajeReply){}
     @RequestMapping(value = "api/simulaciones", method = RequestMethod.POST)
-    public String startSimulacion(@RequestBody GrpcStartSimulacionReq startSimulacionReq, @RequestHeader(value="Authorization") String jwt) {
-        if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
+    public String startSimulacion(@RequestBody WebReqStartSimulacionReq startSimulacionReq, @RequestHeader(value="Authorization") String jwt) {
+        if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {
@@ -326,11 +444,17 @@ public class WebController {
         return "Usuario sin permisos";
     }
 
-    // ***---- IMPLEMENTAR ----
+    /**
+     * Gets equipos trabajando.
+     *
+     * @param jwt the jwt
+     * @return the equipos trabajando
+     */
+// ***---- IMPLEMENTAR ----
     //   rpc getEquiposTrabajando(EmptyReq) returns (EquiposEntityReply){}
-    @RequestMapping(value = "api/ejecuciones/actual/", method = RequestMethod.GET)
+    @RequestMapping(value = "api/equipos/trabajando", method = RequestMethod.GET)
     public String getEquiposTrabajando(@RequestHeader(value="Authorization") String jwt) {
-        if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
+        if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {
@@ -341,11 +465,18 @@ public class WebController {
         return "Usuario sin permisos";
     }
 
-    // TODO: ARREGLAR => ESTAMOS ENTREGANDO LA ID DE LA EJECUCION, NO DE LA SIMULACION
+    /**
+     * Gets ejecucion.
+     *
+     * @param id  the id
+     * @param jwt the jwt
+     * @return the ejecucion
+     */
+// TODO: ARREGLAR => ESTAMOS ENTREGANDO LA ID DE LA EJECUCION, NO DE LA SIMULACION
     //   rpc getEjecucion(IdElementoReq) returns (EjecucionReply){}
     @RequestMapping(value = "api/ejecuciones/{id}", method = RequestMethod.GET)
     public String getEjecucion(@PathVariable long id, @RequestHeader(value="Authorization") String jwt) {
-        if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
+        if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {
@@ -356,10 +487,16 @@ public class WebController {
         return "Usuario sin permisos";
     }
 
-    //   rpc getEjecuciones(EmptyReq) returns (EjecucionesReply){}
+    /**
+     * Gets ejecuciones.
+     *
+     * @param jwt the jwt
+     * @return the ejecuciones
+     */
+//   rpc getEjecuciones(EmptyReq) returns (EjecucionesReply){}
     @RequestMapping(value = "api/ejecuciones/", method = RequestMethod.GET)
     public String getEjecuciones(@RequestHeader(value="Authorization") String jwt) {
-        if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
+        if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {
@@ -374,11 +511,18 @@ public class WebController {
     // ---- OPERACIONES EXTRA  ------------------------------------------------------------------------------
 
 
-    // ***---- IMPLEMENTAR ----
+    /**
+     * Gets lectura sensores.
+     *
+     * @param id  the id
+     * @param jwt the jwt
+     * @return the lectura sensores
+     */
+// ***---- IMPLEMENTAR ----
     //   rpc getLecturaSensores(IdElementoReq) returns (stream LecturaSensoresReply) {}
     @RequestMapping(value = "api/ejecuciones/lecturas/{id}", method = RequestMethod.GET)
     public String getLecturaSensores(@PathVariable long id, @RequestHeader(value="Authorization") String jwt) {
-        if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
+        if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {
@@ -389,10 +533,17 @@ public class WebController {
         return "Usuario sin permisos";
     }
 
-    //   rpc getRegistros(RutEntityReq) returns (RegistrosReply){}
+    /**
+     * Gets registros.
+     *
+     * @param rut the rut
+     * @param jwt the jwt
+     * @return the registros
+     */
+//   rpc getRegistros(RutEntityReq) returns (RegistrosReply){}
     @RequestMapping(value = "api/registros/{rut}", method = RequestMethod.GET)
     public String getRegistros(@PathVariable String rut, @RequestHeader(value="Authorization") String jwt) {
-        if(!this.tokenEsValido(jwt)) { return "Error. Token invalido"; }
+        if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {
@@ -404,10 +555,20 @@ public class WebController {
     }
 
 
+    /**
+     * Gets enum dict.
+     *
+     * @param jwt the jwt
+     * @return the enum dict
+     */
+// ESTE ENDPOINT EXISTE PARA FACILITARLE LA VIDA AL FRONTEND EN LAS PARTES EN LA QUE
+    // SE REQUIERE INPUTS DEL USUARIO => ENTREGANDO LAS LISTA DE LOS VALORES DE LAS ENUMERACIONES
+    // PODEMOS CREAR LISTAS DESPLEGABLES EN EL FRONTEND QUE GARANTIZAN EL BUEN FUNCIONAMIENTO
+    // DE LOS CAMPOS CON ENUMS (opciones limitadas para los usuarios => que solo elijan lo que queremos)
     @RequestMapping(value = "api/extras/enums", method = RequestMethod.GET)
     public EnumValuesResponse getEnumDict(@RequestHeader(value="Authorization") String jwt) {
         EnumValuesResponse objetoRetornar = new EnumValuesResponse();
-        if(!this.tokenEsValido(jwt)) { return null; }
+        if(this.tokenEsInvalido(jwt)) { return null; }
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {

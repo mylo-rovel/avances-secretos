@@ -1,7 +1,10 @@
 package cl.ucn.fondef.sata.mini.grpc.webcoreclient;
 
 import cl.ucn.fondef.sata.mini.grpc.Domain;
-import cl.ucn.fondef.sata.mini.grpcobjects.*;
+import cl.ucn.fondef.sata.mini.utilities.webrequests.WebReqComponenteSubEntity;
+import cl.ucn.fondef.sata.mini.utilities.webrequests.WebReqEquipoReq;
+import cl.ucn.fondef.sata.mini.utilities.webrequests.WebReqPinSubEntity;
+import cl.ucn.fondef.sata.mini.utilities.webrequests.WebReqPlacaSubEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +19,7 @@ public final class WebCoreClientGrpcEquipo extends WebCoreClientGrpcBase {
 
     // Esta funcion es ejecutada por 'this.addEquipo()' y 'this.updateEquipo' dado que
     // comparten la parte de crear un equipo a enviar
-    private Domain.EquipoEntityReq getEquipoGrpcEnviar(GrpcEquipoEntityReq equipoRecibido) {
+    private Domain.EquipoEntityReq getEquipoGrpcEnviar(WebReqEquipoReq equipoRecibido) {
         Domain.EquipoEntity.Builder equipoGrpc = Domain.EquipoEntity.newBuilder()
                 .setNombre(equipoRecibido.getEquipo().getNombre())
                 .setDescripcion(equipoRecibido.getEquipo().getDescripcion())
@@ -25,9 +28,9 @@ public final class WebCoreClientGrpcEquipo extends WebCoreClientGrpcBase {
 
         // ITERAMOS SOBRE EL OBJETO RECIBIDO PARA CREAR OBJETOS...
         // ... "repeated Placa placa = 6;" A ENVIAR
-        List<GrpcPlaca> listaPlacasRecibidas = equipoRecibido.getEquipo().getListaPlacas();
+        List<WebReqPlacaSubEntity> listaPlacasRecibidas = equipoRecibido.getEquipo().getListaPlacas();
         for (int i = 0; i < listaPlacasRecibidas.size(); i++) {
-            GrpcPlaca placaRecibida = listaPlacasRecibidas.get(i);
+            WebReqPlacaSubEntity placaRecibida = listaPlacasRecibidas.get(i);
 
             Domain.Placa placaEnviar = Domain.Placa.newBuilder()
                     .setNombre(placaRecibida.getNombre())
@@ -40,9 +43,9 @@ public final class WebCoreClientGrpcEquipo extends WebCoreClientGrpcBase {
 
 
         // ... "repeated Componente componente_fisico = 7;" A ENVIAR
-        List<GrpcComponente> listaComponentesRecibidos = equipoRecibido.getEquipo().getListaComponentes();
+        List<WebReqComponenteSubEntity> listaComponentesRecibidos = equipoRecibido.getEquipo().getListaComponentes();
         for (int i = 0; i < listaComponentesRecibidos.size(); i++) {
-            GrpcComponente componenteRecibido = listaComponentesRecibidos.get(i);
+            WebReqComponenteSubEntity componenteRecibido = listaComponentesRecibidos.get(i);
 
             Domain.Componente.Builder componenteEnviar = Domain.Componente.newBuilder()
                     .setNombre(componenteRecibido.getNombre())
@@ -52,9 +55,9 @@ public final class WebCoreClientGrpcEquipo extends WebCoreClientGrpcBase {
                     .setTipo(componenteRecibido.getTipo())
                     .setTipoPlaca(componenteRecibido.getTipoPlaca());
 
-            List<GrpcPin> listaPinesComponente = componenteRecibido.getListaPines();
+            List<WebReqPinSubEntity> listaPinesComponente = componenteRecibido.getListaPines();
             for (int j = 0; j < listaPinesComponente.size(); j ++) {
-                GrpcPin pinComponenteRecibido = listaPinesComponente.get(j);
+                WebReqPinSubEntity pinComponenteRecibido = listaPinesComponente.get(j);
                 Domain.Pin pinEnviar = Domain.Pin.newBuilder()
                         .setNumero(pinComponenteRecibido.getNumero())
                         .setNombre(pinComponenteRecibido.getNombre())
@@ -82,7 +85,7 @@ public final class WebCoreClientGrpcEquipo extends WebCoreClientGrpcBase {
      * @param equipoRecibido the equipo recibido
      * @return the string
      */
-    public String addEquipo (GrpcEquipoEntityReq equipoRecibido){
+    public String addEquipo (WebReqEquipoReq equipoRecibido){
         Domain.EquipoEntityReq equipoEntityReq = this.getEquipoGrpcEnviar(equipoRecibido);
         Domain.MensajeReply serverResponse = this.stub.addEquipo(equipoEntityReq);
         return this.gson.toJson(serverResponse);
@@ -94,17 +97,18 @@ public final class WebCoreClientGrpcEquipo extends WebCoreClientGrpcBase {
      * @param equipoRecibido the equipo recibido
      * @return the string
      */
-    public String updateEquipo(GrpcEquipoEntityReq equipoRecibido){
+    public String updateEquipo(WebReqEquipoReq equipoRecibido){
         Domain.EquipoEntityReq equipoEntityReq = this.getEquipoGrpcEnviar(equipoRecibido);
         Domain.MensajeReply serverResponse = this.stub.updateEquipo(equipoEntityReq);
         return this.gson.toJson(serverResponse);
     }
 
     /**
-     * Gets equipo.
+     * Get equipo string.
      *
-     * @param id the id
-     * @return the equipo
+     * @param id  the id
+     * @param rut the rut
+     * @return the string
      */
     public String getEquipo(long id, String rut){
         Domain.IdElementoConRutReq idEquipoUsuarioReq = Domain.IdElementoConRutReq.newBuilder().setId(id).setRut(rut).build();
@@ -113,9 +117,10 @@ public final class WebCoreClientGrpcEquipo extends WebCoreClientGrpcBase {
     }
 
     /**
-     * Gets equipos.
+     * Get equipos string.
      *
-     * @return the equipos
+     * @param rut the rut
+     * @return the string
      */
     public String getEquipos(String rut){
         Domain.RutEntityReq rutUsuarioReq = Domain.RutEntityReq.newBuilder().setRut(rut).build();
@@ -123,52 +128,24 @@ public final class WebCoreClientGrpcEquipo extends WebCoreClientGrpcBase {
         return this.gson.toJson(serverResponse);
     }
 
-/*    public String getEquipoOC(long id, String rut){
-        Domain.IdElementoConRutReq idEquipoUsuario = Domain.IdElementoConRutReq.newBuilder().setId(id).setRut(rut).build();
-        Domain.EquipoEntityReply serverResponse = this.stub.getEquipoOC(idEquipoUsuario);
-        return this.gson.toJson(serverResponse);
-    }
-
-    public String getEquiposOC(String rut){
-        Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(rut).build();
-        Domain.EquiposEntityReply serverResponse = this.stub.getEquiposOC(rutUsuario);
-        return this.gson.toJson(serverResponse);
-    }*/
     /**
-     * Upload archivo string.
+     * Get valvulas equipo string.
      *
-     * @param archivoNuevo the archivo nuevo
+     * @param idEquipo the id equipo
      * @return the string
      */
-// Esto es un stream
-    public String uploadArchivo(GrpcArchivosEntityReq archivoNuevo) {
-        return "";
-    }
-
-    /**
-     * Gets archivos.
-     *
-     * @param idEquipo the id equipo
-     * @return the archivos
-     */
-// Esto es un stream
-    public String getArchivos(long idEquipo) {
-        return "";
-    }
-
-    /**
-     * Gets valvulas equipo.
-     *
-     * @param idEquipo the id equipo
-     * @return the valvulas equipo
-     */
-
     public String getValvulasEquipo(long idEquipo){
         Domain.IdElementoReq requestObj = Domain.IdElementoReq.newBuilder().setId(idEquipo).build();
         Domain.ComponentesEquipoReply serverResponse = this.stub.getValvulasEquipo(requestObj);
         return this.gson.toJson(serverResponse);
     }
 
+    /**
+     * Get secuencias componente string.
+     *
+     * @param idEquipo the id equipo
+     * @return the string
+     */
     public String getSecuenciasComponente(long idEquipo){
         Domain.IdElementoReq idElementoReq = Domain.IdElementoReq.newBuilder().setId(idEquipo).build();
         Domain.SecuenciasComponenteEquipoReply serverResponse = this.stub.getSecuenciasComponente(idElementoReq);

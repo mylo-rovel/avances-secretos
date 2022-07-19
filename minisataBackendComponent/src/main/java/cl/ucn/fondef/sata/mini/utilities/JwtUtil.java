@@ -20,8 +20,6 @@ import java.util.Date;
 
 /**
  * The type Jwt util.
- *
- * @author Mahesh
  */
 @Component
 public class JwtUtil {
@@ -39,11 +37,11 @@ public class JwtUtil {
             .getLogger(JwtUtil.class);
 
     /**
-     * Create a new token.
+     * Create string.
      *
      * @param id      the id
      * @param subject the subject
-     * @return string string
+     * @return the string
      */
     public String create(String id, String subject) {
 
@@ -72,10 +70,10 @@ public class JwtUtil {
     }
 
     /**
-     * Method to validate and read the JWT
+     * Gets value.
      *
      * @param jwt the jwt
-     * @return value value
+     * @return the value
      */
     public String getValue(String jwt) {
         // This line will throw an exception if it is not a signed JWS (as
@@ -87,10 +85,10 @@ public class JwtUtil {
     }
 
     /**
-     * Method to validate and read the JWT
+     * Gets key.
      *
      * @param jwt the jwt
-     * @return key key
+     * @return the key
      */
     public String getKey(String jwt) {
         // This line will throw an exception if it is not a signed JWS (as

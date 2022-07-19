@@ -10,7 +10,7 @@ import cl.ucn.fondef.sata.mini.grpc.Domain.*;
 import java.util.List;
 
 /**
- * The interface Core dao.
+ * The interface Core dao usuario.
  */
 public interface CoreDaoUsuario {
     /**

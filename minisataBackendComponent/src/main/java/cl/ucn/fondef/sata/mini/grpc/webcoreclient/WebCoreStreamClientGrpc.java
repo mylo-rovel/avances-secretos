@@ -21,7 +21,13 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class WebCoreStreamClientGrpc extends WebCoreClientGrpcBase {
 
-    // rpc uploadArchivo(stream ArchivoEntityReq)  returns (MensajeReply){}
+    /**
+     * Upload archivo.
+     *
+     * @param file the file
+     * @throws IOException the io exception
+     */
+// rpc uploadArchivo(stream ArchivoEntityReq)  returns (MensajeReply){}
     public void uploadArchivo(MultipartFile file) throws IOException {
         final CountDownLatch finishLatch = new CountDownLatch(1);
         StreamObserver<MensajeReply> responseObserver = new StreamObserver<>() {

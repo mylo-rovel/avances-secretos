@@ -9,6 +9,9 @@ import lombok.ToString;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Informacion board.
+ */
 @ToString
 @EqualsAndHashCode
 public class InformacionBoard {
@@ -29,6 +32,11 @@ public class InformacionBoard {
     @Setter
     private CoreBoardClientGrpcBase coreBoardClient;
 
+    /**
+     * Instantiates a new Informacion board.
+     *
+     * @param direccion the direccion
+     */
     public InformacionBoard(String direccion) {
         this.coreBoardClient = new CoreBoardClientGrpcBase(direccion);
         this.aguaCaidaActual = 0.0;

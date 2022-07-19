@@ -265,7 +265,7 @@ message SimulacionReply {
   string descripcion = 3;
   string nombre_equipo = 4;
   string descripcion_equipo = 5;
-  repeated Secuencia secuencia = 7;
+  repeated Secuencia secuencia = 6;
 }
 
 message SimulacionAcotada {
@@ -312,13 +312,13 @@ message LecturaSensoresReply {
 }
 
 message SaludoBoardReq {
-  int64 id_equipo = 1;
-  string nombre_equipo = 2;
-  string direccion_ip_equipo = 3;
+  string nombre_equipo = 1;
+  string direccion_ip_equipo = 2;
 }
 
 message SaludoBoardReply {
   EquipoEntity equipo = 1;
+  string respuestaSaludo = 2;
 }
 
 message AvisoTerminoEjecucionReq {

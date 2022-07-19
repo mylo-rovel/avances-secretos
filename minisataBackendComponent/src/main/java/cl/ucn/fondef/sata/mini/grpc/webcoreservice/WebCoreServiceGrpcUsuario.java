@@ -97,6 +97,13 @@ public class WebCoreServiceGrpcUsuario {
         usuarioRetornar.setUsuario(usuarioEnte.build());
     }
 
+    /**
+     * Gets usuario.
+     *
+     * @param rutEntityReq     the rut entity req
+     * @param responseObserver the response observer
+     * @return the usuario
+     */
     public Domain.UsuarioEntityReply getUsuario(Domain.RutEntityReq rutEntityReq, StreamObserver<Domain.UsuarioEntityReply> responseObserver) {
         Usuario usuarioGuardado = coreDaoUsuario.getUsuario(rutEntityReq);
 

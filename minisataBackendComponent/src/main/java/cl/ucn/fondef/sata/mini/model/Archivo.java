@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.io.File;
 
 /**
- * The type Archivo equipo.
+ * The type Archivo.
  */
 @ToString
 @EqualsAndHashCode

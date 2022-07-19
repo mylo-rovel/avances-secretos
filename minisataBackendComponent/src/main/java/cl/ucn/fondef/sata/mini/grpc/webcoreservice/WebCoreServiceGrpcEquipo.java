@@ -48,7 +48,6 @@ public class WebCoreServiceGrpcEquipo {
     }
 
 
-
     /**
      * Update equipo domain . mensaje reply.
      *
@@ -68,10 +67,13 @@ public class WebCoreServiceGrpcEquipo {
     }
 
 
-
-
-
-    private Domain.EquipoEntity.Builder getEquipoEntityBuilder (Equipo equipoGuardado){
+    /**
+     * Get equipo entity builder domain . equipo entity . builder.
+     *
+     * @param equipoGuardado the equipo guardado
+     * @return the domain . equipo entity . builder
+     */
+    public Domain.EquipoEntity.Builder getEquipoEntityBuilder (Equipo equipoGuardado){
         Domain.EquipoEntity.Builder equipoEnte = Domain.EquipoEntity.newBuilder()
                 .setId(equipoGuardado.getId())
                 .setNombre(equipoGuardado.getNombre())
@@ -80,7 +82,14 @@ public class WebCoreServiceGrpcEquipo {
                 .setEstado(stringEnumTransformer.getEnumEstadoEquipo(equipoGuardado.getEstado()));
         return equipoEnte;
     }
-    private void addPlacasToEquipo(Domain.EquipoEntity.Builder equipoEnte, Domain.IdElementoReq idEquipoReq) {
+
+    /**
+     * Add placas to equipo.
+     *
+     * @param equipoEnte  the equipo ente
+     * @param idEquipoReq the id equipo req
+     */
+    public void addPlacasToEquipo(Domain.EquipoEntity.Builder equipoEnte, Domain.IdElementoReq idEquipoReq) {
         List<Placa> placasGuardadas = coreDaoEquipo.getPlacasPorIdEquipo(idEquipoReq);
         // ITERAR PARA CREAR CADA PROTOBUF DE "Placa"
         for (int i = 0; i < placasGuardadas.size(); i++) {
@@ -93,7 +102,14 @@ public class WebCoreServiceGrpcEquipo {
         }
         /*return equipoEnte;*/
     }
-    private void addComponentesYPinesToEquipo(Domain.EquipoEntity.Builder equipoEnte, Domain.IdElementoReq idEquipoReq) {
+
+    /**
+     * Add componentes y pines to equipo.
+     *
+     * @param equipoEnte  the equipo ente
+     * @param idEquipoReq the id equipo req
+     */
+    public void addComponentesYPinesToEquipo(Domain.EquipoEntity.Builder equipoEnte, Domain.IdElementoReq idEquipoReq) {
         List<Componente> componentesGuardados = coreDaoEquipo.getComponentesPorIdEquipo(idEquipoReq);
         // ITERAR PARA CREAR CADA PROTOBUF DE "Componente"
         for (int i = 0; i < componentesGuardados.size(); i++) {
@@ -121,6 +137,14 @@ public class WebCoreServiceGrpcEquipo {
             equipoEnte.addComponente(componenteEnviar);
         }
     }
+
+    /**
+     * Get equipo domain . equipo entity reply.
+     *
+     * @param idEquipoUsuarioReq the id equipo usuario req
+     * @param responseObserver   the response observer
+     * @return the domain . equipo entity reply
+     */
     public Domain.EquipoEntityReply getEquipo(Domain.IdElementoConRutReq idEquipoUsuarioReq, StreamObserver<Domain.EquipoEntityReply> responseObserver){
         Equipo equipoGuardado = coreDaoEquipo.getEquipo(idEquipoUsuarioReq);
         if (equipoGuardado == null) { return Domain.EquipoEntityReply.newBuilder().build(); }
@@ -135,9 +159,13 @@ public class WebCoreServiceGrpcEquipo {
     }
 
 
-
-
-
+    /**
+     * Get equipos domain . equipos entity reply.
+     *
+     * @param rutEntityReq     the rut entity req
+     * @param responseObserver the response observer
+     * @return the domain . equipos entity reply
+     */
     public Domain.EquiposEntityReply getEquipos(Domain.RutEntityReq rutEntityReq, StreamObserver<Domain.EquiposEntityReply> responseObserver){
         List<Equipo> listaEquiposGuardados = coreDaoEquipo.getEquipos(rutEntityReq);
         Domain.EquiposEntityReply.Builder listaRetornar = Domain.EquiposEntityReply.newBuilder();
@@ -170,6 +198,14 @@ public class WebCoreServiceGrpcEquipo {
             grpcResponse.addComponente(componenteFisico);
         }
     }
+
+    /**
+     * Get valvulas equipo domain . componentes equipo reply.
+     *
+     * @param idRequest        the id request
+     * @param responseObserver the response observer
+     * @return the domain . componentes equipo reply
+     */
     public Domain.ComponentesEquipoReply getValvulasEquipo(Domain.IdElementoReq idRequest, StreamObserver<Domain.ComponentesEquipoReply> responseObserver){
         List<Componente> listaValvulasGuardadas = coreDaoEquipo.getValvulasEquipo(idRequest);
         if (listaValvulasGuardadas == null) { return Domain.ComponentesEquipoReply.newBuilder().build(); }
@@ -181,7 +217,13 @@ public class WebCoreServiceGrpcEquipo {
     }
 
 
-
+    /**
+     * Get secuencias componente domain . secuencias componente equipo reply.
+     *
+     * @param idRequest        the id request
+     * @param responseObserver the response observer
+     * @return the domain . secuencias componente equipo reply
+     */
     public Domain.SecuenciasComponenteEquipoReply getSecuenciasComponente(Domain.IdElementoReq idRequest, StreamObserver<Domain.SecuenciasComponenteEquipoReply> responseObserver){
 //        return Domain.SecuenciasComponenteEquipoReply.newBuilder().build();
         List<Secuencia> listaSecuencias = coreDaoEquipo.getSecuenciasComponente(idRequest);

@@ -30,6 +30,9 @@ public class CoreDaoExtraImpl implements CoreDaoExtra {
     @PersistenceContext
     private EntityManager entityManager;
 
+    /**
+     * The constant formatoFecha.
+     */
     public static final String formatoFecha = "dd-MM-yyyy HH:mm:ss";
 
     @Override

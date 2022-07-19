@@ -39,7 +39,6 @@ service WebCoreCommuService {
   // va de la mano con la funcion (1) del CoreBoardCommuService
   rpc startSimulacion(StartSimulacionReq) returns (MensajeReply){}
 
-  // va de la mano con la funcion (2) del CoreBoardCommuService
   // esta funcion busca preguntarle al Raspberry que equipo y simulacion esta corriendo
   rpc getEquiposTrabajando(EmptyReq) returns (EquiposEntityReply){}
 

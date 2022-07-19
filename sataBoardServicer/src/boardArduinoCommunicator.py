@@ -3,16 +3,16 @@ class BoardArduinoCommunicator:
 	import time
 
 	def __init__(self):
-		self.ser = serial.Serial("/dev/ttyUSB0", 9600)
+		self.ser = self.serial.serial("/dev/ttyUSB0", 9600)
 		print("fui instanciado")
 
 	def enviarDatosToArduino(secuenciasJson):
 		try:
 			comando = comando + "\n"
 			comandoBytes = comando.encode()
-			ser.write(comandoBytes)
+			self.ser.write(comandoBytes)
 			time.sleep(0.1)
-			read = ser.readline()
+			read = self.ser.readline()
 			print(read)
 		except KeyboardInterrupt:
 			print("\nInterrupcion por teclado")
@@ -20,4 +20,4 @@ class BoardArduinoCommunicator:
 			print(ve)
 			print("Otra interrupcion")
 		finally:
-			ser.close()
+				self.ser.close()

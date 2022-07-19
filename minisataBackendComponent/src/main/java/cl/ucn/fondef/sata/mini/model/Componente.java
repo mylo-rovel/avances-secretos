@@ -12,7 +12,7 @@ import lombok.ToString;
 import javax.persistence.*;
 
 /**
- * The type Componente fisico.
+ * The type Componente.
  */
 @ToString
 @EqualsAndHashCode

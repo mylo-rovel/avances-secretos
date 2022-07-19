@@ -10,11 +10,12 @@ import grpc
 import coreBoardCommuService_pb2 as ReqResModule
 import coreBoardCommuService_pb2_grpc as ClientServerModule
 # from boardArduinoCommunicator import BoardArduinoCommunicator
+from sataBoardClient import SataBoardClient
 
 venv_dict = dict(dotenv_values(".env"))
 
 # put here aux functions
-print("iniciando servidor")
+print("\n\n\nIniciando servidor")
 print(venv_dict)
 
 class CoreBoardCommuServiceServicer(ClientServerModule.CoreBoardCommuServiceServicer):
@@ -22,7 +23,9 @@ class CoreBoardCommuServiceServicer(ClientServerModule.CoreBoardCommuServiceServ
 
     def __init__(self):
         pass
-        # self.boardArduinoCommunicator = BoardArduinoCommunicator();
+        self.sataBoardClient = SataBoardClient()
+        self.sataBoardClient.sendHelloWorldToCentralCore()
+        # self.boardArduinoCommunicator = BoardArduinoCommunicator()
 
     # PODRIAMOS CREAR UNA CLASE QUE SE COMUNIQUE CON EL ARDUINO => SERVIRIA COMO PUENTE
     # ENTRE EL RASPI gRPC Y EL ARDUINO
@@ -54,7 +57,7 @@ class CoreBoardCommuServiceServicer(ClientServerModule.CoreBoardCommuServiceServ
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     ClientServerModule.add_CoreBoardCommuServiceServicer_to_server(CoreBoardCommuServiceServicer(), server)
-    server.add_insecure_port(f'[::]:{venv_dict["PORT"]}')
+    server.add_insecure_port(f'[::]:{venv_dict["BOARD_PORT"]}')
     server.start()
     server.wait_for_termination()
 

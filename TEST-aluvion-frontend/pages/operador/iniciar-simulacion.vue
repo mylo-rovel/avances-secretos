@@ -95,7 +95,8 @@
                 };
 
                 const respuesta = await fetch(`${this.urlApi}/simulaciones/`, POST_config);
-                console.log(respuesta);
+                const mensajeRespuesta = await respuesta.json();
+                console.log(mensajeRespuesta)
             }
         }
     })

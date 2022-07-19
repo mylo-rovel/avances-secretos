@@ -7,6 +7,9 @@ import lombok.ToString;
 
 import javax.persistence.*;
 
+/**
+ * The type Placa.
+ */
 @Entity
 @Table(name = "placa")
 @ToString

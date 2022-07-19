@@ -21,7 +21,7 @@ public final class WebCoreClientGrpcExtra extends WebCoreClientGrpcBase{
     /**
      * Gets registros.
      *
-     * @param rutUsuario the rut
+     * @param rutUsuario the rut usuario
      * @return the registros
      */
     public String getRegistros (String rutUsuario) {

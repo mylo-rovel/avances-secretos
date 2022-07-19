@@ -9,18 +9,35 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.net.ConnectException;
 
+/**
+ * The type Core board client grpc base.
+ */
 @Slf4j
 public class CoreBoardClientGrpcBase {
     // ESTA CLASE ES INSTANCIADA POR CADA EQUIPO QUE SE REPORTE COMO DISPONIBLE
     // ESOS OBJETOS SON GUARDADOS DENTRO DE LA CLASE "InformacionBoard" Y ESOS EN UN
     // HASHMAP DENTRO DE LA CLASE "WebCoreServiceGrpcSimulacion"
 
-    // objeto que nos permitirá transformar protobufs a JSON
+    /**
+     * The Gson.
+     */
+// objeto que nos permitirá transformar protobufs a JSON
     protected final Gson gson = new Gson();
 
+    /**
+     * The Stub.
+     */
     protected CoreBoardCommuServiceGrpc.CoreBoardCommuServiceBlockingStub stub;
+    /**
+     * The Async stub.
+     */
     protected CoreBoardCommuServiceGrpc.CoreBoardCommuServiceStub asyncStub;
 
+    /**
+     * Instantiates a new Core board client grpc base.
+     *
+     * @param direccion the direccion
+     */
     public CoreBoardClientGrpcBase (String direccion) {
         // PROCESO DE ENVIO DE PETICION GRPC
         // 1ro: Definir la direccion del servidro RPC
@@ -29,6 +46,12 @@ public class CoreBoardClientGrpcBase {
         this.asyncStub = CoreBoardCommuServiceGrpc.newStub(channel);;
     }
 
+    /**
+     * Start simulacion domain . mensaje reply.
+     *
+     * @param simulacionBoardReq the simulacion board req
+     * @return the domain . mensaje reply
+     */
     public Domain.MensajeReply startSimulacion (Domain.SimulacionBoardReq simulacionBoardReq){
         try {
             return stub.startSimulacion(simulacionBoardReq);

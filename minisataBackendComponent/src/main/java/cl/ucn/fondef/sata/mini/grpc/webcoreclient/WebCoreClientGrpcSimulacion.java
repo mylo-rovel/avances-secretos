@@ -1,8 +1,10 @@
 package cl.ucn.fondef.sata.mini.grpc.webcoreclient;
 
 import cl.ucn.fondef.sata.mini.grpc.Domain;
-import cl.ucn.fondef.sata.mini.grpcobjects.*;
-import io.grpc.Grpc;
+import cl.ucn.fondef.sata.mini.utilities.webrequests.WebReqEventoSubEntity;
+import cl.ucn.fondef.sata.mini.utilities.webrequests.WebReqSecuenciaSubEntity;
+import cl.ucn.fondef.sata.mini.utilities.webrequests.WebReqSimulacionReq;
+import cl.ucn.fondef.sata.mini.utilities.webrequests.WebReqStartSimulacionReq;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ public final class WebCoreClientGrpcSimulacion extends WebCoreClientGrpcBase {
      * Get simulacion string.
      *
      * @param idSimulacion the id simulacion
+     * @param rut          the rut
      * @return the string
      */
     public String getSimulacion(long idSimulacion, String rut){
@@ -31,6 +34,7 @@ public final class WebCoreClientGrpcSimulacion extends WebCoreClientGrpcBase {
     /**
      * Get simulaciones string.
      *
+     * @param rut the rut
      * @return the string
      */
     public String getSimulaciones(String rut){
@@ -39,20 +43,26 @@ public final class WebCoreClientGrpcSimulacion extends WebCoreClientGrpcBase {
         return this.gson.toJson(serverResponse);
     }
 
-    public String addSimulacion(GrpcSimulacionReq simulacionReq) {
+    /**
+     * Add simulacion string.
+     *
+     * @param simulacionReq the simulacion req
+     * @return the string
+     */
+    public String addSimulacion(WebReqSimulacionReq simulacionReq) {
         Domain.SimulacionReq.Builder nuevaSimulacionReq = Domain.SimulacionReq.newBuilder()
                 .setNombre(simulacionReq.getNombre())
                 .setDescripcion(simulacionReq.getDescripcion())
                 .setNombreEquipo(simulacionReq.getNombreEquipo())
                 .setRutOperador(simulacionReq.getRutOperador());
 
-        List<GrpcSecuencia> listaSecuencias = simulacionReq.getListaSecuencias();
+        List<WebReqSecuenciaSubEntity> listaSecuencias = simulacionReq.getListaSecuencias();
         for (int i = 0; i < listaSecuencias.size(); i++) {
-            GrpcSecuencia secuenciaRecibida = listaSecuencias.get(i);
+            WebReqSecuenciaSubEntity secuenciaRecibida = listaSecuencias.get(i);
             Domain.Secuencia.Builder secuenciaEnviar = Domain.Secuencia.newBuilder()
                     .setIdComponente(secuenciaRecibida.getIdComponente());
 
-            List<GrpcEvento> listaEventos= secuenciaRecibida.getListaEventos();
+            List<WebReqEventoSubEntity> listaEventos= secuenciaRecibida.getListaEventos();
             for (int j = 0; j < listaEventos.size(); j ++) {
                 Domain.Evento eventoEnviar = Domain.Evento.newBuilder()
                         .setIntensidad(listaEventos.get(j).getIntensidad())
@@ -67,7 +77,13 @@ public final class WebCoreClientGrpcSimulacion extends WebCoreClientGrpcBase {
         return this.gson.toJson(serverResponse);
     }
 
-    public String startSimulacion(GrpcStartSimulacionReq startSimulacionReq) {
+    /**
+     * Start simulacion string.
+     *
+     * @param startSimulacionReq the start simulacion req
+     * @return the string
+     */
+    public String startSimulacion(WebReqStartSimulacionReq startSimulacionReq) {
         Domain.StartSimulacionReq requestObj = Domain.StartSimulacionReq.newBuilder()
                 .setIdSimulacion(startSimulacionReq.getId()).setNombreEquipo(startSimulacionReq.getNombreEquipo()).build();
         Domain.MensajeReply serverResponse = this.stub.startSimulacion(requestObj);
@@ -75,21 +91,36 @@ public final class WebCoreClientGrpcSimulacion extends WebCoreClientGrpcBase {
     }
 
     /**
-     * Gets simulacion actual.
+     * Gets equipos trabajando.
      *
-     * @return the simulacion actual
+     * @return the equipos trabajando
      */
     public String getEquiposTrabajando() {
-        return "";
-    }
-
-    public String getEjecucion(long idEjecucion, String rut) {
-        Domain.IdElementoConRutReq idElementoConRutReq = Domain.IdElementoConRutReq.newBuilder()
-                .setId( idEjecucion ).setRut(rut).build();
-        Domain.EjecucionReply serverResponse = this.stub.getEjecucion(idElementoConRutReq);
+        Domain.EmptyReq emptyReq = Domain.EmptyReq.newBuilder().build();
+        Domain.EquiposEntityReply serverResponse = this.stub.getEquiposTrabajando(emptyReq);
         return this.gson.toJson(serverResponse);
     }
 
+    /**
+     * Gets ejecucion.
+     *
+     * @param idEjecucion the id ejecucion
+     * @param rut         the rut
+     * @return the ejecucion
+     */
+    public String getEjecucion(long idEjecucion, String rut) {
+        Domain.IdElementoConRutReq idEjecucionConRutReq = Domain.IdElementoConRutReq.newBuilder()
+                .setId( idEjecucion ).setRut(rut).build();
+        Domain.EjecucionReply serverResponse = this.stub.getEjecucion(idEjecucionConRutReq);
+        return this.gson.toJson(serverResponse);
+    }
+
+    /**
+     * Gets ejecuciones.
+     *
+     * @param rut the rut
+     * @return the ejecuciones
+     */
     public String getEjecuciones(String rut) {
         Domain.RutEntityReq rutReq = Domain.RutEntityReq.newBuilder().setRut(rut).build();
         Domain.EjecucionesReply serverResponse = this.stub.getEjecuciones(rutReq);
