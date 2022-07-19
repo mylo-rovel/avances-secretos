@@ -23,16 +23,12 @@
       data() {
         return {
           "tituloPag": "Sistema de Alerta Temprana Aluvional",
-<<<<<<< HEAD
           "submitbutton":"volver",
           "cancelbutton":"atras",
-          simulacionesEjecutadas: []
-=======
-          "submitbutton":"abrir",
           simulacionesEjecutadas: [],
           isModalOpened:false,
-          ejecucionSeleccionada:{}
->>>>>>> 1ee15307234a9da0cff982a950b65f09da0ab18c
+          ejecucionSeleccionada:{},
+          nombre:""
         };
       },
       
@@ -45,6 +41,8 @@
           if (rawdata instanceof Error) { return false; }
           const ejecucionesAcotadas = await rawdata.json();
           this.simulacionesEjecutadas = ejecucionesAcotadas["ejecucionAcotada_"];
+          //console.log(this.simulacionesEjecutadas);
+          //console.log();
       },
       methods: {
         getRequestConfig() {
@@ -53,7 +51,6 @@
                 headers: {'authorization': window.localStorage.getItem("token")}
             };
         },
-<<<<<<< HEAD
         verSimulacion(){
           document.querySelector(".back-modal").style.display = "flex";
 
@@ -66,12 +63,9 @@
           });
         }, */
         cerrarModal(){
-          document.querySelector(".close-modal").addEventListener("click",
-          function() {
+    
             document.querySelector('.back-modal').style.display = "none";
-          });
-=======
-
+        },
         async seleccionarEjecucion(elementObj) {
           const idEjecucionSeleccionada = elementObj["id_"];
           const serverPath = `${this.urlApi}/ejecuciones/${idEjecucionSeleccionada}`;
@@ -79,10 +73,9 @@
           if (rawdata instanceof Error) { return false; }
           this.ejecucionSeleccionada = await rawdata.json();
           this.isModalOpened = true;
-          console.log(idEjecucionSeleccionada)
+          console.log(idEjecucionSeleccionada);
           return;
->>>>>>> 1ee15307234a9da0cff982a950b65f09da0ab18c
-        },
+        }
       }
     })
 </script>
@@ -90,19 +83,16 @@
 <template>
   <section id="vistaSimulaciones">
     <section id="contenidoTabla">
-        <div>
-          <NavbarPag :tituloPag="tituloPag"/>
-        </div>
-        <div class="container-header">
-          <PageHeader />
-<<<<<<< HEAD
+      <div>
+        <NavbarPag />
+      </div>
+      <div class="container-header">
+        <PageHeader />
       </div>
       <div class="container">
         <div class="row my-4">
           <h4>Simulaciones</h4>       
-        </div> 
-
-        
+        </div>  
         <div class="my-4 table-responsive table-container">
           <table id="tablaSimulaciones" class=" tabla-simulacion table table-lifht table-bordered table-hover table-striped">
             <thead class=" text-white">
@@ -113,15 +103,15 @@
             </thead>
             <tbody id="tBody-simulaciones">
               <tr scope="row" v-for="(elementObj, rowIndex) in simulacionesEjecutadas" :key="`eventKey_${rowIndex}`">
-                <td ><button :id='"boton-"+elementObj' class="btn" @click="verSimulacion()">{{elementObj["nombreSimulacion_"]}}</button></td>
+                <td ><button :id='"boton-"+elementObj' class="btn" @click="seleccionarEjecucion(elementObj) ">{{elementObj["nombreSimulacion_"]}}</button></td>
                 <td> {{elementObj["nombreEquipo_"]}} </td>
                 <td> {{elementObj["fechaEjecucion_"]}} </td>
                 <td> {{elementObj["aguaCaida_"]}} </td>
               </tr>
             </tbody>
-          </table>
-          
+          </table>  
         </div>
+        
         <center class = "row my-4  ">
           <div class="col-12 contenido-botones my-4">    
             <NuxtLink to="/operador/menu-operador"><SubmitButton :submitbutton = "submitbutton"/></NuxtLink>
@@ -129,7 +119,7 @@
         </center>
        <!-- <button id="boton_prueba" type="button" class="btn btn-primary" @click = "logSimulacionesEjecutadas()" >probar modal</button> -->
         <div class= "back-modal">
-          <div class="modal-content my-4">
+           <!--<div class="modal-content my-4">
             <div class="row">
               <div class = "titulo-modal my-4">
                 <h4>Configuración Simulación</h4>
@@ -185,46 +175,19 @@
               </div>
             </div>
             <div class ="close-modal" @click="cerrarModal()">+</div>
-=======
-        </div>
-        <div class="container">
-
-          <div class="row my-4">
-            <h4>Simulaciones</h4>       
-          </div> 
-
-          <div class="my-4 table-responsive table-container">
-            <table id="tablaSimulaciones" class=" tabla-simulacion table table-lifht table-bordered table-hover table-striped">
-              <thead class="text-white">
-                <th scope="row">Simulacion</th>
-                <th scope="row">Equipo</th>
-                <th scope="row">Fecha</th>
-                <th scope="row">Agua</th>
-              </thead>
-              <tbody id="tBody-simulaciones">
-                <tr scope="row" v-for="(elementObj, rowIndex) in simulacionesEjecutadas" :key="`eventKey_${rowIndex}`"  @click="() => seleccionarEjecucion(elementObj)">
-                  <td> {{elementObj["nombreSimulacion_"]}} </td>
-                  <td> {{elementObj["nombreEquipo_"]}} </td>
-                  <td> {{elementObj["fechaEjecucion_"]}} </td>
-                  <td> {{elementObj["aguaCaida_"]}} </td>
-                </tr>
-              </tbody>
-            </table>
->>>>>>> 1ee15307234a9da0cff982a950b65f09da0ab18c
-          </div>
-
+          </div> -->
           <article v-if="isModalOpened" class="modal-background-container">
-              <EjecucionModal 
-                @changeModalToFalse="isModalOpened=false"
+            <EjecucionModal 
+              @changeModalToFalse="isModalOpened=false"
                 :ejecucionSeleccionada="ejecucionSeleccionada" 
                 :isModalOpened="isModalOpened"/>
           </article>
+        </div>
       </div>
     </section>
-
   </section>
-
 </template>
+
 <style>
 
   .table-container {
@@ -244,7 +207,6 @@
   th{
     padding: 0.5rem;
   }
-<<<<<<< HEAD
   
   .titulo-modal{
     text-align: center;
@@ -293,20 +255,16 @@
         border: 1px solid black;
         transform: scale(1.1);
     }
-=======
+    .modal-background-container{
+      z-index: 999;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width:100vw;
+      height:100vh;
+      background-color: rgba(0, 0, 0, 0.8);
+    }
 
-
-  .modal-background-container{
-    z-index: 999;
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width:100vw;
-    height:100vh;
-    background-color: rgba(0, 0, 0, 0.8);
-  }
-
->>>>>>> 1ee15307234a9da0cff982a950b65f09da0ab18c
 </style>
