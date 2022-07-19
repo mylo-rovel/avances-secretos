@@ -56,7 +56,7 @@
             <p :id="`Inicio_key`" @click="(e) => {}">
                 <span class="menu-routes-element underlined-element lista-items">
                     <img src="~/assets/home.svg" class="img-icono">
-                    <NuxtLink to="/menu-operador">Inicio</NuxtLink>
+                    <NuxtLink to="/operador/menu-operador">Inicio</NuxtLink>
                 </span>
             </p>
             <p :id="`Perfil_key`" @click="(e) => {}">

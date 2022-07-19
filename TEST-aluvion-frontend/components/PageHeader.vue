@@ -16,10 +16,7 @@ export default {
       </div>
       <div class="common-header-top-options">
       <!-- in this part goes the profile section -->
-        <div class="common-header-top-profile-section">
-          <img class="common-profile-logo" src="~/assets/img/profile-icon.png" alt="conicyt-logo">          
-          <p class="common-header-top-profile-word">Usuario</p>
-        </div>
+      
       </div>
     </div>
     <div class="common-header-top-title-container">

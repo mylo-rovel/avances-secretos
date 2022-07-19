@@ -36,7 +36,7 @@
                 method: 'get', 
                 headers: {'authorization': JWTtoken}
             };
-            const url_to_fetch = `http://localhost:8081/api/simulaciones/`;
+            const url_to_fetch = `${this.urlApi}/simulaciones/`;
             const rawdata = await fetch(url_to_fetch, post_config).catch(err => err);
             const listaSimulacionesCrudas = await rawdata.json();
 
@@ -134,8 +134,8 @@
                                     </select>
                                 </div>
                             </div>
-
-                            <div class = "row my-4 ">
+                        </form>
+                        <div class = "row my-4 ">
                                 <div class= "col-12 contenido-botones my-4">
                                     <NuxtLink to="/operador/menu-operador"><CancelButtom :cancelbutton = "cancelbutton"/></NuxtLink>
                                 </div>                            
@@ -143,8 +143,7 @@
                                     <NuxtLink to="/menu-operador"><SubmitButton :submitbutton = "submitbutton" @click = "sendSolicitudSimulacion()"/></NuxtLink>
                                 </div>
                             </div>
-                        </form>
-                        <button @click="sendSolicitudSimulacion()">CONSOLE.LOG HERE CHECK ME OUT</button>
+                        <!--<button @click="sendSolicitudSimulacion()">CONSOLE.LOG HERE CHECK ME OUT</button>-->
                     </div>
                 </div>
             </div>
