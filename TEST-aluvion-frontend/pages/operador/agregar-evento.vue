@@ -70,7 +70,7 @@
                 <p class="total-duration-time-row"><span class="total-duration-number">{{duracionTotalListaEventos}}</span>minutos</p>
             </div>
             <div class="col-6 contenido-botones my-4">
-                <NuxtLink to= "/operador/registrar-simulacion"><SubmitButton :submitbutton ="submitbutton"/></NuxtLink>
+                <NuxtLink to= "/operador/registrar-simulacion"><SubmitButton :submitbutton ="submitbutton" @click="guardarListaEventos()" /></NuxtLink>
             </div>
         </article>
     </section>
