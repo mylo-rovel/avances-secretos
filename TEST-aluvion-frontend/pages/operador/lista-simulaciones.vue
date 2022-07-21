@@ -125,8 +125,7 @@
   th{
     padding: 0.5rem;
   }
-<<<<<<< HEAD
-  
+
   .titulo-modal{
     text-align: center;
   }
@@ -174,8 +173,6 @@
         border: 1px solid black;
         transform: scale(1.1);
     }
-=======
-
 
   .modal-background-container{
     z-index: 999;
@@ -188,6 +185,4 @@
     height:100vh;
     background-color: rgba(0, 0, 0, 0.8);
   }
-
->>>>>>> 1ee15307234a9da0cff982a950b65f09da0ab18c
 </style>
