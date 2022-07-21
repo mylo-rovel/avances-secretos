@@ -17,11 +17,8 @@ class BoardArduinoCommunicator:
 			time.sleep(0.1)
 			read = self.arduino.readline()
 			print(read)
-		except KeyboardInterrupt:
-			print("\nInterrupcion por teclado")
-		except ValueError as ve:
-			print(ve)
-			print("Otra interrupcion")
+		except:
+			print("ERROR AL ENVIAR DATOS A ARDUINO")
 		finally:
 			# self.arduino.close()
 			pass

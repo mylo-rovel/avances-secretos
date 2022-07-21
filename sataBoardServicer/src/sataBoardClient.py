@@ -33,16 +33,21 @@ class SataBoardClient:
     def __init__(self):
         self.channel = grpc.insecure_channel(f'{venv_dict["CENTRAL_CORE_ADDRESS"]}:{venv_dict["CENTRAL_CORE_PORT"]}')
         self.stub = ClientServerModule.CoreBoardCommuServiceStub(self.channel)
-        print(f'Servidor Centra Core a alcanzar: {venv_dict["CENTRAL_CORE_ADDRESS"]}:{venv_dict["CENTRAL_CORE_PORT"]}')
+        print(f'Servidor Central Core a alcanzar: {venv_dict["CENTRAL_CORE_ADDRESS"]}:{venv_dict["CENTRAL_CORE_PORT"]}')
 
     def sendHelloWorldToCentralCore(self):
-        nombreEquipo = venv_dict["NOMBRE_EQUIPO"]
-        direccionIpEquipo = f'{venv_dict["BOARD_ADDRESS"]}:{venv_dict["BOARD_PORT"]}'
-        serverResponse = self.stub.sendMensajeEncendido(
-            ReqResModule.SaludoBoardReq(
-                nombre_equipo = nombreEquipo,
-                direccion_ip_equipo = direccionIpEquipo
-        ))
-        print(serverResponse)
-        print("Mensaje saludo ya enviado al Central Core")
-        return None
+        try:
+            nombreEquipo = venv_dict["NOMBRE_EQUIPO"]
+            direccionIpEquipo = f'{venv_dict["BOARD_ADDRESS"]}:{venv_dict["BOARD_PORT"]}'
+            serverResponse = self.stub.sendMensajeEncendido(
+                ReqResModule.SaludoBoardReq(
+                    nombre_equipo = nombreEquipo,
+                    direccion_ip_equipo = direccionIpEquipo
+            ))
+            print("Mensaje saludo ya enviado al Central Core")
+            print(f"Mensaje recibido: {serverResponse.respuestaSaludo}")
+        except:
+            print("ERROR AL ENVIAR EL SALUDO. NO HUBO RESPUESTA")
+        
+        finally:
+            return None
