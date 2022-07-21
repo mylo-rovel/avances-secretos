@@ -43,4 +43,9 @@ public class InformacionBoard {
         this.estaEjecutandose = false;
         this.valoresGrafico = new ArrayList<Double>();
     }
+
+    public void resetCoreBoardClient(String newDireccion) {
+        this.coreBoardClient.shutdownCoreBoardClient();
+        this.coreBoardClient = new CoreBoardClientGrpcBase(newDireccion);
+    }
 }

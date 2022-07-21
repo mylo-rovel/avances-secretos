@@ -211,6 +211,7 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
     @Override
     public String startSimulacion(StartSimulacionReq startSimulacionReq, HashMap<String, InformacionBoard> ejecucionesEquipo) {
         // SI EL EQUIPO NO ESTA EN EL HASHMAP, NO ESTA ENCENDIDO => NO CONTINUAR CON EL PROCESO
+        System.out.println("ejecucionesEquipo = " + ejecucionesEquipo);
         if (!(ejecucionesEquipo.containsKey(startSimulacionReq.getNombreEquipo()))){
             return "Equipo no disponible para operar";
         }

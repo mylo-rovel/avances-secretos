@@ -24,6 +24,8 @@ public class CoreBoardClientGrpcBase {
 // objeto que nos permitirá transformar protobufs a JSON
     protected final Gson gson = new Gson();
 
+    protected ManagedChannel channel;
+
     /**
      * The Stub.
      */
@@ -41,9 +43,14 @@ public class CoreBoardClientGrpcBase {
     public CoreBoardClientGrpcBase (String direccion) {
         // PROCESO DE ENVIO DE PETICION GRPC
         // 1ro: Definir la direccion del servidro RPC
-        ManagedChannel channel = NettyChannelBuilder.forTarget(direccion).usePlaintext().build();
+        this.channel = NettyChannelBuilder.forTarget(direccion).usePlaintext().build();
         this.stub = CoreBoardCommuServiceGrpc.newBlockingStub(channel);
-        this.asyncStub = CoreBoardCommuServiceGrpc.newStub(channel);;
+        this.asyncStub = CoreBoardCommuServiceGrpc.newStub(channel);
+    }
+
+    public void shutdownCoreBoardClient() {
+        ManagedChannel channelDown = this.channel.shutdownNow();
+        System.out.println("CoreBoardClientGrpcBase channelDown = " + channelDown);
     }
 
     /**

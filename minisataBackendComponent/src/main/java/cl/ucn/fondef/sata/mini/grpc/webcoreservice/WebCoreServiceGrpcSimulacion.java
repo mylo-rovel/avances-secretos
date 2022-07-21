@@ -253,7 +253,7 @@ public class WebCoreServiceGrpcSimulacion {
         // Y SI ESTÁ, ACTUALIZAMOS SU IP POR CAMBIA SU VALOR EN EL ARCHIVO .env
         else {
             InformacionBoard entradaEquipoOLD = ejecucionesEquipo.get(equipoGuardadoDB.getNombre());
-            entradaEquipoOLD.setCoreBoardClient(informacionBoardNueva.getCoreBoardClient());
+            entradaEquipoOLD.resetCoreBoardClient(saludoBoardReq.getDireccionIpEquipo());
         }
 
         //aqui esta el proceso de convertir equipoGuardadoDB a un equipoEntity para enviarlo
