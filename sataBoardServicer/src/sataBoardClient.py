@@ -29,11 +29,11 @@ venv_dict = dict(dotenv_values(".env"))
 
 
 class SataBoardClient:
+
     def __init__(self):
         self.channel = grpc.insecure_channel(f'{venv_dict["CENTRAL_CORE_ADDRESS"]}:{venv_dict["CENTRAL_CORE_PORT"]}')
         self.stub = ClientServerModule.CoreBoardCommuServiceStub(self.channel)
-        print(f'Servidor a alcanzar: {venv_dict["CENTRAL_CORE_ADDRESS"]}:{venv_dict["CENTRAL_CORE_PORT"]}')
-
+        print(f'Servidor Centra Core a alcanzar: {venv_dict["CENTRAL_CORE_ADDRESS"]}:{venv_dict["CENTRAL_CORE_PORT"]}')
 
     def sendHelloWorldToCentralCore(self):
         nombreEquipo = venv_dict["NOMBRE_EQUIPO"]
@@ -43,5 +43,6 @@ class SataBoardClient:
                 nombre_equipo = nombreEquipo,
                 direccion_ip_equipo = direccionIpEquipo
         ))
-        print("Saludo enviado")
+        print(serverResponse)
+        print("Mensaje saludo ya enviado al Central Core")
         return None

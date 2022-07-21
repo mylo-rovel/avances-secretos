@@ -23,16 +23,10 @@
       data() {
         return {
           "tituloPag": "Sistema de Alerta Temprana Aluvional",
-<<<<<<< HEAD
-          "submitbutton":"volver",
-          "cancelbutton":"atras",
-          simulacionesEjecutadas: []
-=======
           "submitbutton":"abrir",
           simulacionesEjecutadas: [],
           isModalOpened:false,
           ejecucionSeleccionada:{}
->>>>>>> 1ee15307234a9da0cff982a950b65f09da0ab18c
         };
       },
       
@@ -53,25 +47,6 @@
                 headers: {'authorization': window.localStorage.getItem("token")}
             };
         },
-<<<<<<< HEAD
-        verSimulacion(){
-          document.querySelector(".back-modal").style.display = "flex";
-
-        },
-
-        /* abrirModal(){
-          document.getElementById("boton_prueba").addEventListener("click",
-          function() {
-            document.querySelector(".back-modal").style.display = "flex";
-          });
-        }, */
-        cerrarModal(){
-          document.querySelector(".close-modal").addEventListener("click",
-          function() {
-            document.querySelector('.back-modal').style.display = "none";
-          });
-=======
-
         async seleccionarEjecucion(elementObj) {
           const idEjecucionSeleccionada = elementObj["id_"];
           const serverPath = `${this.urlApi}/ejecuciones/${idEjecucionSeleccionada}`;
@@ -81,7 +56,6 @@
           this.isModalOpened = true;
           console.log(idEjecucionSeleccionada)
           return;
->>>>>>> 1ee15307234a9da0cff982a950b65f09da0ab18c
         },
       }
     })
@@ -95,100 +69,8 @@
         </div>
         <div class="container-header">
           <PageHeader />
-<<<<<<< HEAD
-      </div>
-      <div class="container">
-        <div class="row my-4">
-          <h4>Simulaciones</h4>       
-        </div> 
-
-        
-        <div class="my-4 table-responsive table-container">
-          <table id="tablaSimulaciones" class=" tabla-simulacion table table-lifht table-bordered table-hover table-striped">
-            <thead class=" text-white">
-              <th scope="row">Simulación</th>
-              <th scope="row">Equipo</th>
-              <th scope="row">Fecha</th>
-              <th scope="row">Agua</th>
-            </thead>
-            <tbody id="tBody-simulaciones">
-              <tr scope="row" v-for="(elementObj, rowIndex) in simulacionesEjecutadas" :key="`eventKey_${rowIndex}`">
-                <td ><button :id='"boton-"+elementObj' class="btn" @click="verSimulacion()">{{elementObj["nombreSimulacion_"]}}</button></td>
-                <td> {{elementObj["nombreEquipo_"]}} </td>
-                <td> {{elementObj["fechaEjecucion_"]}} </td>
-                <td> {{elementObj["aguaCaida_"]}} </td>
-              </tr>
-            </tbody>
-          </table>
-          
-        </div>
-        <center class = "row my-4  ">
-          <div class="col-12 contenido-botones my-4">    
-            <NuxtLink to="/operador/menu-operador"><SubmitButton :submitbutton = "submitbutton"/></NuxtLink>
-          </div>
-        </center>
-       <!-- <button id="boton_prueba" type="button" class="btn btn-primary" @click = "logSimulacionesEjecutadas()" >probar modal</button> -->
-        <div class= "back-modal">
-          <div class="modal-content my-4">
-            <div class="row">
-              <div class = "titulo-modal my-4">
-                <h4>Configuración Simulación</h4>
-              </div>
-              <div>
-                <div class="row my-4" v-for="(i, rowIndex) in simulacionesEjecutadas" :key="`eventKey_${rowIndex}`">
-                  <div class="row my-4">
-                    <div class="input-group flex-nowrap">
-                      <label class="col-sm-4 col-form-label" id="addon-wrapping">ID Simulación</label>
-                      <div class="col-sm-4">
-                        <input id="ver_id" type="text" class="form-control-plaintext" aria-describedby="addon-wrapping" readonly>
-                      </div>  
-                    </div>
-                  </div>
-                  <div class="row my-4">
-                    <div class="input-group flex-nowrap">
-                      <label class="col-sm-4 col-form-label">Nombre Simulación</label>
-                    
-                      <label id="ver_nombre" class="form-control-plaintext" aria-describedby="addon-wrapping">{{i["nombreSimulacion_"]}}</label>
-                
-                    </div>
-                  </div>
-                  <div class="row my-4">
-                    <div class="input-group flex-nowrap">
-                      <label class="col-sm-4 col-form-label" id="addon-wrapping">Equipo</label>
-                      <div class="col-sm-4">
-                        <label id="ver_equipo" class="form-control-plaintext" aria-describedby="addon-wrapping" >{{i["nombreEquipo_"]}}</label>             
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row my-4">
-                    <div class="input-group flex-nowrap">
-                      <label class="col-sm-4 col-form-label" id="addon-wrapping">Secuencias</label>
-                    </div>
-                  </div>
-                  <div class="row my-4">
-                    <div class="input-group flex-nowrap">
-                      <label class="col-sm-4 col-form-label" id="addon-wrapping">Descripción</label>
-                      <div class="col-sm-4">
-                        <input id="ver_descripcion" name="descripcion" type="text" class="form-control-plaintext"  aria-describedby="addon-wrapping" readonly>
-                      </div>  
-                    </div>
-                  </div>
-                  <div class="row my-4">
-                    <div class="input-group flex-nowrap">
-                      <label class="col-sm-4 col-form-label" id="addon-wrapping">Estado</label>
-                      <div class="col-sm-4">
-                        <input id="ver_estado" name="estado" type="text" class="form-control-plaintext"  aria-describedby="addon-wrapping" readonly>
-                      </div>
-                    </div>
-                  </div>           
-                </div>
-              </div>
-            </div>
-            <div class ="close-modal" @click="cerrarModal()">+</div>
-=======
         </div>
         <div class="container">
-
           <div class="row my-4">
             <h4>Simulaciones</h4>       
           </div> 
@@ -210,7 +92,6 @@
                 </tr>
               </tbody>
             </table>
->>>>>>> 1ee15307234a9da0cff982a950b65f09da0ab18c
           </div>
 
           <article v-if="isModalOpened" class="modal-background-container">
