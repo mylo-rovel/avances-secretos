@@ -23,10 +23,12 @@
       data() {
         return {
           "tituloPag": "Sistema de Alerta Temprana Aluvional",
-          "submitbutton":"abrir",
+          "submitbutton":"volver",
+          "cancelbutton":"atras",
           simulacionesEjecutadas: [],
           isModalOpened:false,
-          ejecucionSeleccionada:{}
+          ejecucionSeleccionada:{},
+          nombre:""
         };
       },
       
@@ -39,6 +41,8 @@
           if (rawdata instanceof Error) { return false; }
           const ejecucionesAcotadas = await rawdata.json();
           this.simulacionesEjecutadas = ejecucionesAcotadas["ejecucionAcotada_"];
+          //console.log(this.simulacionesEjecutadas);
+          //console.log();
       },
       methods: {
         getRequestConfig() {
@@ -54,16 +58,16 @@
           if (rawdata instanceof Error) { return false; }
           this.ejecucionSeleccionada = await rawdata.json();
           this.isModalOpened = true;
-          console.log(idEjecucionSeleccionada)
-          return;
-        },
-      }
+          console.log(idEjecucionSeleccionada);
+          return;ea6a01b3caf5b22ddfb655f9ba5bba41bfb66
+      }}
     })
 </script>
 
 <template>
   <section id="vistaSimulaciones">
     <section id="contenidoTabla">
+
         <div>
           <NavbarPag :tituloPag="tituloPag"/>
         </div>
@@ -93,19 +97,18 @@
               </tbody>
             </table>
           </div>
-
           <article v-if="isModalOpened" class="modal-background-container">
-              <EjecucionModal 
-                @changeModalToFalse="isModalOpened=false"
+            <EjecucionModal 
+              @changeModalToFalse="isModalOpened=false"
                 :ejecucionSeleccionada="ejecucionSeleccionada" 
                 :isModalOpened="isModalOpened"/>
           </article>
+        </div>
       </div>
     </section>
-
   </section>
-
 </template>
+
 <style>
 
   .table-container {
@@ -125,7 +128,11 @@
   th{
     padding: 0.5rem;
   }
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 63aea6a01b3caf5b22ddfb655f9ba5bba41bfb66
   .titulo-modal{
     text-align: center;
   }
@@ -173,6 +180,7 @@
         border: 1px solid black;
         transform: scale(1.1);
     }
+<<<<<<< HEAD
 
   .modal-background-container{
     z-index: 999;
@@ -185,4 +193,18 @@
     height:100vh;
     background-color: rgba(0, 0, 0, 0.8);
   }
+=======
+    .modal-background-container{
+      z-index: 999;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width:100vw;
+      height:100vh;
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+
+>>>>>>> 63aea6a01b3caf5b22ddfb655f9ba5bba41bfb66
 </style>

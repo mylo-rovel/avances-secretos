@@ -9,6 +9,30 @@ export const setListasDesplegables = (listaRawSimulaciones) => {
 		return acc;
 	}, {})
 }
+export const getEquiposDesplegables = (listaRawEquipos) => {
+	const listaEquiposCrudos = listaRawEquipos["equipoAcotado_"];
+	return listaEquiposCrudos.reduce( (acc, item) => {
+		if (!(item['nombre_'] in acc)) {
+			acc = {...acc, [item['nombre_']]: { idEquipo:[]}};
+		}
+		acc[item['nombre_']]["idEquipo"].push(item['id_']);
+		//acc[item['nombreEquipo_']]["listaIds"].push(item['id_']);
+		return acc;
+	}, {})
+}
+
+export const getValvulasDesplegables = (listaValvulas) => {
+	const listaValvulasCrudas = listaValvulas["componente_"];
+	return listaValvulasCrudas.reduce( (acc, item) => {
+		if (!(item['nombre_'] in acc)) {
+			acc = {...acc, [item['nombre_']]: { listaIdComponente:[]}};
+		}
+		acc[item['nombre_']]["listaIdComponente"].push(item['id_']);
+		return acc;
+	}, {})
+}
+
+//export const getEquipoValvulaDespl = ()
 
 export const checkIfUserShouldBeHere = (rolesApropiados) => {
 	// console.clear()

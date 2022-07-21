@@ -60,4 +60,13 @@ export const secuenciasMethods = {
         state.listaEventos = [... state.secuencias[state.currentSecuencia]];
         return true;
     },
+
+    setCantidadSecuencias(state, cantValvulas) {
+        const aux = []
+        for (let i = 0; i < cantValvulas; i++) {
+            aux.push({"listaEventos": []})
+        }
+        state.secuencias = [...aux];
+        return true;
+    }
 }

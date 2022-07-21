@@ -37,9 +37,5 @@ export const secuenciasState = {
     // ]
     // DESPUÉS OBTENDREMOS LA CANTIDAD DE VALVULAS PARA INICIALIZAR EL ARRAY CON UNA CANTIDAD DE OBJETOS
     // EQUIVALENTE AL VALOR OBTENIDO
-    secuencias: [
-        {"listaEventos": []}, 
-        {"listaEventos": []}, 
-        {"listaEventos": []}
-    ]
+    secuencias: []
 }
