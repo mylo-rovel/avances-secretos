@@ -104,7 +104,7 @@
                 const listaValvulasCrudas = await dataValvula.json();
                 this.valvulasDisponibles = Object.keys(getValvulasDesplegables(listaValvulasCrudas));
                 console.log(this.valvulasDisponibles);
-                
+                //console.log(this.valvulasDisponibles.lenght);
             },
          
             cantSecuencias(){

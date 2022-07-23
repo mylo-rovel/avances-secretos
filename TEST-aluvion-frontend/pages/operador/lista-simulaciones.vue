@@ -128,11 +128,6 @@
   th{
     padding: 0.5rem;
   }
-<<<<<<< HEAD
-
-=======
-  
->>>>>>> 63aea6a01b3caf5b22ddfb655f9ba5bba41bfb66
   .titulo-modal{
     text-align: center;
   }
@@ -180,7 +175,6 @@
         border: 1px solid black;
         transform: scale(1.1);
     }
-<<<<<<< HEAD
 
   .modal-background-container{
     z-index: 999;
@@ -193,18 +187,4 @@
     height:100vh;
     background-color: rgba(0, 0, 0, 0.8);
   }
-=======
-    .modal-background-container{
-      z-index: 999;
-      position: fixed;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      width:100vw;
-      height:100vh;
-      background-color: rgba(0, 0, 0, 0.8);
-    }
-
->>>>>>> 63aea6a01b3caf5b22ddfb655f9ba5bba41bfb66
 </style>
