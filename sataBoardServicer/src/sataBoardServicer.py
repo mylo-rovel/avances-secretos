@@ -36,7 +36,8 @@ class CoreBoardCommuServiceServicer(ClientServerModule.CoreBoardCommuServiceServ
 
     def _getDictSimulacion(self, dictSecuencias):
         return {
-            "valvulas": len(dictSecuencias.keys()),
+            "cantValvulas": len(dictSecuencias.keys()),
+            "ids": list(dictSecuencias.keys()),
             "secuencias": dictSecuencias
         }
 
@@ -51,8 +52,8 @@ class CoreBoardCommuServiceServicer(ClientServerModule.CoreBoardCommuServiceServ
             dictSecuencias[str(secReq.id_componente)] = self._getHandyListaEventos(secReq.evento)
 
         simulacionJson = json.dumps(self._getDictSimulacion(dictSecuencias))
-        print(simulacionJson)
-        # self.boardArduinoCommunicator.enviarDatosToArduino(simulacionJson);
+        # print(simulacionJson)
+        self.boardArduinoCommunicator.enviarDatosToArduino(simulacionJson);
         
         responseMessage = "Secuencias recibidas"
         return ReqResModule.MensajeReply(

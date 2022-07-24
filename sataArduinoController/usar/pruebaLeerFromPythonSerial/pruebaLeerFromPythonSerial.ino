@@ -18,16 +18,17 @@ void loop() {
       return;
     }
     
-    int valvulas = doc["valvulas"]; // 2
+    int cantValvulas = doc["cantValvulas"]; // 2
     
-    for (JsonObject secuencias_1_item : doc["secuencias"]["1"].as<JsonArray>()) {    
-      int secuencias_1_item_i = secuencias_1_item["i"]; // 30, 31, 32, 32, 32, 32, 32, 32, 32, 32, 32
-      int secuencias_1_item_d = secuencias_1_item["d"]; // 20, 21, 22, 22, 22, 22, 22, 22, 22, 22, 22    
-    }
-    
-    for (JsonObject secuencias_2_item : doc["secuencias"]["2"].as<JsonArray>()) {    
-      int secuencias_2_item_i = secuencias_2_item["i"]; // 40, 41, 42, 42, 42, 42, 42, 42, 42, 42
-      int secuencias_2_item_d = secuencias_2_item["d"]; // 30, 31, 32, 32, 32, 32, 32, 32, 32, 32    
+    for (int i = 0; i < cantValvulas; i++) {
+      const char* currentIdValvula= doc["ids"][i];
+      for (JsonObject secuencias_item : doc["secuencias"][currentIdValvula].as<JsonArray>()) {    
+        int intensidadEvento = secuencias_item["i"]; // 30, 31, 32, 32, 32, 32, 32, 32, 32, 32, 32
+        //int duracionEvento = secuencias_item["d"]; // 20, 21, 22, 22, 22, 22, 22, 22, 22, 22, 22
+        Serial.print(intensidadEvento);
+        Serial.print("#");
+      }
+      Serial.print("%%");
     }
     Serial.print("SUCCESS"); 
   }
