@@ -17,6 +17,7 @@ public class StringEnumTransformer {
      */
     public Domain.UsuarioEntity.RolUsuario getEnumRolUsuario(String stringEvaluar) {
         switch (stringEvaluar){
+            case "ROL_NONE": return Domain.UsuarioEntity.RolUsuario.ROL_NONE;
             case "OPERADOR": return Domain.UsuarioEntity.RolUsuario.OPERADOR;
             case "CONFIGURADOR": return Domain.UsuarioEntity.RolUsuario.CONFIGURADOR;
             case "ADMINISTRADOR": return Domain.UsuarioEntity.RolUsuario.ADMINISTRADOR;
@@ -33,6 +34,7 @@ public class StringEnumTransformer {
      */
     public Domain.UsuarioEntity.EstadoUsuario getEnumEstadoUsuario(String stringEvaluar) {
         switch (stringEvaluar){
+            case "ESTADO_NONE": return Domain.UsuarioEntity.EstadoUsuario.ESTADO_NONE;
             case "ACTIVO": return Domain.UsuarioEntity.EstadoUsuario.ACTIVO;
             case "INACTIVO": return Domain.UsuarioEntity.EstadoUsuario.INACTIVO;
             default: return null;
@@ -47,6 +49,7 @@ public class StringEnumTransformer {
      */
     public Domain.Registro.TipoRegistro getEnumTipoRegistro(String stringEvaluar) {
         switch (stringEvaluar){
+            case "REGISTRO_NONE": return Domain.Registro.TipoRegistro.REGISTRO_NONE;
             case "CREACION_USUARIO": return Domain.Registro.TipoRegistro.CREACION_USUARIO;
             case "LOGIN_USUARIO": return Domain.Registro.TipoRegistro.LOGIN_USUARIO;
             case "MODIFICACION_USUARIO": return Domain.Registro.TipoRegistro.MODIFICACION_USUARIO;
@@ -67,6 +70,7 @@ public class StringEnumTransformer {
      */
     public Domain.Componente.TipoComponente getEnumTipoComponente(String stringEvaluar) {
         switch (stringEvaluar){
+            case "TIPO_NONE": return Domain.Componente.TipoComponente.TIPO_NONE;
             case "CAMARA": return Domain.Componente.TipoComponente.CAMARA;
             case "FLUJOMETRO": return Domain.Componente.TipoComponente.FLUJOMETRO;
             case "TERMOMETRO": return Domain.Componente.TipoComponente.TERMOMETRO;
@@ -83,6 +87,7 @@ public class StringEnumTransformer {
      */
     public Domain.Componente.EstadoComponente getEnumEstadoComponente(String stringEvaluar) {
         switch (stringEvaluar){
+            case "ESTADO_NONE": return Domain.Componente.EstadoComponente.ESTADO_NONE;
             case "ACTIVO": return Domain.Componente.EstadoComponente.ACTIVO;
             case "INACTIVO": return Domain.Componente.EstadoComponente.INACTIVO;
             case "FALLA": return Domain.Componente.EstadoComponente.FALLA;
@@ -99,6 +104,7 @@ public class StringEnumTransformer {
      */
     public Domain.Pin.ConexionPin getEnumConexionPin(String stringEvaluar) {
         switch (stringEvaluar){
+            case "CONEXION_NONE": return Domain.Pin.ConexionPin.CONEXION_NONE;
             case "INPUT_ANALOGICO": return Domain.Pin.ConexionPin.INPUT_ANALOGICO;
             case "INPUT_DIGITAL": return Domain.Pin.ConexionPin.INPUT_DIGITAL;
             case "OUTPUT_ANALOGICO": return Domain.Pin.ConexionPin.OUTPUT_ANALOGICO;
@@ -116,6 +122,7 @@ public class StringEnumTransformer {
      */
     public Domain.TipoPlaca getEnumTipoPlaca(String stringEvaluar) {
         switch (stringEvaluar){
+            case "TIPO_NONE": return Domain.TipoPlaca.TIPO_NONE;
             case "ARDUINO_2560": return Domain.TipoPlaca.ARDUINO_2560;
             case "ESP_32": return Domain.TipoPlaca.ESP_32;
             default: return null;
@@ -130,6 +137,7 @@ public class StringEnumTransformer {
      */
     public Domain.EstadoEquipo getEnumEstadoEquipo(String stringEvaluar) {
         switch (stringEvaluar){
+            case "ESTADO_NONE": return Domain.EstadoEquipo.ESTADO_NONE;
             case "PROTOTIPO": return Domain.EstadoEquipo.PROTOTIPO;
             case "CONSTRUCCION": return Domain.EstadoEquipo.CONSTRUCCION;
             default: return null;
@@ -144,6 +152,7 @@ public class StringEnumTransformer {
      */
     public Domain.ArchivoEntity.TipoArchivo getEnumTipoArchivo(String stringEvaluar) {
         switch (stringEvaluar){
+            case "TIPO_NONE": return Domain.ArchivoEntity.TipoArchivo.TIPO_NONE;
             case "PNG": return Domain.ArchivoEntity.TipoArchivo.PNG;
             case "PDF": return Domain.ArchivoEntity.TipoArchivo.PDF;
             case "JPG": return Domain.ArchivoEntity.TipoArchivo.JPG;
