@@ -48,14 +48,16 @@ message RutEntityReq {
 
 message UsuarioEntity {
   enum EstadoUsuario {
-    ACTIVO = 0;
-    INACTIVO = 1;
+    ESTADO_NONE = 0;
+    ACTIVO = 1;
+    INACTIVO = 2;
   }
 
   enum RolUsuario {
-    OPERADOR = 0;
-    CONFIGURADOR = 1;
-    ADMINISTRADOR = 2;
+    ROL_NONE = 0;
+    OPERADOR = 1;
+    CONFIGURADOR = 2;
+    ADMINISTRADOR = 3;
   }
 
   string nombre = 1;
@@ -83,14 +85,15 @@ message UsuariosEntityReply {
 
 message Registro {
   enum TipoRegistro {
-    CREACION_USUARIO = 0;
-    LOGIN_USUARIO = 1;
-    MODIFICACION_USUARIO = 2;
-    CREACION_SIMULACION = 3;
-    INICIO_SIMULACION = 4;
-    UPLOAD_ARCHIVO = 5;
-    CREACION_EQUIPO = 6;
-    MODIFICACION_EQUIPO = 7;
+    REGISTRO_NONE = 0;
+    CREACION_USUARIO = 1;
+    LOGIN_USUARIO = 2;
+    MODIFICACION_USUARIO = 3;
+    CREACION_SIMULACION = 4;
+    INICIO_SIMULACION = 5;
+    UPLOAD_ARCHIVO = 6;
+    CREACION_EQUIPO = 7;
+    MODIFICACION_EQUIPO = 8;
   }
 
   int64 id = 1;
@@ -110,10 +113,11 @@ message RegistrosReply {
 
 message Pin {
   enum ConexionPin {
-    INPUT_ANALOGICO  = 0;
-    INPUT_DIGITAL = 1;
-    OUTPUT_ANALOGICO = 2;
-    OUTPUT_DIGITAL = 3;
+    CONEXION_NONE = 0;
+    INPUT_ANALOGICO  = 1;
+    INPUT_DIGITAL = 2;
+    OUTPUT_ANALOGICO = 3;
+    OUTPUT_DIGITAL = 4;
   }
 
   int32 numero = 1;
@@ -123,23 +127,26 @@ message Pin {
 }
 
 enum TipoPlaca {
-  ARDUINO_2560 = 0;
-  ESP_32 = 1;
+  TIPO_NONE = 0;
+  ARDUINO_2560 = 1;
+  ESP_32 = 2;
 }
 
 message Componente {
   enum EstadoComponente {
-    ACTIVO = 0;
-    INACTIVO = 1;
-    FALLA = 2;
-    REPARACION = 3;
+    ESTADO_NONE = 0;
+    ACTIVO = 1;
+    INACTIVO = 2;
+    FALLA = 3;
+    REPARACION = 4;
   }
 
   enum TipoComponente {
-    CAMARA = 0;
-    FLUJOMETRO = 1;
-    TERMOMETRO = 2;
-    VALVULA = 3;
+    TIPO_NONE = 0;
+    CAMARA = 1;
+    FLUJOMETRO = 2;
+    TERMOMETRO = 3;
+    VALVULA = 4;
   }
 
   int64 id = 1;
@@ -163,8 +170,9 @@ message ComponentesEquipoReply {
 }
 
 enum EstadoEquipo {
-  PROTOTIPO = 0;
-  CONSTRUCCION = 1;
+  ESTADO_NONE = 0;
+  PROTOTIPO = 1;
+  CONSTRUCCION = 2;
 }
 
 message EquipoEntity {
@@ -188,10 +196,11 @@ message EquipoEntityReply {
 
 message ArchivoEntity {
   enum TipoArchivo {
-    PNG  = 0;
-    PDF  = 1;
-    JPG  = 2;
-    JPEG = 3;
+    TIPO_NONE = 0;
+    PNG  = 1;
+    PDF  = 2;
+    JPG  = 3;
+    JPEG = 4;
   }
 
   string nombre_equipo = 1;

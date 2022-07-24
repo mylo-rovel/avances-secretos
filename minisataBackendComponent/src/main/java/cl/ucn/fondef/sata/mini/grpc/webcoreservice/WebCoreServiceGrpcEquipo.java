@@ -6,6 +6,7 @@ import cl.ucn.fondef.sata.mini.grpc.Domain;
 import cl.ucn.fondef.sata.mini.model.*;
 import cl.ucn.fondef.sata.mini.utilities.StringEnumTransformer;
 import io.grpc.stub.StreamObserver;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.util.List;
 /**
  * The type Web core service grpc equipo.
  */
+@Slf4j
 @Service
 public class WebCoreServiceGrpcEquipo {
     // EN ESTA CLASE CONSTRUIMOS LA RESPUESTA A RETORNAR AL CLIENTE RPC EN BASE A LO QUE
@@ -132,9 +134,12 @@ public class WebCoreServiceGrpcEquipo {
                         .setDescripcion(    pinesGuardados.get(j).getDescripcion())
                         .setConexion(       stringEnumTransformer.getEnumConexionPin(pinesGuardados.get(j).getConexion()))
                         .build();
+                log.info("pinEnviar.getConexion() = " + pinEnviar.getConexion());
+                log.info("pinEnviar.getNombre() = " + pinEnviar.getNombre());
                 componenteEnviar.addPinComponente(pinEnviar);
             }
             equipoEnte.addComponente(componenteEnviar);
+            log.info("equipoEnte = " + equipoEnte);
         }
     }
 

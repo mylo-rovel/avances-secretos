@@ -24,12 +24,13 @@ class CoreBoardCommuServiceServicer(ClientServerModule.CoreBoardCommuServiceServ
         pass
         self.sataBoardClient = SataBoardClient()
         self.sataBoardClient.sendHelloWorldToCentralCore()
-        # self.boardArduinoCommunicator = BoardArduinoCommunicator(venv_dict["ARDUINO_PORT"])
+        self.boardArduinoCommunicator = BoardArduinoCommunicator(venv_dict["ARDUINO_PORT"])
 
-    def _getHandyEventsList(ignorableArg, eventsListProtobuf):
+    def _getHandyListaEventos(self, eventsListProtobuf):
         listaEventos = []
         for event in eventsListProtobuf:
-            eventArr = [event.intensidad, event.duracion]
+            # eventArr = [event.intensidad, event.duracion]
+            eventArr = {"i": event.intensidad, "d": event.duracion}
             listaEventos.append(eventArr)
         return listaEventos
 
@@ -41,10 +42,11 @@ class CoreBoardCommuServiceServicer(ClientServerModule.CoreBoardCommuServiceServ
         # }
         dictSecuencias = {}
         for secReq in request.secuencia:
-            dictSecuencias[str(secReq.id_componente)] = self._getHandyEventsList(secReq.evento)
+            dictSecuencias[str(secReq.id_componente)] = self._getHandyListaEventos(secReq.evento)
 
         secuenciasJson = json.dumps(dictSecuencias)
-        # self.boardArduinoCommunicator.enviarDatosToArduino(secuenciasJson);
+        print(secuenciasJson)
+        #self.boardArduinoCommunicator.enviarDatosToArduino(secuenciasJson);
         
         responseMessage = "Secuencias recibidas"
         return ReqResModule.MensajeReply(

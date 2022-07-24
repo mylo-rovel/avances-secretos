@@ -35,6 +35,11 @@ class SataBoardClient:
         self.stub = ClientServerModule.CoreBoardCommuServiceStub(self.channel)
         print(f'Servidor Central Core a alcanzar: {venv_dict["CENTRAL_CORE_ADDRESS"]}:{venv_dict["CENTRAL_CORE_PORT"]}')
 
+    def _getHandyEquipoDict(self, equipoProtobuf):
+        for key in equipoProtobuf.componente:
+            print(key)
+        return {}
+
     def sendHelloWorldToCentralCore(self):
         try:
             nombreEquipo = venv_dict["NOMBRE_EQUIPO"]
@@ -45,9 +50,11 @@ class SataBoardClient:
                     direccion_ip_equipo = direccionIpEquipo
             ))
             print("Mensaje saludo ya enviado al Central Core")
-            print(f"Mensaje recibido: {serverResponse.respuestaSaludo}")
-        except:
-            print("ERROR AL ENVIAR EL SALUDO. NO HUBO RESPUESTA")
-        
-        finally:
+            print(f"Mensaje recibido desde Central Core: {serverResponse.respuestaSaludo}")
+            self._getHandyEquipoDict(serverResponse.equipo)
+            return {}
+        except Exception as e:
+            print("ERROR AL ENVIAR EL SALUDO. NO HUBO RESPUESTA\n")
+            print(e)
             return None
+        

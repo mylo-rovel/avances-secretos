@@ -262,11 +262,10 @@ public class WebCoreServiceGrpcSimulacion {
         webCoreServiceGrpcEquipo.addPlacasToEquipo(equipoEnte, idEquipoReq);
         webCoreServiceGrpcEquipo.addComponentesYPinesToEquipo(equipoEnte,idEquipoReq);
 
-        Domain.SaludoBoardReply equipoEnviar = Domain.SaludoBoardReply.newBuilder()
+        return Domain.SaludoBoardReply.newBuilder()
                 .setRespuestaSaludo("EXITO EN LA OPERACION")
-                .setEquipo(equipoEnte.build()).build();
-
-        return equipoEnviar;
+                .setEquipo(equipoEnte.build())
+                .build();
     }
 
     /**
