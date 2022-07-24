@@ -10,7 +10,7 @@ export default Vue.extend({
     data() {
         return { }
     },
-    computed: mapState(["urlApi"]),
+    computed: mapState(["urlApi", "duracionTokenDias"]),
 
     mounted() {
         console.clear();
@@ -58,8 +58,12 @@ export default Vue.extend({
 
         guardarItemsYRedireccionar(objetoSesion) {
             let [ token, rol ] = [ objetoSesion['jsonWebToken_'], objetoSesion['rolUsuario_'] ]
+            const duracionTokenMilisegundos = this.duracionTokenDias*1000*60*60*24;
+            const fechaExpiracion = new Date(Date.now() + duracionTokenMilisegundos);
             window.localStorage.setItem("token", token);
             window.localStorage.setItem("rol", rol );
+            window.localStorage.setItem("fechaExpiracion", fechaExpiracion );
+
             const anchorElement = document.createElement("a");
             rol = rol.toLowerCase()
             anchorElement.href= `${rol}/menu-${rol}`;

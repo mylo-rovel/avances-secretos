@@ -38,7 +38,8 @@ export const checkIfUserShouldBeHere = (rolesApropiados) => {
 	// console.clear()
 	const rolUsuario = window.localStorage.getItem("rol");
 	const tokenUsuario = window.localStorage.getItem("token");
-	if ( !(rolesApropiados.includes(rolUsuario))  || !tokenUsuario) {
+	const fechaMax = new Date(window.localStorage.getItem("fechaExpiracion"));
+	if ( !(rolesApropiados.includes(rolUsuario))  || !tokenUsuario || (fechaMax <= Date.now())) {
 		console.clear();
 		window.localStorage.clear();
 		const anchorElement = document.createElement("a");
