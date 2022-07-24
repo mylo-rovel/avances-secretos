@@ -44,9 +44,6 @@
     }
 }
 
-                        // <ul class="eventos-secuencia-list" v-for="(evento, indexEvento) in listaEventos">
-                        //     <li><p>Intensidad:{{evento["intensidad_"]}} - Duracion:{{evento["duracion_"]}}</p></li>
-                        // </ul>
 </script>
 
 <template>
@@ -80,7 +77,7 @@
                 <h5>Secuencias usadas</h5>
             </article>
             <article>
-                <article v-for="(secuencia, indexSecuencia) in listaSecuencias" :key="`secuenciaKey_${rowIndex}`"> 
+                <article v-for="(secuencia, indexSecuencia) in listaSecuencias" :key="`secuenciaKey_${indexSecuencia}`"> 
                     <p class="secuencia-body-row" @click="() => setIndexSecuencia(indexSecuencia)" >Valvula id: {{secuencia["idComponente_"]}}</p>
 
                     <div v-if="indexSecuencia === indexSecuenciaSeleccionada">
