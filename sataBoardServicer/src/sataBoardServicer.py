@@ -45,8 +45,10 @@ class CoreBoardCommuServiceServicer(ClientServerModule.CoreBoardCommuServiceServ
             dictSecuencias[str(secReq.id_componente)] = self._getHandyListaEventos(secReq.evento)
 
         secuenciasJson = json.dumps(dictSecuencias)
-        print(secuenciasJson)
-        #self.boardArduinoCommunicator.enviarDatosToArduino(secuenciasJson);
+        llavesDictSecuencias = dictSecuencias.keys()
+        print(llavesDictSecuencias)
+        # print(secuenciasJson)
+        self.boardArduinoCommunicator.enviarDatosToArduino(secuenciasJson);
         
         responseMessage = "Secuencias recibidas"
         return ReqResModule.MensajeReply(

@@ -51,7 +51,7 @@ class SataBoardClient:
             ))
             print("Mensaje saludo ya enviado al Central Core")
             print(f"Mensaje recibido desde Central Core: {serverResponse.respuestaSaludo}")
-            self._getHandyEquipoDict(serverResponse.equipo)
+            # self._getHandyEquipoDict(serverResponse.equipo)
             return {}
         except Exception as e:
             print("ERROR AL ENVIAR EL SALUDO. NO HUBO RESPUESTA\n")

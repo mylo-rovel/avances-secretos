@@ -28,15 +28,15 @@ void loop() {
     
     for (JsonObject root_1_item : doc["1"].as<JsonArray>()) {
     
-      int root_1_item_intensidad = root_1_item["intensidad"]; // 30, 31, 32, 32, 32, 32, 32, 32, 32, 32, 32
-      int root_1_item_duracion = root_1_item["duracion"]; // 20, 21, 22, 22, 22, 22, 22, 22, 22, 22, 22
+      int root_1_item_intensidad = root_1_item["i"]; // 30, 31, 32, 32, 32, 32, 32, 32, 32, 32, 32
+      int root_1_item_duracion = root_1_item["d"]; // 20, 21, 22, 22, 22, 22, 22, 22, 22, 22, 22
     
     }
     
     for (JsonObject root_2_item : doc["2"].as<JsonArray>()) {
     
-      int root_2_item_intensidad = root_2_item["intensidad"]; // 40, 41, 42, 42, 42, 42, 42, 42, 42, 42
-      int root_2_item_duracion = root_2_item["duracion"]; // 30, 31, 32, 32, 32, 32, 32, 32, 32, 32
+      int root_2_item_intensidad = root_2_item["i"]; // 40, 41, 42, 42, 42, 42, 42, 42, 42, 42
+      int root_2_item_duracion = root_2_item["d"]; // 30, 31, 32, 32, 32, 32, 32, 32, 32, 32
     
     }
     Serial.print("SUCCESS"); 
