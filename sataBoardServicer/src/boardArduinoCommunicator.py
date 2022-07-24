@@ -8,10 +8,10 @@ class BoardArduinoCommunicator:
 		print("Placa ARDUINO alcanzada")
 
 
-	def enviarDatosToArduino(self,secuenciasJson):
+	def enviarDatosToArduino(self,simulacionJson):
 		try:
-			secuenciasJsonBytes = secuenciasJson.encode()
-			self.arduino.write(secuenciasJsonBytes)
+			simulacionJsonBytes = simulacionJson.encode()
+			self.arduino.write(simulacionJsonBytes)
 			time.sleep(0.1)
 			msgFromArduino = self.arduino.readlines()
 			print(f"Mensaje de arduino: {msgFromArduino}")

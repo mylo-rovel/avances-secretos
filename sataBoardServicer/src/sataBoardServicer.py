@@ -34,6 +34,12 @@ class CoreBoardCommuServiceServicer(ClientServerModule.CoreBoardCommuServiceServ
             listaEventos.append(eventArr)
         return listaEventos
 
+    def _getDictSimulacion(self, dictSecuencias):
+        return {
+            "valvulas": len(dictSecuencias.keys()),
+            "secuencias": dictSecuencias
+        }
+
     # rpc startSimulacion(SimulacionBoardReq) returns (MensajeReply){}
     def startSimulacion(self, request, context):    
         # message SimulacionBoardReq {
@@ -44,11 +50,9 @@ class CoreBoardCommuServiceServicer(ClientServerModule.CoreBoardCommuServiceServ
         for secReq in request.secuencia:
             dictSecuencias[str(secReq.id_componente)] = self._getHandyListaEventos(secReq.evento)
 
-        secuenciasJson = json.dumps(dictSecuencias)
-        llavesDictSecuencias = dictSecuencias.keys()
-        print(llavesDictSecuencias)
-        # print(secuenciasJson)
-        self.boardArduinoCommunicator.enviarDatosToArduino(secuenciasJson);
+        simulacionJson = json.dumps(self._getDictSimulacion(dictSecuencias))
+        print(simulacionJson)
+        # self.boardArduinoCommunicator.enviarDatosToArduino(simulacionJson);
         
         responseMessage = "Secuencias recibidas"
         return ReqResModule.MensajeReply(

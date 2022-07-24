@@ -7,16 +7,8 @@ void setup() {
 void loop() {
   while (!Serial.available());
   if (Serial.available()) {
-    //deserializeJson(doc, json);
     String secuenciasRecibidas = Serial.readString();
-    //String secuenciasRecibidas = Serial.readStringUntil( '\n' );
-    const char* json = secuenciasRecibidas.c_str();
-    //int inputLength = strlen(json);
-    StaticJsonDocument<768> doc;
-    Serial.print(secuenciasRecibidas);
-    Serial.print("#####");
-    Serial.print(json);
-    Serial.print("#####");    
+    StaticJsonDocument<768> doc; 
     DeserializationError error = deserializeJson(doc, secuenciasRecibidas);
     
     if (error) {
@@ -26,18 +18,16 @@ void loop() {
       return;
     }
     
-    for (JsonObject root_1_item : doc["1"].as<JsonArray>()) {
+    int valvulas = doc["valvulas"]; // 2
     
-      int root_1_item_intensidad = root_1_item["i"]; // 30, 31, 32, 32, 32, 32, 32, 32, 32, 32, 32
-      int root_1_item_duracion = root_1_item["d"]; // 20, 21, 22, 22, 22, 22, 22, 22, 22, 22, 22
-    
+    for (JsonObject secuencias_1_item : doc["secuencias"]["1"].as<JsonArray>()) {    
+      int secuencias_1_item_i = secuencias_1_item["i"]; // 30, 31, 32, 32, 32, 32, 32, 32, 32, 32, 32
+      int secuencias_1_item_d = secuencias_1_item["d"]; // 20, 21, 22, 22, 22, 22, 22, 22, 22, 22, 22    
     }
     
-    for (JsonObject root_2_item : doc["2"].as<JsonArray>()) {
-    
-      int root_2_item_intensidad = root_2_item["i"]; // 40, 41, 42, 42, 42, 42, 42, 42, 42, 42
-      int root_2_item_duracion = root_2_item["d"]; // 30, 31, 32, 32, 32, 32, 32, 32, 32, 32
-    
+    for (JsonObject secuencias_2_item : doc["secuencias"]["2"].as<JsonArray>()) {    
+      int secuencias_2_item_i = secuencias_2_item["i"]; // 40, 41, 42, 42, 42, 42, 42, 42, 42, 42
+      int secuencias_2_item_d = secuencias_2_item["d"]; // 30, 31, 32, 32, 32, 32, 32, 32, 32, 32    
     }
     Serial.print("SUCCESS"); 
   }
