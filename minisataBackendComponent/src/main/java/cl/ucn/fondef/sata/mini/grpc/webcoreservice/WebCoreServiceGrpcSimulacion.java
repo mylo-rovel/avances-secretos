@@ -220,6 +220,23 @@ public class WebCoreServiceGrpcSimulacion {
     }
 
 
+    public Domain.EmptyReq sendLecturasSensores(Domain.LecturaSensoresReply lecturaSensoresReply, StreamObserver<Domain.EmptyReq> responseObserver){
+        Equipo equipoGuardadoDB = coreDaoEquipo.getEquipoPorNombre(lecturaSensoresReply.getNombreEquipo());
+        if(equipoGuardadoDB == null){
+            log.warn("El equipo no existe en la DB");
+            return Domain.EmptyReq.newBuilder().build();
+        }
+        log.info("LEYENDO SENSORES DEL EQUIPO");
+        log.info("equipo = " + equipoGuardadoDB);
+
+        InformacionBoard informacionBoard = ejecucionesEquipo.get(equipoGuardadoDB.getNombre());
+        List<String> listaValoresGraficos = informacionBoard.getValoresGrafico();
+        listaValoresGraficos.add(lecturaSensoresReply.getCaudal() + " " + lecturaSensoresReply.getHora());
+        informacionBoard.setValoresGrafico(listaValoresGraficos);
+
+        return Domain.EmptyReq.newBuilder().build();
+    }
+
     /**
      * Send mensaje encendido domain . saludo board reply.
      *
@@ -266,6 +283,22 @@ public class WebCoreServiceGrpcSimulacion {
                 .setRespuestaSaludo("EXITO EN LA OPERACION")
                 .setEquipo(equipoEnte.build())
                 .build();
+    }
+
+    public Domain.EmptyReq sendMensajeTerminoEjecucion(Domain.AvisoTerminoEjecucionReq avisoTerminoEjecucionReq,
+                                                       StreamObserver<Domain.EmptyReq> responseObserver){
+        Equipo equipoGuardadoDB = coreDaoEquipo.getEquipoPorNombre(avisoTerminoEjecucionReq.getNombreEquipo());
+        if(equipoGuardadoDB == null){
+            log.warn("El equipo no existe en la DB");
+            return Domain.EmptyReq.newBuilder().build();
+        }
+
+        InformacionBoard informacionBoard = ejecucionesEquipo.get(equipoGuardadoDB.getNombre());
+        informacionBoard.setAguaCaidaActual(avisoTerminoEjecucionReq.getAguaCaida());
+
+        log.info("EJECUCION FINALIZADA");
+        log.info("Equipo = " + avisoTerminoEjecucionReq.getNombreEquipo() + "   Agua caida = " + avisoTerminoEjecucionReq.getAguaCaida());
+        return Domain.EmptyReq.newBuilder().build();
     }
 
     /**

@@ -22,9 +22,26 @@ public class CoreBoardServiceGrpcImpl extends CoreBoardCommuServiceGrpc.CoreBoar
     // LUEGO ENVIAR UN OBJETO VACIO TEMPORAL: Domain.SimulacionReply.newBuilder().build();
 
     @Override
+    public void sendLecturasSensores(Domain.LecturaSensoresReply lecturaSensoresReply, StreamObserver<Domain.EmptyReq> responseObserver){
+        log.info("\n\nSaludo recibido desde el equipo: " + lecturaSensoresReply.getNombreEquipo());
+        Domain.EmptyReq grpcResponse = webCoreServiceGrpcSimulacion.sendLecturasSensores(lecturaSensoresReply, responseObserver);
+        responseObserver.onNext(grpcResponse);
+        responseObserver.onCompleted();
+    }
+
+    @Override
     public void sendMensajeEncendido(Domain.SaludoBoardReq saludoBoardReq, StreamObserver<Domain.SaludoBoardReply> responseObserver){
         log.info("\n\nSaludo recibido desde el equipo: " + saludoBoardReq.getNombreEquipo());
         Domain.SaludoBoardReply grpcResponse = webCoreServiceGrpcSimulacion.sendMensajeEncendido(saludoBoardReq, responseObserver);
+        responseObserver.onNext(grpcResponse);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void sendMensajeTerminoEjecucion(Domain.AvisoTerminoEjecucionReq avisoTerminoEjecucionReq,
+                                            StreamObserver<Domain.EmptyReq> responseObserver){
+        log.info("\n\nSaludo recibido desde el equipo: " + avisoTerminoEjecucionReq.getNombreEquipo());
+        Domain.EmptyReq grpcResponse = webCoreServiceGrpcSimulacion.sendMensajeTerminoEjecucion(avisoTerminoEjecucionReq, responseObserver);
         responseObserver.onNext(grpcResponse);
         responseObserver.onCompleted();
     }
