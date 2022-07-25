@@ -1,7 +1,9 @@
 #include <ArduinoJson.h>
+StaticJsonDocument<768> doc; 
 
-volatile int NumPulsos; //variable para la cantidad de pulsos recibidos
+//---Variables globales para el uso del flujometro
 int PinSensor = 2;    //Sensor conectado en el pin 2
+volatile int NumPulsos; //variable para la cantidad de pulsos recibidos
 float factor_conversion=7.5; //para convertir de frecuencia a caudal
 
 //---Función que se ejecuta en interrupción---------------
@@ -16,21 +18,24 @@ float ObtenerFrecuencia(){
   interrupts();    //Habilitamos las interrupciones
   delay(1000);   //muestra de 1 segundo
   noInterrupts(); //Desabilitamos las interrupciones
-  interrupts();    //Habilitamos las interrupciones
+  interrupts();    //Habilitamos las interrupciones para poder usar Serial.print()
   frecuencia = NumPulsos; //Hz(pulsos por segundo)
   return frecuencia;
 }
 
-
-
-
-StaticJsonDocument<768> doc; 
-String modoOperacion = "init";
-
-void calibrateValvula(float caudalObjetivo) {
-  
+//---Función para obtener caudal usando la frecuencia de los pulsos y enviarla al boardRaspberry--------
+void sendCaudalToSataBoard() {
+  float frecuencia = ObtenerFrecuencia(); //obtenemos la Frecuencia de los pulsos en Hz
+  float caudal_L_min = frecuencia/factor_conversion; //calculamos el caudal en L/min
+  Serial.print(caudal_L_min);
 }
 
+//---Funcion para mover la válvula segun el caudal que se debería obtener
+void calibrateValvula(float caudalObjetivo, float caudalActual) {
+  //if (caudalObjetivo > caudalActual + delta
+}
+
+//---Funcion para iniciar el proceso de simulacion
 void executeSecuencias(){
     int cantValvulas = doc["ids"].size(); // 2
     
@@ -47,20 +52,7 @@ void executeSecuencias(){
     Serial.print("SUCCESS"); 
  }
 
-void storeSecuencias() {
-  String secuenciasRecibidas = Serial.readString();
-  DeserializationError error = deserializeJson(doc, secuenciasRecibidas);
-  
-  if (error) {
-    Serial.print(F("deserializeJson() failed: "));
-    Serial.print("#");
-    Serial.print(error.f_str());
-    return;
-  }
-  modoOperacion = "execute";
-}
 
-//volatile int x;
 void setup() {
   Serial.begin(9600);
   while (!Serial) continue;
@@ -71,10 +63,29 @@ void setup() {
 void loop() {
   while (!Serial.available());
   if (Serial.available()) {
-    String secuenciasRecibidas = Serial.readString();
-    float frecuencia = ObtenerFrecuencia(); //obtenemos la Frecuencia de los pulsos en Hz
-    float caudal_L_min = frecuencia/factor_conversion; //calculamos el caudal en L/min
-    //-----Enviamos por el puerto serie---------------
-    Serial.print(caudal_L_min);
+    String mensajeRecibido = Serial.readString();
+    Serial.print(mensajeRecibido);
+    Serial.print("   ");
+    if (mensajeRecibido == "sendCaudalToSataBoard") {
+      // acá hacer lo de abrir y cerrar valvulas, y enviar caudal de vuelta al sataBoard
+      // habilitar interrupciones solo cuand enviemos informacion y calculemos la frecuencia?
+      // hashmap con las ids como key y una variable que cuente las iteraciones de cada jsonarray de secuencias
+      Serial.print("EXECUTING");
+      int cantValvulas = doc["ids"].size(); // 2
+      Serial.print(cantValvulas);
+    }
+    else {
+      String resultSavingJSON = "";
+      DeserializationError error = deserializeJson(doc, mensajeRecibido);
+      if (error) {
+        //Serial.print(F("deserializeJson() failed: "));
+        //Serial.print("#");
+        //Serial.print(error.f_str());
+        resultSavingJSON = "failedSaving";  
+        Serial.print(resultSavingJSON);      
+      }
+      if (resultSavingJSON == "failedSaving") return;      
+      Serial.print("JSON SETUP FINISHED");
+    }
   }
 }

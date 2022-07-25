@@ -1,19 +1,3 @@
-# Copyright 2015 gRPC authors.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-"""The Python implementation of the gRPC testing client."""
-# I COPIED AND ADAPTED THE ORIGINAL FILE XDD
-
 from __future__ import print_function
 
 import logging
@@ -35,9 +19,10 @@ class SataBoardClient:
         self.stub = ClientServerModule.CoreBoardCommuServiceStub(self.channel)
         print(f'Servidor Central Core a alcanzar: {venv_dict["CENTRAL_CORE_ADDRESS"]}:{venv_dict["CENTRAL_CORE_PORT"]}')
 
+    # ESTA FUNCION BUSCA CREAR UN JSON DEL EQUIPO PARA ENTREGARSELO A ARDUINO
     def _getHandyEquipoDict(self, equipoProtobuf):
         for key in equipoProtobuf.componente:
-            print(key)
+            pass
         return {}
 
     def sendHelloWorldToCentralCore(self):
@@ -57,4 +42,23 @@ class SataBoardClient:
             print("ERROR AL ENVIAR EL SALUDO. NO HUBO RESPUESTA\n")
             print(e)
             return None
+
+
+    def sendCaudalToCentralCore(self, caudalArduino):
+        try:
+            now = datetime.now()
+            horaCaudal = ":".join(str(now.time()).split(":")[0:2])
+            nombreEquipo = venv_dict["NOMBRE_EQUIPO"]
+            serverResponse = self.stub.sendLecturasSensores(
+            ReqResModule.LecturaSensoresReply(
+                caudal = caudalArduino,
+                hora = horaCaudal,
+                nombreEquipo = nombreEquipo
+            ))
+            print("Caudal enviado al Central Core")
+
+        except Exception as e:
+            print("ERROR AL ENVIAR CAUDAL\n")
+            print(e)
+            return None 
         

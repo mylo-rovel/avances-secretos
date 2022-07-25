@@ -15,22 +15,20 @@ from sataBoardClient import SataBoardClient
 
 venv_dict = dict(dotenv_values(".env"))
 
-# put here aux functions
 print("\n\n\nIniciando servidor")
 print(venv_dict)
 
 class CoreBoardCommuServiceServicer(ClientServerModule.CoreBoardCommuServiceServicer):
 
     def __init__(self):
-        pass
         self.sataBoardClient = SataBoardClient()
         self.sataBoardClient.sendHelloWorldToCentralCore()
         self.boardArduinoCommunicator = BoardArduinoCommunicator(venv_dict["ARDUINO_PORT"])
+        # RETORNAR OBJETO EQUIPO DE "sendHelloWorldToCentralCore()" Y ENVIARLO A ARDUINO PARA EL SETUP
 
     def _getHandyListaEventos(self, eventsListProtobuf):
         listaEventos = []
         for event in eventsListProtobuf:
-            # eventArr = [event.intensidad, event.duracion]
             eventArr = {"i": event.intensidad, "d": event.duracion}
             listaEventos.append(eventArr)
         return listaEventos
@@ -42,7 +40,7 @@ class CoreBoardCommuServiceServicer(ClientServerModule.CoreBoardCommuServiceServ
         }
 
     def _enviarDatosToArduinoThreaded(self, simulacionJson):
-        self.boardArduinoCommunicator.enviarDatosToArduino(simulacionJson)        
+        self.boardArduinoCommunicator.enviarDatosToArduino(simulacionJson, self.sataBoardClient)
 
 
     # rpc startSimulacion(SimulacionBoardReq) returns (MensajeReply){}
@@ -60,12 +58,10 @@ class CoreBoardCommuServiceServicer(ClientServerModule.CoreBoardCommuServiceServ
 
         arduinoThread = Thread(target=self._enviarDatosToArduinoThreaded, args = (simulacionJson, ))
         arduinoThread.start()
-        print("Hilo arduino iniciado")
+        print("Secuencias recibidas\nHilo arduino iniciado")
 
         responseMessage = "Secuencias recibidas"
-        return ReqResModule.MensajeReply(
-            mensaje_texto = responseMessage
-        )
+        return ReqResModule.MensajeReply( mensaje_texto = responseMessage )
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
