@@ -32,7 +32,17 @@ export const getValvulasDesplegables = (listaValvulas) => {
 	}, {})
 }
 
-//export const getEquipoValvulaDespl = ()
+export const getValvulasDict = (listaValvulas) => {
+	const listaValvulasCrudas = listaValvulas["componente_"];
+	return listaValvulasCrudas.reduce( (acc, item) => {
+		if (!(item['nombre_'] in acc)) {
+			acc = {...acc, [item['nombre_']]: 0};
+		}
+		acc[item['nombre_']] = item['id_'];
+		return acc;
+	}, {})
+}
+
 
 export const checkIfUserShouldBeHere = (rolesApropiados) => {
 	// console.clear()

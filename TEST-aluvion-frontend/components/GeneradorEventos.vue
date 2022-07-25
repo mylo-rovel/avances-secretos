@@ -6,7 +6,8 @@
     import NavbarPag from '~/components/NavbarPag.vue'
 
     export default Vue.extend({
-        name: "AgregarEvento",
+        name: "GeneradorEventos",
+        props: ["isGeneradorEventosOpen"],
         data() {
             return {
                 duracionTotalListaEventos: 0,
@@ -15,7 +16,7 @@
                 "submitbutton": "guardar",
             }
         },
-        computed: mapState(["listaEventos", "secuencias", "urlApi"]) ,
+        computed: mapState(["listaEventos", "secuencias", "urlApi", "currentSecuencia"]) ,
         methods: {
             ...mapMutations(["addEvento", "removeEvento", "setNuevoValorEvento", "setListaEventos"]),
 
@@ -33,15 +34,19 @@
             },
 
             async guardarListaEventos(){
-                console.clear()
                 this.setListaEventos();
-            }
+                this.closeModal();
+            },
+            
+            closeModal() {
+                this.$emit("onCancelClick");
+            },
         }
     })
 </script>
 
 <template>
-    <section class="add-events-container">
+    <section class="main-container">
         <article class="events-table-container">
             <table>
                 <tr class="table-head">
@@ -63,15 +68,15 @@
         </article>
         <article class="bottom-ribbon">
             <div class="col-6 contenido-botones my-4">
-                <NuxtLink to= "/operador/registrar-simulacion"><CancelButtom :cancelbutton = "cancelbutton"/></NuxtLink>
+                <button class="finalFormButton cancelarButton" @click="closeModal" > CANCELAR </button>
             </div>
             <div class="col-6 contenido-botones my-4 total-duration-container">
                 <p class="total-duration-title">Duración total</p>
                 <p class="total-duration-time-row"><span class="total-duration-number">{{duracionTotalListaEventos}}</span>minutos</p>
             </div>
             <div class="col-6 contenido-botones my-4">
-                <NuxtLink to= "/operador/registrar-simulacion"><SubmitButton :submitbutton ="submitbutton" @click="guardarListaEventos()" /></NuxtLink>
-            </div>
+                <button class="finalFormButton sendDataButton" @click="guardarListaEventos" > GUARDAR </button>
+            </div>        
         </article>
     </section>
 </template>
@@ -85,16 +90,17 @@
         font-weight: 400;
     }
 
-    .add-events-container {
+    .main-container {
         width: fit-content;
+        height: fit-content;
         margin: 0 auto;
+        background-color:white;
+        border-radius: 20px;
     }
 
     .events-table-container{
-        border-radius: 20px;
         width: fit-content;
         height: 25rem;
-        border: 1px solid black;
         margin:0 auto;
         margin-top: 5%;
         padding:2rem 6rem;
@@ -135,11 +141,11 @@
         top: 85%;
         left: -3.4rem;
         place-self: center;
-        padding: 0 1rem;
+        padding: 0 0.5rem;
         border: 1px solid black;
         text-align: center;
         border-radius: 20px;
-        background-color: rgb(255, 255, 255);
+        background-color: rgba(82, 248, 77,0.5);
         font-weight: 800;
     }
 
@@ -149,12 +155,26 @@
         top: 35%;
         right: -3.2rem;
         place-self: center;
-        padding: 0 1rem;
+        padding: 0 0.5rem;
         border: 1px solid black;
         text-align: center;
         border-radius: 20px;
-        background-color: rgb(255, 198, 198);
+        background-color: rgba(199,0,57,0.5);
         font-weight: 800;
+    }
+
+    .plus-button:hover{
+        color: rgba(0,255,0,1);
+        border: 1px solid rgba(0,255,0,1);
+        background-color:white;
+        transition: all 0.1s;
+    }
+
+    .minus-button:hover{
+        color: rgba(255,0,0,1);
+        border: 1px solid rgba(255,0,0,1);
+        background-color:white;
+        transition: all 0.1s;
     }
 
     /*  BOTTOM          ||||| */
@@ -188,25 +208,13 @@
     }
 
 
-    @media screen and (max-width: 614px) {
-    /* start of large tablet styles */
-        th, .bottom-ribbon {
-            font-size: 3vw;
-        }
+    @media screen and (max-width: 650px) {
+    /* cambiar grid a una columna */
+
         .events-table-container{
             padding:2rem 6rem;
             overflow-y: scroll;
         }
-    }
-
-    @media screen and (max-width: 767px) {
-    /* start of medium tablet styles */
-
-    }
-
-    @media screen and (max-width: 479px) {
-    /* start of phone styles */
-
     }
 
 </style>

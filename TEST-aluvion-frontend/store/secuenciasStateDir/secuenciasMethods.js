@@ -53,20 +53,25 @@ export const secuenciasMethods = {
     setSecuenciaModificar(state, indiceValvula) {
         if (typeof indiceValvula !== 'number') {return false;}
         // si no es un número no podemos compararlo con 0
-        if (indiceValvula < 0 || indiceValvula >= secuencias.length) {return false;}
+        if (indiceValvula < 0 || indiceValvula >= state.secuencias.length) {return false;}
 
         state.currentSecuencia = indiceValvula;
         // entregamos una copia del array guardado asociado a la válvula seccionada
-        state.listaEventos = [... state.secuencias[state.currentSecuencia]];
+        state.listaEventos = state.secuencias[indiceValvula]["listaEventos"];
         return true;
     },
 
-    setCantidadSecuencias(state, cantValvulas) {
-        const aux = []
-        for (let i = 0; i < cantValvulas; i++) {
-            aux.push({"listaEventos": []})
+    setCantidadSecuencias(state, dictValvulasEquipo) {
+        const auxSecuencias = []
+        const arrayNombreValvulas = Object.keys(dictValvulasEquipo);
+        for (let i = 0; i < arrayNombreValvulas.length; i++) {
+            auxSecuencias.push({
+                "idComponente":dictValvulasEquipo[arrayNombreValvulas[i]],
+                "nombreComponente":arrayNombreValvulas[i],
+                "listaEventos": []
+            });
         }
-        state.secuencias = [...aux];
+        state.secuencias = [...auxSecuencias];
         return true;
     }
 }
