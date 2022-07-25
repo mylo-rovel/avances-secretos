@@ -18,7 +18,7 @@ public class InformacionBoard {
 
     @Getter
     @Setter
-    private List<Double> valoresGrafico;
+    private List<String> valoresGrafico;
 
     @Getter
     @Setter
@@ -41,7 +41,7 @@ public class InformacionBoard {
         this.coreBoardClient = new CoreBoardClientGrpcBase(direccion);
         this.aguaCaidaActual = 0.0;
         this.estaEjecutandose = false;
-        this.valoresGrafico = new ArrayList<Double>();
+        this.valoresGrafico = new ArrayList<String>();
     }
 
     public void resetCoreBoardClient(String newDireccion) {
