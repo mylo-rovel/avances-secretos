@@ -1,59 +1,51 @@
 #include <ArduinoJson.h>
 
-DynamicJsonDocument doc(10240);
+
+
+void calibrateValvula(float caudalObjetivo) {
+  
+}
+
+void executeSecuencias(){
+  
+}
+
+void storeSecuencias() {
+  
+}
 
 void setup() {
   Serial.begin(9600);
   while (!Serial) continue;
-  Serial.setTimeout(1);
 }
+
 void loop() {
- while (!Serial.available());
- //deserializeJson(doc, json);
- String secuenciasJson = Serial.readString();
- Serial.print(secuenciasJson);
-
-}
-
-{
-    int     size_ = 0;
-  while ( !Serial.available()  ){}
-  //if ( Serial.available() ){}
-  String payload = Serial.readString();
-  const char* json = payload.c_str();
-  StaticJsonDocument<512> doc;
-  String secuenciasJson = Serial.readString();
-  
-  DeserializationError error = deserializeJson(doc, json);
-  if (error) {
-    Serial.print(secuenciasJson);
-    //Serial.print("error.c_str()"); 
+  while (!Serial.available());
+  if (Serial.available()) {
+    String secuenciasRecibidas = Serial.readString();
+    StaticJsonDocument<768> doc; 
+    DeserializationError error = deserializeJson(doc, secuenciasRecibidas);
+    
+    if (error) {
+      Serial.print(F("deserializeJson() failed: "));
+      Serial.print("#");
+      Serial.print(error.f_str());
+      return;
+    }
+    
+    //int cantValvulas = doc["cantValvulas"]; // 2
+    int cantValvulas = doc["ids"].size(); // 2
+    
+    for (int i = 0; i < cantValvulas; i++) {
+      const char* currentIdValvula= doc["ids"][i];
+      for (JsonObject secuencias_item : doc["secuencias"][currentIdValvula].as<JsonArray>()) {    
+        int intensidadEvento = secuencias_item["i"]; // 30, 31, 32, 32, 32, 32, 32, 32, 32, 32, 32
+        //int duracionEvento = secuencias_item["d"]; // 20, 21, 22, 22, 22, 22, 22, 22, 22, 22, 22
+        Serial.print(intensidadEvento);
+        Serial.print("#");
+      }
+      Serial.print("%%");
+    }
+    Serial.print("SUCCESS"); 
   }
-  else{
-    Serial.print("success");
-  }
-  delay(20);
-}
-
-
-{
-  
-  DeserializationError error = deserializeJson(doc, json, inputLength);
-  
-  if (error) {
-    Serial.print(F("deserializeJson() failed: "));
-    Serial.println(error.f_str());
-    return;
-  }
-  
-  for (JsonObject root_1_item : doc["1"].as<JsonArray>()) {
-    int root_1_item_intensidad = root_1_item["intensidad"]; // 30, 31, 32, 32, 32, 32, 32, 32, 32, 32, 32
-    int root_1_item_duracion = root_1_item["duracion"]; // 20, 21, 22, 22, 22, 22, 22, 22, 22, 22, 22    
-  }
-  
-  for (JsonObject root_2_item : doc["2"].as<JsonArray>()) {
-    int root_2_item_intensidad = root_2_item["intensidad"]; // 40, 41, 42, 42, 42, 42, 42, 42, 42, 42
-    int root_2_item_duracion = root_2_item["duracion"]; // 30, 31, 32, 32, 32, 32, 32, 32, 32, 32
-  }
-  Serial.print("Success"); 
 }

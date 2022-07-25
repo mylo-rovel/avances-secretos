@@ -12,9 +12,14 @@ class BoardArduinoCommunicator:
 		try:
 			simulacionJsonBytes = simulacionJson.encode()
 			self.arduino.write(simulacionJsonBytes)
-			time.sleep(0.1)
-			msgFromArduino = self.arduino.readlines()
-			print(f"Mensaje de arduino: {msgFromArduino}")
+			time.sleep(1.2)
+			msgFromArduino = float(self.arduino.readlines()[0])
+			print(f"Mensaje de arduino: {msgFromArduino} litros por minuto")
+			while True:
+				time.sleep(1.2)
+				self.arduino.write("sendCaudalToRaspi".encode())
+				msgFromArduino = float(self.arduino.readlines()[0])
+				print(f"Mensaje de arduino: {msgFromArduino} litros por minuto")
 		except Exception as e:
 			print("ERROR AL ENVIAR DATOS A ARDUINO\n")
 			print(e)

@@ -1,12 +1,13 @@
 """The Python implementation of the gRPC testing server."""
 
+import json
+import grpc
 import logging
 import datetime
-import json
+from threading import Thread
 from concurrent import futures
 from dotenv import dotenv_values
 
-import grpc
 import coreBoardCommuService_pb2 as ReqResModule
 import coreBoardCommuService_pb2_grpc as ClientServerModule
 from boardArduinoCommunicator import BoardArduinoCommunicator
@@ -36,10 +37,13 @@ class CoreBoardCommuServiceServicer(ClientServerModule.CoreBoardCommuServiceServ
 
     def _getDictSimulacion(self, dictSecuencias):
         return {
-            "cantValvulas": len(dictSecuencias.keys()),
             "ids": list(dictSecuencias.keys()),
             "secuencias": dictSecuencias
         }
+
+    def _enviarDatosToArduinoThreaded(self, simulacionJson):
+        self.boardArduinoCommunicator.enviarDatosToArduino(simulacionJson)        
+
 
     # rpc startSimulacion(SimulacionBoardReq) returns (MensajeReply){}
     def startSimulacion(self, request, context):    
@@ -53,8 +57,11 @@ class CoreBoardCommuServiceServicer(ClientServerModule.CoreBoardCommuServiceServ
 
         simulacionJson = json.dumps(self._getDictSimulacion(dictSecuencias))
         # print(simulacionJson)
-        self.boardArduinoCommunicator.enviarDatosToArduino(simulacionJson);
-        
+
+        arduinoThread = Thread(target=self._enviarDatosToArduinoThreaded, args = (simulacionJson, ))
+        arduinoThread.start()
+        print("Hilo arduino iniciado")
+
         responseMessage = "Secuencias recibidas"
         return ReqResModule.MensajeReply(
             mensaje_texto = responseMessage
