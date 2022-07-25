@@ -344,6 +344,6 @@ message SaludoBoardReply {
 }
 
 message AvisoTerminoEjecucionReq {
-  EquipoEntity equipo = 1;
+  string nombreEquipo = 1;
   double agua_caida = 2;
 }
