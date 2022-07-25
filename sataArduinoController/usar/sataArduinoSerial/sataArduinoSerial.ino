@@ -78,13 +78,12 @@ void loop() {
       String resultSavingJSON = "";
       DeserializationError error = deserializeJson(doc, mensajeRecibido);
       if (error) {
-        //Serial.print(F("deserializeJson() failed: "));
-        //Serial.print("#");
-        //Serial.print(error.f_str());
-        resultSavingJSON = "failedSaving";  
-        Serial.print(resultSavingJSON);      
-      }
-      if (resultSavingJSON == "failedSaving") return;      
+        Serial.print(F("deserializeJson() failed: "));
+        Serial.print("#");
+        Serial.print(error.f_str());
+        Serial.print("failedSaving");
+        return;
+      }  
       Serial.print("JSON SETUP FINISHED");
     }
   }
