@@ -9,7 +9,7 @@ service CoreBoardCommuService {
 
   // (2)
   // cliente: raspberry
-  rpc sendLecturasSensores(LecturaSensoresReply) returns (EmptyReq) {}
+  rpc sendLecturasSensores(LecturaSensoresReq) returns (EmptyReq) {}
 
   // Esta llamada se ejecuta al iniciar el servicio del board(raspberry)
   // cliente: raspberry
@@ -327,7 +327,7 @@ message EjecucionesReply {
   repeated EjecucionAcotada ejecucion_acotada = 1;
 }
 
-message LecturaSensoresReply {
+message LecturaSensoresReq {
   float caudal = 1;
   string hora = 2;
   string nombreEquipo = 3;

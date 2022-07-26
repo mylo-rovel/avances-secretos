@@ -313,7 +313,7 @@ message EjecucionesReply {
   repeated EjecucionAcotada ejecucion_acotada = 1;
 }
 
-message LecturaSensoresReply {
+message LecturaSensoresReq {
   float caudal = 1;
   string hora = 2;
   string nombreEquipo = 3;

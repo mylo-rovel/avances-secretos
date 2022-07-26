@@ -15,7 +15,7 @@ service CoreBoardCommuService {
 
   // (2)
   // cliente: raspberry => enviaremos datos constantemente
-  rpc sendLecturasSensores(LecturaSensoresReply) returns (EmptyReq) {}
+  rpc sendLecturasSensores(LecturaSensoresReq) returns (EmptyReq) {}
 
   // Esta llamada se ejecuta al iniciar el servicio del board(raspberry)
   // cliente: raspberry
