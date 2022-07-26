@@ -221,15 +221,15 @@ public class WebCoreServiceGrpcSimulacion {
 
     // SI PUDIMOS ENVIAR ESTA PETICIÓN DESDE EL RASPBERRY, ENTONCES EL EQUIPO YA ESTÁ
     // DENTRO DEL HASHMAP DE EQUIPOS ENCENDIDOS
-    public Domain.EmptyReq sendLecturasSensores(Domain.LecturaSensoresReply lecturaSensoresReply, StreamObserver<Domain.EmptyReq> responseObserver){
+    public Domain.EmptyReq sendLecturasSensores(Domain.LecturaSensoresReq lecturaSensoresReq, StreamObserver<Domain.EmptyReq> responseObserver){
         // SEGURIDAD POR SI EL SERVER SE REINICIA MIENTRAS QUE LOS EQUIPOS ESTÁN VIVOS
-        if (!(ejecucionesEquipo.containsKey(lecturaSensoresReply.getNombreEquipo()))){ return Domain.EmptyReq.newBuilder().build(); }
+        if (!(ejecucionesEquipo.containsKey(lecturaSensoresReq.getNombreEquipo()))){ return Domain.EmptyReq.newBuilder().build(); }
 
-        log.info("LEYENDO SENSORES DEL EQUIPO " + lecturaSensoresReply.getNombreEquipo() + ": "
-                + lecturaSensoresReply.getCaudal() + "#" + lecturaSensoresReply.getHora());
+        log.info("LEYENDO SENSORES DEL EQUIPO " + lecturaSensoresReq.getNombreEquipo() + ": "
+                + lecturaSensoresReq.getCaudal() + "#" + lecturaSensoresReq.getHora());
 
-        InformacionBoard equipoSimulando = ejecucionesEquipo.get(lecturaSensoresReply.getNombreEquipo());
-        equipoSimulando.getValoresGrafico().add(lecturaSensoresReply.getCaudal() + "#" + lecturaSensoresReply.getHora());
+        InformacionBoard equipoSimulando = ejecucionesEquipo.get(lecturaSensoresReq.getNombreEquipo());
+        equipoSimulando.getValoresGrafico().add(lecturaSensoresReq.getCaudal() + "#" + lecturaSensoresReq.getHora());
         log.info("Cantidad lecturas: " + equipoSimulando.getValoresGrafico().size());
         return Domain.EmptyReq.newBuilder().build();
     }

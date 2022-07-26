@@ -319,6 +319,11 @@ message LecturaSensoresReq {
   string nombreEquipo = 3;
 }
 
+message LecturaSensoresReply {
+  string caudal_tiempo = 1;
+  int64 lista_size = 2;
+}
+
 message SaludoBoardReq {
   string nombre_equipo = 1;
   string direccion_ip_equipo = 2;
