@@ -3,6 +3,7 @@
     // import {mapState, mapMutations} from "vuex";
     // import {addGlobalEventListener} from "~/utils/utility_functions.js";
     // addGlobalEventListener("click", ".plus-button", e => console.log("\n\n\naaaa\n\n\n",e))
+    //#EAEBEF
 
     export default Vue.extend({
         name: "ejemplo",
@@ -59,7 +60,7 @@
                         <NuxtLink to="/operador/">Perfil</NuxtLink>
                     </div>
             </li>
-            <li class="list__item list__item--click" :id="`Simulacion_key`" @click="(e) => abrirMenu(e)" >
+            <li class="list__item " :id="`Simulacion_key`" @click="(e) => abrirMenu(e)" >
                 <div class="list__button list__button--click">
                     <img src="~/assets/stats.svg" class="img-icono">
                     <span class="menu-routes-element">Simulación</span>
@@ -99,7 +100,6 @@
     }
 
     body{
-        background: #EAEBEF;
         font-family: 'Poppins', sans-serif;
     }
 
@@ -108,7 +108,7 @@
     }
 
     .nav__link{
-        color: #303440;
+        color: #212529;
         display: block;
         padding: 15px 0;
         text-decoration: none;
@@ -149,7 +149,7 @@
         align-items: center;
         gap: 1em;
         width: 70%;
-        margin: 0 auto;
+        margin:  auto;
     }
 
     .arrow .list__arrow{

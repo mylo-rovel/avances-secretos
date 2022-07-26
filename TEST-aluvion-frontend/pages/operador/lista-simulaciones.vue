@@ -17,9 +17,10 @@
           meta: [{
             name: "simulaciones",
             content: "Simulaciones"
-          }],
-        }
-      },
+          }]
+          //src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous",
+          }
+        },
       data() {
         return {
           "tituloPag": "Sistema de Alerta Temprana Aluvional",
@@ -82,7 +83,7 @@
           <div class="my-4 table-responsive table-container">
             <table id="tablaSimulaciones" class=" tabla-simulacion table table-lifht table-bordered table-hover table-striped">
               <thead class="text-white">
-                <th scope="row">Simulacion</th>
+                <th scope="row">Simulación</th>
                 <th scope="row">Equipo</th>
                 <th scope="row">Fecha</th>
                 <th scope="row">Agua</th>

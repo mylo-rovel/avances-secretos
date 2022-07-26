@@ -35,7 +35,7 @@
                 method: 'get', 
                 headers: {'authorization': JWTtoken}
             };
-            const url_to_fetch = `http://localhost:8081/api/simulaciones/`;
+            const url_to_fetch = `${this.urlApi}/simulaciones/`;
             const rawdata = await fetch(url_to_fetch, post_config).catch(err => err);
             const listaSimulacionesCrudas = await rawdata.json();
 
