@@ -179,11 +179,15 @@
                         </div>
                     
                         <!-- PARTE SELECCIONAR LA VALVULA PARA ABRIR TABLA DE GENERADOR DE EVENTOS -->
-                        <div class="valvulasSection">
-                            <label for="add_nombre" class="valvulasTitle">Secuencias</label>
-                            <p v-for="(nombreValvula, posicionSecuencia) in Object.keys(dictValvulasDisponibles)" :key="`valvulaKey_${posicionSecuencia}`"  class="valvulaRow" @click="() => seleccionarValvulaUtilizar(posicionSecuencia)">
-                                Valvula id: {{dictValvulasDisponibles [nombreValvula]}}
-                            </p>
+                        <div class="valvulasSection my-4 form-group row">
+                            <label for="add_secuencia" class="valvulasTitle col-sm-4 col-form-label">Secuencias</label>
+                            <div v-for="(nombreValvula, posicionSecuencia) in Object.keys(dictValvulasDisponibles)" class="row">
+                                <label class="col-sm-4  col-form-label">Secuencia {{posicionSecuencia+1}}</label>
+                            
+                                <p :key="`valvulaKey_${posicionSecuencia}`"  class="valvulaRow col-form-label col-sm-6" @click="() => seleccionarValvulaUtilizar(posicionSecuencia)">
+                                    Válvula id: {{dictValvulasDisponibles [nombreValvula]}}
+                                </p>
+                            </div>
                         </div>          
 
                         <!-- PARTE ESCRIBIR DESCRIPCION SIMULACION -->
@@ -210,6 +214,7 @@
     </section>
 </template>
 <style>
+
     .generadorEventosContainer{
         z-index: 999;
         position: fixed;
@@ -228,46 +233,45 @@
     }   
     .conf-secuencias{
         margin: 0 auto;
-        padding-left: 4rem;
+        padding-left: 2rem;
     }  
-    .btn-secuencias{
-        background-color: #ecf0f1;
-        border: 1px solid #d0d3d4;
-        color: black;
-        padding: 0.25rem 1.5rem;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 1rem;
-        margin: 0;
-        cursor: pointer;
-        border-radius: 10px;
-    }
-    .btn-secuencias:hover{
-        background: #ecf0f1;
-        border: 1px solid #d0d3d4;
-        color: black;
-        /*transform: scale(1.1);*/
-    }
 
     .valvulasSection {
         display:flex;
-        flex-direction: column;
-        width: 82.5%;
+/*      flex-direction: column;
+ */     width: 90%;
+        padding: .375rem 2.25rem .375rem .75rem;
     }
+    /* .hola{
+        display: block;
+        width: 100%;
+        
+        -moz-padding-start: calc(0.75rem - 3px);
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #212529;
+        
+        background-size: 16px 12px;
+        border: 1px solid #ced4da;
+        border-radius: .375rem;
+    } */
 
     .valvulaRow {
-        width: 100%;
+       /*  width: 100%; */
         margin: 0.2rem auto 0.5rem auto;
         padding: 0.5rem;
-        border: 1px solid black;
-        border-radius: 8px;
+        border: 1px solid #ced4da;  
+        border-radius: .375rem;
         cursor: pointer;
+        
         text-align:center;
     }
     .valvulaRow:hover {
-        background-color: black;
-        color: white;
+        background-color: #212529;
+        color: #fff;
+        /* font-weight: bold;
+        transform: scale(1.1); */
     }
 
 
