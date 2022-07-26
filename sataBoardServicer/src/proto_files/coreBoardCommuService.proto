@@ -9,7 +9,7 @@ service CoreBoardCommuService {
 
   // (2)
   // cliente: raspberry
-  rpc sendLecturasSensores(stream LecturaSensoresReply) returns (EmptyReq) {}
+  rpc sendLecturasSensores(LecturaSensoresReq) returns (EmptyReq) {}
 
   // Esta llamada se ejecuta al iniciar el servicio del board(raspberry)
   // cliente: raspberry
@@ -327,11 +327,15 @@ message EjecucionesReply {
   repeated EjecucionAcotada ejecucion_acotada = 1;
 }
 
+message LecturaSensoresReq {
+  float caudal = 1;
+  string hora = 2;
+  string nombreEquipo = 3;
+}
+
 message LecturaSensoresReply {
-  int64 id_simulacion = 1;
-  string nombre_equipo = 2;
-  double flujo_medido = 3;
-  double tiempo_transcurrido = 4;
+  string caudal_tiempo = 1;
+  int64 lista_size = 2;
 }
 
 message SaludoBoardReq {
@@ -345,6 +349,6 @@ message SaludoBoardReply {
 }
 
 message AvisoTerminoEjecucionReq {
-  EquipoEntity equipo = 1;
+  string nombreEquipo = 1;
   double agua_caida = 2;
 }

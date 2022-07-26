@@ -1,24 +1,14 @@
 #include <ArduinoJson.h>
 
-void setup() {
-  Serial.begin(9600);
-  while (!Serial) continue;
+StaticJsonDocument<768> doc; 
+String modoOperacion = "init";
+
+void calibrateValvula(float caudalObjetivo) {
+  
 }
-void loop() {
-  while (!Serial.available());
-  if (Serial.available()) {
-    String secuenciasRecibidas = Serial.readString();
-    StaticJsonDocument<768> doc; 
-    DeserializationError error = deserializeJson(doc, secuenciasRecibidas);
-    
-    if (error) {
-      Serial.print(F("deserializeJson() failed: "));
-      Serial.print("#");
-      Serial.print(error.f_str());
-      return;
-    }
-    
-    int cantValvulas = doc["cantValvulas"]; // 2
+
+void executeSecuencias(){
+    int cantValvulas = doc["ids"].size(); // 2
     
     for (int i = 0; i < cantValvulas; i++) {
       const char* currentIdValvula= doc["ids"][i];
@@ -31,5 +21,31 @@ void loop() {
       Serial.print("%%");
     }
     Serial.print("SUCCESS"); 
+ }
+
+void storeSecuencias() {
+  String secuenciasRecibidas = Serial.readString();
+  DeserializationError error = deserializeJson(doc, secuenciasRecibidas);
+  
+  if (error) {
+    Serial.print(F("deserializeJson() failed: "));
+    Serial.print("#");
+    Serial.print(error.f_str());
+    return;
+  }
+  modoOperacion = "execute";
+}
+
+volatile int x;
+void setup() {
+  Serial.begin(9600);
+  while (!Serial) continue;
+}
+
+void loop() {
+  while (!Serial.available());
+  if (Serial.available()) {
+    String mensajeFromRaspi = Serial.readString();
+    Serial.print(++x);
   }
 }

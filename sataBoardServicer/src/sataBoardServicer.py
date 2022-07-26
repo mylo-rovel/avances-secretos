@@ -1,12 +1,13 @@
 """The Python implementation of the gRPC testing server."""
 
+import json
+import grpc
 import logging
 import datetime
-import json
+from threading import Thread
 from concurrent import futures
 from dotenv import dotenv_values
 
-import grpc
 import coreBoardCommuService_pb2 as ReqResModule
 import coreBoardCommuService_pb2_grpc as ClientServerModule
 from boardArduinoCommunicator import BoardArduinoCommunicator
@@ -14,32 +15,33 @@ from sataBoardClient import SataBoardClient
 
 venv_dict = dict(dotenv_values(".env"))
 
-# put here aux functions
 print("\n\n\nIniciando servidor")
 print(venv_dict)
 
 class CoreBoardCommuServiceServicer(ClientServerModule.CoreBoardCommuServiceServicer):
 
     def __init__(self):
-        pass
         self.sataBoardClient = SataBoardClient()
         self.sataBoardClient.sendHelloWorldToCentralCore()
         self.boardArduinoCommunicator = BoardArduinoCommunicator(venv_dict["ARDUINO_PORT"])
+        # RETORNAR OBJETO EQUIPO DE "sendHelloWorldToCentralCore()" Y ENVIARLO A ARDUINO PARA EL SETUP
 
     def _getHandyListaEventos(self, eventsListProtobuf):
         listaEventos = []
         for event in eventsListProtobuf:
-            # eventArr = [event.intensidad, event.duracion]
             eventArr = {"i": event.intensidad, "d": event.duracion}
             listaEventos.append(eventArr)
         return listaEventos
 
     def _getDictSimulacion(self, dictSecuencias):
         return {
-            "cantValvulas": len(dictSecuencias.keys()),
             "ids": list(dictSecuencias.keys()),
             "secuencias": dictSecuencias
         }
+
+    def _enviarDatosToArduinoThreaded(self, simulacionJson):
+        self.boardArduinoCommunicator.enviarDatosToArduino(simulacionJson, self.sataBoardClient)
+
 
     # rpc startSimulacion(SimulacionBoardReq) returns (MensajeReply){}
     def startSimulacion(self, request, context):    
@@ -53,12 +55,13 @@ class CoreBoardCommuServiceServicer(ClientServerModule.CoreBoardCommuServiceServ
 
         simulacionJson = json.dumps(self._getDictSimulacion(dictSecuencias))
         # print(simulacionJson)
-        self.boardArduinoCommunicator.enviarDatosToArduino(simulacionJson);
-        
+
+        arduinoThread = Thread(target=self._enviarDatosToArduinoThreaded, args = (simulacionJson, ))
+        arduinoThread.start()
+        print("Secuencias recibidas\nHilo arduino iniciado")
+
         responseMessage = "Secuencias recibidas"
-        return ReqResModule.MensajeReply(
-            mensaje_texto = responseMessage
-        )
+        return ReqResModule.MensajeReply( mensaje_texto = responseMessage )
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))

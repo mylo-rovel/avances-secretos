@@ -90,6 +90,7 @@ public final class WebCoreClientGrpcSimulacion extends WebCoreClientGrpcBase {
         return this.gson.toJson(serverResponse);
     }
 
+
     /**
      * Gets equipos trabajando.
      *

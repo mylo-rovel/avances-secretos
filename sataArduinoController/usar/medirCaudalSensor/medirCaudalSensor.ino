@@ -5,7 +5,6 @@ float factor_conversion=7.5; //para convertir de frecuencia a caudal
 //---Función que se ejecuta en interrupción---------------
 void ContarPulsos (){ 
   NumPulsos++;  //incrementamos la variable de pulsos
-  Serial.print("contando");
 } 
 
 //---Función para obtener frecuencia de los pulsos--------
@@ -20,15 +19,20 @@ float ObtenerFrecuencia(){
 }
 
 void setup(){ 
-  Serial.begin(9600); 
+  Serial.begin(9600);
+  while (!Serial) continue;
   pinMode(PinSensor, INPUT); 
   attachInterrupt(0,ContarPulsos,RISING); //(Interrupcion 0(Pin2),funcion,Flanco de subida)
 } 
 
 void loop (){
-  float frecuencia = ObtenerFrecuencia(); //obtenemos la Frecuencia de los pulsos en Hz
-  float caudal_L_min = frecuencia/factor_conversion; //calculamos el caudal en L/min
-
-  //-----Enviamos por el puerto serie---------------
-  Serial.println(caudal_L_min);
+  while (!Serial.available());
+  //if (Serial.available()) {
+    Serial.print("#");
+    String mensajeFromRaspi = Serial.readString();
+    float frecuencia = ObtenerFrecuencia(); //obtenemos la Frecuencia de los pulsos en Hz
+    float caudal_L_min = frecuencia/factor_conversion; //calculamos el caudal en L/min
+    //-----Enviamos por el puerto serie---------------
+    Serial.print(caudal_L_min);
+  //}
 }

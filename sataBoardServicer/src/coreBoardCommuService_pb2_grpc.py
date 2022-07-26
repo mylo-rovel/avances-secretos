@@ -21,9 +21,9 @@ class CoreBoardCommuServiceStub(object):
                 request_serializer=coreBoardCommuService__pb2.SimulacionBoardReq.SerializeToString,
                 response_deserializer=coreBoardCommuService__pb2.MensajeReply.FromString,
                 )
-        self.sendLecturasSensores = channel.stream_unary(
+        self.sendLecturasSensores = channel.unary_unary(
                 '/CoreBoardCommuService/sendLecturasSensores',
-                request_serializer=coreBoardCommuService__pb2.LecturaSensoresReply.SerializeToString,
+                request_serializer=coreBoardCommuService__pb2.LecturaSensoresReq.SerializeToString,
                 response_deserializer=coreBoardCommuService__pb2.EmptyReq.FromString,
                 )
         self.sendMensajeEncendido = channel.unary_unary(
@@ -51,7 +51,7 @@ class CoreBoardCommuServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def sendLecturasSensores(self, request_iterator, context):
+    def sendLecturasSensores(self, request, context):
         """(2)
         cliente: raspberry
         """
@@ -83,9 +83,9 @@ def add_CoreBoardCommuServiceServicer_to_server(servicer, server):
                     request_deserializer=coreBoardCommuService__pb2.SimulacionBoardReq.FromString,
                     response_serializer=coreBoardCommuService__pb2.MensajeReply.SerializeToString,
             ),
-            'sendLecturasSensores': grpc.stream_unary_rpc_method_handler(
+            'sendLecturasSensores': grpc.unary_unary_rpc_method_handler(
                     servicer.sendLecturasSensores,
-                    request_deserializer=coreBoardCommuService__pb2.LecturaSensoresReply.FromString,
+                    request_deserializer=coreBoardCommuService__pb2.LecturaSensoresReq.FromString,
                     response_serializer=coreBoardCommuService__pb2.EmptyReq.SerializeToString,
             ),
             'sendMensajeEncendido': grpc.unary_unary_rpc_method_handler(
@@ -128,7 +128,7 @@ class CoreBoardCommuService(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def sendLecturasSensores(request_iterator,
+    def sendLecturasSensores(request,
             target,
             options=(),
             channel_credentials=None,
@@ -138,8 +138,8 @@ class CoreBoardCommuService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.stream_unary(request_iterator, target, '/CoreBoardCommuService/sendLecturasSensores',
-            coreBoardCommuService__pb2.LecturaSensoresReply.SerializeToString,
+        return grpc.experimental.unary_unary(request, target, '/CoreBoardCommuService/sendLecturasSensores',
+            coreBoardCommuService__pb2.LecturaSensoresReq.SerializeToString,
             coreBoardCommuService__pb2.EmptyReq.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

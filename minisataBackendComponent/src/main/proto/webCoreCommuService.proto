@@ -45,5 +45,5 @@ service WebCoreCommuService {
   // esta funcion va de la mano con (3) del CoreBoardCommuService
   // busca obtener los valores obtenidos de los sensores como un "stream"
   // => iremos obteniendo los valores a traves del tiempo
-  rpc getLecturaSensores(IdElementoReq) returns (stream LecturaSensoresReply) {}
+  rpc getLecturaSensores(IdElementoReq) returns (LecturaSensoresReply) {}
 }

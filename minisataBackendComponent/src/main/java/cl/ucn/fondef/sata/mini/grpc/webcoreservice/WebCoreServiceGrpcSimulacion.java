@@ -219,6 +219,20 @@ public class WebCoreServiceGrpcSimulacion {
         return Domain.MensajeReply.newBuilder().setMensajeTexto(mensajeResultado).build();
     }
 
+    // SI PUDIMOS ENVIAR ESTA PETICIÓN DESDE EL RASPBERRY, ENTONCES EL EQUIPO YA ESTÁ
+    // DENTRO DEL HASHMAP DE EQUIPOS ENCENDIDOS
+    public Domain.EmptyReq sendLecturasSensores(Domain.LecturaSensoresReq lecturaSensoresReq, StreamObserver<Domain.EmptyReq> responseObserver){
+        // SEGURIDAD POR SI EL SERVER SE REINICIA MIENTRAS QUE LOS EQUIPOS ESTÁN VIVOS
+        if (!(ejecucionesEquipo.containsKey(lecturaSensoresReq.getNombreEquipo()))){ return Domain.EmptyReq.newBuilder().build(); }
+
+        log.info("LEYENDO SENSORES DEL EQUIPO " + lecturaSensoresReq.getNombreEquipo() + ": "
+                + lecturaSensoresReq.getCaudal() + "#" + lecturaSensoresReq.getHora());
+
+        InformacionBoard equipoSimulando = ejecucionesEquipo.get(lecturaSensoresReq.getNombreEquipo());
+        equipoSimulando.getValoresGrafico().add(lecturaSensoresReq.getCaudal() + "#" + lecturaSensoresReq.getHora());
+        log.info("Cantidad lecturas: " + equipoSimulando.getValoresGrafico().size());
+        return Domain.EmptyReq.newBuilder().build();
+    }
 
     /**
      * Send mensaje encendido domain . saludo board reply.
@@ -266,6 +280,18 @@ public class WebCoreServiceGrpcSimulacion {
                 .setRespuestaSaludo("EXITO EN LA OPERACION")
                 .setEquipo(equipoEnte.build())
                 .build();
+    }
+
+    // SI PUDIMOS ENVIAR ESTA PETICIÓN DESDE EL RASPBERRY, ENTONCES EL EQUIPO YA ESTÁ
+    // DENTRO DEL HASHMAP DE EQUIPOS ENCENDIDOS
+    public Domain.EmptyReq sendMensajeTerminoEjecucion(Domain.AvisoTerminoEjecucionReq avisoTerminoEjecucionReq,
+                                                       StreamObserver<Domain.EmptyReq> responseObserver){
+        if (!(ejecucionesEquipo.containsKey(avisoTerminoEjecucionReq.getNombreEquipo()))){ return Domain.EmptyReq.newBuilder().build(); }
+        InformacionBoard informacionBoard = ejecucionesEquipo.get(avisoTerminoEjecucionReq.getNombreEquipo());
+        informacionBoard.setAguaCaidaActual(avisoTerminoEjecucionReq.getAguaCaida());
+        log.info("EJECUCION FINALIZADA");
+        log.info("Equipo = " + avisoTerminoEjecucionReq.getNombreEquipo() + "   Agua caida = " + avisoTerminoEjecucionReq.getAguaCaida());
+        return Domain.EmptyReq.newBuilder().build();
     }
 
     /**

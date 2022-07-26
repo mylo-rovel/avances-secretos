@@ -1,4 +1,4 @@
-package cl.ucn.fondef.sata.mini.grpc.coreboardclient;
+package cl.ucn.fondef.sata.mini.grpc;
 
 import cl.ucn.fondef.sata.mini.grpc.CoreBoardCommuServiceGrpc;
 import cl.ucn.fondef.sata.mini.grpc.Domain;

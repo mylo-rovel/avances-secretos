@@ -177,6 +177,14 @@
                                 <input id="add_nombre_simulacion" type="text" class="form-control" @change="saveNombreSimulacion(nombreSimulacionInput)" required>
                             </div>
                         </div>
+                    
+                        <!-- PARTE SELECCIONAR LA VALVULA PARA ABRIR TABLA DE GENERADOR DE EVENTOS -->
+                        <div class="valvulasSection">
+                            <label for="add_nombre" class="valvulasTitle">Secuencias</label>
+                            <p v-for="(nombreValvula, posicionSecuencia) in Object.keys(dictValvulasDisponibles)" :key="`valvulaKey_${posicionSecuencia}`"  class="valvulaRow" @click="() => seleccionarValvulaUtilizar(posicionSecuencia)">
+                                Valvula id: {{dictValvulasDisponibles [nombreValvula]}}
+                            </p>
+                        </div>          
 
                         <!-- PARTE ESCRIBIR DESCRIPCION SIMULACION -->
                         <div class="my-4 form-group row">
@@ -185,14 +193,6 @@
                                 <input id="add_descripcion_equipo" v-model="descripcionInput" type="text" class="form-control" required>
                             </div>
                         </div>
-                        
-                        <!-- PARTE SELECCIONAR LA VALVULA PARA ABRIR TABLA DE GENERADOR DE EVENTOS -->
-                        <div class="valvulasSection">
-                            <label for="add_nombre" class="valvulasTitle">Secuencias</label>
-                            <p v-for="(nombreValvula, posicionSecuencia) in Object.keys(dictValvulasDisponibles)" :key="`valvulaKey_${posicionSecuencia}`"  class="valvulaRow" @click="() => seleccionarValvulaUtilizar(posicionSecuencia)">
-                                Valvula id: {{dictValvulasDisponibles [nombreValvula]}}
-                            </p>
-                        </div>          
 
                         <!-- PARTE BOTONES -->
                         <div class = "row my-4">
