@@ -23,7 +23,7 @@ public class CoreBoardServiceGrpcImpl extends CoreBoardCommuServiceGrpc.CoreBoar
 
     @Override
     public void sendLecturasSensores(Domain.LecturaSensoresReply lecturaSensoresReply, StreamObserver<Domain.EmptyReq> responseObserver){
-        log.info("\n\nSaludo recibido desde el equipo: " + lecturaSensoresReply.getNombreEquipo());
+        log.info("\n\nCaudal recibido desde el equipo: " + lecturaSensoresReply.getNombreEquipo());
         Domain.EmptyReq grpcResponse = webCoreServiceGrpcSimulacion.sendLecturasSensores(lecturaSensoresReply, responseObserver);
         responseObserver.onNext(grpcResponse);
         responseObserver.onCompleted();
@@ -40,7 +40,7 @@ public class CoreBoardServiceGrpcImpl extends CoreBoardCommuServiceGrpc.CoreBoar
     @Override
     public void sendMensajeTerminoEjecucion(Domain.AvisoTerminoEjecucionReq avisoTerminoEjecucionReq,
                                             StreamObserver<Domain.EmptyReq> responseObserver){
-        log.info("\n\nSaludo recibido desde el equipo: " + avisoTerminoEjecucionReq.getNombreEquipo());
+        log.info("\n\nTermino de ejecución por parte del equipo: " + avisoTerminoEjecucionReq.getNombreEquipo());
         Domain.EmptyReq grpcResponse = webCoreServiceGrpcSimulacion.sendMensajeTerminoEjecucion(avisoTerminoEjecucionReq, responseObserver);
         responseObserver.onNext(grpcResponse);
         responseObserver.onCompleted();

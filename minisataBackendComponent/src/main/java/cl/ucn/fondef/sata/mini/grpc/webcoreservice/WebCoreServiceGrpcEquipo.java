@@ -134,12 +134,9 @@ public class WebCoreServiceGrpcEquipo {
                         .setDescripcion(    pinesGuardados.get(j).getDescripcion())
                         .setConexion(       stringEnumTransformer.getEnumConexionPin(pinesGuardados.get(j).getConexion()))
                         .build();
-                log.info("pinEnviar.getConexion() = " + pinEnviar.getConexion());
-                log.info("pinEnviar.getNombre() = " + pinEnviar.getNombre());
                 componenteEnviar.addPinComponente(pinEnviar);
             }
             equipoEnte.addComponente(componenteEnviar);
-            log.info("equipoEnte = " + equipoEnte);
         }
     }
 

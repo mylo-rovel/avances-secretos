@@ -4,6 +4,7 @@ import logging
 import random
 from math import floor
 from dotenv import dotenv_values
+from datetime import datetime
 
 import grpc
 import coreBoardCommuService_pb2 as ReqResModule
@@ -61,4 +62,19 @@ class SataBoardClient:
             print("ERROR AL ENVIAR CAUDAL\n")
             print(e)
             return None 
+
+    def sendAvisoTerminoToCentralCore(self, volumenTotal):
+        try:
+            nombreEquipo = venv_dict["NOMBRE_EQUIPO"]
+            serverResponse = self.stub.sendMensajeTerminoEjecucion(
+            ReqResModule.AvisoTerminoEjecucionReq(
+                agua_caida = volumenTotal,
+                nombreEquipo = nombreEquipo
+            ))
+            print("Aviso termino enviado al Central Core")
+
+        except Exception as e:
+            print("ERROR AL ENVIAR EL AVISO DE TERMINO\n")
+            print(e)
+            return None             
         

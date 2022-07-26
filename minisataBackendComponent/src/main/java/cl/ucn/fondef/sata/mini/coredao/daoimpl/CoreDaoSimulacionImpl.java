@@ -7,7 +7,7 @@ package cl.ucn.fondef.sata.mini.coredao.daoimpl;
 import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoSimulacion;
 import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoUsuario;
 import cl.ucn.fondef.sata.mini.grpc.Domain;
-import cl.ucn.fondef.sata.mini.grpc.coreboardclient.CoreBoardClientGrpcBase;
+import cl.ucn.fondef.sata.mini.grpc.CoreBoardClientGrpcBase;
 import cl.ucn.fondef.sata.mini.model.Evento;
 import cl.ucn.fondef.sata.mini.model.Secuencia;
 import cl.ucn.fondef.sata.mini.utilities.InformacionBoard;
@@ -211,10 +211,18 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
     @Override
     public String startSimulacion(StartSimulacionReq startSimulacionReq, HashMap<String, InformacionBoard> ejecucionesEquipo) {
         // SI EL EQUIPO NO ESTA EN EL HASHMAP, NO ESTA ENCENDIDO => NO CONTINUAR CON EL PROCESO
-        System.out.println("ejecucionesEquipo = " + ejecucionesEquipo);
         if (!(ejecucionesEquipo.containsKey(startSimulacionReq.getNombreEquipo()))){
+            log.warn(startSimulacionReq.getNombreEquipo() + " NO SE ENCUENTRA ACTIVO");
             return "Equipo no disponible para operar";
         }
+        // SI EL EQUIPO ESTÁ ENCENDIDO PERO OCUPADO
+        if (ejecucionesEquipo.get(startSimulacionReq.getNombreEquipo()).isEstaEjecutandose()) {
+            log.warn(startSimulacionReq.getNombreEquipo() + " ESTÁ OCUPADO");
+            return "Equipo ocupado. NO disponible";
+        }
+
+        log.info(startSimulacionReq.getNombreEquipo() + " INICIANDO SIMULACIÓN");
+        // PROCESO GUARDAR EN BASE DE DATOS
         Domain.IdElementoReq idSimulacionReq = IdElementoReq.newBuilder().setId(startSimulacionReq.getIdSimulacion()).build();
         Simulacion simulacionEjecutar = this.getSimulacionDB(idSimulacionReq);
         if (simulacionEjecutar == null) { return "Simulacion no existente"; }
@@ -240,7 +248,9 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
         // HACIENDO LA LLAMADA GRPC AL EQUIPO
         MensajeReply mensajeBoard = coreBoardClient.startSimulacion(simulacionBoardReq);
 
+        // GUARDANDO EL ESTADO OCUPADO DEL EQUIPO
         objetoEquipoDisponible.setEstaEjecutandose(true);
+
         if (mensajeBoard.getMensajeTexto().equals("Error al intentar conectar con la placa")) {
             return "Error al intentar conectar con la placa";
         }

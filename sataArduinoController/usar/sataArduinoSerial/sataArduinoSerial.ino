@@ -18,8 +18,9 @@ float ObtenerFrecuencia(){
   interrupts();    //Habilitamos las interrupciones
   delay(1000);   //muestra de 1 segundo
   noInterrupts(); //Desabilitamos las interrupciones
-  interrupts();    //Habilitamos las interrupciones para poder usar Serial.print()
+    interrupts();    //Habilitamos las interrupciones para poder usar Serial.print()
   frecuencia = NumPulsos; //Hz(pulsos por segundo)
+  frecuencia = 40;
   return frecuencia;
 }
 
@@ -64,17 +65,15 @@ void loop() {
   while (!Serial.available());
   if (Serial.available()) {
     String mensajeRecibido = Serial.readString();
-    Serial.print(mensajeRecibido);
-    Serial.print("   ");
+
     if (mensajeRecibido == "sendCaudalToSataBoard") {
       // acá hacer lo de abrir y cerrar valvulas, y enviar caudal de vuelta al sataBoard
-      // habilitar interrupciones solo cuand enviemos informacion y calculemos la frecuencia?
       // hashmap con las ids como key y una variable que cuente las iteraciones de cada jsonarray de secuencias
-      Serial.print("EXECUTING");
-      int cantValvulas = doc["ids"].size(); // 2
-      Serial.print(cantValvulas);
+      
+      sendCaudalToSataBoard();
     }
     else {
+      // REALIZANDO EL SETUP Y GUARDADO DE LAS SECUENCIAS PARA LA POSTERIOR EJECUCIÓN
       String resultSavingJSON = "";
       DeserializationError error = deserializeJson(doc, mensajeRecibido);
       if (error) {

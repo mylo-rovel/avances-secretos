@@ -1,5 +1,4 @@
 import time
-from datetime import datetime
 
 class BoardArduinoCommunicator: 
 	import serial
@@ -14,21 +13,20 @@ class BoardArduinoCommunicator:
 			simulacionJsonBytes = simulacionJson.encode()
 			self.arduino.write(simulacionJsonBytes)
 			time.sleep(1.2)
-			# caudalFromArduino = self.arduino.readlines()
-			# print(f"Mensaje de arduino: {caudalFromArduino} litros por minuto")
 			mensajeArduino = self.arduino.readlines()[0]
 			print(f"Secuencias enviadas a ARDUINO")
 			print(f"Mensaje de arduino: {mensajeArduino}")
-			if mensajeArduino != "JSON SETUP FINISHED": break
+			# ENVIAR MENSAJES PARA QUE ARDUINO NOS PUEDA RESPONDER Y ENVIAR DATOS
 			while True:
 				time.sleep(1.2)
 				self.arduino.write("sendCaudalToSataBoard".encode())
-				mensajeArduino = self.arduino.readlines()
-				print(f"Mensaje de arduino: {mensajeArduino}")
-				if mensajeArduino == "FinishedExecution": break
-				# mensajeArduino = float(self.arduino.readlines()[0])
-				# print(f"Mensaje de arduino: {mensajeArduino} litros por minuto")
-				# sataBoardClient.sendCaudalToCentralCore(mensajeArduino)
+				mensajeArduino = float(self.arduino.readlines()[0])
+				print(f"Mensaje de arduino: {mensajeArduino} litros por minuto")
+				# USAR OTROS HILOS?
+				sataBoardClient.sendCaudalToCentralCore(mensajeArduino)
+				if mensajeArduino == "FinishedExecution": 
+					break
+					sataBoardClient.sendAvisoTerminoToCentralCore(60)
 		except Exception as e:
 			print("ERROR AL ENVIAR DATOS A ARDUINO\n")
 			print(e)

@@ -1,6 +1,6 @@
 package cl.ucn.fondef.sata.mini.utilities;
 
-import cl.ucn.fondef.sata.mini.grpc.coreboardclient.CoreBoardClientGrpcBase;
+import cl.ucn.fondef.sata.mini.grpc.CoreBoardClientGrpcBase;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;

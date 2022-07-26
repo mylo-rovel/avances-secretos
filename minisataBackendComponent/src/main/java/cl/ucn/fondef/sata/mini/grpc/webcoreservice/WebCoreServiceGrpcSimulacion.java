@@ -219,21 +219,18 @@ public class WebCoreServiceGrpcSimulacion {
         return Domain.MensajeReply.newBuilder().setMensajeTexto(mensajeResultado).build();
     }
 
-
+    // SI PUDIMOS ENVIAR ESTA PETICIÓN DESDE EL RASPBERRY, ENTONCES EL EQUIPO YA ESTÁ
+    // DENTRO DEL HASHMAP DE EQUIPOS ENCENDIDOS
     public Domain.EmptyReq sendLecturasSensores(Domain.LecturaSensoresReply lecturaSensoresReply, StreamObserver<Domain.EmptyReq> responseObserver){
-        Equipo equipoGuardadoDB = coreDaoEquipo.getEquipoPorNombre(lecturaSensoresReply.getNombreEquipo());
-        if(equipoGuardadoDB == null){
-            log.warn("El equipo no existe en la DB");
-            return Domain.EmptyReq.newBuilder().build();
-        }
-        log.info("LEYENDO SENSORES DEL EQUIPO");
-        log.info("equipo = " + equipoGuardadoDB);
+        // SEGURIDAD POR SI EL SERVER SE REINICIA MIENTRAS QUE LOS EQUIPOS ESTÁN VIVOS
+        if (!(ejecucionesEquipo.containsKey(lecturaSensoresReply.getNombreEquipo()))){ return Domain.EmptyReq.newBuilder().build(); }
 
-        InformacionBoard informacionBoard = ejecucionesEquipo.get(equipoGuardadoDB.getNombre());
-        List<String> listaValoresGraficos = informacionBoard.getValoresGrafico();
-        listaValoresGraficos.add(lecturaSensoresReply.getCaudal() + " " + lecturaSensoresReply.getHora());
-        informacionBoard.setValoresGrafico(listaValoresGraficos);
+        log.info("LEYENDO SENSORES DEL EQUIPO " + lecturaSensoresReply.getNombreEquipo() + ": "
+                + lecturaSensoresReply.getCaudal() + "#" + lecturaSensoresReply.getHora());
 
+        InformacionBoard equipoSimulando = ejecucionesEquipo.get(lecturaSensoresReply.getNombreEquipo());
+        equipoSimulando.getValoresGrafico().add(lecturaSensoresReply.getCaudal() + "#" + lecturaSensoresReply.getHora());
+        log.info("Cantidad lecturas: " + equipoSimulando.getValoresGrafico().size());
         return Domain.EmptyReq.newBuilder().build();
     }
 
@@ -285,17 +282,13 @@ public class WebCoreServiceGrpcSimulacion {
                 .build();
     }
 
+    // SI PUDIMOS ENVIAR ESTA PETICIÓN DESDE EL RASPBERRY, ENTONCES EL EQUIPO YA ESTÁ
+    // DENTRO DEL HASHMAP DE EQUIPOS ENCENDIDOS
     public Domain.EmptyReq sendMensajeTerminoEjecucion(Domain.AvisoTerminoEjecucionReq avisoTerminoEjecucionReq,
                                                        StreamObserver<Domain.EmptyReq> responseObserver){
-        Equipo equipoGuardadoDB = coreDaoEquipo.getEquipoPorNombre(avisoTerminoEjecucionReq.getNombreEquipo());
-        if(equipoGuardadoDB == null){
-            log.warn("El equipo no existe en la DB");
-            return Domain.EmptyReq.newBuilder().build();
-        }
-
-        InformacionBoard informacionBoard = ejecucionesEquipo.get(equipoGuardadoDB.getNombre());
+        if (!(ejecucionesEquipo.containsKey(avisoTerminoEjecucionReq.getNombreEquipo()))){ return Domain.EmptyReq.newBuilder().build(); }
+        InformacionBoard informacionBoard = ejecucionesEquipo.get(avisoTerminoEjecucionReq.getNombreEquipo());
         informacionBoard.setAguaCaidaActual(avisoTerminoEjecucionReq.getAguaCaida());
-
         log.info("EJECUCION FINALIZADA");
         log.info("Equipo = " + avisoTerminoEjecucionReq.getNombreEquipo() + "   Agua caida = " + avisoTerminoEjecucionReq.getAguaCaida());
         return Domain.EmptyReq.newBuilder().build();
