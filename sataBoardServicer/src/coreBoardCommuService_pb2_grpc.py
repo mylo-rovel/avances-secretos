@@ -23,7 +23,7 @@ class CoreBoardCommuServiceStub(object):
                 )
         self.sendLecturasSensores = channel.unary_unary(
                 '/CoreBoardCommuService/sendLecturasSensores',
-                request_serializer=coreBoardCommuService__pb2.LecturaSensoresReply.SerializeToString,
+                request_serializer=coreBoardCommuService__pb2.LecturaSensoresReq.SerializeToString,
                 response_deserializer=coreBoardCommuService__pb2.EmptyReq.FromString,
                 )
         self.sendMensajeEncendido = channel.unary_unary(
@@ -85,7 +85,7 @@ def add_CoreBoardCommuServiceServicer_to_server(servicer, server):
             ),
             'sendLecturasSensores': grpc.unary_unary_rpc_method_handler(
                     servicer.sendLecturasSensores,
-                    request_deserializer=coreBoardCommuService__pb2.LecturaSensoresReply.FromString,
+                    request_deserializer=coreBoardCommuService__pb2.LecturaSensoresReq.FromString,
                     response_serializer=coreBoardCommuService__pb2.EmptyReq.SerializeToString,
             ),
             'sendMensajeEncendido': grpc.unary_unary_rpc_method_handler(
@@ -139,7 +139,7 @@ class CoreBoardCommuService(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/CoreBoardCommuService/sendLecturasSensores',
-            coreBoardCommuService__pb2.LecturaSensoresReply.SerializeToString,
+            coreBoardCommuService__pb2.LecturaSensoresReq.SerializeToString,
             coreBoardCommuService__pb2.EmptyReq.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
