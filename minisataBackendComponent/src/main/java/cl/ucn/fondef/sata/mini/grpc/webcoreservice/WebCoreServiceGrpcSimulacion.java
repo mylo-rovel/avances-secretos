@@ -324,4 +324,24 @@ public class WebCoreServiceGrpcSimulacion {
         return equiposEnviar.build();
     }
 
+
+
+    public Domain.LecturaSensoresReply getValoresGrafico(Domain.EstadoGraficoUsuarioReq estadoGraficoUsuarioReq, StreamObserver<Domain.LecturaSensoresReply> responseObserver){
+        String nombreEquipo = estadoGraficoUsuarioReq.getNombreEquipo();
+
+        if (!(ejecucionesEquipo.containsKey(nombreEquipo))){ return Domain.LecturaSensoresReply.newBuilder().build(); }
+        InformacionBoard equipoEjecutandose = ejecucionesEquipo.get(nombreEquipo);
+        List<String> listaValoresGrafico  = equipoEjecutandose.getValoresGrafico();
+
+        int indiceInicial = (estadoGraficoUsuarioReq.getIndiceInicial() > listaValoresGrafico.size())
+                ? 0 : estadoGraficoUsuarioReq.getIndiceInicial();
+
+        int indiceFinal = (estadoGraficoUsuarioReq.getIndiceFinal() > listaValoresGrafico.size())
+                ? listaValoresGrafico.size() : estadoGraficoUsuarioReq.getIndiceFinal();
+
+        return Domain.LecturaSensoresReply.newBuilder()
+                .addAllCaudalTiempo(listaValoresGrafico.subList(indiceInicial, indiceFinal))
+                .setListaSize(listaValoresGrafico.size()).build();
+    }
+
 }

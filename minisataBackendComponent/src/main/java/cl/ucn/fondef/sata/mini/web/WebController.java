@@ -10,7 +10,7 @@ import cl.ucn.fondef.sata.mini.grpc.Domain;
 import cl.ucn.fondef.sata.mini.grpc.webcoreclient.*;
 import cl.ucn.fondef.sata.mini.model.Usuario;
 import cl.ucn.fondef.sata.mini.utilities.EnumValuesResponse;
-import cl.ucn.fondef.sata.mini.utilities.webrequests.*;
+import cl.ucn.fondef.sata.mini.web.webrequests.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import cl.ucn.fondef.sata.mini.utilities.JwtUtil;
@@ -519,15 +519,16 @@ public class WebController {
      * @return the lectura sensores
      */
 // ***---- IMPLEMENTAR ----
-    //   rpc getLecturaSensores(IdElementoReq) returns (stream LecturaSensoresReply) {}
-    @RequestMapping(value = "api/ejecuciones/lecturas/{id}", method = RequestMethod.GET)
-    public String getLecturaSensores(@PathVariable long id, @RequestHeader(value="Authorization") String jwt) {
+    //   rpc getValoresGrafico(EstadoGraficoUsuarioReq) returns (LecturaSensoresReply) {}
+    @RequestMapping(value = "api/ejecuciones/valoresgrafico", method = RequestMethod.POST)
+    public String getValoresGrafico(@RequestBody WebReqEstadoGraficoUsuarioReq reqObj, @RequestHeader(value="Authorization") String jwt) {
         if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
         Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
         Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
         if(usuario!=null) {
             if (usuario.getRol().equals(Domain.UsuarioEntity.RolUsuario.OPERADOR.name())) {
-                return webCoreClientGrpcExtra.getLecturaSensores(id);
+                log.info("ReqObj" + reqObj);
+                return webCoreClientGrpcSimulacion.getValoresGrafico(reqObj);
             }
         }
         return "Usuario sin permisos";

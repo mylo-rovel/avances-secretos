@@ -1,10 +1,7 @@
 package cl.ucn.fondef.sata.mini.grpc.webcoreclient;
 
 import cl.ucn.fondef.sata.mini.grpc.Domain;
-import cl.ucn.fondef.sata.mini.utilities.webrequests.WebReqEventoSubEntity;
-import cl.ucn.fondef.sata.mini.utilities.webrequests.WebReqSecuenciaSubEntity;
-import cl.ucn.fondef.sata.mini.utilities.webrequests.WebReqSimulacionReq;
-import cl.ucn.fondef.sata.mini.utilities.webrequests.WebReqStartSimulacionReq;
+import cl.ucn.fondef.sata.mini.web.webrequests.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -125,6 +122,16 @@ public final class WebCoreClientGrpcSimulacion extends WebCoreClientGrpcBase {
     public String getEjecuciones(String rut) {
         Domain.RutEntityReq rutReq = Domain.RutEntityReq.newBuilder().setRut(rut).build();
         Domain.EjecucionesReply serverResponse = this.stub.getEjecuciones(rutReq);
+        return this.gson.toJson(serverResponse);
+    }
+
+    public String getValoresGrafico(WebReqEstadoGraficoUsuarioReq estadoGraficoUsuarioReq) {
+        Domain.EstadoGraficoUsuarioReq reqObject = Domain.EstadoGraficoUsuarioReq.newBuilder()
+                .setNombreEquipo(estadoGraficoUsuarioReq.getNombreEquipo())
+                .setIndiceInicial(estadoGraficoUsuarioReq.getIndiceInicial())
+                .setIndiceFinal(estadoGraficoUsuarioReq.getIndiceFinal())
+                .build();
+        var serverResponse = this.stub.getValoresGrafico(reqObject);
         return this.gson.toJson(serverResponse);
     }
 

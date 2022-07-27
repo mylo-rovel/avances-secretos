@@ -40,7 +40,7 @@ public class CoreBoardServiceGrpcImpl extends CoreBoardCommuServiceGrpc.CoreBoar
     @Override
     public void sendMensajeTerminoEjecucion(Domain.AvisoTerminoEjecucionReq avisoTerminoEjecucionReq,
                                             StreamObserver<Domain.EmptyReq> responseObserver){
-        log.info("\n\nTermino de ejecución por parte del equipo: " + avisoTerminoEjecucionReq.getNombreEquipo());
+        log.info("\n\nTermino de ejecucion por parte del equipo: " + avisoTerminoEjecucionReq.getNombreEquipo());
         Domain.EmptyReq grpcResponse = webCoreServiceGrpcSimulacion.sendMensajeTerminoEjecucion(avisoTerminoEjecucionReq, responseObserver);
         responseObserver.onNext(grpcResponse);
         responseObserver.onCompleted();

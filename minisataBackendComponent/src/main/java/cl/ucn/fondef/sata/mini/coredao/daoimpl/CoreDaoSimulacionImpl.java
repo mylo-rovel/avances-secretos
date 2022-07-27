@@ -215,7 +215,7 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
             log.warn(startSimulacionReq.getNombreEquipo() + " NO SE ENCUENTRA ACTIVO");
             return "❌ Equipo no encendido y disponible para operar ❌";
         }
-        // SI EL EQUIPO ESTÁ ENCENDIDO PERO OCUPADO
+        // SI EL EQUIPO ESTÁ ENCENDIDO PERO OCUPADO NO CONTINUAR CON EL PROCESO
         if (ejecucionesEquipo.get(startSimulacionReq.getNombreEquipo()).isEstaEjecutandose()) {
             log.warn(startSimulacionReq.getNombreEquipo() + " ESTA OCUPADO");
             return "❌ Equipo ocupado. NO disponible ❌";
@@ -241,19 +241,23 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
                 .addAllSecuencia(listaSecuenciasGrpc)
                 .build();
 
-        // OBTENIENDO EL OBJETO QUE CONTIENE EL OBJETO QUE PUEDE HACER LAS LLAMADAS GRPC AL EQUIPO SELECCIONADO
+        // OBTENIENDO EL OBJETO QUE CONTIENE OBJETO QUE HACE LAS LLAMADAS GRPC AL EQUIPO SELECCIONADO
         InformacionBoard objetoEquipoDisponible = ejecucionesEquipo.get(startSimulacionReq.getNombreEquipo());
         CoreBoardClientGrpcBase coreBoardClient = objetoEquipoDisponible.getCoreBoardClient();
 
         // HACIENDO LA LLAMADA GRPC AL EQUIPO
         MensajeReply mensajeBoard = coreBoardClient.startSimulacion(simulacionBoardReq);
 
-        // GUARDANDO EL ESTADO OCUPADO DEL EQUIPO
-        objetoEquipoDisponible.setEstaEjecutandose(true);
-
         if (mensajeBoard.getMensajeTexto().equals("Error al intentar conectar con la placa")) {
             return "❌ Error al intentar conectar con la placa ❌";
         }
+        // GUARDANDO EL ESTADO OCUPADO DEL EQUIPO
+        objetoEquipoDisponible.setEstaEjecutandose(true);
+
+        // BORRANDO DATOS SIMULACION ANTERIOR
+        objetoEquipoDisponible.setValoresGrafico(new ArrayList<>());
+        objetoEquipoDisponible.setAguaCaidaActual(0.0);
+
         return "✔ Simulacion iniciada. IdEjecucion" + ejecucionNueva.getId() +" ✔";
     }
 

@@ -161,6 +161,13 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
     }
 
     @Override
+    public void getValoresGrafico(Domain.EstadoGraficoUsuarioReq estadoGraficoUsuarioReq, StreamObserver<LecturaSensoresReply> responseObserver) {
+        var grpcResponse = webCoreServiceGrpcSimulacion.getValoresGrafico(estadoGraficoUsuarioReq, responseObserver);
+        responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
+        responseObserver.onCompleted(); //Terminar el proceso
+    }
+
+    @Override
     // rpc uploadArchivo(stream ArchivoEntityReq)  returns (MensajeReply){}
     public StreamObserver<ArchivoEntityReq> uploadArchivo(final StreamObserver<MensajeReply> responseObserver) {
         return new StreamObserver<ArchivoEntityReq>() {

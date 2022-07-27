@@ -48,7 +48,7 @@ class SataBoardClient:
     def sendCaudalToCentralCore(self, caudalArduino):
         try:
             now = datetime.now()
-            horaCaudal = ":".join(str(now.time()).split(":")[0:2])
+            horaCaudal = ":".join(str(now.time()).split(":")[0:3])
             nombreEquipo = venv_dict["NOMBRE_EQUIPO"]
             serverResponse = self.stub.sendLecturasSensores(
             ReqResModule.LecturaSensoresReq(

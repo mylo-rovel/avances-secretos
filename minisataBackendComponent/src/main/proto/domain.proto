@@ -20,10 +20,6 @@ message IdElementoReq {
   int64 id = 1;
 }
 
-message MensajeReq {
-  string mensaje_texto = 1;
-}
-
 message MensajeReply {
   string mensaje_texto = 1;
 }
@@ -319,8 +315,14 @@ message LecturaSensoresReq {
   string nombreEquipo = 3;
 }
 
+message EstadoGraficoUsuarioReq {
+  string nombre_equipo = 1;
+  int32 indiceInicial = 2;
+  int32 indiceFinal = 3;
+}
+
 message LecturaSensoresReply {
-  string caudal_tiempo = 1;
+  repeated string caudal_tiempo = 1;
   int64 lista_size = 2;
 }
 

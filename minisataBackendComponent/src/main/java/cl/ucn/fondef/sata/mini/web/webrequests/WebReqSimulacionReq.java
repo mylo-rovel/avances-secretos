@@ -2,7 +2,7 @@
  * Copyright (c) 2022 Fondef IDeA I+D.
  */
 
-package cl.ucn.fondef.sata.mini.utilities.webrequests;
+package cl.ucn.fondef.sata.mini.web.webrequests;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

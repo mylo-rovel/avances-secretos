@@ -40,7 +40,7 @@
         computed: mapState(["urlApi"]),
         
         async mounted(){
-
+            // OBTENER LA LISTA DE LOS EQUIPOS QUE ESTÁN EJECUTANDO UNA
             const JWTtoken = window.localStorage.getItem("token");
             const get_config = { 
                 method: 'get', 
@@ -57,18 +57,8 @@
             this.equiposDisponibles = objetoRespuesta["equipoAcotado_"].reduce((acc, equipoAcotado) => {
                 return [...acc, equipoAcotado["nombre_"]];
             }, []);
-            // this.dictEquiposSimulaciones = {...setListasDesplegables(listaSimulacionesCrudas)};
         },
         methods:{
-
-            saveEquipo: function(equipoSeleccionado){
-                let opcionSeleccionada = document.getElementById('select_equipoSimulacion').selectedOptions[0].value;
-                this.simulacionesDisponibles = this.dictEquiposSimulaciones[opcionSeleccionada]["listaSimulaciones"];
-                this.listaIdsDisponibles = this.dictEquiposSimulaciones[opcionSeleccionada]["listaIds"];
-                console.log(opcionSeleccionada);
-                return opcionSeleccionada;
-            },
-
             async sendVerSimulacionReq(e){
                 e.preventDefault();
 
@@ -117,8 +107,10 @@
                         <div class="my-4 form-group row">
                             <label for="simulador" class="col-sm-4 col-form-label ">Seleccione el equipo</label>
                             <div class="col-sm-6">
-                                <select id="select_equipoSimulacion" v-model="equipoSeleccionado" @change= "saveEquipo()" class="form-select" aria-label="Equipo" required>
-                                    <option v-for="i in equiposDisponibles" :value="i">{{i}}</option>
+                                <select id="select_equipoSimulacion" v-model="equipoSeleccionado" class="form-select" aria-label="Equipo" required>
+                                    <option v-for="i in equiposDisponibles" :value="i">
+                                        {{i}}
+                                    </option>
                                 </select>
                             </div>
                         </div>

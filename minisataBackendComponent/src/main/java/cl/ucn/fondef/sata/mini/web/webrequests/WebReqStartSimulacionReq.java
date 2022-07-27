@@ -1,4 +1,4 @@
-package cl.ucn.fondef.sata.mini.utilities.webrequests;
+package cl.ucn.fondef.sata.mini.web.webrequests;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

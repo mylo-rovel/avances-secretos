@@ -60,7 +60,7 @@
           this.ejecucionSeleccionada = await rawdata.json();
           this.isModalOpened = true;
           console.log(idEjecucionSeleccionada);
-          return;ea6a01b3caf5b22ddfb655f9ba5bba41bfb66
+          return;
       }}
     })
 </script>

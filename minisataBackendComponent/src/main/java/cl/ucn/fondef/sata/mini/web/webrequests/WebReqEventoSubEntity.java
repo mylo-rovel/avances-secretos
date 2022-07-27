@@ -1,4 +1,4 @@
-package cl.ucn.fondef.sata.mini.utilities.webrequests;
+package cl.ucn.fondef.sata.mini.web.webrequests;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -6,17 +6,16 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * The type Web req credenciales req.
+ * The type Web req evento sub entity.
  */
 @ToString
 @EqualsAndHashCode
-public class WebReqCredencialesReq {
+public class WebReqEventoSubEntity {
+    @Getter
+    @Setter
+    private int intensidad;
 
     @Getter
     @Setter
-    private String email;
-
-    @Getter
-    @Setter
-    private String password;
+    private int duracion;
 }

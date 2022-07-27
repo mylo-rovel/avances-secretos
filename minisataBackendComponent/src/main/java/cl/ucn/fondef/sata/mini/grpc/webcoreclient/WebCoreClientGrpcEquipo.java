@@ -1,10 +1,10 @@
 package cl.ucn.fondef.sata.mini.grpc.webcoreclient;
 
 import cl.ucn.fondef.sata.mini.grpc.Domain;
-import cl.ucn.fondef.sata.mini.utilities.webrequests.WebReqComponenteSubEntity;
-import cl.ucn.fondef.sata.mini.utilities.webrequests.WebReqEquipoReq;
-import cl.ucn.fondef.sata.mini.utilities.webrequests.WebReqPinSubEntity;
-import cl.ucn.fondef.sata.mini.utilities.webrequests.WebReqPlacaSubEntity;
+import cl.ucn.fondef.sata.mini.web.webrequests.WebReqComponenteSubEntity;
+import cl.ucn.fondef.sata.mini.web.webrequests.WebReqEquipoReq;
+import cl.ucn.fondef.sata.mini.web.webrequests.WebReqPinSubEntity;
+import cl.ucn.fondef.sata.mini.web.webrequests.WebReqPlacaSubEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

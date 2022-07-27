@@ -1,9 +1,6 @@
 <script lang="js">
     import Vue from 'vue'
     import {mapState, mapMutations} from "vuex";
-    import CancelButtom from '~/components/CancelButtom.vue'
-    import SubmitButton from '~/components/SubmitButton.vue'
-    import NavbarPag from '~/components/NavbarPag.vue'
 
     export default Vue.extend({
         name: "GeneradorEventos",
@@ -12,8 +9,6 @@
             return {
                 duracionTotalListaEventos: 0,
                 intensidadTotalListaEventos: 0,
-                "cancelbutton": "atrás",
-                "submitbutton": "guardar",
             }
         },
         computed: mapState(["listaEventos", "secuencias", "urlApi", "currentSecuencia"]) ,

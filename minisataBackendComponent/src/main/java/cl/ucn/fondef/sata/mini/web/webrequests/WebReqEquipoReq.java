@@ -1,4 +1,4 @@
-package cl.ucn.fondef.sata.mini.utilities.webrequests;
+package cl.ucn.fondef.sata.mini.web.webrequests;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -6,16 +6,17 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * The type Web req evento sub entity.
+ * The type Web req equipo req.
  */
 @ToString
 @EqualsAndHashCode
-public class WebReqEventoSubEntity {
-    @Getter
-    @Setter
-    private int intensidad;
+public class WebReqEquipoReq {
 
     @Getter
     @Setter
-    private int duracion;
+    private String rutConfigurador;
+
+    @Getter
+    @Setter
+    private WebReqEquipoEntity equipo;
 }

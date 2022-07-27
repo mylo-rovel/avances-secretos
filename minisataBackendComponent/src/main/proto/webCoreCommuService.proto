@@ -39,11 +39,8 @@ service WebCoreCommuService {
   // va de la mano con la funcion (1) del CoreBoardCommuService
   rpc startSimulacion(StartSimulacionReq) returns (MensajeReply){}
 
-  // esta funcion busca preguntarle al Raspberry que equipo y simulacion esta corriendo
+  // esta funcion busca obtener los equipos que estan corriendo una simulacion
   rpc getEquiposTrabajando(EmptyReq) returns (EquiposEntityReply){}
 
-  // esta funcion va de la mano con (3) del CoreBoardCommuService
-  // busca obtener los valores obtenidos de los sensores como un "stream"
-  // => iremos obteniendo los valores a traves del tiempo
-  rpc getLecturaSensores(IdElementoReq) returns (LecturaSensoresReply) {}
+  rpc getValoresGrafico(EstadoGraficoUsuarioReq) returns (LecturaSensoresReply) {}
 }

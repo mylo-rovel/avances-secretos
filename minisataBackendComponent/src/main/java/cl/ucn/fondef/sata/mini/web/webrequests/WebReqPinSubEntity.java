@@ -1,4 +1,4 @@
-package cl.ucn.fondef.sata.mini.utilities.webrequests;
+package cl.ucn.fondef.sata.mini.web.webrequests;
 
 import cl.ucn.fondef.sata.mini.grpc.Domain;
 import lombok.EqualsAndHashCode;

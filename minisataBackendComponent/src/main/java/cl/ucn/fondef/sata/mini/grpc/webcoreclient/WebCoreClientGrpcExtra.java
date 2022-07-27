@@ -9,16 +9,6 @@ import org.springframework.stereotype.Service;
 @Service
 public final class WebCoreClientGrpcExtra extends WebCoreClientGrpcBase{
     /**
-     * Gets lectura sensores.
-     *
-     * @param id the id
-     * @return the lectura sensores
-     */
-    public String getLecturaSensores(long id) {
-        return "";
-    }
-
-    /**
      * Gets registros.
      *
      * @param rutUsuario the rut usuario

@@ -1,8 +1,8 @@
 package cl.ucn.fondef.sata.mini.grpc.webcoreclient;
 
 import cl.ucn.fondef.sata.mini.grpc.Domain;
-import cl.ucn.fondef.sata.mini.utilities.webrequests.WebReqCredencialesReq;
-import cl.ucn.fondef.sata.mini.utilities.webrequests.WebReqUsuarioReq;
+import cl.ucn.fondef.sata.mini.web.webrequests.WebReqCredencialesReq;
+import cl.ucn.fondef.sata.mini.web.webrequests.WebReqUsuarioReq;
 import org.springframework.stereotype.Service;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
