@@ -60,7 +60,7 @@
                 <li class="list__item mb-3" :id="`Inicio_key`" @click="(e) => {}">
                     <div class="list__button">
                         <img src="~/assets/home.svg" class="img-icono">
-                        <NuxtLink to="#">Inicio</NuxtLink>
+                        <NuxtLink to="/operador/menu-operador">Inicio</NuxtLink>
                     </div>
                 </li>
                 <!--<p :id="`Inicio_key`" @click="(e) => {}" class="container">
@@ -79,7 +79,7 @@
                 <li class="list__item mb-3 " :id="`Perfil_key`" @click="(e) => {}">
                     <div class="list__button">    
                         <img src="~/assets/profile.svg" class="img-icono">
-                        <NuxtLink to="#">Perfil</NuxtLink>
+                        <NuxtLink to="/operador/">Perfil</NuxtLink>
                     </div>
                 </li>
                  <li class="list__item  mb-3" :id="`Simulacion_key`" @click="(e) => abrirMenu(e)" >
@@ -116,7 +116,7 @@
                 <li class="list__item mb-3" :id="`Contacto_key`" @click="(e) => {}">
                     <div class="list__button">
                         <img src="~/assets/message.svg" class="img-icono">
-                        <NuxtLink to="#">Contacto</NuxtLink>
+                        <NuxtLink to="/operador/ejemplo">Contacto</NuxtLink>
                     </div>
                 </li>
 
