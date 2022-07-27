@@ -287,8 +287,10 @@ public class WebCoreServiceGrpcSimulacion {
     public Domain.EmptyReq sendMensajeTerminoEjecucion(Domain.AvisoTerminoEjecucionReq avisoTerminoEjecucionReq,
                                                        StreamObserver<Domain.EmptyReq> responseObserver){
         if (!(ejecucionesEquipo.containsKey(avisoTerminoEjecucionReq.getNombreEquipo()))){ return Domain.EmptyReq.newBuilder().build(); }
-        InformacionBoard informacionBoard = ejecucionesEquipo.get(avisoTerminoEjecucionReq.getNombreEquipo());
-        informacionBoard.setAguaCaidaActual(avisoTerminoEjecucionReq.getAguaCaida());
+        InformacionBoard equipoEjecutandose = ejecucionesEquipo.get(avisoTerminoEjecucionReq.getNombreEquipo());
+        equipoEjecutandose.setAguaCaidaActual(avisoTerminoEjecucionReq.getAguaCaida());
+        equipoEjecutandose.setEstaEjecutandose(false);
+
         log.info("EJECUCION FINALIZADA");
         log.info("Equipo = " + avisoTerminoEjecucionReq.getNombreEquipo() + "   Agua caida = " + avisoTerminoEjecucionReq.getAguaCaida());
         return Domain.EmptyReq.newBuilder().build();

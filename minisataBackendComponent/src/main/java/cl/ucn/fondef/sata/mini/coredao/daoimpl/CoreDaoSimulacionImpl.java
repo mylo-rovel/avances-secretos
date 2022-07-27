@@ -213,19 +213,19 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
         // SI EL EQUIPO NO ESTA EN EL HASHMAP, NO ESTA ENCENDIDO => NO CONTINUAR CON EL PROCESO
         if (!(ejecucionesEquipo.containsKey(startSimulacionReq.getNombreEquipo()))){
             log.warn(startSimulacionReq.getNombreEquipo() + " NO SE ENCUENTRA ACTIVO");
-            return "Equipo no disponible para operar";
+            return "❌ Equipo no encendido y disponible para operar ❌";
         }
         // SI EL EQUIPO ESTÁ ENCENDIDO PERO OCUPADO
         if (ejecucionesEquipo.get(startSimulacionReq.getNombreEquipo()).isEstaEjecutandose()) {
-            log.warn(startSimulacionReq.getNombreEquipo() + " ESTÁ OCUPADO");
-            return "Equipo ocupado. NO disponible";
+            log.warn(startSimulacionReq.getNombreEquipo() + " ESTA OCUPADO");
+            return "❌ Equipo ocupado. NO disponible ❌";
         }
 
-        log.info(startSimulacionReq.getNombreEquipo() + " INICIANDO SIMULACIÓN");
+        log.info(startSimulacionReq.getNombreEquipo() + " INICIANDO SIMULACION");
         // PROCESO GUARDAR EN BASE DE DATOS
         Domain.IdElementoReq idSimulacionReq = IdElementoReq.newBuilder().setId(startSimulacionReq.getIdSimulacion()).build();
         Simulacion simulacionEjecutar = this.getSimulacionDB(idSimulacionReq);
-        if (simulacionEjecutar == null) { return "Simulacion no existente"; }
+        if (simulacionEjecutar == null) { return "❌ Simulacion no existente ❌"; }
 
         Ejecucion ejecucionNueva = new Ejecucion();
         ejecucionNueva.setIdSimulacion(startSimulacionReq.getIdSimulacion());
@@ -252,10 +252,9 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
         objetoEquipoDisponible.setEstaEjecutandose(true);
 
         if (mensajeBoard.getMensajeTexto().equals("Error al intentar conectar con la placa")) {
-            return "Error al intentar conectar con la placa";
+            return "❌ Error al intentar conectar con la placa ❌";
         }
-        return "Simulacion iniciada. IdEjecucion" + ejecucionNueva.getId()
-                + "Mensaje board:" + mensajeBoard.getMensajeTexto();
+        return "✔ Simulacion iniciada. IdEjecucion" + ejecucionNueva.getId() +" ✔";
     }
 
 

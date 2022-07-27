@@ -56,6 +56,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     //implementation 'org.springframework.session:spring-session-core'
 
+    // Web Sockets
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
     // Crypto library
     implementation 'org.springframework.security:spring-security-crypto:5.6.3'
     runtimeOnly 'org.bouncycastle:bcprov-jdk15on:1.70'

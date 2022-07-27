@@ -9,27 +9,34 @@ class BoardArduinoCommunicator:
 
 
 	def enviarDatosToArduino(self,simulacionJson, sataBoardClient):
+		cantidadAgua = 0.0
+		contadorAux = 0
 		try:
+			print(simulacionJson)
 			simulacionJsonBytes = simulacionJson.encode()
 			self.arduino.write(simulacionJsonBytes)
 			time.sleep(1.2)
-			mensajeArduino = self.arduino.readlines()[0]
+			mensajeArduino = str(self.arduino.readlines()[0])
 			print(f"Secuencias enviadas a ARDUINO")
 			print(f"Mensaje de arduino: {mensajeArduino}")
+			# raise ERROR si no es exitosa esta parte
 			# ENVIAR MENSAJES PARA QUE ARDUINO NOS PUEDA RESPONDER Y ENVIAR DATOS
 			while True:
 				time.sleep(1.2)
 				self.arduino.write("sendCaudalToSataBoard".encode())
 				mensajeArduino = float(self.arduino.readlines()[0])
 				print(f"Mensaje de arduino: {mensajeArduino} litros por minuto")
-				# USAR OTROS HILOS?
+				# USAR OTROS HILOS PARA ENVIAR CAUDAL?
 				sataBoardClient.sendCaudalToCentralCore(mensajeArduino)
-				if mensajeArduino == "FinishedExecution": 
+
+				# if mensajeArduino == "FinishedExecution": 
+				contadorAux += 1
+				if contadorAux > 4:
+					cantidadAgua = 60.0
 					break
-					sataBoardClient.sendAvisoTerminoToCentralCore(60)
 		except Exception as e:
-			print("ERROR AL ENVIAR DATOS A ARDUINO\n")
+			print("\nERROR EN EL PROCESO DE COMUNICACION CON ARDUINO")
 			print(e)
+			cantidadAgua = 0.0
 		finally:
-			# self.arduino.close()
-			pass
+			sataBoardClient.sendAvisoTerminoToCentralCore(cantidadAgua)

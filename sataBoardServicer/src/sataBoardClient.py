@@ -51,7 +51,7 @@ class SataBoardClient:
             horaCaudal = ":".join(str(now.time()).split(":")[0:2])
             nombreEquipo = venv_dict["NOMBRE_EQUIPO"]
             serverResponse = self.stub.sendLecturasSensores(
-            ReqResModule.LecturaSensoresReply(
+            ReqResModule.LecturaSensoresReq(
                 caudal = caudalArduino,
                 hora = horaCaudal,
                 nombreEquipo = nombreEquipo

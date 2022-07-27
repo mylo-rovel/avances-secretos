@@ -67,28 +67,21 @@
 
             async sendVerSimulacionReq(e){
                 e.preventDefault();
-                let solicitud = JSON.stringify({"nombreEquipo":this.equipoSeleccionado, "id":this.idSimulacionSeleccionada});
 
                 const tokenUsuario = window.localStorage.getItem("token");
-                const POST_config = {
+                const GET_config = {
                     'method': 'POST',
-                    'body': solicitud,
                     'headers':{
-                        'Content-Type':'application/json',
                         'authorization': tokenUsuario,}
                 };
 
-                const rawReponse = await fetch(`${this.urlApi}/simulaciones/`, POST_config).catch(err => err);
+                const rawReponse = await fetch(`${this.urlApi}/equipos/trabajando`, GET_config).catch(err => err);
                 if (rawReponse instanceof Error) {
                     alert("❌ Error al enviar solicitud ❌")
                 }
                 const objetoRespuesta = await rawReponse.json();
-                const mensajeTexto = objetoRespuesta["mensajeTexto_"];
-                console.log(mensajeTexto);
                 alert(mensajeTexto);
-                if (mensajeTexto.includes("❌")) {
-                    return;
-                }
+                console.log(objetoRespuesta["equipoAcotado_"])
                 this.graficoEjecucion = "graficoEjecucion";
             },
             
