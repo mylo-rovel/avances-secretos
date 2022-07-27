@@ -12,7 +12,7 @@ void setup(){
 
 void loop(){
     if(Serial.available() > 0){
-        string dato = Serial.readStringUntil('\n');
+        String dato = Serial.readStringUntil('\n');
 
         if(dato == "abrir"){
             digitalWrite(R1, HIGH); //cerrado = 1
