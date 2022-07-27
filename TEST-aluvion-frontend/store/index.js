@@ -12,9 +12,6 @@ export const state = () => ({
     ...secuenciasState
 });
 
-export const actions = {
-}
-
 export const mutations = {
     ... secuenciasMethods,
 }

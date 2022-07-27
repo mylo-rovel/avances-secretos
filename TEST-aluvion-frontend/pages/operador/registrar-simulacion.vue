@@ -9,7 +9,7 @@
     import NavbarPag from '~/components/NavbarPag.vue'
     import Modal from '~/components/Modal.vue'
     //import * as d3 from "d3";
-    import { getEquiposDesplegables, getValvulasDesplegables } from '~/utils/utility_functions';
+    import { getEquiposDesplegables, getValvulasDesplegables, getValvulasDict } from '~/utils/utility_functions';
     import { setSecuenciaModificar, setCantidadSecuencias } from '~/store/secuenciasStateDir/secuenciasMethods';
 
     export default Vue.extend({
@@ -22,20 +22,16 @@
                 "infoContenido": "Simulación registrada :D",
                 "nombreSecuencia": "Configurar Secuencia",
 
-                
-                equiposDisponibles:[],
-                idEquiposDisponibles:[],
-
-                
+                equiposDisponibles:{},
+                dictValvulasDisponibles:{},
                 valvulasDisponibles:[],
-                equipoSeleccionado:"",
 
-                simulacionInput:"",
-                secuenciasInput: [],
+                equipoSeleccionado:"",
+                nombreSimulacionInput:"",
                 descripcionInput:"",
 
-                dictequipo:{},
-                dictvalvula:{},                
+                isGeneradorEventosOpen: false,
+
             };
         },
         head(){
@@ -57,38 +53,17 @@
             };
 
             const urlEquipos = `${this.urlApi}/equipos/`;
-            const dataEquipo = await fetch(urlEquipos, post_config).catch(err => err);
-            const listaEquiposCrudos = await dataEquipo.json();
+            const serverResponse = await fetch(urlEquipos, post_config).catch(err => err);
+            if (serverResponse instanceof Error) {
+                alert("❌ No hay respuesta del server ❌");
+                return;
+            }
+            const listaEquiposCrudos = await serverResponse.json();
             this.equiposDisponibles = getEquiposDesplegables(listaEquiposCrudos);
-            console.log(getEquiposDesplegables(listaEquiposCrudos))
-            this.dictequipo = {...getEquiposDesplegables(listaEquiposCrudos)};
            
         },
         methods: {
              ...mapMutations(["setSecuenciaModificar", "setCantidadSecuencias"]),
-
-            //Metodo que guarda el equipo seleccionado
-            saveEquipo: function(equipoSeleccionado){
-                let opcionSeleccionada = document.getElementById('select_equipoSimulacion').selectedOptions[0].value;
-                //this.simulacionesDisponibles = this.dictEquiposSimulaciones[opcionSeleccionada]["listaSimulaciones"];
-                //this.listaIdsDisponibles = this.dictEquiposSimulaciones[opcionSeleccionada]["listaIds"];
-                return opcionSeleccionada;
-                console.log(opcionSeleccionada);
-            },
-            //Metodo que guarda el nombre de la simulacion
-            saveSimulacion: function(simulacionInput){
-                let nuevaSimulacion = document.getElementById("add_nombre_simulacion").value;
-                this.simulacionInput = nuevaSimulacion;
-                console.log(this.simulacionInput);
-                return this.simulacionInput;
-            },
-            //Metodo de guarda la descripcion de la simulacion
-            saveDescripcion: function(descripcionInput){
-                let nuevaDescripcion = document.getElementById("add_descripcion_equipo").value;
-                this.descripcionInput = nuevaDescripcion;
-                console.log(this.descripcionInput);
-                return this.descripcionInput;
-            },
 
             async getValvulas(){
                 const JWTtoken = window.localStorage.getItem("token");
@@ -98,38 +73,75 @@
                 };
                 const idEquipoSeleccionado = this.equiposDisponibles[this.equipoSeleccionado]["idEquipo"][0];
                 const urlValvulaEquipo = `${this.urlApi}/equipos/valvulas/${idEquipoSeleccionado}`;
-                console.log(idEquipoSeleccionado);
-                //console.log(urlValvulaEquipo);
+
                 const dataValvula = await fetch(urlValvulaEquipo, post_config).catch(err => err);
-                const listaValvulasCrudas = await dataValvula.json();
-                this.valvulasDisponibles = Object.keys(getValvulasDesplegables(listaValvulasCrudas));
-                console.log(this.valvulasDisponibles);
-                //console.log(this.valvulasDisponibles.lenght);
-            },
-         
-            cantSecuencias(){
-                this.secuencias[this.valvulasDisponibles.lenght];
-                console.log(this.secuencias);
+                if (dataValvula instanceof Error) {
+                    alert("❌ Error pidiendo datos al servidor ❌");
+                    return;
+                }
+                const listaValvulasCrudas = await dataValvula.json()
+                const dictValvulasEquipo = getValvulasDict(listaValvulasCrudas);
+
+                this.valvulasDisponibles = [...Object.keys(dictValvulasEquipo)]; //borrar
+
+                this.dictValvulasDisponibles = dictValvulasEquipo;
+                this.setCantidadSecuencias(dictValvulasEquipo);
             },
 
+            //Metodo que guarda el equipo seleccionado
+            saveEquipo: function(equipoSeleccionado){
+                let opcionSeleccionada = document.getElementById('select_equipoSimulacion').selectedOptions[0].value;
+                this.getValvulas();
+                return opcionSeleccionada;
+            },
+
+            //Metodo que guarda el nombre de la simulacion
+            saveNombreSimulacion: function(nombreSimulacionInput){
+                let nuevaSimulacion = document.getElementById("add_nombre_simulacion").value;
+                this.nombreSimulacionInput = nuevaSimulacion;
+                return this.nombreSimulacionInput;
+            },
+
+            // abrir el modal del generador de eventos SÓLO para la valvula seleccionada
+            seleccionarValvulaUtilizar(posicionSecuencia) {
+                this.setSecuenciaModificar(posicionSecuencia);
+                this.isGeneradorEventosOpen = true;
+            },        
+
             //Metodo que envia registro de una nueva simulacion
-            async sendAddSimulacion(){
-                let registro = JSON.stringify({"nombre":this.simulacionInput, "descripcion":this.descripcionInput, "equipo":this.equipoSeleccionado, "secuencias":this.secuencias});
-                console.log(registro);
+            async sendAddSimulacion(eventObj){
+                eventObj.preventDefault();
+                const simulacionBody = JSON.stringify({
+                    "nombre":this.nombreSimulacionInput,
+                    "descripcion":this.descripcionInput,
+                    "nombreEquipo":this.equipoSeleccionado,
+                    "rutOperador": "",
+                    "listaSecuencias":this.secuencias});
 
                 const tokenUsuario = window.localStorage.getItem("token");
                 const POST_config = {
                     'method': 'POST',
-                    'body': registro,
+                    'body': simulacionBody,
                     'headers':{
                         'Content-Type':'application/json',
                         'authorization': tokenUsuario,}
                 };
-
-                const respuesta = await fetch(`${this.urlApi}/simulaciones/secuencias/`, POST_config);
+                
+                console.clear()
+                const respuesta = await fetch(`${this.urlApi}/simulaciones/secuencias/`, POST_config).catch(err => err);
+                if (respuesta instanceof Error) {
+                    alert("❌ Error enviando al servidor ❌");
+                    return;
+                }
                 const mensajeRespuesta = await respuesta.json();
-                console.log(mensajeRespuesta);
+                alert(mensajeRespuesta["mensajeTexto_"]);
+                window.location.reload();
             },
+            cancelarAddSimulacion() {
+                const anchorElement = document.createElement("a");
+                anchorElement.href= "/operador/menu-operador";
+		        anchorElement.click();
+            }
         }    
     })
 </script>
@@ -147,8 +159,19 @@
                 <div class="row my-4">
                     <h4>Registrar Simulación</h4>
                 </div>
+
+                <!-- PARTE TABLA GENERADORA DE EVENTOS -->
+                <div v-if="isGeneradorEventosOpen" class="generadorEventosContainer"> 
+                    <GeneradorEventos 
+                        @onCancelClick = "isGeneradorEventosOpen=false"
+                        :isGeneradorEventosOpen = "isGeneradorEventosOpen"
+                        /> 
+                </div>
+
                 <div class="row">
                     <form id ="form-regsimulacion" method="post">
+
+                        <!-- PARTE SELECCIONAR EQUIPO PARA OBTENER LAS VALVULAS -->
                         <div class="my-4 form-group row">
                             <label for="equipo-simulacion" class="col-sm-4 col-form-label " >Seleccione un equipo</label>
                             <div class="col-sm-6">
@@ -157,39 +180,42 @@
                                 </select>
                             </div>
                         </div>
-                        <button @click="getValvulas()">PRUEBA</button>
+
+                        <!-- PARTE ESCRIBIR NOMBRE SIMULACION -->
                         <div class="my-4 form-group row">
                             <label for="add_nombre_simulacion" class="col-sm-4 col-form-label">Nombre Simulación</label>
                             <div class="col-sm-6">
-                                <input id="add_nombre_simulacion" type="text" class="form-control" @change="saveSimulacion(simulacionInput)" required>
+                                <input id="add_nombre_simulacion" type="text" class="form-control" @change="saveNombreSimulacion(nombreSimulacionInput)" required>
                             </div>
                         </div>
-                        <div class="my-4 form-group row">
-                            <label for="add_nombre" class="col-sm-4 col-form-label">Secuencias</label>
-                            <div  v-for="(evento, posicionSecuencia) in valvulasDisponibles" :key="`secKey_${posicionSecuencia}`"  class="row mb-2">
-                                <div class="col-sm-4">
-                                    <label for="secuencia-valvula3" class="conf-secuencias col-form-label">Válvula {{posicionSecuencia+1}}</label>
-                                </div>
-                                <div class="col-sm-6">
-                                   <NuxtLink to="/operador/agregar-evento"><SecuenciaButton :nombreSecuencia = "nombreSecuencia" :posicionSecuencia = "posicionSecuencia" @click ="setSecuenciaModificar()"/></NuxtLink>
-                                </div>
-                                
+                    
+                        <!-- PARTE SELECCIONAR LA VALVULA PARA ABRIR TABLA DE GENERADOR DE EVENTOS -->
+                        <div class="valvulasSection my-4 form-group row">
+                            <label for="add_secuencia" class="valvulasTitle col-sm-4 col-form-label">Secuencias</label>
+                            <div v-for="(nombreValvula, posicionSecuencia) in Object.keys(dictValvulasDisponibles)" class="row">
+                                <label class="col-sm-4  col-form-label">Secuencia {{posicionSecuencia+1}}</label>
+                            
+                                <p :key="`valvulaKey_${posicionSecuencia}`"  class="valvulaRow col-form-label col-sm-6" @click="() => seleccionarValvulaUtilizar(posicionSecuencia)">
+                                    Válvula id: {{dictValvulasDisponibles [nombreValvula]}}
+                                </p>
                             </div>
-                            <button @click="cantSecuencias(valvulasDisponibles)">PRUEBA</button>
-                        </div>
+                        </div>          
+
+                        <!-- PARTE ESCRIBIR DESCRIPCION SIMULACION -->
                         <div class="my-4 form-group row">
                             <label for="add_descripcion_equipo" class="col-sm-4 col-form-label">Descripción Simulación</label>
                             <div class="col-sm-6">
-                                <input id="add_descripcion_equipo" @change="saveDescripcion(descripcionInput)" type="text" class="form-control" required>
+                                <input id="add_descripcion_equipo" v-model="descripcionInput" type="text" class="form-control" required>
                             </div>
                         </div>
+
+                        <!-- PARTE BOTONES -->
                         <div class = "row my-4">
                             <div class= "col-12 contenido-botones my-4">
-                                <NuxtLink to="/menu-operador"><CancelButtom :cancelbutton = "cancelbutton"/></NuxtLink>
+                                <button class="finalFormButton cancelarButton" @click="cancelarAddSimulacion" > CANCELAR </button>
                             </div>                            
                             <div class="col-12 contenido-botones my-4">    
-                                <SubmitButton :submitbutton = "submitbutton" @click = "sendAddSimulacion()" />
-                                
+                                <button class="finalFormButton sendDataButton" @click="sendAddSimulacion" > GUARDAR </button>
                             </div>
                         </div> 
                     </form>
@@ -199,60 +225,101 @@
     </section>
 </template>
 <style>
+
+    .generadorEventosContainer{
+        z-index: 999;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width:100vw;
+        height:100vh;
+        background-color: rgba(0, 0, 0, 0.8);
+    }
+
     .contenido-botones{
         width: fit-content;
         margin: auto ;
     }   
     .conf-secuencias{
         margin: 0 auto;
-        padding-left: 4rem;
+        padding-left: 2rem;
     }  
-    .btn-secuencias{
-        background-color: #ecf0f1;
-        border: 1px solid #d0d3d4;
-        color: black;
-        padding: 0.25rem 1.5rem;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 1rem;
-        margin: 0;
-        cursor: pointer;
-        border-radius: 10px;
+
+    .valvulasSection {
+        display:flex;
+/*      flex-direction: column;
+ */     width: 90%;
+        padding: .375rem 2.25rem .375rem .75rem;
     }
-    .btn-secuencias:hover{
-        background: #ecf0f1;
-        border: 1px solid #d0d3d4;
-        color: black;
-        /*transform: scale(1.1);*/
-    }
-    .back-modal{
-        display: none;
+    /* .hola{
+        display: block;
         width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.7);
-        position: relative;
-        top: 0;
-        justify-content: center;
-        align-items: center;
-    }
-    .modal-content {
-        /*width: 500px;
-        height: 300px;*/
-        background-color: white;
-        border-radius: 10px;
-        text-align: center;
-        padding: 5px;
-        position: relative;
-        margin-left: 40px;
-        margin-right: 40px;
-    }
-    .close-modal {
-        position: absolute;
-        top: 0;
-        right: 14px;
-        font-size: 42px;
-        transform: rotate(45deg);
+        
+        -moz-padding-start: calc(0.75rem - 3px);
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #212529;
+        
+        background-size: 16px 12px;
+        border: 1px solid #ced4da;
+        border-radius: .375rem;
+    } */
+
+    .valvulaRow {
+       /*  width: 100%; */
+        margin: 0.2rem auto 0.5rem auto;
+        padding: 0.5rem;
+        border: 1px solid #ced4da;  
+        border-radius: .375rem;
         cursor: pointer;
+        
+        text-align:center;
     }
+    .valvulaRow:hover {
+        background-color: #212529;
+        color: #fff;
+        /* font-weight: bold;
+        transform: scale(1.1); */
+    }
+
+
+    .finalFormButton {
+        color: white;
+        font-weight: 900;
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        height: fit-content;
+        margin: auto 0;
+    }
+    .sendDataButton {
+        background-color: rgba(2,92,250,1);        
+    }
+    .cancelarButton {
+        background-color: rgba(199,0,57,1);
+    }
+
+    .sendDataButton:hover {
+        color: rgba(2,92,250,1);
+        border: 1px solid rgba(2,92,250,1);
+        background-color:white;
+        transition: all 0.4s;
+        transform: scale(1.1);
+    }
+    .cancelarButton:hover {
+        color: rgba(199,0,57,1);
+        border: 1px solid rgba(199,0,57,1);
+        background-color:white;
+        transition: all 0.4s;
+        transform: scale(1.1);
+    }
+
+    @media screen and (max-width: 575px) {
+        .valvulasSection {
+            width: 100%;
+        }
+    }
+
 </style>

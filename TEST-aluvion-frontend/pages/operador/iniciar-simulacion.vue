@@ -81,7 +81,7 @@
             
 
 //Metodo que enviar solicitud de iniciar simulacion SE TIENE QUE ENVIAR LA ID DEL EQUIPO Y SIMULACION , NO NOMBRES
-            async sendSolicitudSimulacion(){
+            async sendStartSimulacionReq(){
                 let solicitud = JSON.stringify({"nombreEquipo":this.equipoSeleccionado, "id":this.idSimulacionSeleccionada});
                 console.log(solicitud);
 
@@ -97,6 +97,12 @@
                 const respuesta = await fetch(`${this.urlApi}/simulaciones/`, POST_config);
                 const mensajeRespuesta = await respuesta.json();
                 console.log(mensajeRespuesta)
+                alert(mensajeRespuesta["mensajeTexto_"]);
+            },
+            cancelarStartSimulacion() {
+                const anchorElement = document.createElement("a");
+                anchorElement.href= "/operador/menu-operador";
+		        anchorElement.click();
             }
         }
     })
@@ -136,25 +142,56 @@
                                 </div>
                             </div>
                         </form>
-                        <div class = "row my-4 ">
-                                <div class= "col-12 contenido-botones my-4">
-                                    <NuxtLink to="/operador/menu-operador"><CancelButtom :cancelbutton = "cancelbutton"/></NuxtLink>
-                                </div>                            
-                                <div class="col-12 contenido-botones my-4">    
-                                    <NuxtLink to="/menu-operador"><SubmitButton :submitbutton = "submitbutton" @click = "sendSolicitudSimulacion()"/></NuxtLink>
-                                </div>
+                        <!-- PARTE BOTONES -->
+                        <div class = "row my-4">
+                            <div class= "col-12 contenido-botones my-4">
+                                <button class="finalFormButton cancelarButton" @click="cancelarStartSimulacion" > CANCELAR </button>
+                            </div>                            
+                            <div class="col-12 contenido-botones my-4">    
+                                <button class="finalFormButton sendDataButton" @click="sendStartSimulacionReq" > GUARDAR </button>
                             </div>
-                        <!--<button @click="sendSolicitudSimulacion()">CONSOLE.LOG HERE CHECK ME OUT</button>-->
+                        </div> 
+
                     </div>
                 </div>
             </div>
         </section>
     </template>
 <style>
-   
-    .contenido-botones{
-        width: fit-content;
-        margin: auto ;
-    }
+
+.contenido-botones{
+    width: fit-content;
+    margin: auto ;
+}
+
+    .finalFormButton {
+    color: white;
+    font-weight: 900;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    height: fit-content;
+    margin: auto 0;
+}
+.sendDataButton {
+    background-color: rgba(2,92,250,1);        
+}
+.cancelarButton {
+    background-color: rgba(199,0,57,1);
+}
+
+.sendDataButton:hover {
+    color: rgba(2,92,250,1);
+    border: 1px solid rgba(2,92,250,1);
+    background-color:white;
+    transition: all 0.4s;
+    transform: scale(1.1);
+}
+.cancelarButton:hover {
+    color: rgba(199,0,57,1);
+    border: 1px solid rgba(199,0,57,1);
+    background-color:white;
+    transition: all 0.4s;
+    transform: scale(1.1);
+}
     
 </style>

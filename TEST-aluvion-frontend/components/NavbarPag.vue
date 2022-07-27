@@ -24,9 +24,9 @@
     methods: {
       setLinksNavbarPag(rolUsar) {
         this.linkInicio = `menu-${this.rolUsuario}`;
-        this.linkPerfil = `/perfil-usuario`;
+        // this.linkPerfil = `/perfil-usuario`;
         //this.linkOpciones = `${rolUsuario}/opciones-${rolUsuario}`;
-        console.log(this.linkInicio);
+        // console.log(this.linkInicio);
       },
       cerrarSesion(e) {
         cerrarSesionUsuario();
@@ -37,7 +37,7 @@
 <template>
     <nav class="navbar navbar-expand-lg  navbar-dark bg-dark" >
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">Sistema de Alerta Temprana Aluvional </a>
+        <a class="navbar-brand" href="/">Sistema de Alerta Temprana Aluvional </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -54,7 +54,7 @@
                 Opciones
               </a>
               <ul class="desplegable  " aria-labelledby="navbarDropdown">
-                <li><a class="opcion dropdown-item" href="/operador/registrar-simulacion2">Registrar Simulación</a></li>
+                <li><a class="opcion dropdown-item" href="/operador/registrar-simulacion">Registrar Simulación</a></li>
                 <li><a class="opcion dropdown-item" href="/operador/iniciar-simulacion">Iniciar Simulación</a></li>
                 <li><a class="opcion dropdown-item" href="/operador/ver-simulacion">Ver Simulación</a></li>
                 <li><a class="opcion dropdown-item" href="/operador/lista-simulaciones">Historial de Simulaciones</a></li>

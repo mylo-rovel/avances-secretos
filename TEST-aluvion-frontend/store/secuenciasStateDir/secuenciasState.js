@@ -19,17 +19,24 @@ export const secuenciasState = {
     currentSecuencia: 0,
     
     // secuencias: [
-    //     {"listaEventos": [ 
+    //     {
+    //      "idComponente": 1,
+    //      "nombreComponente": "nombre1",
+    //      "listaEventos": [ 
     //         {"intensidad": 5, "duracion":9},
     //         {"intensidad": 7, "duracion":7},
     //         {"intensidad": 1, "duracion":5}
     //     ]},
-    //     {"listaEventos": [ 
+    //      "idComponente": 2,
+    //      "nombreComponente": "nombre2",
+    //      "listaEventos": [ 
     //         {"intensidad": 5, "duracion":9},
     //         {"intensidad": 7, "duracion":7},
     //         {"intensidad": 1, "duracion":5}
     //     ]},
-    //     {"listaEventos": [ 
+    //      "idComponente": 3,
+    //      "nombreComponente": "nombre3",
+    //      "listaEventos": [ 
     //         {"intensidad": 5, "duracion":9},
     //         {"intensidad": 7, "duracion":7},
     //         {"intensidad": 1, "duracion":5}

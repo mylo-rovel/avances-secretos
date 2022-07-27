@@ -8,11 +8,9 @@
     import {mapState} from "vuex";
     import { setListasDesplegables } from '~/utils/utility_functions';
 
-
-
     export default Vue.extend({
         name: "VerSimulacion",
-        components: { PageHeader, CancelButtom, SubmitButton},
+        components: { PageHeader, CancelButtom, SubmitButton },
         data() {
             return {
             "cancelbutton": "cancelar",
@@ -24,10 +22,22 @@
             equipoSeleccionado: "",
             idSimulacionSeleccionada:0,
 
-            dictEquiposSimulaciones:{}
+            dictEquiposSimulaciones:{},
+
+            // paginaRenderizar: "listaEquiposEjecutando"
+            paginaRenderizar: "graficoEjecucion",
+
+            listaDatosEjecucion: [
+                {caudal: 400, pos: 1},
+                {caudal: 500, pos: 2},
+                {caudal: 450, pos: 3},
+                {caudal: 600, pos: 4},
+                {caudal: 400, pos: 5},
+            ]
+            
             };
         },
-        computed: mapState(["urlApi"]) ,
+        computed: mapState(["urlApi"]),
         
         async mounted(){
             const JWTtoken = window.localStorage.getItem("token");
@@ -37,12 +47,13 @@
             };
             const url_to_fetch = `${this.urlApi}/simulaciones/`;
             const rawdata = await fetch(url_to_fetch, post_config).catch(err => err);
+            if (rawdata instanceof Error) {
+                alert("❌ Error con el servidor ❌")
+            }
             const listaSimulacionesCrudas = await rawdata.json();
-
             this.equiposDisponibles = Object.keys(setListasDesplegables(listaSimulacionesCrudas));
             this.dictEquiposSimulaciones = {...setListasDesplegables(listaSimulacionesCrudas)};
-            //console.log(this.equiposDisponibles);
-
+            
         },
         methods:{
 
@@ -52,12 +63,11 @@
                 this.listaIdsDisponibles = this.dictEquiposSimulaciones[opcionSeleccionada]["listaIds"];
                 console.log(opcionSeleccionada);
                 return opcionSeleccionada;
-                console.log("hola");
-                
             },
-            async sendSolicitudVerSimulacion(){
+
+            async sendVerSimulacionReq(e){
+                e.preventDefault();
                 let solicitud = JSON.stringify({"nombreEquipo":this.equipoSeleccionado, "id":this.idSimulacionSeleccionada});
-                console.log(solicitud);
 
                 const tokenUsuario = window.localStorage.getItem("token");
                 const POST_config = {
@@ -68,8 +78,24 @@
                         'authorization': tokenUsuario,}
                 };
 
-                const respuesta = await fetch(`${this.urlApi}/simulaciones/`, POST_config);
-                console.log(respuesta);
+                const rawReponse = await fetch(`${this.urlApi}/simulaciones/`, POST_config).catch(err => err);
+                if (rawReponse instanceof Error) {
+                    alert("❌ Error al enviar solicitud ❌")
+                }
+                const objetoRespuesta = await rawReponse.json();
+                const mensajeTexto = objetoRespuesta["mensajeTexto_"];
+                console.log(mensajeTexto);
+                alert(mensajeTexto);
+                if (mensajeTexto.includes("❌")) {
+                    return;
+                }
+                this.graficoEjecucion = "graficoEjecucion";
+            },
+            
+            cancelarVerSimulacion() {
+                const anchorElement = document.createElement("a");
+                anchorElement.href= "/operador/menu-operador";
+		        anchorElement.click();
             }
         }
     })
@@ -84,7 +110,7 @@
             <PageHeader/>
         </div>
         <div class= "container">
-            <div>
+            <div v-if="paginaRenderizar === 'listaEquiposEjecutando'" id="verSimulacionSelection">
                 <div class="row my-4">
                     <h2>Ver Simulación</h2>
                 </div>
@@ -98,17 +124,69 @@
                                 </select>
                             </div>
                         </div>
-                        <div class = "row my-4">
-                            <div class= "col-12 contenido-botones my-4">
-                                <NuxtLink to="/operador/menu-operador"><CancelButtom :cancelbutton = "cancelbutton"/></NuxtLink>
+                        <!-- PARTE BOTONES -->
+                        <div class = "row my-4 button-ribbon">
+                            <div class= "col-12 contenido-botones my-4 button-container">
+                                <button class="finalFormButton cancelarButton" @click="cancelarVerSimulacion" > CANCELAR </button>
                             </div>                            
-                            <div class="col-12 contenido-botones my-4">    
-                                <NuxtLink to="/operador/menu-operador"><SubmitButton :submitbutton = "submitbutton"/></NuxtLink>
+                            <div class="col-12 contenido-botones my-4 button-container">    
+                                <button class="finalFormButton sendDataButton" @click="sendVerSimulacionReq" > ENVIAR </button>
                             </div>
                         </div>
+
                     </form>
                 </div>
+            </div>
+            <div v-if="paginaRenderizar === 'graficoEjecucion'" id="verSimulacionGrafico">
+                <svg></svg>
             </div>
         </div>
     </section>
 </template>
+
+<style>
+
+    .button-ribbon {
+        width: 50vw;
+        display: flex;
+        margin: 0 auto;
+        justify-content: space-between;
+    }
+
+    .button-container {
+        width: fit-content;
+        margin: 0 auto;
+    }
+
+    .finalFormButton {
+        color: white;
+        font-weight: 900;
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        height: fit-content;
+        margin: auto 0;
+    }
+    .sendDataButton {
+        background-color: rgba(2,92,250,1);        
+    }
+    .cancelarButton {
+        background-color: rgba(199,0,57,1);
+    }
+
+    .sendDataButton:hover {
+        color: rgba(2,92,250,1);
+        border: 1px solid rgba(2,92,250,1);
+        background-color:white;
+        transition: all 0.4s;
+        transform: scale(1.1);
+    }
+    .cancelarButton:hover {
+        color: rgba(199,0,57,1);
+        border: 1px solid rgba(199,0,57,1);
+        background-color:white;
+        transition: all 0.4s;
+        transform: scale(1.1);
+    }
+
+
+</style>

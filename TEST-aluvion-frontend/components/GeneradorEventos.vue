@@ -64,7 +64,6 @@
                 </tr>
                 
             </table>
-            {{intensidadTotalListaEventos}}
         </article>
         <article class="bottom-ribbon">
             <div class="col-6 contenido-botones my-4">

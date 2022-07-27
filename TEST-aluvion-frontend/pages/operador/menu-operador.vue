@@ -60,7 +60,7 @@
                 <li class="list__item mb-3" :id="`Inicio_key`" @click="(e) => {}">
                     <div class="list__button">
                         <img src="~/assets/home.svg" class="img-icono">
-                        <NuxtLink to="/operador/menu-operador">Inicio</NuxtLink>
+                        <NuxtLink to="#">Inicio</NuxtLink>
                     </div>
                 </li>
                 <!--<p :id="`Inicio_key`" @click="(e) => {}" class="container">
@@ -79,7 +79,7 @@
                 <li class="list__item mb-3 " :id="`Perfil_key`" @click="(e) => {}">
                     <div class="list__button">    
                         <img src="~/assets/profile.svg" class="img-icono">
-                        <NuxtLink to="/operador/">Perfil</NuxtLink>
+                        <NuxtLink to="#">Perfil</NuxtLink>
                     </div>
                 </li>
                  <li class="list__item  mb-3" :id="`Simulacion_key`" @click="(e) => abrirMenu(e)" >
@@ -89,7 +89,7 @@
                         <img id= "flechaSimulacion" src="~/assets/arrow.svg" class="list__arrow">
                     </div>
                     <ul v-if="elementsObj['Simulacion']" class=" submenu-routes-menu">
-                        <p class="list__inside"><NuxtLink to="/operador/registrar-simulacion2">Registrar simulación</NuxtLink></p>
+                        <p class="list__inside"><NuxtLink to="/operador/registrar-simulacion">Registrar simulación</NuxtLink></p>
                         <p ><NuxtLink to="/operador/iniciar-simulacion">Iniciar simulación</NuxtLink></p>
                         <p><NuxtLink to="/operador/ver-simulacion">Ver simulación</NuxtLink></p>
                         <p><NuxtLink to="/operador/lista-simulaciones">Historial de simulaciones</NuxtLink></p>
@@ -116,7 +116,7 @@
                 <li class="list__item mb-3" :id="`Contacto_key`" @click="(e) => {}">
                     <div class="list__button">
                         <img src="~/assets/message.svg" class="img-icono">
-                        <NuxtLink to="/operador/ejemplo">Contacto</NuxtLink>
+                        <NuxtLink to="#">Contacto</NuxtLink>
                     </div>
                 </li>
 
