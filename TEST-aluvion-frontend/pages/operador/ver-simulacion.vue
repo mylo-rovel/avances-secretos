@@ -24,8 +24,8 @@
 
             dictEquiposSimulaciones:{},
 
-            // paginaRenderizar: "listaEquiposEjecutando"
-            paginaRenderizar: "graficoEjecucion",
+            paginaRenderizar: "listaEquiposEjecutando",
+            // paginaRenderizar: "graficoEjecucion",
 
             listaDatosEjecucion: [
                 {caudal: 400, pos: 1},
@@ -40,20 +40,24 @@
         computed: mapState(["urlApi"]),
         
         async mounted(){
+
             const JWTtoken = window.localStorage.getItem("token");
-            const post_config = { 
+            const get_config = { 
                 method: 'get', 
                 headers: {'authorization': JWTtoken}
             };
-            const url_to_fetch = `${this.urlApi}/simulaciones/`;
-            const rawdata = await fetch(url_to_fetch, post_config).catch(err => err);
+            const url_to_fetch = `${this.urlApi}/equipos/trabajando`;
+            const rawdata = await fetch(url_to_fetch, get_config).catch(err => err);
             if (rawdata instanceof Error) {
-                alert("❌ Error con el servidor ❌")
+                alert("❌ Error al enviar solicitud ❌");
+                return;
             }
-            const listaSimulacionesCrudas = await rawdata.json();
-            this.equiposDisponibles = Object.keys(setListasDesplegables(listaSimulacionesCrudas));
-            this.dictEquiposSimulaciones = {...setListasDesplegables(listaSimulacionesCrudas)};
-            
+            const objetoRespuesta = await rawdata.json();
+                    
+            this.equiposDisponibles = objetoRespuesta["equipoAcotado_"].reduce((acc, equipoAcotado) => {
+                return [...acc, equipoAcotado["nombre_"]];
+            }, []);
+            // this.dictEquiposSimulaciones = {...setListasDesplegables(listaSimulacionesCrudas)};
         },
         methods:{
 
@@ -75,13 +79,14 @@
                         'authorization': tokenUsuario,}
                 };
 
-                const rawReponse = await fetch(`${this.urlApi}/equipos/trabajando`, GET_config).catch(err => err);
+                const rawReponse = await fetch(`${this.urlApi}/`, GET_config).catch(err => err);
                 if (rawReponse instanceof Error) {
-                    alert("❌ Error al enviar solicitud ❌")
+                    alert("❌ Error al enviar solicitud ❌");
+                    return;
                 }
                 const objetoRespuesta = await rawReponse.json();
                 alert(mensajeTexto);
-                console.log(objetoRespuesta["equipoAcotado_"])
+
                 this.graficoEjecucion = "graficoEjecucion";
             },
             
