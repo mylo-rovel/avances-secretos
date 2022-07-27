@@ -59,28 +59,28 @@ void loop() {
       Serial.print(caudalActual);
       // LA IDEA ES ITERAR SOBRE UNA LISTA DE INDICES (3 VALVULAS, 3 INDICES)
       // CHEQUEANDO DURACIONES VS TIEMPOS TRANSCURRIDOS (PARA CAMBIAR LA INTENSIDAD SI ES NECESARIO)
-      // for (int i = 0; i < cantValvulas; i++) {
-      //   // REVISAR SI CONVIENE DECLARAR ESTAS VARIABLES EN OTRO SCOPE PARA MEJORAR PERFORMANCE
-      //   char* currentIdValvula = doc["ids"][i];
-      //   int currentIndexValvula = indicesValvula[i];
-      //   int minsDuracionEventoActual = doc["secuencias"][currentIdValvula][currentIndexValvula]["i"];
-      //   long duracionEventoActual = duracionEventoActual * 60 * 1000;
-      //   long tiempoTranscurridosEvento = currentTiemposInicioEvento[i];
+      for (int i = 0; i < cantValvulas; i++) {
+        // REVISAR SI CONVIENE DECLARAR ESTAS VARIABLES EN OTRO SCOPE PARA MEJORAR PERFORMANCE
+        char* currentIdValvula = doc["ids"][i];
+        int currentIndexValvula = indicesValvula[i];
+        int minsDuracionEventoActual = doc["secuencias"][currentIdValvula][currentIndexValvula]["i"];
+        long duracionEventoActual = duracionEventoActual * 60 * 1000;
+        long tiempoTranscurridosEvento = currentTiemposInicioEvento[i];
         
-      //   // PASAR AL EVENTO SIGUIENTE SI YA SE SUPERO LA DURACION DEL EVENTO
-      //   if ( (millis() - tiempoTranscurridosEvento) >= duracionEventoActual) {
-      //     indicesValvula[i]++;
-      //     currentTiemposInicioEvento[i] = millis();
-      //     int intensidadNuevoEvento = doc["secuencias"][currentIdValvula][currentIndexValvula+1]["i"];
-      //     calibrateValvula(intensidadNuevoEvento, caudalActual);
-      //   }
-      //   // SI NO SE PASA A OTRO EVENTO, CHEQUEAR SI LA VALVULA ESTÁ DENTRO DEL RANGO DE LA INTENSIDAD
-      //   else {
-      //     int intensidadEventoActual = doc["secuencias"][currentIdValvula][currentIndexValvula]["i"];
-      //     calibrateValvula(intensidadEventoActual, caudalActual);
-      //   }
+        // PASAR AL EVENTO SIGUIENTE SI YA SE SUPERO LA DURACION DEL EVENTO
+        if ( (millis() - tiempoTranscurridosEvento) >= duracionEventoActual) {
+          indicesValvula[i]++;
+          currentTiemposInicioEvento[i] = millis();
+          int intensidadNuevoEvento = doc["secuencias"][currentIdValvula][currentIndexValvula+1]["i"];
+          calibrateValvula(intensidadNuevoEvento, caudalActual);
+        }
+        // SI NO SE PASA A OTRO EVENTO, CHEQUEAR SI LA VALVULA ESTÁ DENTRO DEL RANGO DE LA INTENSIDAD
+        else {
+          int intensidadEventoActual = doc["secuencias"][currentIdValvula][currentIndexValvula]["i"];
+          calibrateValvula(intensidadEventoActual, caudalActual);
+        }
 
-      // }
+      }
     }
     
     // ---------------------- PARTE SÓLO EJECUTADA AL RECEBIR EL JSON ------------------------

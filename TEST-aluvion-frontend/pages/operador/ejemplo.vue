@@ -35,19 +35,6 @@
 <template>
     <nav class="nav ">
         <ul class=" list ">
-            <!-- <p v-for="element in Object.entries(elementsObj)" :key="`${element[0]}_key`"> 
-                <span :id="`${element[0]}_key`" @click="(e) => abrirMenu(e)"> 
-                    <span class="menu-routes-element">
-                        {{element[0]}}
-                    </span>
-                    <ul v-if="element[1].esDesplegable && element[0]==='Simulación'" class="submenu-routes-menu">
-                        <p ><NuxtLink to="/operador/">Registrar simulacion</NuxtLink></p>
-                        <p ><NuxtLink to="/operador/">Iniciar simulacion</NuxtLink></p>
-                        <p ><NuxtLink to="/operador/">Ver simulacion</NuxtLink></p>
-                        <p ><NuxtLink to="/operador/">Historial de simulaciones</NuxtLink></p>
-                    </ul>
-                </span>
-            </p> -->
             <li class="list__item" :id="`Inicio_key`" @click="(e) => {}">
                 <div class="list__button">
                     <img src="~/assets/home.svg" class="img-icono">
