@@ -1,13 +1,13 @@
 <script>
 
-    import {Line} from 'vue-chartjs'
+    // import {Line} from 'vue-chartjs'
     //import * as Vue from 'vue'
     
     export default {
-        extends: Line,
+        // extends: Line,
         props: ["chartData", "options"],
         mounted(){
-            this.renderChart(this.chartData, this.options);
+            // this.renderChart(this.chartData, this.options);
         }
         
     };

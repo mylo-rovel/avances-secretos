@@ -1,8 +1,8 @@
 <script>
 
    // import {Line} from 'vue-chartjs'
-    import LineChart from '~/components/LineChart.vue'
-    import Vue from 'vue';
+    // import LineChart from '~/components/LineChart.vue'
+    // import Vue from 'vue';
     //import * as Vue from 'vue'
 
     export default {
@@ -45,7 +45,7 @@
     <div>
         <h1 class="title">Vue Chart></h1>
         <div class="chart-div">
-            <LineChart :chartData="chartData" :options="chartOptions"/>
+            <!-- <LineChart :chartData="chartData" :options="chartOptions"/> -->
         </div>
     </div>
 </template>

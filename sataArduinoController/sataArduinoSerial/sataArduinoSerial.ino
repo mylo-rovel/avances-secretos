@@ -26,6 +26,7 @@ float obtenerFrecuencia(){
   noInterrupts(); //Desabilitamos las interrupciones
   interrupts();    //Habilitamos las interrupciones para poder usar Serial.print()
   frecuencia = NumPulsos; //Hz(pulsos por segundo)
+  frecuencia = random(30,51);
   return frecuencia;
 }
 

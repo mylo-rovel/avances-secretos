@@ -35,14 +35,13 @@ class SataBoardClient:
                     nombre_equipo = nombreEquipo,
                     direccion_ip_equipo = direccionIpEquipo
             ))
-            print("Mensaje saludo ya enviado al Central Core")
+            print("Mensaje saludo enviado al Central Core")
             print(f"Mensaje recibido desde Central Core: {serverResponse.respuestaSaludo}")
-            # self._getHandyEquipoDict(serverResponse.equipo)
+            # return self._getHandyEquipoDict(serverResponse.equipo)
             return {}
         except Exception as e:
             print("ERROR AL ENVIAR EL SALUDO. NO HUBO RESPUESTA\n")
             print(e)
-        finally:
             return None
 
 
@@ -65,6 +64,7 @@ class SataBoardClient:
         
         finally:
             return None             
+
 
     def sendAvisoTerminoToCentralCore(self, volumenTotal):
         try:

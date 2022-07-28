@@ -29,9 +29,9 @@ class BoardArduinoCommunicator:
 				# USAR OTROS HILOS PARA ENVIAR CAUDAL?
 				sataBoardClient.sendCaudalToCentralCore(mensajeArduino)
 
-				# if mensajeArduino == "FinishedExecution": 
-				contadorAux += 1
+				# contadorAux += 1
 				if contadorAux > 4:
+				# if mensajeArduino == "FinishedExecution":
 					cantidadAgua = 60.0
 					break
 		except Exception as e:
