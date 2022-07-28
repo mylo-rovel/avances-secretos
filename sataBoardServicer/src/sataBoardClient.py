@@ -42,6 +42,7 @@ class SataBoardClient:
         except Exception as e:
             print("ERROR AL ENVIAR EL SALUDO. NO HUBO RESPUESTA\n")
             print(e)
+        finally:
             return None
 
 
@@ -61,7 +62,9 @@ class SataBoardClient:
         except Exception as e:
             print("ERROR AL ENVIAR CAUDAL\n")
             print(e)
-            return None 
+        
+        finally:
+            return None             
 
     def sendAvisoTerminoToCentralCore(self, volumenTotal):
         try:
@@ -76,5 +79,7 @@ class SataBoardClient:
         except Exception as e:
             print("ERROR AL ENVIAR EL AVISO DE TERMINO\n")
             print(e)
+        
+        finally:
             return None             
         

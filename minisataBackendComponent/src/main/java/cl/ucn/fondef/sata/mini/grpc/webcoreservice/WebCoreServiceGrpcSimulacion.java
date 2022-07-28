@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -259,15 +260,18 @@ public class WebCoreServiceGrpcSimulacion {
         log.info("EQUIPO ENCENDIDO");
         log.info("equipo = " + equipoGuardadoDB);
 
-        InformacionBoard informacionBoardNueva = new InformacionBoard(saludoBoardReq.getDireccionIpEquipo());
         // SI NO ESTA DENTRO DEL HASHMAP DE EQUIPOS DISPONIBLES, LO AGREGAMOS
         if (!(ejecucionesEquipo.containsKey(saludoBoardReq.getNombreEquipo()))){
+            InformacionBoard informacionBoardNueva = new InformacionBoard(saludoBoardReq.getDireccionIpEquipo());
             ejecucionesEquipo.put(equipoGuardadoDB.getNombre(), informacionBoardNueva);
         }
         // Y SI ESTÁ, ACTUALIZAMOS SU IP POR CAMBIA SU VALOR EN EL ARCHIVO .env
         else {
             InformacionBoard entradaEquipoOLD = ejecucionesEquipo.get(equipoGuardadoDB.getNombre());
             entradaEquipoOLD.resetCoreBoardClient(saludoBoardReq.getDireccionIpEquipo());
+            entradaEquipoOLD.setValoresGrafico(new ArrayList<>());
+            entradaEquipoOLD.setAguaCaidaActual(0.0);
+            entradaEquipoOLD.setEstaEjecutandose(false);
         }
 
         //aqui esta el proceso de convertir equipoGuardadoDB a un equipoEntity para enviarlo
@@ -310,17 +314,12 @@ public class WebCoreServiceGrpcSimulacion {
         Domain.EquiposEntityReply.Builder equiposEnviar = Domain.EquiposEntityReply.newBuilder();
         for(String nombreEquipo : ejecucionesEquipo.keySet()){
             if(ejecucionesEquipo.get(nombreEquipo).isEstaEjecutandose()){
-//                Equipo equipo = coreDaoEquipo.getEquipoPorNombre(nombreEquipo);
                 Domain.EquipoEntityAcotado equipoAgregar = Domain.EquipoEntityAcotado.newBuilder()
-//                        .setId(equipo.getId())
-//                        .setNombre(equipo.getNombre())
-//                        .setEstado(Domain.EstadoEquipo.valueOf(equipo.getEstado()))
                         .setNombre(nombreEquipo)
                         .build();
                 equiposEnviar.addEquipoAcotado(equipoAgregar);
             }
         }
-
         return equiposEnviar.build();
     }
 
