@@ -18,10 +18,9 @@
             equiposDisponibles:[],
             equipoSeleccionado: "",
 
-            // paginaRenderizar: "listaEquiposEjecutando",
-            paginaRenderizar: "graficoEjecucion",
+            paginaRenderizar: "listaEquiposEjecutando",
+            // paginaRenderizar: "graficoEjecucion",
 
-            // Bar: {},
             listaDatosEjecucion: []
             
             };
@@ -45,30 +44,32 @@
             this.equiposDisponibles = objetoRespuesta["equipoAcotado_"].reduce((acc, equipoAcotado) => {
                 return [...acc, equipoAcotado["nombre_"]];
             }, []);
-            
-            const importedBar = await import('vue-chartjs/legacy');
-            // this.Bar = importedBar;
-            console.log(importedBar);
         },
 
         methods:{
             async sendVerSimulacionReq(e){
                 e.preventDefault();
-
+                const POST_body = {
+                    "nombreEquipo": this.equipoSeleccionado,
+                    "indiceInicial": 0,
+                    "indiceFinal": listaDatosEjecucion.length
+                }
                 const tokenUsuario = window.localStorage.getItem("token");
-                const GET_config = {
+                const POST_config = {
                     'method': 'POST',
+                    'body': '',
                     'headers':{
                         'authorization': tokenUsuario,}
                 };
 
-                const rawReponse = await fetch(`${this.urlApi}/`, GET_config).catch(err => err);
+                const rawReponse = await fetch(`${this.urlApi}/ejecuciones/valoresgrafico`, POST_config).catch(err => err);
                 if (rawReponse instanceof Error) {
-                    alert("❌ Error al enviar solicitud ❌");
+                    alert("❌ Error al pedir gráfico ❌");
+                    console.log(rawReponse)
                     return;
                 }
                 const objetoRespuesta = await rawReponse.json();
-                alert(mensajeTexto);
+                console.log(objetoRespuesta);
 
                 this.graficoEjecucion = "graficoEjecucion";
             },
@@ -121,7 +122,7 @@
                 </div>
             </div>
             <div v-if="paginaRenderizar === 'graficoEjecucion'" id="verSimulacionGrafico">
-               <GraficoEjecucion :Bar="Bar"/> 
+               <GraficoEjecucion/> 
             </div>
         </div>
     </section>

@@ -125,7 +125,7 @@
         <section  class = "rigth-menu-panel col-6">
             <article>
                 <p>
-                    <h3 class="my-4">Bienvenidos ORIGINAL</h3>
+                    <h3 class="my-4">Bienvenidos</h3>
                     <h3 class= "my-4">Sistema de Alerta Temprana Aluvional</h3>
                 </p>
                 <p>
@@ -233,7 +233,7 @@
         text-align: center;
         overflow: hidden;
     }
-
+    
     .list__item {
         list-style: none;
     }
@@ -243,6 +243,14 @@
     }
     .list__item .list__button img {
         margin-right: 0.5rem;
+    }    
+    .submenu-routes-menu {
+        text-align: center;
+        margin-right: 4rem;
+        margin-top: 0.2rem;
+    }
+    #flechaSimulacion {
+        transition: all 0.1s;
     }
 
 </style>

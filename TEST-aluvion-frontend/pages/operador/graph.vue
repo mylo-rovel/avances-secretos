@@ -1,9 +1,11 @@
-<script>
+<script >
 
    // import {Line} from 'vue-chartjs'
     // import LineChart from '~/components/LineChart.vue'
     // import Vue from 'vue';
     //import * as Vue from 'vue'
+    import Vue from 'vue';
+    // import {getChart} from '~/utils/charts_utils.js';
 
     export default {
         data(){
@@ -38,6 +40,10 @@
                     },
                 },
             }
+        },
+        async mounted() {
+            const a = await import("~/utils/charts_utils.js");
+            console.log(a);
         }
     }
 </script>
