@@ -70,3 +70,13 @@ export const cerrarSesionUsuario = () => {
 	anchorElement.href= "/";
 	anchorElement.click();
 }
+
+export const getListasUsarDatosGrafico = (valoresArr) => {
+	// 4933.33#20:27:52.447177
+	return valoresArr.reduce( (acc, itemCaudal) => {
+		const [caudal, hora] = itemCaudal.split("#");
+		acc["caudales"].push(parseFloat(caudal));
+		acc["horas"].push(hora);
+		return acc
+	}, {"caudales":[],"horas":[]})
+}

@@ -16,7 +16,10 @@ export default {
     height: { type: Number, default: 400 },
     cssClasses: { type: String, default: '' },
     styles: { type: Object, default: () => {} },
-    plugins: { type: Array, default: () => [] }
+    plugins: { type: Array, default: () => [] },
+
+    objetoDatosEjecucion: { type: Object, default: () => {return {"caudales":[],"horas":[]}} },
+    equipoSeleccionado: { type: String, default: '' },
   },
   data() {
     return {
@@ -24,7 +27,7 @@ export default {
         labels: [ 'January', 'February', 'March', 'April', 'May', 'June', 'July' ],
         datasets: [
           {
-            label: 'Data One',
+            label: 'Datos ejecución ',
             backgroundColor: '#f87979',
             data: [40, 39, 10, 40, 39, 80, 40]
           }
@@ -35,6 +38,14 @@ export default {
         maintainAspectRatio: false
       }
     }
+  },
+  mounted() {
+    console.log("aaabbb");
+    console.log(this.objetoDatosEjecucion);
+    this.chartData["datasets"][0]["label"] += this.equipoSeleccionado;
+    this.chartData["datasets"][0]["data"] = this.objetoDatosEjecucion["caudales"];
+    this.chartData["labels"] = this.objetoDatosEjecucion["horas"];
+    console.log(this.objetoDatosEjecucion["horas"])
   }
 }
 </script>

@@ -6,7 +6,9 @@
     import SubmitButton from '~/components/SubmitButton.vue'
     import NavbarPag from '~/components/NavbarPag.vue'
     import {mapState} from "vuex";
-    import { setListasDesplegables } from '~/utils/utility_functions';
+    import { 
+        setListasDesplegables, 
+        getListasUsarDatosGrafico } from '~/utils/utility_functions';
 
     export default Vue.extend({
         name: "VerSimulacion",
@@ -21,7 +23,7 @@
             paginaRenderizar: "listaEquiposEjecutando",
             // paginaRenderizar: "graficoEjecucion",
 
-            listaDatosEjecucion: []
+            objetoDatosEjecucion: []
             
             };
         },
@@ -52,14 +54,16 @@
                 const POST_body = {
                     "nombreEquipo": this.equipoSeleccionado,
                     "indiceInicial": 0,
-                    "indiceFinal": listaDatosEjecucion.length
+                    "indiceFinal": 100
                 }
                 const tokenUsuario = window.localStorage.getItem("token");
                 const POST_config = {
                     'method': 'POST',
-                    'body': '',
+                    'body': JSON.stringify(POST_body),
                     'headers':{
-                        'authorization': tokenUsuario,}
+                        'Content-Type':'application/json',
+                        'authorization': tokenUsuario,
+                        }
                 };
 
                 const rawReponse = await fetch(`${this.urlApi}/ejecuciones/valoresgrafico`, POST_config).catch(err => err);
@@ -69,9 +73,11 @@
                     return;
                 }
                 const objetoRespuesta = await rawReponse.json();
-                console.log(objetoRespuesta);
+                const valoresCaudalArr = objetoRespuesta["caudalTiempo_"];
+                this.objetoDatosEjecucion = getListasUsarDatosGrafico(valoresCaudalArr);
+                // console.log(this.objetoDatosEjecucion);
+                this.paginaRenderizar = "graficoEjecucion";
 
-                this.graficoEjecucion = "graficoEjecucion";
             },
             
             cancelarVerSimulacion() {
@@ -122,7 +128,10 @@
                 </div>
             </div>
             <div v-if="paginaRenderizar === 'graficoEjecucion'" id="verSimulacionGrafico">
-               <GraficoEjecucion/> 
+               <GraficoEjecucion  
+                :objetoDatosEjecucion="objetoDatosEjecucion"
+                :equipoSeleccionado="equipoSeleccionado"
+                /> 
             </div>
         </div>
     </section>
