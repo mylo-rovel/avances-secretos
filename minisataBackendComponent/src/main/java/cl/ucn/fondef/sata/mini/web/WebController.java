@@ -514,7 +514,6 @@ public class WebController {
     /**
      * Gets lectura sensores.
      *
-     * @param id  the id
      * @param jwt the jwt
      * @return the lectura sensores
      */
@@ -528,6 +527,9 @@ public class WebController {
         if(usuario!=null) {
             if (usuario.getRol().equals(Domain.UsuarioEntity.RolUsuario.OPERADOR.name())) {
                 log.info("ReqObj" + reqObj);
+                if (reqObj.getIndiceInicial() > reqObj.getIndiceFinal()) {
+                    return "Indices incorrectos";
+                }
                 return webCoreClientGrpcSimulacion.getValoresGrafico(reqObj);
             }
         }

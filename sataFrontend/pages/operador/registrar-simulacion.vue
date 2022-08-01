@@ -8,8 +8,11 @@
     import SecuenciaButton from '~/components/SecuenciaButton.vue'
     import NavbarPag from '~/components/NavbarPag.vue'
     import Modal from '~/components/Modal.vue'
-    //import * as d3 from "d3";
-    import { getEquiposDesplegables, getValvulasDesplegables, getValvulasDict } from '~/utils/utility_functions';
+
+    import { 
+        getEquiposDesplegables, 
+        getValvulasDesplegables, 
+        getValvulasDict } from '~/utils/utility_functions';
     import { setSecuenciaModificar, setCantidadSecuencias } from '~/store/secuenciasStateDir/secuenciasMethods';
 
     export default Vue.extend({
@@ -46,6 +49,8 @@
         computed: mapState(["urlApi", "secuencias"]) ,
         
         async mounted(){
+            checkIfUserShouldBeHere(["OPERADOR"]);
+
             const JWTtoken = window.localStorage.getItem("token");
             const post_config = { 
                 method: 'get', 

@@ -333,7 +333,7 @@ public class WebCoreServiceGrpcSimulacion {
         List<String> listaValoresGrafico  = equipoEjecutandose.getValoresGrafico();
 
         int indiceInicial = (estadoGraficoUsuarioReq.getIndiceInicial() > listaValoresGrafico.size())
-                ? 0 : estadoGraficoUsuarioReq.getIndiceInicial();
+                ? listaValoresGrafico.size()-1 : estadoGraficoUsuarioReq.getIndiceInicial();
 
         int indiceFinal = (estadoGraficoUsuarioReq.getIndiceFinal() > listaValoresGrafico.size())
                 ? listaValoresGrafico.size() : estadoGraficoUsuarioReq.getIndiceFinal();

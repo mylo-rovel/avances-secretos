@@ -14,7 +14,6 @@
         components: { PageHeader, CancelButtom, SubmitButton},
         data() {
             return {
-                "cancelbutton": "cancelar",
                 "tituloPag": "Sistema de Alerta Temprana Aluvional",
                 "submitbutton": "guardar",
                 simulacionesDisponibles: [],
@@ -38,23 +37,15 @@
             };
             const url_to_fetch = `${this.urlApi}/simulaciones/`;
             const rawdata = await fetch(url_to_fetch, post_config).catch(err => err);
+            if (rawdata instanceof Error) {
+                alert("❌ Error al solicitar datos del servidor ❌");
+                return;
+            }
+
             const listaSimulacionesCrudas = await rawdata.json();
 
             this.equiposDisponibles = Object.keys(setListasDesplegables(listaSimulacionesCrudas));
             this.dictEquiposSimulaciones = {...setListasDesplegables(listaSimulacionesCrudas)};
-
-            //this.simulacionesDisponibles = setListasDesplegables(listaSimulacionesCrudas);
-            //this.equiposDisponibles = Object.keys(setListasDesplegables(listaSimulacionesCrudas));
-            //console.log(this.equiposDisponibles);
-            //console.log(listaSimulacionesCrudas);
-            //console.log(setListasDesplegables(listaSimulacionesCrudas)[this.equiposDisponibles]['listaIds']);
-            //this.listaIdsDisponibles = setListasDesplegables(listaSimulacionesCrudas)[this.equiposDisponibles]['listaIds'];
-            
-            //console.log(this.listaIdsDisponibles);
-           // console.log(Object.keys(setListasDesplegables(listaSimulacionesCrudas)));
-            // this.simulacionesDisponibles = setListasDesplegables(listaSimulacionesCrudas)[this.equiposDisponibles];
-            // console.log(this.simulacionesDisponibles);
-            // console.log();
         },
 
         
@@ -77,10 +68,6 @@
                 return opcion;
             },
 
-            
-            
-
-//Metodo que enviar solicitud de iniciar simulacion SE TIENE QUE ENVIAR LA ID DEL EQUIPO Y SIMULACION , NO NOMBRES
             async sendStartSimulacionReq(){
                 let solicitud = JSON.stringify({"nombreEquipo":this.equipoSeleccionado, "id":this.idSimulacionSeleccionada});
                 console.log(solicitud);

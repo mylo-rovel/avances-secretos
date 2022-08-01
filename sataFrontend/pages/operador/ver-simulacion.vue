@@ -2,34 +2,34 @@
 
     import Vue from 'vue'
     import PageHeader from '~/components/PageHeader.vue'
-    import CancelButtom from '~/components/CancelButtom.vue'
-    import SubmitButton from '~/components/SubmitButton.vue'
     import NavbarPag from '~/components/NavbarPag.vue'
     import {mapState} from "vuex";
     import { 
         setListasDesplegables, 
-        getListasUsarDatosGrafico } from '~/utils/utility_functions';
+        getListasUsarDatosGrafico, 
+        checkIfUserShouldBeHere } from '~/utils/utility_functions';
 
     export default Vue.extend({
         name: "VerSimulacion",
-        components: { PageHeader, CancelButtom, SubmitButton },
+        components: { PageHeader },
         data() {
             return {
-            "cancelbutton": "cancelar",
-            "submitbutton": "guardar",
             equiposDisponibles:[],
             equipoSeleccionado: "",
 
             paginaRenderizar: "listaEquiposEjecutando",
             // paginaRenderizar: "graficoEjecucion",
 
-            objetoDatosEjecucion: []
+            objetoDatosEjecucion: {},
+            cantidadValoresGrafico:0,
             
             };
         },
         computed: mapState(["urlApi"]),
         
         async mounted(){
+            checkIfUserShouldBeHere(["OPERADOR"]);
+
             // OBTENER LA LISTA DE LOS EQUIPOS QUE ESTÁN EJECUTANDO UNA
             const JWTtoken = window.localStorage.getItem("token");
             const get_config = { 
@@ -54,7 +54,7 @@
                 const POST_body = {
                     "nombreEquipo": this.equipoSeleccionado,
                     "indiceInicial": 0,
-                    "indiceFinal": 100
+                    "indiceFinal": 50
                 }
                 const tokenUsuario = window.localStorage.getItem("token");
                 const POST_config = {
@@ -73,11 +73,17 @@
                     return;
                 }
                 const objetoRespuesta = await rawReponse.json();
+                if (objetoRespuesta === "Indices incorrectos") {
+                    alert("❌ INDICES INCOHERENTES ❌");
+                    console.log(rawReponse)
+                    return;
+                }
                 const valoresCaudalArr = objetoRespuesta["caudalTiempo_"];
                 this.objetoDatosEjecucion = getListasUsarDatosGrafico(valoresCaudalArr);
-                // console.log(this.objetoDatosEjecucion);
+                this.cantidadValoresGrafico = objetoRespuesta["listaSize_"];
                 this.paginaRenderizar = "graficoEjecucion";
-
+                console.log(`CANTIDAD VALORES GRAFICO ${objetoRespuesta["listaSize_"]}`);
+                console.log(`CANTIDAD INICIAL PEDIDA ${this.objetoDatosEjecucion["caudales"].length}`);
             },
             
             cancelarVerSimulacion() {
@@ -131,6 +137,7 @@
                <GraficoEjecucion  
                 :objetoDatosEjecucion="objetoDatosEjecucion"
                 :equipoSeleccionado="equipoSeleccionado"
+                :cantidadValoresGrafico="cantidadValoresGrafico"
                 /> 
             </div>
         </div>

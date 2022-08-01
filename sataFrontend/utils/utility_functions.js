@@ -43,7 +43,8 @@ export const getValvulasDict = (listaValvulas) => {
 	}, {})
 }
 
-
+// NECESARIA PARA CHEQUEAR SI EL USUARIO TIENE LOS PERMISOS PARA ESTAR EN LA PAGINA QUE VISITA
+// USADA EN TODAS LAS PAGINAS
 export const checkIfUserShouldBeHere = (rolesApropiados) => {
 	// console.clear()
 	const rolUsuario = window.localStorage.getItem("rol");

@@ -37,6 +37,7 @@
 
       async mounted() {
           checkIfUserShouldBeHere(["OPERADOR"]);
+          
           const serverPath = `${this.urlApi}/ejecuciones/`;
           const rawdata = await fetch(serverPath, this.getRequestConfig()).catch(err => err);
           if (rawdata instanceof Error) { return false; }

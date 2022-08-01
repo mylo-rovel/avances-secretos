@@ -25,7 +25,7 @@ class BoardArduinoCommunicator:
 				time.sleep(1.2)
 				self.arduino.write("sendCaudalToSataBoard".encode())
 				mensajeArduino = float(self.arduino.readlines()[0])
-				print(f"Mensaje de arduino: {mensajeArduino} litros por minuto")
+				print(f"Mensaje de arduino: {mensajeArduino} mililitros por minuto")
 				# USAR OTROS HILOS PARA ENVIAR CAUDAL?
 				sataBoardClient.sendCaudalToCentralCore(mensajeArduino)
 
