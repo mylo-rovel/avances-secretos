@@ -22,14 +22,13 @@ class BoardArduinoCommunicator:
 			while True:
 				time.sleep(1)
 				self.arduino.write("sendCaudalToSataBoard".encode())
-				# mensajeArduino = float(self.arduino.readlines()[0])
-				mensajeArduino = self.arduino.readlines()[0]
+				mensajeArduino = float(self.arduino.readlines()[0])
 				print(f"Mensaje de arduino: {mensajeArduino} mililitros por minuto")
 				if mensajeArduino < 0:
+					print("VALOR NEGATIVO RECIBIDO. SIMULACION EJECUTADA EXITOSAMENTE")
 					cantidadAgua = 60.0
 					break
-				# sataBoardClient.sendCaudalToCentralCore(mensajeArduino)
-				sataBoardClient.sendCaudalToCentralCore(40)
+				sataBoardClient.sendCaudalToCentralCore(mensajeArduino)
 		except Exception as e:
 			print("\nERROR EN EL PROCESO DE COMUNICACION CON ARDUINO")
 			print(e)

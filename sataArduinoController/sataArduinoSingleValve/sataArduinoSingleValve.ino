@@ -31,7 +31,7 @@ float obtenerFrecuencia(){
   noInterrupts(); //Desabilitamos las interrupciones
   interrupts();    //Habilitamos las interrupciones para poder usar Serial.print()
   frecuencia = NumPulsos; //Hz(pulsos por segundo)
-  frecuencia = random(30,51);
+  frecuencia = random(2,5);
   return frecuencia;
 }
 //OBTENER EL CAUDAL EN MILILITROS POR MINUTO
@@ -114,45 +114,35 @@ void loop() {
       // OBTENER EL CAUDAL EN MILILITROS POR MINUTO
       float caudalActual = obtenerCaudalActual();
 
-      // if (indiceEventoValvula >= doc["secuencias"][doc["ids"][0]].size()) {
-      //   Serial.print(indiceEventoValvula);
-      //   Serial.print("#");
-      //   Serial.print(doc["secuencias"]["1"].size());
-      //   return;
-      // }
+      String idValvula = doc["ids"][0]; // necesario para acceder al contenido json
+
+      if (indiceEventoValvula >= doc["secuencias"][idValvula].size()) {
+        Serial.print(-2);
+        return;
+      }
       Serial.print(caudalActual);
-
-      Serial.print("-<=1-"); //---
-      Serial.print(indiceEventoValvula);//---
-      Serial.print("-<=2-");//---
-      Serial.print(doc["secuencias"][doc["ids"][0]].size());//---
-      Serial.print("-<=3-");//---
-      // Serial.print(String(doc["ids"][0]));//---
-      // Serial.print("-<=4-");//---
-      // Serial.print(String(doc["secuencias"][doc["ids"][0]]));//---
-      // Serial.print("-<=5-");//---
-      // Serial.print(String(doc["secuencias"][doc["ids"][0]].size()));//---
-
-      // // REVISAR SI CONVIENE DECLARAR ESTAS VARIABLES EN OTRO SCOPE PARA MEJORAR PERFORMANCE
-      // char* idValvula = doc["ids"][0]; // necesario para acceder al contenido json
-      // int minsDuracionEventoActual = doc["secuencias"][idValvula][indiceEventoValvula]["i"];
-      // // duracion en milisegundos => mins * 60min * 1000 ms => milisegundos
-      // long duracionEventoActual = minsDuracionEventoActual * 60 * 1000;
+      //Serial.print(indiceEventoValvula);
+            
+      int minsDuracionEventoActual = doc["secuencias"][idValvula][indiceEventoValvula]["i"];
+      // duracion en milisegundos => mins * 60min * 1000 ms => milisegundos
+      long duracionEventoActual = minsDuracionEventoActual * 60 * 1000;
       
-      // // PASAR AL EVENTO SIGUIENTE SI YA SE SUPERO LA DURACION DEL EVENTO
-      // if ( (millis() - currentTiempoInicioEvento) >= duracionEventoActual) {
-      //   indiceEventoValvula++; // pasar al siguiente evento
-      //   currentTiempoInicioEvento = millis(); // reiniciar el tiempo transcurrido por el nuevo evento
-      //   // OBTENER EL VALOR QUE DEBEMOS TENER COMO OBJETIVO
-      //   int intensidadNuevoEvento = doc["secuencias"][idValvula][indiceEventoValvula+1]["i"];
-      //   calibrateValvula(intensidadNuevoEvento, caudalActual);
-      // }
-      // // SI NO SE PASA A OTRO EVENTO, CHEQUEAR SI LA VALVULA ESTÁ DENTRO DEL RANGO DE LA INTENSIDAD
-      // else {
-      //   // OBTENER EL VALOR QUE DEBEMOS TENER COMO OBJETIVO
-      //   int intensidadEventoActual = doc["secuencias"][idValvula][indiceEventoValvula]["i"];
-      //   calibrateValvula(intensidadEventoActual, caudalActual);
-      // }
+      // PASAR AL EVENTO SIGUIENTE SI YA SE SUPERO LA DURACION DEL EVENTO
+      if ( (millis() - currentTiempoInicioEvento) >= duracionEventoActual) {
+        indiceEventoValvula++; // pasar al siguiente evento
+        currentTiempoInicioEvento = millis(); // reiniciar el tiempo transcurrido por el nuevo evento
+        // OBTENER EL VALOR QUE DEBEMOS TENER COMO OBJETIVO
+        int intensidadNuevoEvento = doc["secuencias"][idValvula][indiceEventoValvula+1]["i"];
+       
+        // calibrateValvula(intensidadNuevoEvento, caudalActual);
+      }
+      // SI NO SE PASA A OTRO EVENTO, CHEQUEAR SI LA VALVULA ESTÁ DENTRO DEL RANGO DE LA INTENSIDAD
+      else {
+        // OBTENER EL VALOR QUE DEBEMOS TENER COMO OBJETIVO
+        int intensidadEventoActual = doc["secuencias"][idValvula][indiceEventoValvula]["i"];
+       
+        // calibrateValvula(intensidadEventoActual, caudalActual);
+      }
 
     }
     
@@ -166,6 +156,8 @@ void loop() {
         return; // NO CONTINUAR SI HUBO UN ERROR
       }
       Serial.print("JSON SETUP FINISHED");
+      // REINICIANDO VALORES EN CASO DE ENVIAR +1 SIMULACION MIENTRAS ESTA ENCENDIDO
+      indiceEventoValvula = 0;
       currentTiempoInicioEvento = millis();
     }
   }

@@ -57,7 +57,10 @@
           const idEjecucionSeleccionada = elementObj["id_"];
           const serverPath = `${this.urlApi}/ejecuciones/${idEjecucionSeleccionada}`;
           const rawdata = await fetch(serverPath, this.getRequestConfig()).catch(err => err);
-          if (rawdata instanceof Error) { return false; }
+          if (rawdata instanceof Error) { 
+            console.log(rawdata);
+            return false; 
+          }
           this.ejecucionSeleccionada = await rawdata.json();
           this.isModalOpened = true;
           console.log(idEjecucionSeleccionada);

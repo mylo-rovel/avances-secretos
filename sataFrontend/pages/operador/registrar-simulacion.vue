@@ -12,7 +12,8 @@
     import { 
         getEquiposDesplegables, 
         getValvulasDesplegables, 
-        getValvulasDict } from '~/utils/utility_functions';
+        getValvulasDict,
+        checkIfUserShouldBeHere } from '~/utils/utility_functions';
     import { setSecuenciaModificar, setCantidadSecuencias } from '~/store/secuenciasStateDir/secuenciasMethods';
 
     export default Vue.extend({
@@ -140,6 +141,8 @@
                 }
                 const mensajeRespuesta = await respuesta.json();
                 alert(mensajeRespuesta["mensajeTexto_"]);
+                this.nombreSimulacionInput = "";
+                this.descripcionInput = "";
                 window.location.reload();
             },
             cancelarAddSimulacion() {

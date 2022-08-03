@@ -81,10 +81,19 @@
                         'authorization': tokenUsuario,}
                 };
 
-                const respuesta = await fetch(`${this.urlApi}/simulaciones/`, POST_config);
+                const respuesta = await fetch(`${this.urlApi}/simulaciones/`, POST_config).catch(err => err);
+                if (respuesta instanceof Error) { 
+                    console.log(respuesta);
+                    return false; 
+                }
                 const mensajeRespuesta = await respuesta.json();
-                console.log(mensajeRespuesta)
-                alert(mensajeRespuesta["mensajeTexto_"]);
+                alert(mensajeRespuesta["mensajeTexto_"]);          
+                // si el mensaje no incluye una X quiere decir que todo salió bien
+                if (!mensajeRespuesta["mensajeTexto_"].includes("❌")){
+                    const anchorElement = document.createElement("a");
+                    anchorElement.href= "/operador/ver-simulacion";
+                    anchorElement.click(); 
+                }
             },
             cancelarStartSimulacion() {
                 const anchorElement = document.createElement("a");

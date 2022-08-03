@@ -33,7 +33,7 @@ class CoreBoardCommuServiceServicer(ClientServerModule.CoreBoardCommuServiceServ
             listaEventos.append(eventArr)
         return listaEventos
 
-    def _getDictSimulacion(self, dictSecuencias):
+    def _getDictSimulacion(self, dictSecuencias):        
         return {
             "ids": list(dictSecuencias.keys()),
             "secuencias": dictSecuencias
@@ -51,7 +51,9 @@ class CoreBoardCommuServiceServicer(ClientServerModule.CoreBoardCommuServiceServ
         # }
         dictSecuencias = {}
         for secReq in request.secuencia:
-            dictSecuencias[str(secReq.id_componente)] = self._getHandyListaEventos(secReq.evento)
+            # CHEQUEAR SI LA ID ES 0 => SI ES ASÍ, NO INCLUIRLA
+            if (secReq.id_componente > 0):
+                dictSecuencias[str(secReq.id_componente)] = self._getHandyListaEventos(secReq.evento)
 
         simulacionJson = json.dumps(self._getDictSimulacion(dictSecuencias))
         # print(simulacionJson)
