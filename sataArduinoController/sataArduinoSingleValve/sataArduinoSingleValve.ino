@@ -31,7 +31,7 @@ float obtenerFrecuencia(){
   noInterrupts(); //Desabilitamos las interrupciones
   interrupts();    //Habilitamos las interrupciones para poder usar Serial.print()
   frecuencia = NumPulsos; //Hz(pulsos por segundo)
-  frecuencia = random(2,5);
+  //frecuencia = random(2,5);
   return frecuencia;
 }
 //OBTENER EL CAUDAL EN MILILITROS POR MINUTO
@@ -51,7 +51,7 @@ void inmovilizarValvula(){
 }
 void abrirValvula() {
     digitalWrite(R1, HIGH); //cerrado = 1
-    digitalWrite(R2, LOW); // abierta = 0
+    digitalWrite(R2, LOW); // abierta = 0        
 }
 void cerrarValvula() {
     digitalWrite(R1, LOW); //abierta = 0
@@ -64,18 +64,24 @@ void calibrateValvula(float intensidadObjetivo, float caudalActual) {
   float cotaSuperior = caudalObjetivo + diferenciaCotaSupInf;
   
   //SI EL CAUDAL ACTUAL ESTA EN EL INTERVALO ACEPTABLE => QUE NO SE MUEVA
-  if (cotaInferior <= caudalActual && caudalActual <= cotaSuperior) {
-    inmovilizarValvula();
+  // if (cotaInferior <= caudalActual && caudalActual <= cotaSuperior) {
+  //   inmovilizarValvula();
+  // }
+  // // SI NO ESTÁ EN EL INTERVALO ACEPTABLE => MOVER LA VALVULA
+  // else {
+  //   // EL CAUDAL OBJETIVO ES SIGNFICATIVAMENTE MAYOR AL CAUDAL ACTUAL => ABRIR VALVULA
+  //   if (caudalObjetivo > caudalActual) {
+  //     abrirValvula();
+  //   }
+  //   else {
+  //     cerrarValvula();
+  //   }
+  // }
+  if (intensidadObjetivo >= 49) {
+    abrirValvula();
   }
-  // SI NO ESTÁ EN EL INTERVALO ACEPTABLE => MOVER LA VALVULA
   else {
-    // EL CAUDAL OBJETIVO ES SIGNFICATIVAMENTE MAYOR AL CAUDAL ACTUAL => ABRIR VALVULA
-    if (caudalObjetivo > caudalActual) {
-      abrirValvula();
-    }
-    else {
-      cerrarValvula();
-    }
+    cerrarValvula();
   }
 }
 // --- SECCION PARA MANIPULAR LA VALVULA -----------------------------------------------
@@ -98,9 +104,11 @@ void setup() {
   digitalWrite(R2, HIGH); //cerrado
   // ambos en HIGH implica que las valvulas no se moveran
 
-  //abrir valvula
-  digitalWrite(R1, HIGH); //cerrado = 1
-  digitalWrite(R2, LOW); // abierta = 0
+  //dar la orden de cerrar la valvula y esperar hasta que esté completo
+  //abrirValvula();
+  //delay(9000);
+  cerrarValvula();
+  delay(9000);
 }
 
 void loop() {
@@ -118,6 +126,8 @@ void loop() {
 
       if (indiceEventoValvula >= doc["secuencias"][idValvula].size()) {
         Serial.print(-2);
+        cerrarValvula();
+        delay(9000);
         return;
       }
       Serial.print(caudalActual);
@@ -134,14 +144,14 @@ void loop() {
         // OBTENER EL VALOR QUE DEBEMOS TENER COMO OBJETIVO
         int intensidadNuevoEvento = doc["secuencias"][idValvula][indiceEventoValvula+1]["i"];
        
-        // calibrateValvula(intensidadNuevoEvento, caudalActual);
+        calibrateValvula(intensidadNuevoEvento, caudalActual);
       }
       // SI NO SE PASA A OTRO EVENTO, CHEQUEAR SI LA VALVULA ESTÁ DENTRO DEL RANGO DE LA INTENSIDAD
       else {
         // OBTENER EL VALOR QUE DEBEMOS TENER COMO OBJETIVO
         int intensidadEventoActual = doc["secuencias"][idValvula][indiceEventoValvula]["i"];
        
-        // calibrateValvula(intensidadEventoActual, caudalActual);
+        calibrateValvula(intensidadEventoActual, caudalActual);
       }
 
     }
