@@ -9,8 +9,6 @@ class BoardArduinoCommunicator:
 
 
 	def enviarDatosToArduino(self,simulacionJson, sataBoardClient):
-		cantidadAgua = 0.0
-		contadorAux = 0
 		try:
 			print(simulacionJson)
 			simulacionJsonBytes = simulacionJson.encode()
@@ -22,18 +20,16 @@ class BoardArduinoCommunicator:
 			# raise ERROR si no es exitosa esta parte
 			# ENVIAR MENSAJES PARA QUE ARDUINO NOS PUEDA RESPONDER Y ENVIAR DATOS
 			while True:
-				time.sleep(1.2)
+				time.sleep(1)
 				self.arduino.write("sendCaudalToSataBoard".encode())
-				mensajeArduino = float(self.arduino.readlines()[0])
+				# mensajeArduino = float(self.arduino.readlines()[0])
+				mensajeArduino = self.arduino.readlines()[0]
 				print(f"Mensaje de arduino: {mensajeArduino} mililitros por minuto")
-				# USAR OTROS HILOS PARA ENVIAR CAUDAL?
-				sataBoardClient.sendCaudalToCentralCore(mensajeArduino)
-
-				# contadorAux += 1
-				if contadorAux > 4:
-				# if mensajeArduino == "FinishedExecution":
+				if mensajeArduino < 0:
 					cantidadAgua = 60.0
 					break
+				# sataBoardClient.sendCaudalToCentralCore(mensajeArduino)
+				sataBoardClient.sendCaudalToCentralCore(40)
 		except Exception as e:
 			print("\nERROR EN EL PROCESO DE COMUNICACION CON ARDUINO")
 			print(e)
