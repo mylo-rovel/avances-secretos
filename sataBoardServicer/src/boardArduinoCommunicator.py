@@ -5,12 +5,16 @@ class BoardArduinoCommunicator:
 
 	def __init__(self, ARDUINO_PORT):
 		self.arduino = self.serial.Serial(port=ARDUINO_PORT, baudrate=9600, timeout=2.5)
+		print("ESPERANDO CONEXION CON PLACA ARDUINO...")
+		# tiempo equivalente al delay que hay en el programa de arduino
+		time.sleep(9) # corresponde al tiempo que la valvula requiere para cerrarse completamente
+		# OJO. USAMOS ESTO PORQUE TENEMOS UNA SEGUNDA CAÑERIA SIEMPRE ABIERTA PARA NO ACUMULAR PRESION
 		print("Placa ARDUINO alcanzada")
 
 
 	def enviarDatosToArduino(self,simulacionJson, sataBoardClient):
 		try:
-			print(simulacionJson)
+			print("SIMULACION A ENVIAR:\n", simulacionJson)
 			simulacionJsonBytes = simulacionJson.encode()
 			self.arduino.write(simulacionJsonBytes)
 			time.sleep(1.2)

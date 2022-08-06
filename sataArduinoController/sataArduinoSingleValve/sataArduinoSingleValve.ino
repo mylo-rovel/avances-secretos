@@ -6,6 +6,7 @@ StaticJsonDocument<768> doc;
 int PinSensor = 2;    //Sensor conectado en el pin 2
 volatile int NumPulsos; //variable para la cantidad de pulsos recibidos
 float factor_conversion=7.5; //para convertir de frecuencia a caudal
+
 // VALORES OBTENIDOS AL CREAR UN INTERVALO DE CONFIANZA DEL 95% con 575 muestras del caudal sin variar algun parametro
 // float caudalMaximoMedido = 465.3901;
 float caudalMaximoMedido = 400.0;
@@ -31,7 +32,6 @@ float obtenerFrecuencia(){
   noInterrupts(); //Desabilitamos las interrupciones
   interrupts();    //Habilitamos las interrupciones para poder usar Serial.print()
   frecuencia = NumPulsos; //Hz(pulsos por segundo)
-  //frecuencia = random(2,5);
   return frecuencia;
 }
 //OBTENER EL CAUDAL EN MILILITROS POR MINUTO
@@ -77,7 +77,9 @@ void calibrateValvula(float intensidadObjetivo, float caudalActual) {
   //     cerrarValvula();
   //   }
   // }
-  if (intensidadObjetivo >= 49) {
+
+  // TEMPORAL PARA TESTEAR SI FUNCIONA EL ABRIR Y CERRAR VALVULA
+  if (intensidadObjetivo >= 50) {
     abrirValvula();
   }
   else {
@@ -131,7 +133,6 @@ void loop() {
         return;
       }
       Serial.print(caudalActual);
-      //Serial.print(indiceEventoValvula);
             
       int minsDuracionEventoActual = doc["secuencias"][idValvula][indiceEventoValvula]["i"];
       // duracion en milisegundos => mins * 60min * 1000 ms => milisegundos
@@ -141,11 +142,13 @@ void loop() {
       if ( (millis() - currentTiempoInicioEvento) >= duracionEventoActual) {
         indiceEventoValvula++; // pasar al siguiente evento
         currentTiempoInicioEvento = millis(); // reiniciar el tiempo transcurrido por el nuevo evento
+        
         // OBTENER EL VALOR QUE DEBEMOS TENER COMO OBJETIVO
         int intensidadNuevoEvento = doc["secuencias"][idValvula][indiceEventoValvula+1]["i"];
        
         calibrateValvula(intensidadNuevoEvento, caudalActual);
       }
+      
       // SI NO SE PASA A OTRO EVENTO, CHEQUEAR SI LA VALVULA ESTÁ DENTRO DEL RANGO DE LA INTENSIDAD
       else {
         // OBTENER EL VALOR QUE DEBEMOS TENER COMO OBJETIVO
@@ -156,7 +159,7 @@ void loop() {
 
     }
     
-    // ------------ PARTE EJECUTADA SÓLO AL RECIBIIR EL JSON (COMIENZO SIMULACION) -----------------
+    // ------------ PARTE EJECUTADA SÓLO AL RECIBIR EL JSON (COMIENZO SIMULACION) -----------------
     else {
       // REALIZANDO EL SETUP Y GUARDADO DE LAS SECUENCIAS EN "doc" PARA LA POSTERIOR EJECUCION
       DeserializationError error = deserializeJson(doc, mensajeRecibido);
