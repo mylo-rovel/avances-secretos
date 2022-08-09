@@ -1,0 +1,30 @@
+version: "3.9"
+services:
+  spring_api:
+    container_name: backend_container
+    build: .
+    ports:
+      - "8081:8081"
+      - "9090:9090"
+#    command: /data/app/gradle-7.5.1/bin/gradle bootRun
+    volumes:
+      - .:/data/app
+#    depends_on:
+#      - mysql
+
+  mysql:
+    container_name: mysql_container
+    build: ./mysql_docker
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: True
+#      MYSQL_DATABASE: satadb
+#      MYSQL_USER: root
+#      MYSQL_PASSWORD: root
+#      MYSQL_ROOT_PASSWORD: root
+
+volumes:
+  mysql-data:
