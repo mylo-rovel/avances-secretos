@@ -46,6 +46,7 @@ float obtenerCaudalActual() {
 
 // --- SECCION PARA MANIPULAR LA VALVULA ----------------------------------------------
 void inmovilizarValvula(){
+    // ambos en HIGH implica que las valvulas no se moveran
     digitalWrite(R1, HIGH);
     digitalWrite(R2, HIGH);
 }
@@ -101,14 +102,9 @@ void setup() {
   // HIGH => desenergizar el rele
   // LOW => energizar el rele
   pinMode(R1, OUTPUT);
-  digitalWrite(R1, HIGH); //cerrado
   pinMode(R2, OUTPUT);
-  digitalWrite(R2, HIGH); //cerrado
-  // ambos en HIGH implica que las valvulas no se moveran
 
   //dar la orden de cerrar la valvula y esperar hasta que esté completo
-  //abrirValvula();
-  //delay(9000);
   cerrarValvula();
   delay(9000);
 }
@@ -127,9 +123,10 @@ void loop() {
       String idValvula = doc["ids"][0]; // necesario para acceder al contenido json
 
       if (indiceEventoValvula >= doc["secuencias"][idValvula].size()) {
+        // SI ENVIAMOS UN VALOR NEGATIVO, LA RASPBERRY SABRA QUE LA EJECUCION FINALIZO
         Serial.print(-2);
         cerrarValvula();
-        delay(9000);
+        delay(9000); // tiempo que tarda la valvula en cerrarse desde 100% abierto
         return;
       }
       Serial.print(caudalActual);
@@ -140,12 +137,13 @@ void loop() {
       
       // PASAR AL EVENTO SIGUIENTE SI YA SE SUPERO LA DURACION DEL EVENTO
       if ( (millis() - currentTiempoInicioEvento) >= duracionEventoActual) {
-        indiceEventoValvula++; // pasar al siguiente evento
+        // PASAR AL SIGUIENTE EVENTO Y REINICIAR EL TIEMPO TRANSCURRIDO DESDE EL INICIO DEL NUEVO EVENTO
+        indiceEventoValvula++;
         currentTiempoInicioEvento = millis(); // reiniciar el tiempo transcurrido por el nuevo evento
         
         // OBTENER EL VALOR QUE DEBEMOS TENER COMO OBJETIVO
         int intensidadNuevoEvento = doc["secuencias"][idValvula][indiceEventoValvula+1]["i"];
-       
+        // MOVER LA VALVULA AL NUEVO OBJETIVO
         calibrateValvula(intensidadNuevoEvento, caudalActual);
       }
       
@@ -153,7 +151,7 @@ void loop() {
       else {
         // OBTENER EL VALOR QUE DEBEMOS TENER COMO OBJETIVO
         int intensidadEventoActual = doc["secuencias"][idValvula][indiceEventoValvula]["i"];
-       
+        // MOVER LA VALVULA SI CORRESPONDE
         calibrateValvula(intensidadEventoActual, caudalActual);
       }
 
@@ -168,10 +166,11 @@ void loop() {
         Serial.print(error.f_str());
         return; // NO CONTINUAR SI HUBO UN ERROR
       }
-      Serial.print("JSON SETUP FINISHED");
       // REINICIANDO VALORES EN CASO DE ENVIAR +1 SIMULACION MIENTRAS ESTA ENCENDIDO
       indiceEventoValvula = 0;
       currentTiempoInicioEvento = millis();
+      
+      Serial.print("JSON SETUP FINISHED");
     }
   }
 }

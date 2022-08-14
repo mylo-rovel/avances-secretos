@@ -14,8 +14,13 @@ float diferenciaCotaSupInf = 7.2738;
 const int R1 = 13;
 const int R2 = 12;
 int cantValvulas = 0;
+// ACTUALMENTE SON 5 PORQUE NO REINICIALIZAMOS EL ARRAY => NO CONOCEMOS LA CANTIDAD DE VALVULAS
+// TENEMOS DOS ARRAYS QUE MANEJAN HASTA 5 VALVULAS => SI SE NECESITAN MAS, AUMENTAR SU VALOR
 int indicesEventoValvula[5]; // estos indices iran desde 0 hasta n, con cada n = cantEventos de cada valv
 long currentTiemposInicioEvento[5]; // tiemposInicio de cada evento para saber si ya expiro eventoActual
+
+long tiempoTranscurridoGlobal;
+long duracionTotalSecuenciaLarga;
 
 
 //---Función que se ejecuta en interrupción---------------
@@ -46,6 +51,7 @@ float obtenerCaudalActual() {
 
 // --- SECCION PARA MANIPULAR LA VALVULA ----------------------------------------------
 void inmovilizarValvula(){
+    // ambos en HIGH implica que las valvulas no se moveran
     digitalWrite(R1, HIGH);
     digitalWrite(R2, HIGH);
 }
@@ -64,23 +70,29 @@ void calibrateValvula(float intensidadObjetivo, float caudalActual) {
   float cotaSuperior = caudalObjetivo + diferenciaCotaSupInf;
   
   //SI EL CAUDAL ACTUAL ESTA EN EL INTERVALO ACEPTABLE => QUE NO SE MUEVA
-  if (cotaInferior <= caudalActual && caudalActual <= cotaSuperior) {
-    inmovilizarValvula();
+  // if (cotaInferior <= caudalActual && caudalActual <= cotaSuperior) {
+  //   inmovilizarValvula();
+  // }
+  // // SI NO ESTÁ EN EL INTERVALO ACEPTABLE => MOVER LA VALVULA
+  // else {
+  //   // EL CAUDAL OBJETIVO ES SIGNFICATIVAMENTE MAYOR AL CAUDAL ACTUAL => ABRIR VALVULA
+  //   if (caudalObjetivo > caudalActual) {
+  //     abrirValvula();
+  //   }
+  //   else {
+  //     cerrarValvula();
+  //   }
+  // }
+
+  // TEMPORAL PARA TESTEAR SI FUNCIONA EL ABRIR Y CERRAR VALVULA
+  if (intensidadObjetivo >= 50) {
+    abrirValvula();
   }
-  // SI NO ESTÁ EN EL INTERVALO ACEPTABLE => MOVER LA VALVULA
   else {
-    // EL CAUDAL OBJETIVO ES SIGNFICATIVAMENTE MAYOR AL CAUDAL ACTUAL => ABRIR VALVULA
-    if (caudalObjetivo > caudalActual) {
-      abrirValvula();
-    }
-    else {
-      cerrarValvula();
-    }
+    cerrarValvula();
   }
 }
 // --- SECCION PARA MANIPULAR LA VALVULA -----------------------------------------------
-
-
 
 
 void setup() {
@@ -93,10 +105,11 @@ void setup() {
   // HIGH => desenergizar el rele
   // LOW => energizar el rele
   pinMode(R1, OUTPUT);
-  digitalWrite(R1, HIGH); //cerrado
   pinMode(R2, OUTPUT);
-  digitalWrite(R2, HIGH); //cerrado
-  // ambos en HIGH implica que las valvulas no se moveran
+
+  //dar la orden de cerrar la valvula y esperar hasta que esté completo
+  cerrarValvula();
+  delay(9000);
 }
 
 void loop() {
@@ -109,42 +122,69 @@ void loop() {
     if (mensajeRecibido == "sendCaudalToSataBoard") {
       // OBTENER EL CAUDAL EN MILILITROS POR MINUTO
       float caudalActual = obtenerCaudalActual();
+      
+      
+      // TERMINO DEL PROCESO
+      // PARA SABER SI LA SIMULACION TERMINO, HAY QUE COMPARAR EL TIEMPO TRANSCURRIDO
+      // vs LA DURACION TOTAL DE LA SIMULACION (COMBINACION ENTRE LAS SECUENCIAS)
+      // usar las variables:
+      // long tiempoTranscurridoGlobal;
+      // long duracionTotalSecuenciaLarga;
+
+
+
+      // if (indiceEventoValvula >= doc["secuencias"][idValvula].size()) {
+      //   // SI ENVIAMOS UN VALOR NEGATIVO, LA RASPBERRY SABRA QUE LA EJECUCION FINALIZO
+      //   Serial.print(-2);
+      //   cerrarValvula();
+      //   delay(9000); // tiempo que tarda la valvula en cerrarse desde 100% abierto
+      //   return;
+      // }
+
+
       Serial.print(caudalActual);
 
       // LA IDEA ES ITERAR SOBRE UNA LISTA DE INDICES (n VALVULAS => n INDICES)
       // BUSCAMOS CHEQUEAR DURACIONES VS TIEMPOS TRANSCURRIDOS 
       // (PARA CAMBIAR AL SIGUIENTE EVENTO SI HA PASADO SUFICIENTE TIEMPO)
       for (int i = 0; i < cantValvulas; i++) {
-        // REVISAR SI CONVIENE DECLARAR ESTAS VARIABLES EN OTRO SCOPE PARA MEJORAR PERFORMANCE
-        char* currentIdValvula = doc["ids"][i]; //ESTO ES NECESARIO PARA CHEQUEAR CADA VALVULA
+        String currentIdValvula = doc["ids"][i]; //ESTO ES NECESARIO PARA CHEQUEAR CADA VALVULA
         int currentIndexEventoValvula = indicesEventoValvula[i];
-        long tiempoTranscurridosEvento = currentTiemposInicioEvento[i];
 
+        // SI SE ACABARON LOS EVENTOS PARA UNA VALVULA, CONTINUAR CON LA SIGUIENTE VALVULA
+        if (currentIndexEventoValvula >= doc["secuencias"][currentIdValvula].size()) {
+          continue;
+        }
+
+        long tiempoTranscurridosEvento = currentTiemposInicioEvento[i]; // en milisegundos
         int minsDuracionEventoActual = doc["secuencias"][currentIdValvula][currentIndexEventoValvula]["i"];
         // duracion en milisegundos => mins * 60min * 1000 ms => milisegundos
         long duracionEventoActual = minsDuracionEventoActual * 60 * 1000;
         
         // PASAR AL EVENTO SIGUIENTE SI YA SE SUPERO LA DURACION DEL EVENTO
         if ( (millis() - tiempoTranscurridosEvento) >= duracionEventoActual) {
-          indicesEventoValvula[i]++; // pasar al siguiente evento
+          // PASAR AL SIGUIENTE EVENTO Y REINICIAR EL TIEMPO TRANSCURRIDO DESDE EL INICIO DEL NUEVO EVENTO
+          indicesEventoValvula[i]++; 
           currentTiemposInicioEvento[i] = millis(); // reiniciar el tiempo transcurrido por el nuevo evento
           // OBTENER EL VALOR QUE DEBEMOS TENER COMO OBJETIVO
           int intensidadNuevoEvento = doc["secuencias"][currentIdValvula][currentIndexEventoValvula+1]["i"];
+          // MOVER LA VALVULA AL NUEVO OBJETIVO
           calibrateValvula(intensidadNuevoEvento, caudalActual);
         }
+
         // SI NO SE PASA A OTRO EVENTO, CHEQUEAR SI LA VALVULA ESTÁ DENTRO DEL RANGO DE LA INTENSIDAD
         else {
           // OBTENER EL VALOR QUE DEBEMOS TENER COMO OBJETIVO
           int intensidadEventoActual = doc["secuencias"][currentIdValvula][currentIndexEventoValvula]["i"];
           calibrateValvula(intensidadEventoActual, caudalActual);
         }
-
       }
     }
     
-    // ------------ PARTE EJECUTADA SÓLO AL RECIBIIR EL JSON (COMIENZO SIMULACION) -----------------
+    // ------------ PARTE EJECUTADA SÓLO AL RECIBIR EL JSON (COMIENZO SIMULACION) -----------------
     else {
       // REALIZANDO EL SETUP Y GUARDADO DE LAS SECUENCIAS EN "doc" PARA LA POSTERIOR EJECUCION
+      // "doc" esta en las primeras lineas
       DeserializationError error = deserializeJson(doc, mensajeRecibido);
       if (error) {
         Serial.print(F("deserializeJson() failed: #"));
@@ -152,14 +192,16 @@ void loop() {
         return; // NO CONTINUAR SI HUBO UN ERROR
       }
       
-      Serial.print("JSON SETUP FINISHED");
-      cantValvulas = doc["ids"].size(); // modificando el valor de la variable global
+      cantValvulas = doc["ids"].size(); // VALOR USADO EN 'if (mensajeRecibido == "sendCaudalToSataBoard")'
       
       // INICIALIZANDO LOS VALORES AUXILIARES A USAR EN LA ITERACION PRINCIPAL
+      // ALSO: REINICIANDO VALORES EN CASO DE ENVIAR OTRA SIMULACION AL FINALIZAR UNA
       for (int i = 0; i < cantValvulas; i++) { 
         indicesEventoValvula[i] = 0; 
         currentTiemposInicioEvento[i] = millis();
       }
+
+      Serial.print("JSON SETUP FINISHED");
     }
   }
 }
