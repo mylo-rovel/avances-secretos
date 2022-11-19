@@ -5,9 +5,9 @@
     import {mapState} from "vuex";
     import CancelButtom from '~/components/CancelButtom.vue'
     import SubmitButton from '~/components/SubmitButton.vue'
+    import CustomButton from '../../components/CustomButton.vue';
     import NavbarPag from '~/components/NavbarPag.vue'
     import { setListasDesplegables } from '~/utils/utility_functions';
-
 
     export default Vue.extend({
         name: "IniciarSimulacion",
@@ -141,10 +141,11 @@
                         <!-- PARTE BOTONES -->
                         <div class = "row my-4">
                             <div class= "col-12 contenido-botones my-4">
-                                <button class="finalFormButton cancelarButton" @click="cancelarStartSimulacion" > ATRÁS </button>
+                                <CustomButton  :text="'ATRÁS'" :custombcolor="'#C70039'" customhcolor="#72152f" @click.native="cancelarStartSimulacion"/>
+                    
                             </div>                            
-                            <div class="col-12 contenido-botones my-4">    
-                                <button class="finalFormButton sendDataButton" @click="sendStartSimulacionReq" > INICIAR </button>
+                            <div class="col-12 contenido-botones my-4">
+                                <CustomButton  :text="'INICIAR'" :custombcolor="'#4482ee'" customhcolor="#264a88" @click.native="sendStartSimulacionReq"/>   
                             </div>
                         </div> 
 
@@ -169,7 +170,7 @@
     margin: auto 0;
 }
 .sendDataButton {
-    background-color: rgba(2,92,250,1);        
+    background-color: #1861e0;        
 }
 .cancelarButton {
     background-color: rgba(199,0,57,1);
