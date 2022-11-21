@@ -2,16 +2,13 @@
     import Vue from 'vue';
     import {mapState} from "vuex";
     import PageHeader from '~/components/PageHeader.vue'
-    import SubmitButton from '~/components/SubmitButton.vue'
-    import CancelButtom from '~/components/CancelButtom.vue'
     import CustomButton from '../../components/CustomButton.vue';
     import Modal from '~/components/Modal.vue'
     import { checkIfUserShouldBeHere } from '~/utils/utility_functions.js';
-    import { bPagination, bTable } from 'bootstrap-vue'
 
     export default Vue.extend({
       name: "ListaSimulaciones",
-      components: { PageHeader, SubmitButton, Modal, CancelButtom},
+      components: { PageHeader, Modal},
       head(){
         return{
           title: "Simulaciones - Sistema de Alerta Temprana Aluvional",
@@ -30,10 +27,13 @@
           simulacionesEjecutadasConFiltro: [],
           simulacionesEjecutadas: [],
           listaEquipos: [],
+          listaFechas: [],
           isModalOpened:false,
           ejecucionSeleccionada:{},
           nombre:"",
-          filtro:""
+          filtroEquipo:"",
+          filtroAnno:"",
+          filtroMes:""
         };
       },
       
@@ -41,26 +41,49 @@
 
       async mounted() {
           //checkIfUserShouldBeHere(["OPERADOR"]);
-          const serverPath = `${this.urlApi}/ejecuciones/`;
-          const rawdata = await fetch(serverPath, this.getRequestConfig()).catch(err => err);
+          let serverPath = `${this.urlApi}/ejecuciones/`;
+          let rawdata = await fetch(serverPath, this.getRequestConfig()).catch(err => err);
           if (rawdata instanceof Error) { return false; }
           const ejecucionesAcotadas = await rawdata.json();
           this.simulacionesEjecutadas = ejecucionesAcotadas["ejecucionAcotada_"];
           this.simulacionesEjecutadasConFiltro = [... this.simulacionesEjecutadas];
-          const serverPath2 = `${this.urlApi}/equipos/`;
-          const rawdata2 = await fetch(serverPath2, this.getRequestConfig()).catch(err => err);
-          if (rawdata2 instanceof Error) { return false; }
-          const equiposAcotados = await rawdata2.json();
+          this.listaFechas = this.simulacionesEjecutadas['fechaEjecucion_'];
+          //console.log(this.simulacionesEjecutadasConFiltro);
+          serverPath = `${this.urlApi}/equipos/`;
+          rawdata = await fetch(serverPath, this.getRequestConfig()).catch(err => err);
+          if (rawdata instanceof Error) { return false; }
+          const equiposAcotados = await rawdata.json();
           this.listaEquipos = equiposAcotados["equipoAcotado_"];
-          console.log(this.listaEquipos);
-          //console.log(this.simulacionesEjecutadas);
+          //TODO:Crear consulta para que devuelva una lista unica de los años en que se ejecutaron las simulaciones
           //console.log();
-
       },
       methods: {
-        filtarPorEquipo(){
+        filtrar(){
+          //Filtro por nombre equipo
           this.simulacionesEjecutadasConFiltro = this.simulacionesEjecutadas.filter((item) => {
-            return item["nombreEquipo_"].includes(this.filtro);
+            return item["nombreEquipo_"].includes(this.filtroEquipo);
+          })
+          //Filtro por año ejecucion
+          if(this.filtroAnno == ""){
+            //Si no hay un año seleccionado restablesco el valor del filtro mes y deshabilito la seleccion de mes
+            this.filtroMes = "";
+            this.$refs.mesRef.disabled =  1;
+          }else{
+            //Si hay un valor de año seleccionado habilito la seleccion de mes
+            this.$refs.mesRef.disabled =  0;
+          }
+          this.simulacionesEjecutadasConFiltro = this.simulacionesEjecutadasConFiltro.filter((item) => {
+            return item["fechaEjecucion_"].includes(this.filtroAnno);
+          })
+          //Filtro mes ejecucion
+          //Debido que la fecha se encuentra en string se necesita simular el formato "Año-Mes" para filtrar
+          let stringFilter = this.filtroAnno
+          if(this.filtroMes != ""){
+            //al año se le agrega un "-" y PadStart permite que los numeros de solo 1 digito se les agregue un 0 antes (Ej: 4 -> 04)
+            stringFilter = this.filtroAnno + "-" + this.filtroMes.padStart(2, '0');
+          }
+          this.simulacionesEjecutadasConFiltro = this.simulacionesEjecutadasConFiltro.filter((item) => {
+            return item["fechaEjecucion_"].includes(stringFilter);
           })
         },
         getRequestConfig() {
@@ -89,7 +112,6 @@
 <template>
   <section id="vistaSimulaciones">
     <section id="contenidoTabla">
-
         <div>
           <NavbarPag :tituloPag="tituloPag"/>
         </div>
@@ -104,12 +126,35 @@
             <h5>Filtro</h5>       
           </div>
         <div class="rcorners">
-          <div class="row my-6">
-            <h6>Equipo</h6>      
-            <select class="options" v-model="filtro" @click="filtarPorEquipo()" v-for="(elementObj, rowIndex) in listaEquipos" :key="`eventKey_${rowIndex}`">
-              <option value="">Seleccione una opción</option>
-              <option>{{elementObj["nombre_"]}}</option>
-            </select>
+          <div class="ul_top">
+            <li>
+              <h6>Equipo</h6>      
+              <select class="options" v-model="filtroEquipo" @change="filtrar()">
+                <option value="">Seleccione una opción</option>
+                <option v-for="(elementObj, rowIndex) in listaEquipos" :key="`eventKey_${rowIndex}`">{{elementObj["nombre_"]}}</option>
+              </select>
+            </li>
+            <li>
+              <h6>Año</h6>      
+              <select class="options" v-model="filtroAnno" @change="filtrar()">
+                <option value="">Seleccione una opción</option>
+                <option>2022</option>
+              </select>
+            </li>
+            <li>
+              <h6>Mes</h6>      
+              <select disabled="True" ref="mesRef" class="options" v-model="filtroMes" @change="filtrar()">
+                <option value="">Seleccione una opción</option>
+                <option v-for="index in 12">{{index}}</option>
+              </select>
+            </li>
+            <!-- <li>
+              <h6>Ordenar Por</h6>      
+              <select class="options">
+                <option value="">Seleccione una opción</option>
+                <option>Nombre Equipo</option>
+              </select>
+            </li> -->
           </div>
         </div>
           <div class="my-4 table-responsive table-container">
@@ -160,13 +205,21 @@
   th{
     padding: 0.5rem;
   }
+  
+  .ul_top {
+    display: flex;
+    justify-content: space-between;
+    list-style-type: none;
+    padding: 0;
+    width: 90%;
+  }
+
   .titulo-modal{
     text-align: center;
   }
   .boton-nombre{
     background-color: #025cfa;
     color: white;
-
   }
   .modal-background-container{
     z-index: 999;
@@ -185,14 +238,16 @@
     padding: 20px;
     width: 100%;
     height: 110px;
+    margin: auto;
   }
   .options{
-    width: 298px;
+    width: 12vw;
     height: 40px;
     margin-left: 10px;
     background-color: #fff;
     border-radius: 4px;
   }
 
+ 
 
 </style>
