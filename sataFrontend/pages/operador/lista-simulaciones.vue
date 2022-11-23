@@ -5,7 +5,7 @@
     import CustomButton from '../../components/CustomButton.vue';
     import Modal from '~/components/Modal.vue'
     import { checkIfUserShouldBeHere } from '~/utils/utility_functions.js';
-    import { BootstrapVue, IconsPlugin, BPagination } from 'bootstrap-vue'
+    import { BPagination } from 'bootstrap-vue'
 
     export default Vue.extend({
       name: "ListaSimulaciones",
@@ -36,11 +36,7 @@
           filtroAnno:"",
           filtroMes:"",
           porPantalla:8,
-          pagActual:1,
-          first:0,
-          last:8,
-          cantPag:1
-          // showLess:false
+          pagActual:1
         };
       },
       
@@ -54,10 +50,7 @@
           const ejecucionesAcotadas = await rawdata.json();
           this.simulacionesEjecutadas = ejecucionesAcotadas["ejecucionAcotada_"];
           this.simulacionesEjecutadasConFiltro = [... this.simulacionesEjecutadas];
-          this.cantPag = Math.round(this.simulacionesEjecutadasConFiltro.length/8);
-          // this.showLess = this.cantPag <= 8;
           this.listaFechas = this.simulacionesEjecutadas['fechaEjecucion_'];
-          //console.log(this.simulacionesEjecutadasConFiltro);
           serverPath = `${this.urlApi}/equipos/`;
           rawdata = await fetch(serverPath, this.getRequestConfig()).catch(err => err);
           if (rawdata instanceof Error) { return false; }
@@ -66,17 +59,6 @@
           //TODO:Crear consulta para que devuelva una lista unica de los años en que se ejecutaron las simulaciones
       },
       methods: {
-        cambiarPagina(){
-          // console.log(this.$refs['pages'][this.pagActual-1]);
-          // this.$refs['pages'][this.pagActual-1].classList.remove('active');
-          console.log(this.pagActual);
-          console.log(this.$refs.pagination);
-          console.log(this.$refs.pagination.value);
-          this.first = (this.pagActual-1) * this.porPantalla;
-          this.last = (this.pagActual) * this.porPantalla;
-          // this.$refs['pages'][this.pagActual-1].classList.add('active');
-          // console.log(this.$refs['pages']);
-        },
         filtrar(){
           //Filtro por nombre equipo
           this.simulacionesEjecutadasConFiltro = this.simulacionesEjecutadas.filter((item) => {
@@ -104,7 +86,6 @@
           this.simulacionesEjecutadasConFiltro = this.simulacionesEjecutadasConFiltro.filter((item) => {
             return item["fechaEjecucion_"].includes(stringFilter);
           })
-          this.cantPag = Math.round(this.simulacionesEjecutadasConFiltro.length/this.porPantalla);
         },
         getRequestConfig() {
           return { 
@@ -195,35 +176,6 @@
               </tbody>
             </table>
           </div>
-          <!-- <article v-if="isModalOpened" class="modal-background-container">
-            <EjecucionModal 
-              @changeModalToFalse="isModalOpened=false"
-                :ejecucionSeleccionada="ejecucionSeleccionada" 
-                :isModalOpened="isModalOpened"/>
-          </article> -->
-          <!-- <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-end" >
-              <li class="page-item">
-                <a class="page-link" href="#" aria-label="Previous">
-                  <span aria-hidden="true">&laquo;</span>
-                </a>
-              </li>
-              <li class="page-item" v-for="index in this.cantPag" @click="cambiarPagina(index)"><a class="page-link">{{index}}</a></li>
-              <li class="page-item">
-                <a class="page-link" aria-label="Next">
-                  <span aria-hidden="true">&raquo;</span>
-                </a>
-              </li>
-            </ul>
-          </nav> -->
-          <!-- <nav aria-label="Page navigation">
-          <ul class="pagination justify-content-end" >
-            <li class="page-item"><a class="page-link"><span>&laquo;</span></a></li>
-            <li v-show="showLess" class="page-item" v-for="index in this.cantPag" @click="cambiarPagina(index)" ref="pages"><a class="page-link">{{index}}</a></li>
-            <li class="page-item"><a class="page-link"><span>&raquo;</span></a>
-            </li>
-          </ul>
-        </nav> -->
         <b-pagination ref="pagination" class="justify-content-end" v-model="pagActual"
         :total-rows="this.simulacionesEjecutadasConFiltro.length"
         :per-page="porPantalla"
@@ -296,7 +248,4 @@
     background-color: #fff;
     border-radius: 4px;
   }
-
- 
-
 </style>
