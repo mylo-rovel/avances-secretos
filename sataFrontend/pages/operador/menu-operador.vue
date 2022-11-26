@@ -92,7 +92,7 @@
                         <p class="list__inside"><NuxtLink to="/operador/registrar-simulacion">Registrar simulación</NuxtLink></p>
                         <p ><NuxtLink to="/operador/iniciar-simulacion">Iniciar simulación</NuxtLink></p>
                         <p><NuxtLink to="/operador/ver-simulacion">Ver simulación</NuxtLink></p>
-                        <p><NuxtLink to="/operador/lista-simulaciones">Historial de simulaciones</NuxtLink></p>
+                        <p><NuxtLink to="/operador/lista-ejecuciones">Historial de simulaciones</NuxtLink></p>
                     </ul>
                 </li>
                 <!--<p :id="`Simulacion_key`" @click="(e) => abrirMenu(e)" class="container row" >
