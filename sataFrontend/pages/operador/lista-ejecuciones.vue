@@ -3,13 +3,12 @@
     import {mapState} from "vuex";
     import PageHeader from '~/components/PageHeader.vue'
     import CustomButton from '../../components/CustomButton.vue';
-    import Modal from '~/components/Modal.vue'
     import { checkIfUserShouldBeHere } from '~/utils/utility_functions.js';
     import { BPagination } from 'bootstrap-vue'
 
     export default Vue.extend({
       name: "ListaSimulaciones",
-      components: { PageHeader, Modal, BPagination },
+      components: { PageHeader, BPagination },
       head(){
         return{
           title: "Simulaciones - Sistema de Alerta Temprana Aluvional",
@@ -23,15 +22,10 @@
       data() {
         return {
           "tituloPag": "Sistema de Alerta Temprana Aluvional",
-          "submitbutton":"volver",
-          "cancelbutton":"atras",
           simulacionesEjecutadasConFiltro: [],
           simulacionesEjecutadas: [],
           listaEquipos: [],
           listaFechas: [],
-          isModalOpened:false,
-          ejecucionSeleccionada:{},
-          nombre:"",
           filtroEquipo:"",
           filtroAnno:"",
           filtroMes:"",
@@ -92,20 +86,8 @@
                 method: 'get',
                 headers: {'authorization': window.localStorage.getItem("token")}
             };
-        },
-        async seleccionarEjecucion(elementObj) {
-          const idEjecucionSeleccionada = elementObj["id_"];
-          const serverPath = `${this.urlApi}/ejecuciones/${idEjecucionSeleccionada}`;
-          const rawdata = await fetch(serverPath, this.getRequestConfig()).catch(err => err);
-          if (rawdata instanceof Error) { 
-            console.log(rawdata);
-            return false; 
-          }
-          this.ejecucionSeleccionada = await rawdata.json();
-          this.isModalOpened = true;
-          console.log(idEjecucionSeleccionada);
-          return;
-      }}
+        }
+      }
     })
 
 </script>
@@ -121,7 +103,7 @@
         </div>
         <div class="container">
           <div class="row my-4">
-            <h4>Simulaciones</h4>       
+            <h4>Simulaciones Ejecutadas</h4>       
           </div>
           <div class="row my-6">
             <h5>Filtro</h5>       
@@ -171,7 +153,7 @@
                   <td> {{elementObj["nombreSimulacion_"]}} </td>
                   <td> {{elementObj["nombreEquipo_"]}} </td>
                   <td> {{elementObj["fechaEjecucion_"]}} </td>
-                  <td> <CustomButton :text="'Ver'" :custombcolor="'#68da85'" customhcolor="#3c724a"/> </td>
+                  <td> <NuxtLink :to="'resumen?id=' + elementObj['id_']"> <CustomButton :text="'Ver'" :custombcolor="'#68da85'" :customhcolor="'#3c724a'"/> </NuxtLink> </td>
                 </tr>
               </tbody>
             </table>
@@ -186,12 +168,10 @@
     </section>
   </section>
 </template>
-
-
 <style>
   .table-container {
     max-height: 50vh;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
   .tabla-simulacion{
     background-color: white;
@@ -199,39 +179,19 @@
     border-collapse: collapse;
     width: 100%;
   }
-  thead {
+  .tabla-simulacion thead {
     background-color: #4e89f0;
     color: white;
   }
-  th{
+  .tabla-simulacion th{
     padding: 0.5rem;
   }
-  
   .ul_top {
     display: flex;
     justify-content: space-between;
     list-style-type: none;
     padding: 0;
     width: 90%;
-  }
-
-  .titulo-modal{
-    text-align: center;
-  }
-  .boton-nombre{
-    background-color: #025cfa;
-    color: white;
-  }
-  .modal-background-container{
-    z-index: 999;
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width:100vw;
-    height:100vh;
-    background-color: rgba(0, 0, 0, 0.8);
   }
   .rcorners{
     border-radius: 25px;
