@@ -9,7 +9,7 @@
   import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, LinearScale, CategoryScale, PointElement, Filler } from 'chart.js'
   import { getDefaultCharDataModel } from '../utils/charts_utils'
   import { getDefaultChartOptions } from '../utils/charts_utils'
-  ChartJS.register( Title, Tooltip, Legend, LineElement, LinearScale, CategoryScale, PointElement )
+  ChartJS.register( Title, Tooltip, Legend, LineElement, LinearScale, CategoryScale, PointElement, Filler )
   export default {
     name: 'LineChart',
     components: { LineChartGenerator },

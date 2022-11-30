@@ -81,54 +81,54 @@
         </div>
       </div>
       <div class="row" style="justify-content: space-between;">
-        <a class="data-card my-4" href="graficos?id=1&g=0" >
+        <NuxtLink class="data-card my-4" :to="'graficos?id=1&g=0'" > 
             <h3>30mm</h3>
             <h4>Agua Caída Promedio</h4>
             <span class="link-text">
               Ver Gráficos 
               <font-awesome-icon icon="arrow-right" />
             </span>
-        </a>
-        <a class="data-card my-4" href="graficos?id=1&g=1" >
+        </NuxtLink>
+        <NuxtLink class="data-card my-4" :to="'graficos?id=1&g=1'" >
             <h3>28°C</h3>
             <h4>Temperatura Promedio</h4>
             <span class="link-text">
               Ver Gráficos 
               <font-awesome-icon icon="arrow-right" />
             </span>
-        </a>
-        <a class="data-card my-4" href="graficos?id=1&g=2" >
+        </NuxtLink>
+        <NuxtLink class="data-card my-4" :to="'graficos?id=1&g=2'" >
             <h3>10 psi</h3>
             <h4>Presión De Válvula Promedio</h4>
             <span class="link-text">
               Ver Gráficos 
               <font-awesome-icon icon="arrow-right" />
             </span>
-        </a>
-        <a class="data-card my-4" href="graficos?id=1&g=3" >
+        </NuxtLink>
+        <NuxtLink class="data-card my-4" :to="'graficos?id=1&g=3'" >
             <h3>64%</h3>
             <h4>Humedad Promedio</h4>
             <span class="link-text">
               Ver Gráficos 
               <font-awesome-icon icon="arrow-right" />
             </span>
-        </a>
-        <a class="data-card my-4" href="graficos?id=1&g=4" >
+        </NuxtLink>
+        <NuxtLink class="data-card my-4" :to="'graficos?id=1&g=4'" >
             <h3>1013 hPa</h3>
             <h4>Presión Atmosférica Promedio</h4>
             <span class="link-text">
               Ver Gráficos 
               <font-awesome-icon icon="arrow-right" />
             </span>
-        </a>
-        <a class="data-card my-4" href="graficos?id=1&g=5" >
+        </NuxtLink>
+        <NuxtLink class="data-card my-4" :to="'graficos?id=1&g=5'" >
             <h3>12 m³/s</h3>
             <h4>Caudal Promedio</h4>
             <span class="link-text">
               Ver Gráficos 
               <font-awesome-icon icon="arrow-right" />
             </span>
-        </a>
+        </NuxtLink>
       </div>
       <div class="row">
         <div class="data-card my-4" style="max-width: 100%;pointer-events: none;">

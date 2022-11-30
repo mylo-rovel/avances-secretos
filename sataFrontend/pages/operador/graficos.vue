@@ -107,7 +107,7 @@
     </div>
     <div class="container">
       <div class="row my-4">
-        <!-- <h3>{{this.nombrePag}}</h3>        -->
+        <h3>{{this.nombrePag}}</h3>       
       </div>
     </div>
     <div class="container">
