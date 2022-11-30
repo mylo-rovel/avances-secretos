@@ -52,7 +52,7 @@ void inmovilizarValvula(){
 }
 void abrirValvula() {
     digitalWrite(R1, HIGH); //cerrado = 1
-    digitalWrite(R2, LOW); // abierta = 0        
+    digitalWrite(R2, LOW); // abierta = 0
 }
 void cerrarValvula() {
     digitalWrite(R1, LOW); //abierta = 0
