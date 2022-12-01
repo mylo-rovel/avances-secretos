@@ -2249,6 +2249,42 @@ ALTER TABLE `secuencia`
 ALTER TABLE `simulacion`
   ADD CONSTRAINT `simulacion_ibfk_1` FOREIGN KEY (`id_equipo`) REFERENCES `equipo` (`id`),
   ADD CONSTRAINT `simulacion_ibfk_2` FOREIGN KEY (`id_operador`) REFERENCES `usuario` (`id`);
+
+ALTER TABLE `componente` ADD `es_sensor` BOOLEAN NOT NULL DEFAULT FALSE AFTER `tipo_placa`, 
+  ADD `unidad` VARCHAR(20) NULL AFTER `es_sensor`, ADD `formula` VARCHAR(40) NULL AFTER `unidad`;
+
+CREATE TABLE medida
+(
+    id                  bigint(20)      NOT NULL AUTO_INCREMENT,
+    id_componente       bigint(20)      NOT NULL,
+    id_ejecucion        bigint(20)      NOT NULL,
+    senial              double          NOT NULL DEFAULT '0',
+    fisico              double          NOT NULL DEFAULT '0',
+    timestamp           timestamp       NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (id_componente) REFERENCES componente (id),
+    FOREIGN KEY (id_ejecucion) REFERENCES ejecucion (id)
+);
+
+INSERT INTO `componente` (`id_equipo`, `nombre`, `descripcion`, `url`, `estado`, `tipo`, `tipo_placa`, `unidad`, `es_sensor`, `formula`) VALUES
+(1, 'flujometro1_simulador12', 'testeo',  '', 'ACTIVO', 'FLUJOMETRO',  'ARDUINO_2560', 'Litros/Segundo', TRUE, 'FORMULA1'),
+(1, 'flujometro2_simulador12', 'testeo',  '', 'ACTIVO', 'FLUJOMETRO',  'ARDUINO_2560', 'Litros/Segundo', TRUE, 'FORMULA2'),
+(1, 'pluviometro1_simulador12', 'testeo', '', 'ACTIVO', 'PLUVIOMETRO', 'ARDUINO_2560', 'Milimetros', TRUE, 'FORMULA3');
+
+INSERT INTO `medida` (`id_componente`, `id_ejecucion`, `senial`, `fisico`, `timestamp`) VALUES 
+('4', '2', '362', '16', current_timestamp()),
+('6', '1', '32',  '24', current_timestamp()),
+('6', '3', '440', '27', current_timestamp()),
+('4', '1', '479', '21', current_timestamp()),
+('6', '2', '96',  '41', current_timestamp()),
+('4', '2', '682', '47', current_timestamp()),
+('6', '3', '185', '19', current_timestamp()),
+('6', '1', '381', '12', current_timestamp()),
+('4', '1', '612', '31', current_timestamp()),
+('6', '3', '182', '33', current_timestamp()),
+('4', '2', '458', '37', current_timestamp()),
+('6', '3', '607', '13', current_timestamp());
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
