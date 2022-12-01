@@ -43,4 +43,6 @@ service WebCoreCommuService {
   rpc getEquiposTrabajando(EmptyReq) returns (EquiposEntityReply){}
 
   rpc getValoresGrafico(EstadoGraficoUsuarioReq) returns (LecturaSensoresReply) {}
+
+  rpc getMedidasEjecucion(EjecucionReq) returns (MedidasEjecucionReply) {}
 }

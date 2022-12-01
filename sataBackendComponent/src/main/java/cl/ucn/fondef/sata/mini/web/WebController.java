@@ -507,6 +507,20 @@ public class WebController {
         return "Usuario sin permisos";
     }
 
+    //   rpc getEjecuciones(EmptyReq) returns (EjecucionesReply){}
+    @RequestMapping(value = "api/medidas-ejecucion", method = RequestMethod.POST)
+    public String getMedidasEjecucion(@RequestBody MedidaSensorReq medidaSensorReq, @RequestHeader(value="Authorization") String jwt){
+        if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
+        Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
+        Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
+        if(usuario!=null) {
+            if (usuario.getRol().equals(Domain.UsuarioEntity.RolUsuario.CONFIGURADOR.name())) {
+                return webCoreClientGrpcEquipo.addEquipo(equipoNuevo);
+            }
+        }
+        return "Error. Token invalido";
+    }
+
     // ---- SIMULACIONES       ------------------------------------------------------------------------------
     // ---- OPERACIONES EXTRA  ------------------------------------------------------------------------------
 

@@ -128,23 +128,24 @@ enum TipoPlaca {
   ESP_32 = 2;
 }
 
+enum TipoComponente {
+  TIPO_COMP_NONE = 0;
+  CAMARA = 1;
+  FLUJOMETRO = 2;
+  TERMOMETRO = 3;
+  VALVULA = 4;
+  PLUVIOMETRO = 5;
+}
+
+enum EstadoComponente {
+  ESTADO_COMP_NONE = 0;
+  ACTIVO = 1;
+  INACTIVO = 2;
+  FALLA = 3;
+  REPARACION = 4;
+}
+
 message Componente {
-  enum EstadoComponente {
-    ESTADO_NONE = 0;
-    ACTIVO = 1;
-    INACTIVO = 2;
-    FALLA = 3;
-    REPARACION = 4;
-  }
-
-  enum TipoComponente {
-    TIPO_NONE = 0;
-    CAMARA = 1;
-    FLUJOMETRO = 2;
-    TERMOMETRO = 3;
-    VALVULA = 4;
-  }
-
   int64 id = 1;
   string nombre = 2;
   string descripcion = 3;
@@ -339,4 +340,18 @@ message SaludoBoardReply {
 message AvisoTerminoEjecucionReq {
   string nombreEquipo = 1;
   double agua_caida = 2;
+}
+
+
+message EjecucionReq {
+  int64 idEjecucion = 1;
+  TipoComponente tipoComponente = 2;
+}
+
+message MedidaReply {
+  int64
+}
+
+message MedidasEjecucionReply {
+  repeated MedidaReply medidaEjecucion = 1;
 }
