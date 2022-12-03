@@ -1,3 +1,4 @@
+
 <!-- eslint-disable dot-notation -->
 <template>
   <LineChartGenerator :chart-data="dynChartData" :chart-options="dynChartOptions" class="myChart"/>
