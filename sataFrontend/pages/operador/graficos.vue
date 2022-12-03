@@ -14,7 +14,7 @@
     Vue.config.productionTip = false;
     export default Vue.extend({
       name: "Graficos",
-      components: { PageHeader, FontAwesomeIcon, GraficoLinea },
+      components: { PageHeader, FontAwesomeIcon, GraficoLinea, CustomButton },
       head(){
         return{
           title: "Simulaciones - Sistema de Alerta Temprana Aluvional",
@@ -36,7 +36,8 @@
             "Graficos Sensores Humedad",
             "Graficos Sensores Presion Atmosferica",
             "Graficos Sensores Caudal"
-          ]
+          ],
+          idSimEjecutada:""
         };
       },
       
@@ -48,22 +49,7 @@
           const urlParams = new URLSearchParams(queryString);
           const graphIndex = urlParams.get('g');
           this.nombrePag = this.nombresPag[graphIndex];
-
-          // switch(graphType){
-          //   case "pluviometro":
-            
-          //   case "presionAtm":
-
-          //   case "presionValv":
-
-          //   case "temp":
-
-          //   case "caudal":
-
-          //   case "humedad":
-
-          //}
-
+          this.idSimEjecutada = urlParams.get('id');
       },
       methods: {
         getRequestConfig() {
@@ -102,27 +88,33 @@
     <div>
       <NavbarPag :tituloPag="tituloPag"/>
     </div>
-    <div class="container-header">
+    <!-- <div class="container-header">
       <PageHeader />
-    </div>
-    <div class="container">
-      <div class="row my-4">
-        <h3>{{this.nombrePag}}</h3>       
-      </div>
-    </div>
+    </div> -->
     <div class="container">
         <div class="row">
-            <div class="grafico my-4" style="max-width: 100%;">
-                <GraficoLinea/>
-            </div>
+          <div class="my-4" >
+            <NuxtLink :to="'resumen?id='+ this.idSimEjecutada">
+              <CustomButton :text="'Volver'" :custombcolor="'#7f8a99'" :customhcolor="'#575c63'" style="width: 6em" />
+            </NuxtLink>     
+          </div>
+          <h3>{{this.nombrePag}}</h3>
+          <div class="grafico my-4" style="max-width: 100%;">
+              <GraficoLinea/>
+          </div>
         </div>
     </div>
-   
+    
   </section>
 </template>
 
 
 <style>
+.test{
+  background-color: #7f8a99;
+  color:#575c63;
+}
+
   .grafico thead {
     color: white;
     border-bottom: 2px solid #2162ad;

@@ -27,6 +27,14 @@
       data() {
         return {
           "tituloPag": "Sistema de Alerta Temprana Aluvional",
+          nombreEquipo: "",
+          nombreSimulacion:"",
+          listaSensores:[],
+          duracionSimulacion:"",
+          aguaPromedio:0,
+          tempPromedio:0,
+          humedadPromedio:0,
+          idSimEjecutada:""
         };
       },
       
@@ -34,10 +42,9 @@
 
       async mounted() {
           //checkIfUserShouldBeHere(["OPERADOR"]);
-          let serverPath = `${this.urlApi}/ejecuciones/`;
-          let rawdata = await fetch(serverPath, this.getRequestConfig()).catch(err => err);
-          if (rawdata instanceof Error) { return false; }
-          const ejecucionesAcotadas = await rawdata.json();
+          const queryString = window.location.search;
+          const urlParams = new URLSearchParams(queryString);
+          this.idSimEjecutada = urlParams.get('id');
       },
       methods: {
         getRequestConfig() {
@@ -56,11 +63,16 @@
     <div>
       <NavbarPag :tituloPag="tituloPag"/>
     </div>
-    <div class="container-header">
+    <!-- <div class="container-header">
       <PageHeader />
-    </div>
+    </div> -->
     <div class="container">
-      <div class="row my-4">
+      <div class="row">
+        <div class="my-4" >
+            <NuxtLink :to="'lista-ejecuciones'">
+              <CustomButton :text="'Volver'" :custombcolor="'#7f8a99'" :customhcolor="'#575c63'" style="width: 6em" />
+            </NuxtLink>     
+        </div>
         <h3>Resumen Simulación</h3>       
       </div>
     </div>
@@ -74,95 +86,40 @@
       <div class="row">
         <div class="data-card my-4" style="max-width: 100%;pointer-events: none;">
             <h3>Información General</h3>
-            <h4>Nombre Equipo: Genesis143</h4>  
-            <h4>Nombre Simulación: Lluvia de 1932 </h4>
-            <h4>Cantidad Sensores: 4</h4>
-            <h4>Duración de la Simulación: 30 minutos 21 segundos</h4>
+            <h4>Nombre Equipo: {{this.nombreEquipo}}</h4>  
+            <h4>Nombre Simulación: {{this.nombreSimulacion}} </h4>
+            <h4>Cantidad Sensores: {{this.listaSensores.lenght}}</h4>
+            <h4>Duración de la Simulación: {{this.duracionSimulacion}}</h4>
         </div>
       </div>
       <div class="row" style="justify-content: space-between;">
-        <NuxtLink class="data-card my-4" :to="'graficos?id=1&g=0'" > 
-            <h3>30mm</h3>
+        <NuxtLink class="data-card my-4" :to="'graficos?id='+this.idSimEjecutada+'&g=0'" > 
+            <h3>{{this.aguaPromedio + ' mm'}}</h3>
             <h4>Agua Caída Promedio</h4>
+            <h4>{{2 + ' Sensores'}}</h4>
             <span class="link-text">
               Ver Gráficos 
               <font-awesome-icon icon="arrow-right" />
             </span>
         </NuxtLink>
-        <NuxtLink class="data-card my-4" :to="'graficos?id=1&g=1'" >
-            <h3>28°C</h3>
+        <NuxtLink class="data-card my-4" :to="'graficos?id='+this.idSimEjecutada+'&g=1'" >
+            <h3>{{this.tempPromedio + '°C'}}</h3>
             <h4>Temperatura Promedio</h4>
+            <h4>{{3 + ' Sensores'}}</h4>
             <span class="link-text">
               Ver Gráficos 
               <font-awesome-icon icon="arrow-right" />
             </span>
         </NuxtLink>
-        <NuxtLink class="data-card my-4" :to="'graficos?id=1&g=2'" >
-            <h3>10 psi</h3>
-            <h4>Presión De Válvula Promedio</h4>
-            <span class="link-text">
-              Ver Gráficos 
-              <font-awesome-icon icon="arrow-right" />
-            </span>
-        </NuxtLink>
-        <NuxtLink class="data-card my-4" :to="'graficos?id=1&g=3'" >
-            <h3>64%</h3>
+        <NuxtLink class="data-card my-4" :to="'graficos?id='+this.idSimEjecutada+'&g=3'" >
+            <h3>{{this.humedadPromedio + '%'}}</h3>
             <h4>Humedad Promedio</h4>
+            <h4>2 sensores</h4>
             <span class="link-text">
               Ver Gráficos 
               <font-awesome-icon icon="arrow-right" />
             </span>
         </NuxtLink>
-        <NuxtLink class="data-card my-4" :to="'graficos?id=1&g=4'" >
-            <h3>1013 hPa</h3>
-            <h4>Presión Atmosférica Promedio</h4>
-            <span class="link-text">
-              Ver Gráficos 
-              <font-awesome-icon icon="arrow-right" />
-            </span>
-        </NuxtLink>
-        <NuxtLink class="data-card my-4" :to="'graficos?id=1&g=5'" >
-            <h3>12 m³/s</h3>
-            <h4>Caudal Promedio</h4>
-            <span class="link-text">
-              Ver Gráficos 
-              <font-awesome-icon icon="arrow-right" />
-            </span>
-        </NuxtLink>
-      </div>
-      <div class="row">
-        <div class="data-card my-4" style="max-width: 100%;pointer-events: none;">
-            <h3>Lista de Sensores</h3>
-            <table>
-              <thead>
-                <th scope="row">Nombre</th>
-                <th scope="row">Unidad</th>
-              </thead>
-              <tbody>
-                <tr scope="row">
-                    <td> Sensor Temperatura 1 </td>
-                    <td> C° </td>
-                </tr>
-                <tr scope="row">
-                    <td> Sensor Temperatura 2 </td>
-                    <td> C° </td>
-                </tr>
-                <tr scope="row">
-                    <td> Sensor Válvula 1 </td>
-                    <td> psi </td>
-                </tr>
-                <tr scope="row">
-                    <td> Sensor Humedad 1 </td>
-                    <td> % </td>
-                </tr>
-                <tr scope="row">
-                    <td> Sensor Caudal 1 </td>
-                    <td> m³/s </td>
-                </tr>
-
-              </tbody>
-            </table>
-        </div>
       </div>
     </div>
   </section>
