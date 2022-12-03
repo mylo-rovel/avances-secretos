@@ -18,7 +18,7 @@ export default {
     background-color: var(--custombcolor);
     border-radius: 8px;
     border-style: none;
-    box-shadow: rgba(39, 174, 96, .15) 0 4px 9px;
+    box-shadow: rgba(var(--customhcolor), .15) 0 4px 9px;
     box-sizing: border-box;
     color: #fff;
     cursor: pointer;
@@ -30,7 +30,7 @@ export default {
     line-height: 1.1;
     outline: none;
     overflow: hidden;
-    padding: 13px 20px;
+    padding: 10px 20px;
     position: relative;
     text-align: center;
     text-decoration: none;
@@ -56,7 +56,7 @@ export default {
   }
 
   .custom-button:hover {
-    box-shadow: rgba(39, 174, 96, .2) 0 6px 12px;
+    box-shadow: rgba(var(--customhcolor), .2) 0 6px 12px;
   }
 </style>
 
