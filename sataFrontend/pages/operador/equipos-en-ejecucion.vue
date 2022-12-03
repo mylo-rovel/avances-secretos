@@ -11,7 +11,7 @@
         checkIfUserShouldBeHere } from '~/utils/utility_functions';
 
     export default Vue.extend({
-        name: "VerSimulacion",
+        name: "EquiposEnEjecucion",
         components: { PageHeader },
         data() {
             return {

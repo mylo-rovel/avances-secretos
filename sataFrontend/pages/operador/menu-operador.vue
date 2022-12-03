@@ -91,7 +91,7 @@
                     <ul v-if="elementsObj['Simulacion']" class=" submenu-routes-menu">
                         <p class="list__inside"><NuxtLink to="/operador/registrar-simulacion">Registrar simulación</NuxtLink></p>
                         <p ><NuxtLink to="/operador/iniciar-simulacion">Iniciar simulación</NuxtLink></p>
-                        <p><NuxtLink to="/operador/ver-simulacion">Ver simulación</NuxtLink></p>
+                        <p><NuxtLink to="/operador/equipos-en-ejecucion">Ver simulación</NuxtLink></p>
                         <p><NuxtLink to="/operador/lista-ejecuciones">Historial de simulaciones</NuxtLink></p>
                     </ul>
                 </li>
