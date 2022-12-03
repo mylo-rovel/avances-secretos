@@ -29,7 +29,7 @@
           filtroEquipo:"",
           filtroAnno:"",
           filtroMes:"",
-          porPantalla:8,
+          porPantalla:7,
           pagActual:1
         };
       },
@@ -98,14 +98,19 @@
         <div>
           <NavbarPag :tituloPag="tituloPag"/>
         </div>
-        <div class="container-header">
+        <!-- <div class="container-header">
           <PageHeader />
-        </div>
+        </div> -->
         <div class="container">
-          <div class="row my-4">
+          <div class="row">
+            <div class="my-4" >
+              <NuxtLink :to="'menu-operador'">
+                <CustomButton :text="'Volver'" :custombcolor="'#7f8a99'" :customhcolor="'#575c63'" style="width: 6em" />
+              </NuxtLink>     
+            </div>
             <h4>Simulaciones Ejecutadas</h4>       
           </div>
-          <div class="row my-6">
+          <div class="row my-3">
             <h5>Filtro</h5>       
           </div>
         <div class="rcorners">
