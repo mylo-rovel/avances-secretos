@@ -2,12 +2,9 @@
 
     import Vue from 'vue'
     import {mapState, mapMutations} from "vuex";
-    import PageHeader from '~/components/PageHeader.vue'
-    import CancelButtom from '~/components/CancelButtom.vue'
-    import SubmitButton from '~/components/SubmitButton.vue'
     import SecuenciaButton from '~/components/SecuenciaButton.vue'
-    import NavbarPag from '~/components/NavbarPag.vue'
     import Modal from '~/components/Modal.vue'
+    import CustomButton from '../../components/CustomButton.vue';
 
     import { 
         getEquiposDesplegables, 
@@ -18,11 +15,9 @@
 
     export default Vue.extend({
         name: "RegistrarSimulacion",
-        components: { PageHeader, CancelButtom, SubmitButton, Modal, SecuenciaButton},
+        components: { CustomButton, Modal, SecuenciaButton},
         data() {
             return {
-                "cancelbutton": "cancelar",
-                "submitbutton": "guardar",
                 "infoContenido": "Simulación registrada :D",
                 "nombreSecuencia": "Configurar Secuencia",
 
@@ -144,11 +139,6 @@
                 this.nombreSimulacionInput = "";
                 this.descripcionInput = "";
                 window.location.reload();
-            },
-            cancelarAddSimulacion() {
-                const anchorElement = document.createElement("a");
-                anchorElement.href= "/operador/menu-operador";
-		        anchorElement.click();
             }
         }    
     })
@@ -156,12 +146,7 @@
 
 <template>
     <section>
-        <div>
-            <NavbarPag/> 
-        </div>
-        <div class="container-header">
-            <PageHeader />
-        </div>
+        <SideBar/>
         <div class= "container">
             <div>
                 <div class="row my-4">
@@ -220,11 +205,15 @@
                         <!-- PARTE BOTONES -->
                         <div class = "row my-4">
                             <div class= "col-12 contenido-botones my-4">
-                                <button class="finalFormButton cancelarButton" @click="cancelarAddSimulacion" > CANCELAR </button>
+                                <NuxtLink :to="'menu-operador'">
+                                    <CustomButton  :text="'ATRÁS'" :custombcolor="'#C70039'" customhcolor="#72152f"/>
+                                </NuxtLink>
                             </div>                            
-                            <div class="col-12 contenido-botones my-4">    
-                                <button class="finalFormButton sendDataButton" @click="sendAddSimulacion" > GUARDAR </button>
+                            <div class="col-12 contenido-botones my-4">
+                                <CustomButton  :text="'INICIAR'" :custombcolor="'#4482ee'" customhcolor="#264a88" @click.native="sendAddSimulacion"/>   
                             </div>
+
+                            
                         </div> 
                     </form>
                 </div>
@@ -301,27 +290,6 @@
         border-radius: 10px;
         height: fit-content;
         margin: auto 0;
-    }
-    .sendDataButton {
-        background-color: rgba(2,92,250,1);        
-    }
-    .cancelarButton {
-        background-color: rgba(199,0,57,1);
-    }
-
-    .sendDataButton:hover {
-        color: rgba(2,92,250,1);
-        border: 1px solid rgba(2,92,250,1);
-        background-color:white;
-        transition: all 0.4s;
-        transform: scale(1.1);
-    }
-    .cancelarButton:hover {
-        color: rgba(199,0,57,1);
-        border: 1px solid rgba(199,0,57,1);
-        background-color:white;
-        transition: all 0.4s;
-        transform: scale(1.1);
     }
 
     @media screen and (max-width: 575px) {

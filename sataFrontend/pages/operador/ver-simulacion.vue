@@ -4,6 +4,7 @@
     import PageHeader from '~/components/PageHeader.vue'
     import NavbarPag from '~/components/NavbarPag.vue'
     import CustomButton from '../../components/CustomButton.vue';
+    import SideBar from '../../components/SideBar/SideBar.vue';
     import {mapState} from "vuex";
     import { 
         setListasDesplegables, 
@@ -12,7 +13,7 @@
 
     export default Vue.extend({
         name: "VerSimulacion",
-        components: { PageHeader },
+        components: { SideBar },
         data() {
             return {
             equiposDisponibles:[],
@@ -92,74 +93,21 @@
 
 <template>
     <section>
-        <div>
-            <NavbarPag/> 
-        </div>
-        <!-- <div class="container-header">
-            <PageHeader/>
-        </div> -->
+        <SideBar/>
         <div class= "container">
             <div v-if="paginaRenderizar === 'listaEquiposEjecutando'" id="verSimulacionSelection">
                 <div class="row">
                     <div class="my-4" >
-                    <NuxtLink :to="'menu-operador'">
+                    <NuxtLink :to="'equipos-en-ejecucion'">
                         <CustomButton :text="'Volver'" :custombcolor="'#7f8a99'" :customhcolor="'#575c63'" style="width: 6em" />
                     </NuxtLink>     
                     </div>
-                    <h2>Equipos en Ejecución</h2>
+                    <h2>Ver Simulacion</h2>
                 </div>
                 <div class="row">
-                    <div class="my-4 table-responsive table-container">
-                        <table id="tablaSimulaciones" class="tabla-simulacion table table-lifht table-bordered table-hover table-striped">
-                        <thead class="text-white">
-                            <th scope="row">Nombre Equipo</th>
-                            <th scope="row">Nombre Simulación</th>
-                            <th scope="row">Ver en Vivo</th>
-                        </thead>
-                        <tbody id="tBody-simulaciones">
-                        <tr scope="row" :key="`eventKey_${rowIndex}`">
-                            <td> Genesis66 </td>
-                            <td> Lluvia de 2010 </td>
-                            <td> <NuxtLink :to="'resumen'"> <CustomButton :text="'Ver'" :custombcolor="'#68da85'" :customhcolor="'#3c724a'"/> </NuxtLink> </td>
-                            </tr>
-                        </tbody>
-                        </table>
-                    </div>
-
-                    <!-- <form>
-                        <div class="my-4 form-group row">
-                            <label for="simulador" class="col-sm-4 col-form-label ">Seleccione el equipo</label>
-                            <div class="col-sm-6">
-                                <select id="select_equipoSimulacion" v-model="equipoSeleccionado" class="form-select" aria-label="Equipo" required>
-                                    <option v-for="i in equiposDisponibles" :value="i">
-                                        {{i}}
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                       
-                        <div class = "row my-4 button-ribbon">
-                          
-                            <div class= "col-12 contenido-botones my-4 button-container">
-                                <NuxtLink :to="'menu-operador'">
-                                    <CustomButton :text="'Cancelar'" :custombcolor="'#c70039'" :customhcolor="'#7c0225'" style="width: 6em" />
-                                </NuxtLink>
-                            </div>                            
-                            <div class="col-12 contenido-botones my-4 button-container">
-                                
-                                <CustomButton :text="'Enviar'" :custombcolor="'#025cfa'" :customhcolor="'#012f7e'" style="width: 6em" @click.native="sendVerSimulacionReq"  />
-                            </div>
-                        </div>
-                    </form> -->
+                    
                 </div>
             </div>
-            <!-- <div v-if="paginaRenderizar === 'graficoEjecucion'" id="verSimulacionGrafico">
-               <GraficoEjecucion  
-                :objetoDatosEjecucion="objetoDatosEjecucion"
-                :equipoSeleccionado="equipoSeleccionado"
-                :cantidadValoresGrafico="cantidadValoresGrafico"
-                /> 
-            </div> -->
         </div>
     </section>
 </template>

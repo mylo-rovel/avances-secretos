@@ -3,19 +3,16 @@
     import Vue from 'vue'
     import PageHeader from '~/components/PageHeader.vue'
     import {mapState} from "vuex";
-    import CancelButtom from '~/components/CancelButtom.vue'
-    import SubmitButton from '~/components/SubmitButton.vue'
     import CustomButton from '../../components/CustomButton.vue';
-    import NavbarPag from '~/components/NavbarPag.vue'
     import { setListasDesplegables } from '~/utils/utility_functions';
+    import SideBar from '../../components/SideBar/SideBar.vue';
 
     export default Vue.extend({
         name: "IniciarSimulacion",
-        components: { PageHeader, CancelButtom, SubmitButton},
+        components: { SideBar},
         data() {
             return {
                 "tituloPag": "Sistema de Alerta Temprana Aluvional",
-                "submitbutton": "guardar",
                 simulacionesDisponibles: [],
                 listaIdsDisponibles:[],
 
@@ -94,23 +91,13 @@
                     anchorElement.href= "/operador/ver-simulacion";
                     anchorElement.click(); 
                 }
-            },
-            cancelarStartSimulacion() {
-                const anchorElement = document.createElement("a");
-                anchorElement.href= "/operador/menu-operador";
-		        anchorElement.click();
             }
         }
     })
 </script>
     <template>
         <section>
-            <div>
-                <NavbarPag :tituloPag="tituloPag"/> 
-            </div>
-            <div class="container-header">
-                <PageHeader/>
-            </div>          
+            <SideBar/>
             <div class= "container">
                 <div>
                     <div class="row my-4">
@@ -141,8 +128,9 @@
                         <!-- PARTE BOTONES -->
                         <div class = "row my-4">
                             <div class= "col-12 contenido-botones my-4">
-                                <CustomButton  :text="'ATRÁS'" :custombcolor="'#C70039'" customhcolor="#72152f" @click.native="cancelarStartSimulacion"/>
-                    
+                                <NuxtLink :to="'menu-operador'">
+                                    <CustomButton  :text="'ATRÁS'" :custombcolor="'#C70039'" customhcolor="#72152f"/>
+                                </NuxtLink>
                             </div>                            
                             <div class="col-12 contenido-botones my-4">
                                 <CustomButton  :text="'INICIAR'" :custombcolor="'#4482ee'" customhcolor="#264a88" @click.native="sendStartSimulacionReq"/>   
@@ -169,26 +157,4 @@
     height: fit-content;
     margin: auto 0;
 }
-.sendDataButton {
-    background-color: #1861e0;        
-}
-.cancelarButton {
-    background-color: rgba(199,0,57,1);
-}
-
-.sendDataButton:hover {
-    color: rgba(2,92,250,1);
-    border: 1px solid rgba(2,92,250,1);
-    background-color:white;
-    transition: all 0.4s;
-    transform: scale(1.1);
-}
-.cancelarButton:hover {
-    color: rgba(199,0,57,1);
-    border: 1px solid rgba(199,0,57,1);
-    background-color:white;
-    transition: all 0.4s;
-    transform: scale(1.1);
-}
-    
 </style>

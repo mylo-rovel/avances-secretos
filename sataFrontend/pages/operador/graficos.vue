@@ -1,7 +1,6 @@
 <script lang="js">
     import Vue from 'vue';
     import {mapState} from "vuex";
-    import PageHeader from '~/components/PageHeader.vue'
     import CustomButton from '../../components/CustomButton.vue';
     import { checkIfUserShouldBeHere } from '~/utils/utility_functions.js';
     import { library } from "@fortawesome/fontawesome-svg-core";
@@ -9,12 +8,13 @@
     import { fas } from "@fortawesome/free-solid-svg-icons/";
     import '@fortawesome/fontawesome-svg-core/styles.css';
     import GraficoLinea from '~/components/GraficoLinea.vue';
+    import SideBar from '../../components/SideBar/SideBar.vue';
     library.autoAddCss = false;
     library.add(fas);
     Vue.config.productionTip = false;
     export default Vue.extend({
       name: "Graficos",
-      components: { PageHeader, FontAwesomeIcon, GraficoLinea, CustomButton },
+      components: { FontAwesomeIcon, GraficoLinea, CustomButton, SideBar },
       head(){
         return{
           title: "Simulaciones - Sistema de Alerta Temprana Aluvional",
@@ -83,14 +83,8 @@
 </script>
 
 <template>
-
   <section id="vistaResumen">
-    <div>
-      <NavbarPag :tituloPag="tituloPag"/>
-    </div>
-    <!-- <div class="container-header">
-      <PageHeader />
-    </div> -->
+    <SideBar/>
     <div class="container">
         <div class="row">
           <div class="my-4" >

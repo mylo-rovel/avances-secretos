@@ -1,14 +1,13 @@
 <script lang="js">
     import Vue from 'vue';
     import {mapState} from "vuex";
-    import PageHeader from '~/components/PageHeader.vue'
     import CustomButton from '../../components/CustomButton.vue';
     import { checkIfUserShouldBeHere } from '~/utils/utility_functions.js';
     import { BPagination } from 'bootstrap-vue'
-
+    import SideBar from '../../components/SideBar/SideBar.vue';
     export default Vue.extend({
       name: "ListaSimulaciones",
-      components: { PageHeader, BPagination },
+      components: { BPagination, SideBar },
       head(){
         return{
           title: "Simulaciones - Sistema de Alerta Temprana Aluvional",
@@ -95,12 +94,7 @@
 <template>
   <section id="vistaSimulaciones">
     <section id="contenidoTabla">
-        <div>
-          <NavbarPag :tituloPag="tituloPag"/>
-        </div>
-        <!-- <div class="container-header">
-          <PageHeader />
-        </div> -->
+        <SideBar/>
         <div class="container">
           <div class="row">
             <div class="my-4" >

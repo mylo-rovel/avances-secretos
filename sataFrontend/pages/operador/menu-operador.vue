@@ -4,46 +4,47 @@
     import Footer from '~/components/Footer.vue'
     import CarouselPag from '~/components/CarouselPag.vue'
     import { checkIfUserShouldBeHere } from '~/utils/utility_functions.js';
+    import SideBar from '../../components/SideBar/SideBar.vue';
 
     export default Vue.extend({
-        name: "MenuOperador",
-        data() {
-            return {
-                elementsObj : {
-                    Inicio: false,
-                    Perfil:  false,
-                    Simulacion:  false,
-                    Contacto: false,
-                }
+    name: "MenuOperador",
+    data() {
+        return {
+            elementsObj: {
+                Inicio: false,
+                Perfil: false,
+                Simulacion: false,
+                Contacto: false,
+            }
+        };
+    },
+    mounted() {
+        console.clear();
+        checkIfUserShouldBeHere(["OPERADOR"]);
+    },
+    methods: {
+        abrirMenu(eventObj) {
+            const idRouteTitle = eventObj.currentTarget.id.toString().split("_key")[0];
+            // this.elementsObj[idRouteTitle].esDesplegable = !this.elementsObj[idRouteTitle].esDesplegable;
+            this.elementsObj[idRouteTitle] = !this.elementsObj[idRouteTitle];
+            if (this.elementsObj[idRouteTitle] === true) {
+                let flecha = document.getElementById("flechaSimulacion").style.transform = "rotate(90deg)";
+            }
+            else if (this.elementsObj[idRouteTitle] === false) {
+                let flecha = document.getElementById("flechaSimulacion").style.transform = "rotate(0deg)";
             }
         },
-        mounted() {
-            console.clear();
-            checkIfUserShouldBeHere(["OPERADOR"]);
-        },
-        methods: {
-            abrirMenu(eventObj){
-                const idRouteTitle = eventObj.currentTarget.id.toString().split("_key")[0];
-                // this.elementsObj[idRouteTitle].esDesplegable = !this.elementsObj[idRouteTitle].esDesplegable;
-                this.elementsObj[idRouteTitle] = !this.elementsObj[idRouteTitle];
-                if(this.elementsObj[idRouteTitle] === true){
-                    let flecha = document.getElementById("flechaSimulacion").style.transform = "rotate(90deg)";
-                }else if(this.elementsObj[idRouteTitle] === false){
-                    let flecha = document.getElementById("flechaSimulacion").style.transform = "rotate(0deg)";
-                }
-            },
-        }
-    })
+    },
+    components: { SideBar }
+})
 </script>
 
 <template>
     <section class="row">
         <!--<div><CarouselPag /></div>-->
-        <div>
-            <NavbarPag/> 
-        </div>
-        <section class="left-menu-panel col-4">
-            <article class="menu-routes-row-container">
+        <SideBar/>
+        <!-- <section class="left-menu-panel col-4">
+            <article class="menu-routes-row-container"> -->
                 <!-- <p v-for="element in Object.entries(elementsObj)" :key="`${element[0]}_key`"> 
                     <span :id="`${element[0]}_key`" @click="(e) => abrirMenu(e)"> 
                         <span class="menu-routes-element">
@@ -57,12 +58,12 @@
                         </ul>
                     </span>
                 </p> -->
-                <li class="list__item mb-3" :id="`Inicio_key`" @click="(e) => {}">
+                <!-- <li class="list__item mb-3" :id="`Inicio_key`" @click="(e) => {}">
                     <div class="list__button">
                         <img src="~/assets/home.svg" class="img-icono">
                         <NuxtLink to="/operador/menu-operador">Inicio</NuxtLink>
                     </div>
-                </li>
+                </li> -->
                 <!--<p :id="`Inicio_key`" @click="(e) => {}" class="container">
                     <span class="menu-routes-element row ">
                         <NuxtLink class="col-md-auto" to="/operador/ejemplo">
@@ -76,7 +77,7 @@
                             <img src="~/assets/profile.svg" width="24" height="24" class="col-md-auto img-icono"><NuxtLink class="col-md-auto" to="/operador/">Perfil</NuxtLink>
                         </span>
                 </p> -->
-                <li class="list__item mb-3 " :id="`Perfil_key`" @click="(e) => {}">
+                <!-- <li class="list__item mb-3 " :id="`Perfil_key`" @click="(e) => {}">
                     <div class="list__button">    
                         <img src="~/assets/profile.svg" class="img-icono">
                         <NuxtLink to="/operador/">Perfil</NuxtLink>
@@ -94,7 +95,7 @@
                         <p><NuxtLink to="/operador/equipos-en-ejecucion">Ver simulación</NuxtLink></p>
                         <p><NuxtLink to="/operador/lista-ejecuciones">Historial de simulaciones</NuxtLink></p>
                     </ul>
-                </li>
+                </li> -->
                 <!--<p :id="`Simulacion_key`" @click="(e) => abrirMenu(e)" class="container row" >
                     <img src="~/assets/stats.svg" width="24" height="24"class="img-icono col-md-auto">
                     <span class="menu-routes-element col-md-auto">Simulación</span>
@@ -113,7 +114,7 @@
                         <NuxtLink to="/operador/">Contacto</NuxtLink>
                     </span>
                 </p>-->
-                <li class="list__item mb-3" :id="`Contacto_key`" @click="(e) => {}">
+                <!-- <li class="list__item mb-3" :id="`Contacto_key`" @click="(e) => {}">
                     <div class="list__button">
                         <img src="~/assets/message.svg" class="img-icono">
                         <NuxtLink to="/operador/ejemplo">Contacto</NuxtLink>
@@ -121,7 +122,7 @@
                 </li>
 
             </article>
-        </section>
+        </section> -->
         <section  class = "rigth-menu-panel col-6">
             <article>
                 <p>

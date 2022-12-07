@@ -8,7 +8,7 @@ export default {
 <template>
   <section>
     <div class="common-header-top-logo">
-      <img class="common-anid-logo" src="~/assets/img/anid-logo.png" alt="conicyt-logo" height="100" weight="100">
+      <img class="common-anid-logo" src="~/assets/img/anid-logo.png" alt="conicyt-logo" height="50" weight="100">
       <div class="common-header-top-logo-text">
         <p>FONDEF</p>
         <p>Fondo de Fomento al Desarrollo</p>
@@ -47,10 +47,6 @@ export default {
     font-size: 1rem;
   }
 
-  .common-anid-logo { 
-    max-height: 120px; 
-    max-width: 120px;
-  }
 
 
   /* TOP LEFT PART OF THE HEADER */

@@ -4,6 +4,7 @@
     import PageHeader from '~/components/PageHeader.vue'
     import NavbarPag from '~/components/NavbarPag.vue'
     import CustomButton from '../../components/CustomButton.vue';
+    import SideBar from '../../components/SideBar/SideBar.vue';
     import {mapState} from "vuex";
     import { 
         setListasDesplegables, 
@@ -12,7 +13,7 @@
 
     export default Vue.extend({
         name: "EquiposEnEjecucion",
-        components: { PageHeader },
+        components: { PageHeader, SideBar },
         data() {
             return {
             equiposDisponibles:[],
@@ -92,12 +93,7 @@
 
 <template>
     <section>
-        <div>
-            <NavbarPag/> 
-        </div>
-        <!-- <div class="container-header">
-            <PageHeader/>
-        </div> -->
+        <SideBar/>
         <div class= "container">
             <div v-if="paginaRenderizar === 'listaEquiposEjecutando'" id="verSimulacionSelection">
                 <div class="row">
@@ -120,7 +116,7 @@
                         <tr scope="row" :key="`eventKey_${rowIndex}`">
                             <td> Genesis66 </td>
                             <td> Lluvia de 2010 </td>
-                            <td> <NuxtLink :to="'resumen'"> <CustomButton :text="'Ver'" :custombcolor="'#68da85'" :customhcolor="'#3c724a'"/> </NuxtLink> </td>
+                            <td> <NuxtLink :to="'ver-simulacion'"> <CustomButton :text="'Ver'" :custombcolor="'#68da85'" :customhcolor="'#3c724a'"/> </NuxtLink> </td>
                             </tr>
                         </tbody>
                         </table>
