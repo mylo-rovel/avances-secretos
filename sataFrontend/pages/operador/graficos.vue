@@ -9,6 +9,7 @@
     import '@fortawesome/fontawesome-svg-core/styles.css';
     import GraficoLinea from '~/components/GraficoLinea.vue';
     import SideBar from '../../components/SideBar/SideBar.vue';
+    import { infoGeneral,listaColores } from '../../utils/charts_utils'
     library.autoAddCss = false;
     library.add(fas);
     Vue.config.productionTip = false;
@@ -32,10 +33,7 @@
           nombresPag: [
             "Graficos Sensores Pluviometricos",
             "Graficos Sensores Temperatura",
-            "Graficos Sensores Presión Valvula",
             "Graficos Sensores Humedad",
-            "Graficos Sensores Presion Atmosferica",
-            "Graficos Sensores Caudal"
           ],
           idSimEjecutada:""
         };
@@ -50,6 +48,44 @@
           const graphIndex = urlParams.get('g');
           this.nombrePag = this.nombresPag[graphIndex];
           this.idSimEjecutada = urlParams.get('id');
+          let datasets = [];
+          this.chartDataProps.labelsL = infoGeneral['listaSensores'][0]['labels']
+          for (let value of infoGeneral['listaSensores']) {
+            const listaMedidas = value["datos"];
+            const nombreSensor = value["nombre"];
+            if(graphIndex == 0 && value['tipo'] == 'Pluviometro'){
+              datasets.push(
+                {
+                  label: nombreSensor,
+                  backgroundColor: listaColores[Math.floor(Math.random() * listaColores.length)],
+                  fill: true,
+                  data: listaMedidas
+                }
+              );
+            }
+            if(graphIndex == 1  && value['tipo'] == 'Temperatura' ){
+              datasets.push(
+                {
+                  label: nombreSensor,
+                  backgroundColor: listaColores[Math.floor(Math.random() * listaColores.length)],
+                  fill: true,
+                  data: listaMedidas
+                }
+              );
+            }
+            if(graphIndex == 2  && value['tipo'] == 'Humedad'){
+              datasets.push(
+                {
+                  label: nombreSensor,
+                  backgroundColor: listaColores[Math.floor(Math.random() * listaColores.length)],
+                  fill: true,
+                  data: listaMedidas
+                }
+              );
+            }
+            
+          }
+          this.chartDataProps.dataL = datasets;
       },
       methods: {
         getRequestConfig() {
@@ -58,25 +94,6 @@
                 headers: {'authorization': window.localStorage.getItem("token")}
             };
         },
-        getMedidasProperties (rawMedidasArr) {   
-          return rawMedidasArr.reduce((acc, medidaObj) => {
-            acc.seniales.push(medidaObj['senial']);
-            acc.fisicos.push(medidaObj['fisico']);
-            acc.timestamps.push(medidaObj['timestamp']);
-            return acc;
-          }, {seniales: [], fisicos: [], timestamps: []})
-        },
-        async getMasDatosEjecucion(){
-          const rawReponse = await fetch(`${this.urlApi}/ejecuciones/ultimos`).catch(err => err);
-          if (rawReponse instanceof Error) {
-            console.log("❌ Error al pedir datos del grafico ❌");
-            return;
-          }
-          const {fisicos, timestamps} = this.getMedidasProperties(await rawReponse.json());
-          this.chartDataProps.x = timestamps;
-          this.chartDataProps.y = fisicos;
-          console.log(fisicos, timestamps);
-        }
       }
     })
 
@@ -94,7 +111,7 @@
           </div>
           <h3>{{this.nombrePag}}</h3>
           <div class="grafico my-4" style="max-width: 100%;">
-              <GraficoLinea/>
+              <GraficoLinea :chartDataProps="chartDataProps" />
           </div>
         </div>
     </div>

@@ -1,11 +1,9 @@
 <script lang="js">
-
-    import Vue from 'vue'
-    import PageHeader from '~/components/PageHeader.vue'
-    import NavbarPag from '~/components/NavbarPag.vue'
+    import Vue from 'vue';
     import CustomButton from '../../components/CustomButton.vue';
     import SideBar from '../../components/SideBar/SideBar.vue';
     import {mapState} from "vuex";
+    import { BPagination } from 'bootstrap-vue';
     import { 
         setListasDesplegables, 
         getListasUsarDatosGrafico, 
@@ -13,7 +11,7 @@
 
     export default Vue.extend({
         name: "EquiposEnEjecucion",
-        components: { PageHeader, SideBar },
+        components: { BPagination, SideBar },
         data() {
             return {
             equiposDisponibles:[],
@@ -24,7 +22,9 @@
 
             objetoDatosEjecucion: {},
             cantidadValoresGrafico:0,
-            
+            porPantalla:7,
+            pagActual:1,
+            listaEnEjecucion:[]
             };
         },
         computed: mapState(["urlApi"]),
@@ -67,25 +67,6 @@
                         'authorization': tokenUsuario,
                         }
                 };
-
-                const rawReponse = await fetch(`${this.urlApi}/ejecuciones/valoresgrafico`, POST_config).catch(err => err);
-                if (rawReponse instanceof Error) {
-                    alert("❌ Error al pedir gráfico ❌");
-                    console.log(rawReponse)
-                    return;
-                }
-                const objetoRespuesta = await rawReponse.json();
-                if (objetoRespuesta === "Indices incorrectos") {
-                    alert("❌ INDICES INCOHERENTES ❌");
-                    console.log(rawReponse)
-                    return;
-                }
-                const valoresCaudalArr = objetoRespuesta["caudalTiempo_"];
-                this.objetoDatosEjecucion = getListasUsarDatosGrafico(valoresCaudalArr);
-                this.cantidadValoresGrafico = objetoRespuesta["listaSize_"];
-                this.paginaRenderizar = "graficoEjecucion";
-                console.log(`CANTIDAD VALORES GRAFICO ${objetoRespuesta["listaSize_"]}`);
-                console.log(`CANTIDAD INICIAL PEDIDA ${this.objetoDatosEjecucion["caudales"].length}`);
             },
         }
     })
@@ -121,6 +102,13 @@
                         </tbody>
                         </table>
                     </div>
+                    <b-pagination ref="pagination" class="justify-content-end" v-model="pagActual"
+                    :total-rows="this.listaEnEjecucion.length"
+                    :per-page="porPantalla"
+                    first-number
+                    last-number></b-pagination>
+             
+                    
 
                     <!-- <form>
                         <div class="my-4 form-group row">

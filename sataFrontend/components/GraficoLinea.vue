@@ -24,8 +24,8 @@
     computed: {
       dynChartData() {
         const chartData = getDefaultCharDataModel();
-        //chartData.labels = this.chartDataProps.labelsL;
-        //chartData.datasets[0].data = this.chartDataProps.dataL;
+        chartData.labels = this.chartDataProps.labelsL;
+        chartData.datasets = this.chartDataProps.dataL;
         return chartData;
       },
       dynChartOptions() {

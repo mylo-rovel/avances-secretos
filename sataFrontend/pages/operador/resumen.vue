@@ -8,6 +8,7 @@
     import { fas } from "@fortawesome/free-solid-svg-icons/";
     import '@fortawesome/fontawesome-svg-core/styles.css';
     import SideBar from '../../components/SideBar/SideBar.vue';
+    import { infoGeneral } from '../../utils/charts_utils'
     library.autoAddCss = false;
     library.add(fas);
     Vue.config.productionTip = false;
@@ -34,7 +35,11 @@
           aguaPromedio:0,
           tempPromedio:0,
           humedadPromedio:0,
-          idSimEjecutada:""
+          idSimEjecutada:"",
+          cantSensoresHum: 0,
+          cantSensoresPluv: 0,
+          cantSensoresTemp:0,
+
         };
       },
       
@@ -45,6 +50,39 @@
           const queryString = window.location.search;
           const urlParams = new URLSearchParams(queryString);
           this.idSimEjecutada = urlParams.get('id');
+          this.nombreEquipo = infoGeneral['nombreEquipo'];
+          this.nombreSimulacion = infoGeneral['nombreSimulacion'];
+          this.duracionSimulacion = infoGeneral['duracionSimulacion'];
+          this.listaSensores = infoGeneral['listaSensores'];
+          let aguaPromedioParcial = 0;
+          let tempPromedioParcial = 0;
+          let humPromedioParcial = 0;
+          let cantSensoresPluvParcial = 0;
+          let cantSensoresTempParcial = 0;
+          let cantSensoresHumParcial = 0;
+          for (let value of this.listaSensores) {
+            const element = value["datos"];
+            if(value['tipo'] == 'Pluviometro'){
+              aguaPromedioParcial += (element.reduce((a, b) => a + b, 0) / element.length);
+              cantSensoresPluvParcial +=1;
+            }
+            if(value['tipo'] == 'Temperatura'){
+              tempPromedioParcial += (element.reduce((a, b) => a + b, 0) / element.length);
+              cantSensoresTempParcial +=1;
+            }
+            if(value['tipo'] == 'Humedad'){
+              humPromedioParcial += (element.reduce((a, b) => a + b, 0) / element.length);
+              cantSensoresHumParcial +=1;
+            }
+          }
+          this.aguaPromedio = (aguaPromedioParcial/cantSensoresPluvParcial).toFixed(1);
+          this.tempPromedio = (tempPromedioParcial/cantSensoresTempParcial).toFixed(0);
+          this.humedadPromedio = (humPromedioParcial/cantSensoresHumParcial).toFixed(0);
+          this.cantSensoresPluv = cantSensoresPluvParcial;
+          this.cantSensoresTemp = cantSensoresTempParcial;
+          this.cantSensoresHum = cantSensoresHumParcial;
+          
+          
       },
       methods: {
         getRequestConfig() {
@@ -82,7 +120,7 @@
             <h3>Información General</h3>
             <h4>Nombre Equipo: {{this.nombreEquipo}}</h4>  
             <h4>Nombre Simulación: {{this.nombreSimulacion}} </h4>
-            <h4>Cantidad Sensores: {{this.listaSensores.lenght}}</h4>
+            <h4>Cantidad Sensores: {{this.listaSensores.length}}</h4>
             <h4>Duración de la Simulación: {{this.duracionSimulacion}}</h4>
         </div>
       </div>
@@ -90,7 +128,7 @@
         <NuxtLink class="data-card my-4" :to="'graficos?id='+this.idSimEjecutada+'&g=0'" > 
             <h3>{{this.aguaPromedio + ' mm'}}</h3>
             <h4>Agua Caída Promedio</h4>
-            <h4>{{2 + ' Sensores'}}</h4>
+            <h4>{{this.cantSensoresPluv + ' Sensor(es)'}}</h4>
             <span class="link-text">
               Ver Gráficos 
               <font-awesome-icon icon="arrow-right" />
@@ -99,16 +137,16 @@
         <NuxtLink class="data-card my-4" :to="'graficos?id='+this.idSimEjecutada+'&g=1'" >
             <h3>{{this.tempPromedio + '°C'}}</h3>
             <h4>Temperatura Promedio</h4>
-            <h4>{{3 + ' Sensores'}}</h4>
+            <h4>{{this.cantSensoresTemp + ' Sensor(es)'}}</h4>
             <span class="link-text">
               Ver Gráficos 
               <font-awesome-icon icon="arrow-right" />
             </span>
         </NuxtLink>
-        <NuxtLink class="data-card my-4" :to="'graficos?id='+this.idSimEjecutada+'&g=3'" >
+        <NuxtLink class="data-card my-4" :to="'graficos?id='+this.idSimEjecutada+'&g=2'" >
             <h3>{{this.humedadPromedio + '%'}}</h3>
             <h4>Humedad Promedio</h4>
-            <h4>2 sensores</h4>
+            <h4>{{this.cantSensoresHum + ' Sensor(es)'}}</h4>
             <span class="link-text">
               Ver Gráficos 
               <font-awesome-icon icon="arrow-right" />
