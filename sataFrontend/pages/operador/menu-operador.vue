@@ -40,7 +40,7 @@
 </script>
 
 <template>
-    <section class="row">
+    <section class="container">
         <!--<div><CarouselPag /></div>-->
         <SideBar/>
         <!-- <section class="left-menu-panel col-4">
