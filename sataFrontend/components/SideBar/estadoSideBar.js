@@ -16,17 +16,17 @@ export const listaTitulosMenu = [
         "to":"menu-operador"
     },
     {
-        "nombre":"Registrar Simulacion",
+        "nombre":"Registrar Simulación",
         "icono":"pencil",
         "to":"registrar-simulacion"
     }, 
     {
-        "nombre": "Iniciar Simulacion",
+        "nombre": "Iniciar Simulación",
         "icono": "play",
         "to":"iniciar-simulacion"
     },
     {
-        "nombre":"Equipos en Ejecucion",
+        "nombre":"Equipos en Ejecución",
         "icono":"eye",
         "to":"equipos-en-ejecucion"
     },

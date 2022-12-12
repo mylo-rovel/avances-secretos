@@ -210,7 +210,7 @@
                                 </NuxtLink>
                             </div>                            
                             <div class="col-12 contenido-botones my-4">
-                                <CustomButton  :text="'INICIAR'" :custombcolor="'#4482ee'" customhcolor="#264a88" @click.native="sendAddSimulacion"/>   
+                                <CustomButton  :text="'REGISTRAR'" :custombcolor="'#4482ee'" customhcolor="#264a88" @click.native="sendAddSimulacion"/>   
                             </div>
 
                             
