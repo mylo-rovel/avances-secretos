@@ -81,3 +81,27 @@ export const getListasUsarDatosGrafico = (valoresArr) => {
 		return acc
 	}, {"caudales":[],"horas":[]})
 }
+
+export const listaSimuEnEjecucion = [
+	{
+		"idSimulacion_":1,
+		"nombreEquipo_":"Genesis66",
+		"nombreSimulacion_":"Lluvia de 1994"
+	},
+	{
+		"idSimulacion_":2,
+		"nombreEquipo_":"Sigma35",
+		"nombreSimulacion_":"Lluvia de 2010"
+	},
+	{
+		"idSimulacion_":3,
+		"nombreEquipo_":"simulador12",
+		"nombreSimulacion_":"Lluvia de 2006"
+	},
+	{
+		"idSimulacion_":4,
+		"nombreEquipo_":"Tin2151171",
+		"nombreSimulacion_":"Lluvia de 1994"
+	},
+]
+  

@@ -7,7 +7,8 @@
     import { 
         setListasDesplegables, 
         getListasUsarDatosGrafico, 
-        checkIfUserShouldBeHere } from '~/utils/utility_functions';
+        checkIfUserShouldBeHere,
+        listaSimuEnEjecucion } from '~/utils/utility_functions';
 
     export default Vue.extend({
         name: "EquiposEnEjecucion",
@@ -31,44 +32,18 @@
         
         async mounted(){
             checkIfUserShouldBeHere(["OPERADOR"]);
-
             // OBTENER LA LISTA DE LOS EQUIPOS QUE ESTÁN EJECUTANDO UNA
-            const JWTtoken = window.localStorage.getItem("token");
-            const get_config = { 
-                method: 'get', 
-                headers: {'authorization': JWTtoken}
-            };
-            const url_to_fetch = `${this.urlApi}/equipos/trabajando`;
-            const rawdata = await fetch(url_to_fetch, get_config).catch(err => err);
-            if (rawdata instanceof Error) {
-                alert("❌ Error al enviar solicitud ❌");
-                return;
-            }
-            const objetoRespuesta = await rawdata.json();                    
-            this.equiposDisponibles = objetoRespuesta["equipoAcotado_"].reduce((acc, equipoAcotado) => {
-                return [...acc, equipoAcotado["nombre_"]];
-            }, []);
+            this.listaEnEjecucion = listaSimuEnEjecucion;
         },
+        methods: {
+        getRequestConfig() {
+          return { 
+                method: 'get',
+                headers: {'authorization': window.localStorage.getItem("token")}
+            };
+        },
+      }
 
-        methods:{
-            async sendVerSimulacionReq(e){
-                e.preventDefault();
-                const POST_body = {
-                    "nombreEquipo": this.equipoSeleccionado,
-                    "indiceInicial": 0,
-                    "indiceFinal": 50
-                }
-                const tokenUsuario = window.localStorage.getItem("token");
-                const POST_config = {
-                    'method': 'POST',
-                    'body': JSON.stringify(POST_body),
-                    'headers':{
-                        'Content-Type':'application/json',
-                        'authorization': tokenUsuario,
-                        }
-                };
-            },
-        }
     })
 </script>
 
@@ -94,11 +69,11 @@
                             <th scope="row">Ver en Vivo</th>
                         </thead>
                         <tbody id="tBody-simulaciones">
-                        <tr scope="row" :key="`eventKey_${rowIndex}`">
-                            <td> Genesis66 </td>
-                            <td> Lluvia de 2010 </td>
+                        <tr scope="row" v-for="(elementObj, rowIndex) in this.listaEnEjecucion.slice((this.pagActual-1) * this.porPantalla,(this.pagActual) * this.porPantalla)" :key="`eventKey_${rowIndex}`">
+                            <td> {{elementObj["nombreEquipo_"]}} </td>
+                            <td> {{elementObj["nombreSimulacion_"]}} </td>
                             <td> <NuxtLink :to="'ver-simulacion'"> <CustomButton :text="'Ver'" :custombcolor="'#68da85'" :customhcolor="'#3c724a'"/> </NuxtLink> </td>
-                            </tr>
+                        </tr>
                         </tbody>
                         </table>
                     </div>
@@ -107,43 +82,8 @@
                     :per-page="porPantalla"
                     first-number
                     last-number></b-pagination>
-             
-                    
-
-                    <!-- <form>
-                        <div class="my-4 form-group row">
-                            <label for="simulador" class="col-sm-4 col-form-label ">Seleccione el equipo</label>
-                            <div class="col-sm-6">
-                                <select id="select_equipoSimulacion" v-model="equipoSeleccionado" class="form-select" aria-label="Equipo" required>
-                                    <option v-for="i in equiposDisponibles" :value="i">
-                                        {{i}}
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                       
-                        <div class = "row my-4 button-ribbon">
-                          
-                            <div class= "col-12 contenido-botones my-4 button-container">
-                                <NuxtLink :to="'menu-operador'">
-                                    <CustomButton :text="'Cancelar'" :custombcolor="'#c70039'" :customhcolor="'#7c0225'" style="width: 6em" />
-                                </NuxtLink>
-                            </div>                            
-                            <div class="col-12 contenido-botones my-4 button-container">
-                                
-                                <CustomButton :text="'Enviar'" :custombcolor="'#025cfa'" :customhcolor="'#012f7e'" style="width: 6em" @click.native="sendVerSimulacionReq"  />
-                            </div>
-                        </div>
-                    </form> -->
                 </div>
             </div>
-            <!-- <div v-if="paginaRenderizar === 'graficoEjecucion'" id="verSimulacionGrafico">
-               <GraficoEjecucion  
-                :objetoDatosEjecucion="objetoDatosEjecucion"
-                :equipoSeleccionado="equipoSeleccionado"
-                :cantidadValoresGrafico="cantidadValoresGrafico"
-                /> 
-            </div> -->
         </div>
     </section>
 </template>

@@ -35,7 +35,14 @@
             "Graficos Sensores Temperatura",
             "Graficos Sensores Humedad",
           ],
-          idSimEjecutada:""
+          tiposSensores:[
+            "Pluviometro",
+            "Temperatura",
+            "Humedad"
+          ],
+          idSimEjecutada:"",
+          nombreEquipo: "",
+          nombreSimulacion:"",
         };
       },
       
@@ -49,11 +56,15 @@
           this.nombrePag = this.nombresPag[graphIndex];
           this.idSimEjecutada = urlParams.get('id');
           let datasets = [];
-          this.chartDataProps.labelsL = infoGeneral['listaSensores'][0]['labels']
+          
+          this.listaSensores = infoGeneral['listaSensores'];
+          this.nombreEquipo = infoGeneral['nombreEquipo'];
+          this.nombreSimulacion = infoGeneral['nombreSimulacion'];
           for (let value of infoGeneral['listaSensores']) {
             const listaMedidas = value["datos"];
             const nombreSensor = value["nombre"];
-            if(graphIndex == 0 && value['tipo'] == 'Pluviometro'){
+            if(this.tiposSensores[graphIndex] == value['tipo']){
+              this.chartDataProps.labelsL = value['labels'];
               datasets.push(
                 {
                   label: nombreSensor,
@@ -63,27 +74,6 @@
                 }
               );
             }
-            if(graphIndex == 1  && value['tipo'] == 'Temperatura' ){
-              datasets.push(
-                {
-                  label: nombreSensor,
-                  backgroundColor: listaColores[Math.floor(Math.random() * listaColores.length)],
-                  fill: true,
-                  data: listaMedidas
-                }
-              );
-            }
-            if(graphIndex == 2  && value['tipo'] == 'Humedad'){
-              datasets.push(
-                {
-                  label: nombreSensor,
-                  backgroundColor: listaColores[Math.floor(Math.random() * listaColores.length)],
-                  fill: true,
-                  data: listaMedidas
-                }
-              );
-            }
-            
           }
           this.chartDataProps.dataL = datasets;
       },
@@ -94,6 +84,29 @@
                 headers: {'authorization': window.localStorage.getItem("token")}
             };
         },
+        exportarCSV(){
+          let dataAExportar = [];
+          const queryString = window.location.search;
+          const urlParams = new URLSearchParams(queryString);
+          const graphIndex = urlParams.get('g');
+          for(let sensor of this.listaSensores){
+            if(this.tiposSensores[graphIndex] == sensor['tipo']){
+              for (let i = 0; i < sensor['datos'].length; i++) {
+                const element = [sensor['nombre'],sensor['datos'][i],sensor['labels'][i]];
+                dataAExportar.push(element);
+              }
+            }
+          }
+          let csvContent = "data:text/csv;charset=utf-8," + dataAExportar.map(e => e.join(",")).join("\n");
+          let encodedUri = encodeURI(csvContent);
+          let link = document.createElement("a");
+          link.setAttribute("href", encodedUri);
+          link.setAttribute("download", this.nombreSimulacion + this.nombreEquipo + + ".csv");
+          document.body.appendChild(link);
+          link.click();
+          console.log(dataAExportar);
+        }
+        
       }
     })
 
@@ -109,6 +122,11 @@
               <CustomButton :text="'Volver'" :custombcolor="'#7f8a99'" :customhcolor="'#575c63'" style="width: 6em" />
             </NuxtLink>     
           </div>
+          <div class="container">
+            <div class="my-4">
+              <CustomButton :text="'Descargar CSV'" :custombcolor="'#1c94e4fd'" :customhcolor="'#13659b'" @click.native="exportarCSV()"/>
+            </div>
+          </div>
           <h3>{{this.nombrePag}}</h3>
           <div class="grafico my-4" style="max-width: 100%;">
               <GraficoLinea :chartDataProps="chartDataProps" />
@@ -121,10 +139,10 @@
 
 
 <style>
-.test{
-  background-color: #7f8a99;
-  color:#575c63;
-}
+  .test{
+    background-color: #7f8a99;
+    color:#575c63;
+  }
 
   .grafico thead {
     color: white;

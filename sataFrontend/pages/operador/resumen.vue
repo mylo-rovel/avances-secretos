@@ -90,7 +90,26 @@
                 method: 'get',
                 headers: {'authorization': window.localStorage.getItem("token")}
             };
-        }}
+        },
+        exportarCSV(){
+          let dataAExportar = [];
+          for(let sensor of this.listaSensores){
+            for (let i = 0; i < sensor['datos'].length; i++) {
+              const element = [sensor['nombre'],sensor['datos'][i],sensor['labels'][i]];
+              dataAExportar.push(element);
+            }
+          }
+          let csvContent = "data:text/csv;charset=utf-8," + dataAExportar.map(e => e.join(",")).join("\n");
+          let encodedUri = encodeURI(csvContent);
+          let link = document.createElement("a");
+          link.setAttribute("href", encodedUri);
+          link.setAttribute("download", this.nombreSimulacion + this.nombreEquipo + ".csv");
+          document.body.appendChild(link);
+          link.click();
+          console.log(dataAExportar);
+        }
+      }
+
     })
 
 </script>
@@ -110,7 +129,7 @@
     </div>
     <div class="container">
       <div class="my-4">
-        <CustomButton :text="'Descargar CSV'" :custombcolor="'#1c94e4fd'" :customhcolor="'#13659b'"/>
+        <CustomButton :text="'Descargar CSV'" :custombcolor="'#1c94e4fd'" :customhcolor="'#13659b'" @click.native="exportarCSV()"/>
         <CustomButton :text="'Descargar PDF'" :custombcolor="'#1c94e4fd'" :customhcolor="'#13659b'"/>
       </div>
     </div>
