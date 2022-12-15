@@ -25,18 +25,16 @@ export default {
         <h4 class="title" v-if="collapsed">
             SATA
         </h4>
-        <div class="title" v-else>
-            <h2 >Sistema</h2>
-            <h2>Alerta</h2>
-            <h2>Temprana</h2>
-            <h2>Aluvional</h2>
-        </div>
-       
-
         <div class="routes">
+            <div class="title" v-if="!collapsed">
+                <h2 >Sistema</h2>
+                <h2>Alerta</h2>
+                <h2>Temprana</h2>
+                <h2>Aluvional</h2>
+            </div>
             <div v-for="(elementObj, rowIndex) in listaTitulosMenu" :key="`eventKey_${rowIndex}`">
                 <NuxtLink :class= "collapsed ? 'route-text-collapsed' : 'route-text-expanded' " :to='elementObj["to"]'>
-                    <font-awesome-icon style="align-items: center;" :icon='elementObj["icono"]' />
+                    <font-awesome-icon style="align-self: center;" :icon='elementObj["icono"]' />
                     <div style="margin-left: 20px;" v-if="!collapsed">
                         {{elementObj["nombre"]}}
                     </div>
@@ -77,7 +75,7 @@ export default {
         position: relative;
         user-select: none;
         transition: 0.1s ease;
-        margin-bottom: 4rem;
+        margin-top: 2rem;
         padding: 0.2rem 0.5rem;
         overflow:hidden;
         border-radius: 5px;

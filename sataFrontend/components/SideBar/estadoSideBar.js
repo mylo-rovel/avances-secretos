@@ -26,6 +26,11 @@ export const listaTitulosMenu = [
         "to":"iniciar-simulacion"
     },
     {
+        "nombre": "Lista de Equipos",
+        "icono": "list",
+        "to":"lista-equipos"
+    },
+    {
         "nombre":"Equipos en Ejecución",
         "icono":"eye",
         "to":"equipos-en-ejecucion"
