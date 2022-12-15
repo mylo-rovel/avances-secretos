@@ -10,6 +10,15 @@
     export default Vue.extend({
         name: "IniciarSimulacion",
         components: { SideBar},
+        head(){
+            return{
+                title: "Iniciar Simulación - Sistema de Alerta Temprana Aluvional",
+                meta: [{
+                    name: "iniciarSimulacion",
+                    content: "Iniciar simulación"
+                }],
+            }
+        },
         data() {
             return {
                 "tituloPag": "Sistema de Alerta Temprana Aluvional",

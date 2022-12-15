@@ -10,12 +10,11 @@
       components: { BPagination, SideBar },
       head(){
         return{
-          title: "Simulaciones - Sistema de Alerta Temprana Aluvional",
+          title: "Simulaciones Ejecutadas - Sistema de Alerta Temprana Aluvional",
           meta: [{
-            name: "simulaciones",
-            content: "Simulaciones"
+            name: "simulacionesEjecutadas",
+            content: "Simulaciones ejecutadas"
           }]
-          //src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous",
           }
         },
       data() {

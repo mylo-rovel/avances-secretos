@@ -14,6 +14,15 @@
     export default Vue.extend({
         name: "ListaEquipos",
         components: { BPagination, SideBar },
+        head(){
+            return{
+                title: "Listado Equipos - Sistema de Alerta Temprana Aluvional",
+                meta: [{
+                    name: "listadoEquipos",
+                    content: "Listado equipos"
+                }],
+            }
+        },
         data() {
             return {
             equiposDisponibles:[],

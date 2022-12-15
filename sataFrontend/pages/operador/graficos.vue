@@ -18,7 +18,7 @@
       components: { FontAwesomeIcon, GraficoLinea, CustomButton, SideBar },
       head(){
         return{
-          title: "Simulaciones - Sistema de Alerta Temprana Aluvional",
+          title: "Graficos - Sistema de Alerta Temprana Aluvional",
           meta: [{
             name: "graficos",
             content: "Graficos",       
@@ -122,12 +122,13 @@
               <CustomButton :text="'Volver'" :custombcolor="'#7f8a99'" :customhcolor="'#575c63'" style="width: 6em" />
             </NuxtLink>     
           </div>
+          
+          <h3 style="border-bottom: 1mm solid #2162ad;">{{this.nombrePag}}</h3>
           <div class="container">
             <div class="my-4">
               <CustomButton :text="'Descargar CSV'" :custombcolor="'#1c94e4fd'" :customhcolor="'#13659b'" @click.native="exportarCSV()"/>
             </div>
           </div>
-          <h3>{{this.nombrePag}}</h3>
           <div class="grafico my-4" style="max-width: 100%;">
               <GraficoLinea :chartDataProps="chartDataProps" />
           </div>

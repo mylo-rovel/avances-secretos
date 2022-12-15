@@ -8,6 +8,15 @@
 
     export default Vue.extend({
     name: "MenuOperador",
+    head(){
+            return{
+                title: "Menu Principal - Sistema de Alerta Temprana Aluvional",
+                meta: [{
+                    name: "menuPrincipal",
+                    content: "Menu principal"
+                }],
+            }
+        },
     data() {
         return {
             elementsObj: {

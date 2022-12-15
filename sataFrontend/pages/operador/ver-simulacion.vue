@@ -17,6 +17,15 @@
     export default Vue.extend({
         name: "VerSimulacion",
         components: { SideBar, GraficoDona, GraficoLinea },
+        head(){
+            return{
+                title: "Ver Simualción - Sistema de Alerta Temprana Aluvional",
+                meta: [{
+                    name: "verSimulacion",
+                    content: "Ver simulación"
+                }],
+            }
+        },
         data() {
             return {
             equiposDisponibles:[],
@@ -148,7 +157,7 @@
                         <CustomButton :text="'Volver'" :custombcolor="'#7f8a99'" :customhcolor="'#575c63'" style="width: 6em" />
                     </NuxtLink>     
                     </div>
-                    <h2>Ver Simulacion</h2>
+                    <h2>Ver Simulación</h2>
                 </div>
                 <div class="row" style="justify-content:center;border-top: 1mm solid #2162ad;">
                     <h3 style="margin-top: 10px;">Temperatura</h3>

@@ -33,7 +33,7 @@ export default {
                 <h2>Aluvional</h2>
             </div>
             <div v-for="(elementObj, rowIndex) in listaTitulosMenu" :key="`eventKey_${rowIndex}`">
-                <NuxtLink :class= "collapsed ? 'route-text-collapsed' : 'route-text-expanded' " :to='elementObj["to"]'>
+                <NuxtLink :class= "collapsed ? 'route-text-collapsed' : 'route-text-expanded'" :to='elementObj["to"]'>
                     <font-awesome-icon style="align-self: center;" :icon='elementObj["icono"]' />
                     <div style="margin-left: 20px;" v-if="!collapsed">
                         {{elementObj["nombre"]}}
@@ -85,6 +85,12 @@ export default {
         color: white;
         background-color: rgb(66, 160, 204);
     }
+
+    .nuxt-link-active{
+        color: white;
+        background-color: rgb(66, 110, 204);
+    }
+
 
     .route-text-expanded:hover{
         color: white;

@@ -13,6 +13,15 @@
     export default Vue.extend({
         name: "EquiposEnEjecucion",
         components: { BPagination, SideBar },
+        head(){
+            return{
+                title: "Equipos en Ejecución - Sistema de Alerta Temprana Aluvional",
+                meta: [{
+                    name: "equiposEnEjecucion",
+                    content: "Equipos en ejecución"
+                }],
+            }
+        },
         data() {
             return {
             equiposDisponibles:[],
