@@ -58,7 +58,7 @@
                         <CustomButton :text="'Volver'" :custombcolor="'#7f8a99'" :customhcolor="'#575c63'" style="width: 6em" />
                     </NuxtLink>     
                     </div>
-                    <h2>Equipos en Ejecución</h2>
+                    <h3 style="border-bottom: 1mm solid #2162ad;">Equipos en Ejecución</h3>
                 </div>
                 <div class="row">
                     <div class="my-4 table-responsive table-container">

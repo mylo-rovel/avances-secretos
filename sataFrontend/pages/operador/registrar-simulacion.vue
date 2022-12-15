@@ -150,7 +150,7 @@
         <div class= "container">
             <div>
                 <div class="row my-4">
-                    <h4>Registrar Simulación</h4>
+                    <h3 style="border-bottom: 1mm solid #2162ad;">Registrar Simulación</h3>
                 </div>
 
                 <!-- PARTE TABLA GENERADORA DE EVENTOS -->

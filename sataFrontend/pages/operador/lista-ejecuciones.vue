@@ -102,7 +102,7 @@
                 <CustomButton :text="'Volver'" :custombcolor="'#7f8a99'" :customhcolor="'#575c63'" style="width: 6em" />
               </NuxtLink>     
             </div>
-            <h4>Simulaciones Ejecutadas</h4>       
+            <h3 style="border-bottom: 1mm solid #2162ad;">Simulaciones Ejecutadas</h3>       
           </div>
           <div class="row my-3">
             <h5>Filtro</h5>       

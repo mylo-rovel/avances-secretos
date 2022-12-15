@@ -101,7 +101,7 @@
             <div class= "container">
                 <div>
                     <div class="row my-4">
-                        <h3>Iniciar Simulación</h3>
+                        <h3 style="border-bottom: 1mm solid #2162ad;">Iniciar Simulación</h3>
                     </div>
                     <div class="row">
                         <form id="form_iniciarSimulacion" method="post">
