@@ -82,6 +82,45 @@ export const getListasUsarDatosGrafico = (valoresArr) => {
 	}, {"caudales":[],"horas":[]})
 }
 
+export const listaEquipos = [
+	{
+		"idEquipo_":1,
+		"nombreEquipo_":"Genesis66",
+		"descripcion":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+		"sensorPluv":2,
+		"sensorHum":1,
+		"sensorTemp":1,
+		"cantValv":1
+	},
+	{
+		"idEquipo_":2,
+		"nombreEquipo_":"Genesis44",
+		"descripcion":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+		"sensorPluv":1,
+		"sensorHum":1,
+		"sensorTemp":1,
+		"cantValv":2
+	},
+	{
+		"idEquipo_":3,
+		"nombreEquipo_":"Genesis55",
+		"descripcion":"",
+		"sensorPluv":1,
+		"sensorHum":1,
+		"sensorTemp":1,
+		"cantValv":1
+	},
+	{
+		"idEquipo_":4,
+		"nombreEquipo_":"Sigma22",
+		"descripcion":"",
+		"sensorPluv":1,
+		"sensorHum":2,
+		"sensorTemp":1,
+		"cantValv":1
+	},
+]
+
 export const listaSimuEnEjecucion = [
 	{
 		"idSimulacion_":1,
