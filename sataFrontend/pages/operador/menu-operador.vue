@@ -41,97 +41,15 @@
 
 <template>
     <section class="container">
-        <!--<div><CarouselPag /></div>-->
         <SideBar/>
-        <!-- <section class="left-menu-panel col-4">
-            <article class="menu-routes-row-container"> -->
-                <!-- <p v-for="element in Object.entries(elementsObj)" :key="`${element[0]}_key`"> 
-                    <span :id="`${element[0]}_key`" @click="(e) => abrirMenu(e)"> 
-                        <span class="menu-routes-element">
-                            {{element[0]}}
-                        </span>
-                        <ul v-if="element[1].esDesplegable && element[0]==='Simulación'" class="submenu-routes-menu">
-                            <p ><NuxtLink to="/operador/">Registrar simulacion</NuxtLink></p>
-                            <p ><NuxtLink to="/operador/">Iniciar simulacion</NuxtLink></p>
-                            <p ><NuxtLink to="/operador/">Ver simulacion</NuxtLink></p>
-                            <p ><NuxtLink to="/operador/">Historial de simulaciones</NuxtLink></p>
-                        </ul>
-                    </span>
-                </p> -->
-                <!-- <li class="list__item mb-3" :id="`Inicio_key`" @click="(e) => {}">
-                    <div class="list__button">
-                        <img src="~/assets/home.svg" class="img-icono">
-                        <NuxtLink to="/operador/menu-operador">Inicio</NuxtLink>
-                    </div>
-                </li> -->
-                <!--<p :id="`Inicio_key`" @click="(e) => {}" class="container">
-                    <span class="menu-routes-element row ">
-                        <NuxtLink class="col-md-auto" to="/operador/ejemplo">
-                            <img src="~/assets/home.svg" width="24" height="24"class=" img-icono col-md-auto">
-                            <span class="menu-routes-element col-md-auto">Inicio</span>
-                        </NuxtLink>
-                    </span>
-                </p>
-                <p :id="`Perfil_key`" @click="(e) => {}" class="container row">
-                        <span class="menu-routes-element ">    
-                            <img src="~/assets/profile.svg" width="24" height="24" class="col-md-auto img-icono"><NuxtLink class="col-md-auto" to="/operador/">Perfil</NuxtLink>
-                        </span>
-                </p> -->
-                <!-- <li class="list__item mb-3 " :id="`Perfil_key`" @click="(e) => {}">
-                    <div class="list__button">    
-                        <img src="~/assets/profile.svg" class="img-icono">
-                        <NuxtLink to="/operador/">Perfil</NuxtLink>
-                    </div>
-                </li>
-                 <li class="list__item  mb-3" :id="`Simulacion_key`" @click="(e) => abrirMenu(e)" >
-                    <div class="list__button ">
-                        <img src="~/assets/stats.svg" class="img-icono">
-                        <span class="menu-routes-element">Simulación</span>
-                        <img id= "flechaSimulacion" src="~/assets/arrow.svg" class="list__arrow">
-                    </div>
-                    <ul v-if="elementsObj['Simulacion']" class=" submenu-routes-menu">
-                        <p class="list__inside"><NuxtLink to="/operador/registrar-simulacion">Registrar simulación</NuxtLink></p>
-                        <p ><NuxtLink to="/operador/iniciar-simulacion">Iniciar simulación</NuxtLink></p>
-                        <p><NuxtLink to="/operador/equipos-en-ejecucion">Ver simulación</NuxtLink></p>
-                        <p><NuxtLink to="/operador/lista-ejecuciones">Historial de simulaciones</NuxtLink></p>
-                    </ul>
-                </li> -->
-                <!--<p :id="`Simulacion_key`" @click="(e) => abrirMenu(e)" class="container row" >
-                    <img src="~/assets/stats.svg" width="24" height="24"class="img-icono col-md-auto">
-                    <span class="menu-routes-element col-md-auto">Simulación</span>
-                    <img id= "flechaSimulacion" src="~/assets/arrow.svg" width="24" height="24"class=" col-md-auto flecha flecha-inv">
-
-                    <ul v-if="elementsObj['Simulacion']" class="submenu-routes-menu">
-                        <p ><NuxtLink to="/operador/registrar-simulacion">Registrar simulación</NuxtLink></p>
-                        <p ><NuxtLink to="/operador/iniciar-simulacion">Iniciar simulación</NuxtLink></p>
-                        <p ><NuxtLink to="/operador/ver-simulacion">Ver simulación</NuxtLink></p>
-                        <p ><NuxtLink to="/operador/lista-simulaciones">Historial de simulaciones</NuxtLink></p>
-                    </ul>
-                </p>
-                <p :id="`Contacto_key`" @click="(e) => {}" class="container row">
-                    <span class="menu-routes-element col-md-auto">
-                        <img src="~/assets/message.svg" width="24" height="24" class="col-md-auto img-icono ">
-                        <NuxtLink to="/operador/">Contacto</NuxtLink>
-                    </span>
-                </p>-->
-                <!-- <li class="list__item mb-3" :id="`Contacto_key`" @click="(e) => {}">
-                    <div class="list__button">
-                        <img src="~/assets/message.svg" class="img-icono">
-                        <NuxtLink to="/operador/ejemplo">Contacto</NuxtLink>
-                    </div>
-                </li>
-
-            </article>
-        </section> -->
         <section  class = "rigth-menu-panel col-6">
             <article>
                 <p>
                     <h3 class="my-4">Bienvenidos</h3>
                     <h3 class= "my-4">Sistema de Alerta Temprana Aluvional</h3>
                 </p>
-                <p>
 
-                </p>
+                <img class="img" src="~/assets/img/maqueta.png" alt="conicyt-logo"/>
             </article>
         </section>
     </section>
@@ -252,6 +170,11 @@
     }
     #flechaSimulacion {
         transition: all 0.1s;
+    }
+    .img { 
+        max-width: fit-content;
+        border-top: 1mm solid #2162ad;
+        padding: 0.75em;
     }
 
 </style>
