@@ -8,7 +8,7 @@
     import { fas } from "@fortawesome/free-solid-svg-icons/";
     import '@fortawesome/fontawesome-svg-core/styles.css';
     import SideBar from '../../components/SideBar/SideBar.vue';
-    import { infoGeneral } from '../../utils/charts_utils'
+    import { infoGeneral } from '../../utils/charts_utils';
     library.autoAddCss = false;
     library.add(fas);
     Vue.config.productionTip = false;
@@ -80,8 +80,6 @@
           this.cantSensoresPluv = cantSensoresPluvParcial;
           this.cantSensoresTemp = cantSensoresTempParcial;
           this.cantSensoresHum = cantSensoresHumParcial;
-          
-          
       },
       methods: {
         getRequestConfig() {
@@ -106,6 +104,9 @@
           document.body.appendChild(link);
           link.click();
           console.log(dataAExportar);
+        },
+        exportarPDF(){          
+          
         }
       }
 
@@ -114,7 +115,7 @@
 </script>
 
 <template>
-  <section id="vistaResumen">
+  <section ref="vistaResumen">
     <SideBar/>
     <div class="container">
       <div class="row">
@@ -129,7 +130,7 @@
     <div class="container">
       <div class="my-4">
         <CustomButton :text="'Descargar CSV'" :custombcolor="'#1c94e4fd'" :customhcolor="'#13659b'" @click.native="exportarCSV()"/>
-        <CustomButton :text="'Descargar PDF'" :custombcolor="'#1c94e4fd'" :customhcolor="'#13659b'"/>
+        <CustomButton :text="'Descargar PDF'" :custombcolor="'#1c94e4fd'" :customhcolor="'#13659b'" @click.native="exportarPDF()"/>
       </div>
     </div>
     <div class="container">

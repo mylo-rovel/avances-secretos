@@ -31,9 +31,9 @@
           chartDataProps:{labelsL:[], dataL:[], optionsL:[]},
           nombrePag: "",
           nombresPag: [
-            "Graficos Sensores Pluviometricos",
-            "Graficos Sensores Temperatura",
-            "Graficos Sensores Humedad",
+            "Gráficos Sensores Pluviométricos",
+            "Gráficos Sensores Temperatura",
+            "Gráficos Sensores Humedad",
           ],
           tiposSensores:[
             "Pluviometro",

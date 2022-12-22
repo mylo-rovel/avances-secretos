@@ -27,7 +27,6 @@
         //chartData.labels = this.chartDataProps.labelsL;
         chartData.datasets[0].data = this.chartDataProps.dataL;
         chartData.datasets[0].backgroundColor = ["#FF6384","#bbbbbb"];
-        console.log(chartData);
         return chartData;
       },
       dynChartOptions() {

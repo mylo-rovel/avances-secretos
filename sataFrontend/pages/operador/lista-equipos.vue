@@ -83,7 +83,7 @@
                             <th scope="row" colspan="3">Cantidad de sensores</th>
                         </tr>
                         <tr>
-                            <th scope="row">Pluviometro</th>
+                            <th scope="row">Pluviómetro</th>
                             <th scope="row">Temperatura</th>
                             <th scope="row">Humedad</th>
                         </tr>

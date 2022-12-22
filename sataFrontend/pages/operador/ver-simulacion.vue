@@ -12,7 +12,7 @@
         setListasDesplegables, 
         getListasUsarDatosGrafico, 
         checkIfUserShouldBeHere } from '~/utils/utility_functions';
-    import { infoGeneral , listaColores } from '../../utils/charts_utils';
+    import { infoGeneral , listaColores, infoVivo } from '../../utils/charts_utils';
 
     export default Vue.extend({
         name: "VerSimulacion",
@@ -30,7 +30,7 @@
             return {
             equiposDisponibles:[],
             equipoSeleccionado: "",
-            
+            intervalo: "",
             paginaRenderizar: "listaEquiposEjecutando",
             // paginaRenderizar: "graficoEjecucion",
 
@@ -46,10 +46,9 @@
             };
         },
         computed: mapState(["urlApi"]),
-        
         async mounted(){
             checkIfUserShouldBeHere(["OPERADOR"]);
-            this.listaSensores = infoGeneral['listaSensores'];
+            this.listaSensores = infoVivo['listaSensores'];
             const listaSensoresPluvParcial = [];
             const listaSensoresTempParcial = [];
             const listaSensoresHumParcial = [];
@@ -102,9 +101,11 @@
             this.chartDataPropsHum.dataL = datasetsHum;
             this.chartDataPropsPluv.dataL = datasetsPluv;
             this.chartDataPropsTemp.dataL = datasetsTemp;
-            
+            this.intervalo = setInterval(this.getMasDatosEjecucion, 1000);
         },
-
+        async beforeUnmount(){
+            clearInterval(this.intervalo);
+        },
         methods:{
             async sendVerSimulacionReq(e){
                 e.preventDefault();
@@ -142,6 +143,29 @@
                 console.log(`CANTIDAD VALORES GRAFICO ${objetoRespuesta["listaSize_"]}`);
                 console.log(`CANTIDAD INICIAL PEDIDA ${this.objetoDatosEjecucion["caudales"].length}`);
             },
+            async getMasDatosEjecucion(){
+                for (let i = 0; i < this.listaSensoresPluv.length; i++) {
+                    const element = this.listaSensoresPluv[i];
+                    element.datos.shift();
+                    const randomPluv = Math.floor(Math.random() * (5 - 2) + 2);
+                    element.datos.push(randomPluv);
+                    this.listaSensoresPluv[i] = element;
+                }
+                for (let i = 0; i < this.listaSensoresHum.length; i++) {
+                    const element = this.listaSensoresHum[i];
+                    element.datos.shift();
+                    const randomHum = Math.floor(Math.random() * (83 - 78) + 78);
+                    element.datos.push(randomHum);
+                }
+                for (let i = 0; i < this.listaSensoresTemp.length; i++) {
+                    const element = this.listaSensoresTemp[i];
+                    element.datos.shift(); 
+                    const randomTemp = Math.floor(Math.random() * (22 - 18) + 18);
+                    element.datos.push(randomTemp);
+                }
+
+                console.log(this.listaSensores)
+            },
         }
     })
 </script>
@@ -169,10 +193,10 @@
                     </div>
                 </div>
                 <div class="row" style="justify-content:center;border-top: 1mm solid #2162ad;">
-                    <h3 style="margin-top: 10px;">Pluviometro</h3>
+                    <h3 style="margin-top: 10px;">Pluviómetro</h3>
                     <div class="row" style="justify-content:center;">
                         <div class="grafico my-4" style="max-width: 80%;"> 
-                            <h4>Sensores Pluviometros en el tiempo</h4>
+                            <h4>Sensores Pluviómetros en el tiempo</h4>
                             <GraficoLinea :chartDataProps="chartDataPropsPluv" />
                         </div>
                     </div>
