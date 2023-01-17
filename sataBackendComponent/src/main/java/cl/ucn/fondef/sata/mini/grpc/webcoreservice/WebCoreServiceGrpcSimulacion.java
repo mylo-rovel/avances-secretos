@@ -3,9 +3,7 @@ package cl.ucn.fondef.sata.mini.grpc.webcoreservice;
 import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoEquipo;
 import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoSimulacion;
 import cl.ucn.fondef.sata.mini.grpc.Domain;
-import cl.ucn.fondef.sata.mini.model.Ejecucion;
-import cl.ucn.fondef.sata.mini.model.Equipo;
-import cl.ucn.fondef.sata.mini.model.Simulacion;
+import cl.ucn.fondef.sata.mini.model.*;
 import cl.ucn.fondef.sata.mini.utilities.InformacionBoard;
 import io.grpc.stub.StreamObserver;
 import lombok.Getter;
@@ -44,10 +42,11 @@ public class WebCoreServiceGrpcSimulacion {
                 .setRut(idElementoConRutReq.getRut()).setId(simulacionGuardada.getIdEquipo()).build();
         return coreDaoEquipo.getEquipo(idEquipoConRut);
     }
-    private void attachDataToSimulacionReply (Domain.SimulacionReply.Builder simulacionRetornar,
-                                              Simulacion simulacionGuardada,
-                                              Equipo equipoAsociado,
-                                              List<Domain.Secuencia> secuenciasGrpcEnviar) {
+
+    private void attachDataToSimulacionReply(Domain.SimulacionReply.Builder simulacionRetornar,
+                                             Simulacion simulacionGuardada,
+                                             Equipo equipoAsociado,
+                                             List<Domain.Secuencia> secuenciasGrpcEnviar) {
         simulacionRetornar.setId(simulacionGuardada.getId())
                 .setNombre(simulacionGuardada.getNombre())
                 .setDescripcion(simulacionGuardada.getDescripcion())
@@ -63,16 +62,20 @@ public class WebCoreServiceGrpcSimulacion {
      * @param responseObserver    the response observer
      * @return the domain . simulacion reply
      */
-    public Domain.SimulacionReply getSimulacion(Domain.IdElementoConRutReq idElementoConRutReq, StreamObserver<Domain.SimulacionReply> responseObserver){
+    public Domain.SimulacionReply getSimulacion(Domain.IdElementoConRutReq idElementoConRutReq, StreamObserver<Domain.SimulacionReply> responseObserver) {
         // idElementoConRutReq => id (long) de la simulacion y rut del operador
         Domain.IdElementoReq idSimulacionReq = Domain.IdElementoReq.newBuilder().setId(idElementoConRutReq.getId()).build();
         Simulacion simulacionGuardada = coreDaoSimulacion.getSimulacionDB(idSimulacionReq);
-        if (simulacionGuardada == null) { return Domain.SimulacionReply.newBuilder().build(); }
+        if (simulacionGuardada == null) {
+            return Domain.SimulacionReply.newBuilder().build();
+        }
 
         List<Domain.Secuencia> secuenciasGrpcEnviar = coreDaoSimulacion.getGrpcSecuenciasSimulacion(idSimulacionReq);
         Equipo equipoAsociado = this.getEquipoAsociadoASimulacion(idElementoConRutReq, simulacionGuardada);
 
-        if (secuenciasGrpcEnviar == null || equipoAsociado == null) { return Domain.SimulacionReply.newBuilder().build(); }
+        if (secuenciasGrpcEnviar == null || equipoAsociado == null) {
+            return Domain.SimulacionReply.newBuilder().build();
+        }
 
         Domain.SimulacionReply.Builder simulacionRetornar = Domain.SimulacionReply.newBuilder();
         this.attachDataToSimulacionReply(simulacionRetornar, simulacionGuardada, equipoAsociado, secuenciasGrpcEnviar);
@@ -88,10 +91,12 @@ public class WebCoreServiceGrpcSimulacion {
      * @param responseObserver the response observer
      * @return the domain . simulaciones reply
      */
-    public Domain.SimulacionesReply getSimulaciones(Domain.RutEntityReq rutEntityReq, StreamObserver<Domain.SimulacionesReply> responseObserver){
+    public Domain.SimulacionesReply getSimulaciones(Domain.RutEntityReq rutEntityReq, StreamObserver<Domain.SimulacionesReply> responseObserver) {
         List<Simulacion> listaSimuGuardadas = coreDaoSimulacion.getSimulaciones();
         Domain.SimulacionesReply.Builder listaRetornar = Domain.SimulacionesReply.newBuilder();
-        if (listaSimuGuardadas == null) { return listaRetornar.build(); }
+        if (listaSimuGuardadas == null) {
+            return listaRetornar.build();
+        }
 
         for (Simulacion simulacion : listaSimuGuardadas) {
             Domain.IdElementoConRutReq idEquipoConRut = Domain.IdElementoConRutReq.newBuilder().setRut(rutEntityReq.getRut()).setId(simulacion.getIdEquipo()).build();
@@ -117,7 +122,7 @@ public class WebCoreServiceGrpcSimulacion {
      * @return the domain . mensaje reply
      */
 // rpc addSecuencias(SecuenciasReq)  returns (MensajeReply){}
-    public Domain.MensajeReply addSimulacion(Domain.SimulacionReq simulacionReq, StreamObserver<Domain.MensajeReply> responseObserver){
+    public Domain.MensajeReply addSimulacion(Domain.SimulacionReq simulacionReq, StreamObserver<Domain.MensajeReply> responseObserver) {
         String mensajeResultado = coreDaoSimulacion.addSimulacion(simulacionReq);
         return Domain.MensajeReply.newBuilder().setMensajeTexto(mensajeResultado).build();
     }
@@ -127,7 +132,7 @@ public class WebCoreServiceGrpcSimulacion {
      * Gets ejecucion.
      *
      * @param idEjecucionConRutReq the id elemento con rut req
-     * @param responseObserver    the response observer
+     * @param responseObserver     the response observer
      * @return the ejecucion
      */
 //    rpc getEjecucion(IdElementoReq) returns (EjecucionReply){}
@@ -135,20 +140,20 @@ public class WebCoreServiceGrpcSimulacion {
         Domain.IdElementoReq idEjecucionReq = Domain.IdElementoReq.newBuilder().setId(idEjecucionConRutReq.getId()).build();
         Ejecucion ejecucionDB = coreDaoSimulacion.getEjecucionDB(idEjecucionReq);
         if (ejecucionDB == null) {
-            log.warn("Ejecucion de id "+idEjecucionReq.getId()+" no existe");
+            log.warn("Ejecucion de id " + idEjecucionReq.getId() + " no existe");
             return Domain.EjecucionReply.newBuilder().build();
         }
 
         Domain.IdElementoReq idSimulacionReq = Domain.IdElementoReq.newBuilder().setId(ejecucionDB.getIdSimulacion()).build();
         Simulacion simulacionDB = coreDaoSimulacion.getSimulacionDB(idSimulacionReq);
         if (simulacionDB == null) {
-            log.warn("Simulacion de id "+idSimulacionReq.getId()+" no existe");
+            log.warn("Simulacion de id " + idSimulacionReq.getId() + " no existe");
             return Domain.EjecucionReply.newBuilder().build();
         }
 
         List<Domain.Secuencia> listaSecuenciasGrpc = coreDaoSimulacion.getGrpcSecuenciasSimulacion(idSimulacionReq);
         Domain.IdElementoConRutReq idSimulacionConRutReq = Domain.IdElementoConRutReq.newBuilder()
-                .setId( simulacionDB.getIdEquipo() ).setRut( idEjecucionConRutReq.getRut() ).build();
+                .setId(simulacionDB.getIdEquipo()).setRut(idEjecucionConRutReq.getRut()).build();
         Equipo equipoDB = coreDaoEquipo.getEquipo(idSimulacionConRutReq);
 
         return Domain.EjecucionReply.newBuilder()
@@ -164,16 +169,15 @@ public class WebCoreServiceGrpcSimulacion {
     }
 
 
-
     private void attachDataToEjecucionesAcotadas(Domain.EjecucionesReply.Builder listaAcotadaEjecuciones,
-                                           List<Ejecucion> listaEjecuciones, Domain.RutEntityReq rutEntityReq) {
+                                                 List<Ejecucion> listaEjecuciones, Domain.RutEntityReq rutEntityReq) {
         for (int i = 0; i < listaEjecuciones.size(); i++) {
             Domain.IdElementoReq idSimulacionReq = Domain.IdElementoReq.newBuilder()
-                    .setId( listaEjecuciones.get(i).getIdSimulacion() ).build();
+                    .setId(listaEjecuciones.get(i).getIdSimulacion()).build();
             Simulacion simulacionEjecutada = coreDaoSimulacion.getSimulacionDB(idSimulacionReq);
 
             Domain.IdElementoConRutReq idSimulacionConRutReq = Domain.IdElementoConRutReq.newBuilder()
-                    .setId( simulacionEjecutada.getIdEquipo() ).setRut( rutEntityReq.getRut() ).build();
+                    .setId(simulacionEjecutada.getIdEquipo()).setRut(rutEntityReq.getRut()).build();
             Equipo equipoUsado = coreDaoEquipo.getEquipo(idSimulacionConRutReq);
 
             Domain.EjecucionAcotada ejecucionAcotada = Domain.EjecucionAcotada.newBuilder()
@@ -211,7 +215,7 @@ public class WebCoreServiceGrpcSimulacion {
      * @param responseObserver   the response observer
      * @return the domain . mensaje reply
      */
-    public Domain.MensajeReply startSimulacion(Domain.StartSimulacionReq startSimulacionReq, StreamObserver<Domain.MensajeReply> responseObserver){
+    public Domain.MensajeReply startSimulacion(Domain.StartSimulacionReq startSimulacionReq, StreamObserver<Domain.MensajeReply> responseObserver) {
         // le pasamos el hashmap ejecucionesEquipo a la funcion para que podamos recuperar de la estructura
         // el objeto de informacion de cierto equipo en segun del nombre enviado por el frontend
         // el objeto que hace las llamads grpc hacia cierta placa que corre un servidor grpc está dentro
@@ -222,9 +226,11 @@ public class WebCoreServiceGrpcSimulacion {
 
     // SI PUDIMOS ENVIAR ESTA PETICIÓN DESDE EL RASPBERRY, ENTONCES EL EQUIPO YA ESTÁ
     // DENTRO DEL HASHMAP DE EQUIPOS ENCENDIDOS
-    public Domain.EmptyReq sendLecturasSensores(Domain.LecturaSensoresReq lecturaSensoresReq, StreamObserver<Domain.EmptyReq> responseObserver){
+    public Domain.EmptyReq sendLecturasSensores(Domain.LecturaSensoresReq lecturaSensoresReq, StreamObserver<Domain.EmptyReq> responseObserver) {
         // SEGURIDAD POR SI EL SERVER SE REINICIA MIENTRAS QUE LOS EQUIPOS ESTÁN VIVOS
-        if (!(ejecucionesEquipo.containsKey(lecturaSensoresReq.getNombreEquipo()))){ return Domain.EmptyReq.newBuilder().build(); }
+        if (!(ejecucionesEquipo.containsKey(lecturaSensoresReq.getNombreEquipo()))) {
+            return Domain.EmptyReq.newBuilder().build();
+        }
 
         log.info("LEYENDO SENSORES DEL EQUIPO " + lecturaSensoresReq.getNombreEquipo() + ": "
                 + lecturaSensoresReq.getCaudal() + "#" + lecturaSensoresReq.getHora());
@@ -248,7 +254,7 @@ public class WebCoreServiceGrpcSimulacion {
     // responde esas peticiones (es el encargado de la comunicacion CentralCore <--> Raspberry)
     // "ejecucionesEquipo" es una estructura que guarda los equipos que están encendidos en forma de
     // objetos de tipo "InformacionBoard" (disponible en el paquete 'utilities'
-    public Domain.SaludoBoardReply sendMensajeEncendido(Domain.SaludoBoardReq saludoBoardReq, StreamObserver<Domain.SaludoBoardReply> responseObserver){
+    public Domain.SaludoBoardReply sendMensajeEncendido(Domain.SaludoBoardReq saludoBoardReq, StreamObserver<Domain.SaludoBoardReply> responseObserver) {
         //aqui se deberia actualizar el HashMap para que ahora tenga el nombre del equipo y un nuevo InformacionBoard
         //que sera construido en esta funcion
         // BUSCAMOS EL EQUIPO PARA QUE EL RASPBERRY OBTENGA LA CONFIGURACION GUARDADA EN LA DB
@@ -261,7 +267,7 @@ public class WebCoreServiceGrpcSimulacion {
         log.info("equipo = " + equipoGuardadoDB);
 
         // SI NO ESTA DENTRO DEL HASHMAP DE EQUIPOS DISPONIBLES, LO AGREGAMOS
-        if (!(ejecucionesEquipo.containsKey(saludoBoardReq.getNombreEquipo()))){
+        if (!(ejecucionesEquipo.containsKey(saludoBoardReq.getNombreEquipo()))) {
             InformacionBoard informacionBoardNueva = new InformacionBoard(saludoBoardReq.getDireccionIpEquipo());
             ejecucionesEquipo.put(equipoGuardadoDB.getNombre(), informacionBoardNueva);
         }
@@ -278,7 +284,7 @@ public class WebCoreServiceGrpcSimulacion {
         Domain.EquipoEntity.Builder equipoEnte = webCoreServiceGrpcEquipo.getEquipoEntityBuilder(equipoGuardadoDB);
         Domain.IdElementoReq idEquipoReq = Domain.IdElementoReq.newBuilder().setId(equipoGuardadoDB.getId()).build();
         webCoreServiceGrpcEquipo.addPlacasToEquipo(equipoEnte, idEquipoReq);
-        webCoreServiceGrpcEquipo.addComponentesYPinesToEquipo(equipoEnte,idEquipoReq);
+        webCoreServiceGrpcEquipo.addComponentesYPinesToEquipo(equipoEnte, idEquipoReq);
 
         return Domain.SaludoBoardReply.newBuilder()
                 .setRespuestaSaludo("EXITO EN LA OPERACION")
@@ -289,8 +295,10 @@ public class WebCoreServiceGrpcSimulacion {
     // SI PUDIMOS ENVIAR ESTA PETICIÓN DESDE EL RASPBERRY, ENTONCES EL EQUIPO YA ESTÁ
     // DENTRO DEL HASHMAP DE EQUIPOS ENCENDIDOS
     public Domain.EmptyReq sendMensajeTerminoEjecucion(Domain.AvisoTerminoEjecucionReq avisoTerminoEjecucionReq,
-                                                       StreamObserver<Domain.EmptyReq> responseObserver){
-        if (!(ejecucionesEquipo.containsKey(avisoTerminoEjecucionReq.getNombreEquipo()))){ return Domain.EmptyReq.newBuilder().build(); }
+                                                       StreamObserver<Domain.EmptyReq> responseObserver) {
+        if (!(ejecucionesEquipo.containsKey(avisoTerminoEjecucionReq.getNombreEquipo()))) {
+            return Domain.EmptyReq.newBuilder().build();
+        }
         InformacionBoard equipoEjecutandose = ejecucionesEquipo.get(avisoTerminoEjecucionReq.getNombreEquipo());
         equipoEjecutandose.setAguaCaidaActual(avisoTerminoEjecucionReq.getAguaCaida());
         equipoEjecutandose.setEstaEjecutandose(false);
@@ -307,13 +315,13 @@ public class WebCoreServiceGrpcSimulacion {
      * @param streamObserver the stream observer
      * @return the domain . equipos entity reply
      */
-    public Domain.EquiposEntityReply getEquiposTrabajando(Domain.EmptyReq emptyReq, StreamObserver<Domain.EquiposEntityReply> streamObserver){
+    public Domain.EquiposEntityReply getEquiposTrabajando(Domain.EmptyReq emptyReq, StreamObserver<Domain.EquiposEntityReply> streamObserver) {
 
         //construir un equiposEntityReply, utilizar la funcion setKey de ejecucionesEquipo para retornar todos los nombres de los
         //equipos del hashmap
         Domain.EquiposEntityReply.Builder equiposEnviar = Domain.EquiposEntityReply.newBuilder();
-        for(String nombreEquipo : ejecucionesEquipo.keySet()){
-            if(ejecucionesEquipo.get(nombreEquipo).isEstaEjecutandose()){
+        for (String nombreEquipo : ejecucionesEquipo.keySet()) {
+            if (ejecucionesEquipo.get(nombreEquipo).isEstaEjecutandose()) {
                 Domain.EquipoEntityAcotado equipoAgregar = Domain.EquipoEntityAcotado.newBuilder()
                         .setNombre(nombreEquipo)
                         .build();
@@ -324,16 +332,17 @@ public class WebCoreServiceGrpcSimulacion {
     }
 
 
-
-    public Domain.LecturaSensoresReply getValoresGrafico(Domain.EstadoGraficoUsuarioReq estadoGraficoUsuarioReq, StreamObserver<Domain.LecturaSensoresReply> responseObserver){
+    public Domain.LecturaSensoresReply getValoresGrafico(Domain.EstadoGraficoUsuarioReq estadoGraficoUsuarioReq, StreamObserver<Domain.LecturaSensoresReply> responseObserver) {
         String nombreEquipo = estadoGraficoUsuarioReq.getNombreEquipo();
 
-        if (!(ejecucionesEquipo.containsKey(nombreEquipo))){ return Domain.LecturaSensoresReply.newBuilder().build(); }
+        if (!(ejecucionesEquipo.containsKey(nombreEquipo))) {
+            return Domain.LecturaSensoresReply.newBuilder().build();
+        }
         InformacionBoard equipoEjecutandose = ejecucionesEquipo.get(nombreEquipo);
-        List<String> listaValoresGrafico  = equipoEjecutandose.getValoresGrafico();
+        List<String> listaValoresGrafico = equipoEjecutandose.getValoresGrafico();
 
         int indiceInicial = (estadoGraficoUsuarioReq.getIndiceInicial() > listaValoresGrafico.size())
-                ? listaValoresGrafico.size()-1 : estadoGraficoUsuarioReq.getIndiceInicial();
+                ? listaValoresGrafico.size() - 1 : estadoGraficoUsuarioReq.getIndiceInicial();
 
         int indiceFinal = (estadoGraficoUsuarioReq.getIndiceFinal() > listaValoresGrafico.size())
                 ? listaValoresGrafico.size() : estadoGraficoUsuarioReq.getIndiceFinal();
@@ -342,5 +351,87 @@ public class WebCoreServiceGrpcSimulacion {
                 .addAllCaudalTiempo(listaValoresGrafico.subList(indiceInicial, indiceFinal))
                 .setListaSize(listaValoresGrafico.size()).build();
     }
+    // Nuevas funciones para Capstone 2022-2
+    //1 Obtener Lista de sensores y cantidad de los mismos que tiene el equipo.
 
-}
+    public Domain.SensoresEquipoEntityReply getSensores(Domain.SensoresEquipoEntityReq sensoresEquipoEntityReq, StreamObserver<Domain.SensoresEquipoEntityReply> responseObserver) {
+        List<Componente> listaSensores = coreDaoEquipo.getSensoresDB(sensoresEquipoEntityReq.getIdEquipo());
+        Domain.SensoresEquipoEntityReply.Builder reply = Domain.SensoresEquipoEntityReply.newBuilder();
+        listaSensores.forEach(componente -> reply.addNombreSensor(componente.getNombre()));
+        listaSensores.forEach(componente -> reply.addTipoSensor(componente.getTipo()));
+        reply.setIdEquipo(sensoresEquipoEntityReq.getIdEquipo());
+        return reply.build();
+    }
+    public Domain.SimulacionesEquipoMesReply getSimulacionesEjecutadas(Domain.DatosSimulacionesEquipoMesReq datosSimulacionesEquipoMesReq, StreamObserver<Domain.SimulacionesEquipoMesReply> responseObserver) {
+        List<Simulacion> listaSimulacionesMes = coreDaoSimulacion.getSimulacionesEjectuadasDB(datosSimulacionesEquipoMesReq.getIdEquipo(), datosSimulacionesEquipoMesReq.getMes());
+        Domain.SimulacionesEquipoMesReply.Builder reply = Domain.SimulacionesEquipoMesReply.newBuilder();
+        listaSimulacionesMes.forEach(componente -> {
+            Domain.Simulacione simulacione = Domain.Simulacione.newBuilder().setIdEquipo(datosSimulacionesEquipoMesReq.getIdEquipo()).setMes(datosSimulacionesEquipoMesReq.getMes()).build();
+            reply.addSimulacione(simulacione);
+        });
+        return reply.build();
+
+    }
+    public Domain.ResumenSimulacionReply getDatosResumen(Domain.DatosSimulacionReq datosSimulacionReq, StreamObserver<Domain.ResumenSimulacionReply> responseObserver) {
+        List<Simulacion> listaDatosResumen = coreDaoSimulacion.getDatosResumenDB(datosSimulacionReq.getIdSimulacion(), datosSimulacionReq.getCaudal(), datosSimulacionReq.getTemperatura(),datosSimulacionReq.getPluviometro(),  datosSimulacionReq.getPresion(),  datosSimulacionReq.getHumedad());
+        Domain.ResumenSimulacionReply.Builder reply = Domain.ResumenSimulacionReply.newBuilder();
+        reply.setIdSimulacion(datosSimulacionReq.getIdSimulacion());
+        reply.setCaudal(datosSimulacionReq.getCaudal());
+        reply.setTemperatura(datosSimulacionReq.getTemperatura());
+        reply.setPresion(datosSimulacionReq.getPresion());
+        reply.setHumedad(datosSimulacionReq.getHumedad());
+        return reply.build();
+    }
+    private String getMedida (Simulacion mediciones){
+        return mediciones.getCaudal()+"#"+ mediciones.getTemperatura()+"#"+mediciones.getPluviometro()+"#"+mediciones.getPresion()+"#"+mediciones.getHumedad();
+    }
+    public Domain.MedidasEjecucionSensorReply getMedidas (Domain.DatosEjecucionSensorReq datosEjecucionSensorReq, StreamObserver<Domain.MedidasEjecucionSensorReply> responseObserver) {
+        List<Simulacion> listaMedidas = coreDaoSimulacion.getMedidasDB ((int) datosEjecucionSensorReq.getIdEjecucion(), (int) datosEjecucionSensorReq.getIdSensor());
+        Domain.MedidasEjecucionSensorReply.Builder reply = Domain.MedidasEjecucionSensorReply.newBuilder();
+        listaMedidas.forEach(componente -> {
+            Domain.Medida medidas = Domain.Medida.newBuilder().setIdEjecucion(datosEjecucionSensorReq.getIdEjecucion()).setSensores (this.getMedida(componente)).build();
+            reply.addMedida(medidas);
+        });
+        return reply.build();
+    }
+
+
+    public Domain.UltimaMedidaReply getUltimaMedida(Domain.DatosEjecucionUltimaMedidaReq datosEjecucionUltimaMedidaReq, StreamObserver<Domain.UltimaMedidaReply> responseObserver) {
+        var UltimaMedida = coreDaoSimulacion.getUltimaMedidasDB ((int) datosEjecucionUltimaMedidaReq.getIdEjecucion(), (int) datosEjecucionUltimaMedidaReq.getIdSensor());
+        Domain.UltimaMedidaReply.Builder reply = Domain.UltimaMedidaReply.newBuilder();
+        reply.setIdSensor(datosEjecucionUltimaMedidaReq.getIdSensor());
+        reply.setIdEjecucion(datosEjecucionUltimaMedidaReq.getIdEjecucion());
+        reply.setUltMedida(UltimaMedida);
+        return reply.build();
+    }
+
+
+    public Domain.UltimasMedidasEjecucionReply getUltimasMedidas(Domain.UltimosDatosEjecucionReq ultimosDatosEjecucionReq, StreamObserver<Domain.UltimasMedidasEjecucionReply> responseObserver) {
+        List<Simulacion> listaUltimasMedidas = coreDaoSimulacion.getUltimasMedidasDB((int) ultimosDatosEjecucionReq.getIdEjecucion(), (int) ultimosDatosEjecucionReq.getIdSensor(), ultimosDatosEjecucionReq.getTimeStamp(), ultimosDatosEjecucionReq.getLastSecond(), ultimosDatosEjecucionReq.getLastEntrities());
+        Domain.UltimasMedidasEjecucionReply.Builder reply = Domain.UltimasMedidasEjecucionReply.newBuilder();
+        reply.setIdEjecucion(ultimosDatosEjecucionReq.getIdEjecucion());
+        reply.setIdSensor(ultimosDatosEjecucionReq.getIdSensor());
+        reply.setTimeStamp(ultimosDatosEjecucionReq.getTimeStamp());
+        reply.setLastSecond(ultimosDatosEjecucionReq.getLastSecond());
+        reply.setLastEntrities(ultimosDatosEjecucionReq.getLastEntrities());
+        listaUltimasMedidas.forEach(simulacion -> {
+            var ultimasmedidas = simulacion.getCaudal()+"#"+ simulacion.getTemperatura()+"#"+simulacion.getPluviometro()+"#"+simulacion.getPresion()+"#"+simulacion.getHumedad();
+            reply.addUltMedidas(ultimasmedidas);
+        });
+        return reply.build();
+    }
+
+    public Domain.UmbralesSensorReply getUmbralesPorSensor(Domain.UmbralesSensorReq umbralesSensorReq, StreamObserver<Domain.UmbralesSensorReply> responseObserver) {
+        List<Componente> listaUmbralesPorSensor = coreDaoEquipo.getUmbralesPorSensorDB(umbralesSensorReq.getIdSensor());
+        Domain.UmbralesSensorReply.Builder reply = Domain.UmbralesSensorReply.newBuilder();
+        listaUmbralesPorSensor.forEach(componente -> {
+            Domain.Umbrales umbrales = Domain.Umbrales.newBuilder().setIdSensor(umbralesSensorReq.getIdSensor()).build();
+            reply.addUmbrales(umbrales);
+        });
+        return reply.build();
+
+    }
+    }
+
+
+

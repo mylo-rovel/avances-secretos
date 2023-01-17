@@ -355,6 +355,20 @@ public class WebController {
         return "Usuario sin permisos";
     }
 
+    //   rpc getRegistros(RutEntityReq) returns (RegistrosReply){}
+    @RequestMapping(value = "api/registros/{rut}", method = RequestMethod.GET)
+    public String getRegistros(@PathVariable String rut, @RequestHeader(value="Authorization") String jwt) {
+        if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
+        Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
+        Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
+        if(usuario!=null) {
+            if (usuario.getRol().equals(Domain.UsuarioEntity.RolUsuario.ADMINISTRADOR.name())) {
+                return webCoreClientGrpcExtra.getRegistros(rut);
+            }
+        }
+        return "Usuario sin permisos";
+    }
+
 
     // ---- EQUIPOS      ------------------------------------------------------------------------------------
     // ---- SIMULACIONES ------------------------------------------------------------------------------------
@@ -538,27 +552,52 @@ public class WebController {
 
     /**
      * Gets registros.
-     *
-     * @param rut the rut
      * @param jwt the jwt
      * @return the registros
      */
-//   rpc getRegistros(RutEntityReq) returns (RegistrosReply){}
-    @RequestMapping(value = "api/registros/{rut}", method = RequestMethod.GET)
-    public String getRegistros(@PathVariable String rut, @RequestHeader(value="Authorization") String jwt) {
-        if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
-        Domain.RutEntityReq rutUsuario = Domain.RutEntityReq.newBuilder().setRut(this.getTokenKey(jwt)).build();
-        Usuario usuario = coreDaoUsuario.getUsuario(rutUsuario);
-        if(usuario!=null) {
-            if (usuario.getRol().equals(Domain.UsuarioEntity.RolUsuario.ADMINISTRADOR.name())) {
-                return webCoreClientGrpcExtra.getRegistros(rut);
-            }
-        }
-        return "Usuario sin permisos";
+//    rpc getSensores (SensoresEquipoEntityReq) returns (SensoresEquipoEntityReply) {}
+    @RequestMapping(value = "api/equipos/sensores/{idEquipo}", method = RequestMethod.GET)
+    public String getSensores(@PathVariable long idEquipo, @RequestHeader(value="Authorization") String jwt) {
+        //if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
+        return webCoreClientGrpcEquipo.getSensores(idEquipo);
     }
-
-
-    /**
+//rpc getSimulacionesEjecutadas (DatosSimulacionesEquipoMesReq) returns (SimulacionesEquipoMesReply) {}
+    @RequestMapping(value = "api/equipos/simulaciones/{idEquipo}/{mes}", method = RequestMethod.GET)
+    public String getSimulacionesEjecutadas (@PathVariable long idEquipo, @PathVariable int mes, @RequestHeader(value="Authorization") String jwt) {
+        //if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
+        return webCoreClientGrpcSimulacion.getSimulacionesEjecutadas(idEquipo, mes);
+    }
+   // rpc getDatosResumen (DatosSimulacionReq) returns (ResumenSimulacionReply) {} {}
+   @RequestMapping(value = "api/equipos/simulaciones/{idSimulacion}/{caudal}/{temperatura}/{pluviometro}/{presion}/{humedad}", method = RequestMethod.GET)
+   public String getDatosResumen (@PathVariable long idSimulacion, @PathVariable int caudal, @PathVariable int temperatura, @PathVariable int pluviometro, @PathVariable int presion, @PathVariable int humedad, @RequestHeader(value="Authorization") String jwt) {
+       //if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
+       return webCoreClientGrpcSimulacion.getDatosResumen(idSimulacion, caudal, temperatura, pluviometro, presion, humedad);
+   }
+    //rpc getMedidas (DatosEjecucionSensorReq) returns (MedidasEjecucionSensorReply) {}
+    @RequestMapping(value = "api/ejecuciones/{idEjecucion}/{idSensor}", method = RequestMethod.GET)
+    public String getMedidas (@PathVariable int idEjecucion, @PathVariable int idSensor, @RequestHeader(value="Authorization") String jwt) {
+        //if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
+        return webCoreClientGrpcSimulacion.getMedidas(idEjecucion, idSensor);
+    }
+    // rpc getUltimaMedida (DatosEjecucionUltimaMedidaReq) returns (UltimaMedidaReply) {}
+    @RequestMapping(value = "api/ejecuciones/ultima/{idEjecucion}/{idSensor}", method = RequestMethod.GET)
+    public String getUltimaMedida (@PathVariable int idEjecucion, @PathVariable int idSensor, @RequestHeader(value="Authorization") String jwt) {
+        //if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
+        return webCoreClientGrpcSimulacion.getUltimaMedida(idEjecucion, idSensor);
+    }
+    // rpc getUltimasMedidas (UltimosDatosEjecucionReq) returns (UltimasMedidasEjecucionReply) {}
+    @RequestMapping(value = "api/ejecuciones/{idEjecucion}/{idSensor}/{timeStamp}/{lastSecond}/{lastEntrities}", method = RequestMethod.GET)
+    public String getUltimasMedidas (@PathVariable int idEjecucion, @PathVariable int idSensor, @PathVariable String timestamp, @PathVariable int lastSecond, @PathVariable int lastEntrities, @RequestHeader(value="Authorization") String jwt) {
+        //if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
+        return webCoreClientGrpcSimulacion.getUltimasMedidas(idEjecucion, idSensor, timestamp, lastSecond, lastEntrities);
+    }
+    //  rpc getUmbralesPorSensor (UmbralesSensorReq) returns (UmbralesSensorReply) {}
+    @RequestMapping(value = "api/equipos/sensores/umbrales/{idSensor}", method = RequestMethod.GET)
+    public String getUmbralesPorSensor(@PathVariable int idSensor, @RequestHeader(value="Authorization") String jwt) {
+        //if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
+        return webCoreClientGrpcEquipo.getUmbralesPorSensor(idSensor);
+    }
+   /**
      * Gets enum dict.
      *
      * @param jwt the jwt

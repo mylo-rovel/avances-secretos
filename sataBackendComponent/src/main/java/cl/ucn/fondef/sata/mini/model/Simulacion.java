@@ -50,4 +50,64 @@ public class Simulacion {
     @Setter
     @Column(name = "fecha_creacion")
     private String fechaCreacion;
+    //
+    @Getter
+    @Setter
+    @Column(name = "caudal")
+    private String caudal;
+
+    @Getter
+    @Setter
+    @Column(name = "temperatura")
+    private String temperatura;
+
+    @Getter
+    @Setter
+    @Column(name = "pluviometro")
+    private String pluviometro;
+
+    @Getter
+    @Setter
+    @Column(name = "presion")
+    private String presion;
+
+    @Getter
+    @Setter
+    @Column(name = "humedad")
+    private String humedad;
+
+    @Getter
+    @Setter
+    @Column(name = "idEjecucion")
+    private int idEjecucion;
+
+    @Getter
+    @Setter
+    @Column(name = "idSensor")
+    private int idSensor;
+
+    @Getter
+    @Setter
+    @Column(name = "ultima_medida")
+    private String UltimaMedida;
+
+    @Getter
+    @Setter
+    @Column(name = "timestamp")
+    private String timestamp;
+
+    @Getter
+    @Setter
+    @Column(name = "lastSecond")
+    private int lastSecond;
+
+    @Getter
+    @Setter
+    @Column(name = "lastEntrities")
+    private int lastEntrities;
+
+    @Getter
+    @Setter
+    @Column(name = "mes")
+    private int mes;
 }

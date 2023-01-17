@@ -32,4 +32,22 @@ public class Secuencia {
     @Setter
     @Column(name = "id_simulacion")
     private long idSimulacion;
+
+    @Getter
+    @Setter
+    @Column(name = "mes")
+    private int mes;
+
+    @Getter
+    @Setter
+    @Column(name = "id_sensor")
+    private long idSensor;
+
+    @Getter
+    @Setter
+    @Column(name = "id_ejecucion")
+    private int idEjecucion;
+
+
+
 }

@@ -8,6 +8,7 @@ import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoSimulacion;
 import cl.ucn.fondef.sata.mini.coredao.daointerface.CoreDaoUsuario;
 import cl.ucn.fondef.sata.mini.grpc.Domain;
 import cl.ucn.fondef.sata.mini.grpc.CoreBoardClientGrpcBase;
+import cl.ucn.fondef.sata.mini.model.Componente;
 import cl.ucn.fondef.sata.mini.model.Evento;
 import cl.ucn.fondef.sata.mini.model.Secuencia;
 import cl.ucn.fondef.sata.mini.utilities.InformacionBoard;
@@ -260,6 +261,82 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
 
         return "✔ Simulacion iniciada. IdEjecucion" + ejecucionNueva.getId() +" ✔";
     }
+    public List<Simulacion> getSimulacionesEjectuadasDB (long idEquipo, int mes) {
+        //se obtienen las secuencias de la id de un equipo dado utilizando la id_equipo de componenteFisico
+        System.out.println("Aaaaaaaaaaaaaa");
+        String sqlQuery = "SELECT s FROM Simulacion s WHERE " +
+                "s.idEquipo = : idEquipo AND" +
+                ":mes = s.mes";
+        System.out.println("Bbbbbbbbbbbbbb");
+        var listas = (List<Simulacion>) entityManager.createQuery(sqlQuery)
+                .setParameter("idEquipo", idEquipo)
+                .setParameter("mes", mes)
+                .getResultList();
+        System.out.println(listas);
+        return listas;
+    }
+    public List<Simulacion> getDatosResumenDB (long idEquipo, long caudal, long temperatura, long pluviometro, long presion, long humedad) {
+        //se obtienen las secuencias de la id de un equipo dado utilizando la id_equipo de componenteFisico
+        String sqlQuery = "SELECT c FROM Simulacion c WHERE " +
+                "c.idEquipo = :idEquipo AND " +
+                "c.caudal = :caudal AND " +
+                "c.temperatura = :temperatura AND " +
+                "c.pluviometro = :pluviometro AND " +
+                "c.presion = :presion AND " +
+                "c.humedad = :humedad";
+        return (List<cl.ucn.fondef.sata.mini.model.Simulacion>) entityManager.createQuery(sqlQuery)
+                .setParameter("idEquipo", idEquipo)
+                .setParameter("caudal", caudal)
+                .setParameter("temperatura",temperatura)
+                .setParameter("pluviometro", pluviometro)
+                .setParameter("presion", presion)
+                .setParameter("humedad", humedad)
+                .getResultList();
+    }
 
+    // Si el atributo está en rojo es porque no existe en la respectiva clase del paquete Model
+    public List<Simulacion> getMedidasDB (int idEjecucion, int idSensor) {
+        //se obtienen las secuencias de la id de un equipo dado utilizando la id_equipo de componenteFisico
+        String sqlQuery = "SELECT s, c FROM Secuencia s, Simulacion c WHERE " +
+                "c.idEjecucion = :idEjecucion AND " +
+                ":idSensor = c.idSensor";
+        return (List<Simulacion>) entityManager.createQuery(sqlQuery)
+                .setParameter("idEjecucion", idEjecucion)
+                .setParameter("idSensor", idSensor)
+                .getResultList();
+    }
+
+
+    // Si el atributo está en rojo es porque no existe en la respectiva clase del paquete Model
+    public String getUltimaMedidasDB (int idEjecucion, int idSensor) {
+        //se obtienen las secuencias de la id de un equipo dado utilizando la id_equipo de componenteFisico
+        String sqlQuery = "SELECT s, c FROM Secuencia s, Simulacion c WHERE "+
+                "s.idEjecucion= :idEjecucion AND " +
+                ":idSensor = c.idSensor";
+        var ListaSimulacion = entityManager.createQuery(sqlQuery)
+                .setParameter("idEjecucion", idEjecucion)
+                .setParameter("idSensor", idSensor)
+                .getResultList();
+        var ultimoElemento = (Simulacion) ListaSimulacion.get(ListaSimulacion.size() - 1);
+        return ultimoElemento.getCaudal()+"#"+ ultimoElemento.getTemperatura()+"#"+ultimoElemento.getPluviometro()+"#"+ultimoElemento.getPresion()+"#"+ultimoElemento.getHumedad();
+    }
+
+    // Si el atributo está en rojo es porque no existe en la respectiva clase del paquete Model
+    public List<Simulacion> getUltimasMedidasDB (int idEjecucion, int idSensor, String  timestamp, int lastSecond, int lastEntrities) {
+        //se obtienen las secuencias de la id de un equipo dado utilizando la id_equipo de componenteFisico
+        String sqlQuery = "SELECT c FROM Simulacion c WHERE " +
+                "c.idEjecucion = :idEjecucion AND " +
+                "c.idSensor = :idSensor AND " +
+                "c.timestamp = :timestamp AND " +
+                "c.lastSecond = :lastSecond AND " +
+                "c.lastEntrities = :lastEntrities";
+        return (List<cl.ucn.fondef.sata.mini.model.Simulacion>) entityManager.createQuery(sqlQuery)
+                .setParameter("idEjecucion", idEjecucion)
+                .setParameter("idSensor", idSensor)
+                .setParameter("timestamp", timestamp)
+                .setParameter("lastSecond", lastSecond)
+                .setParameter("lastEntrities", lastEntrities)
+                .getResultList();
+    }
 
 }

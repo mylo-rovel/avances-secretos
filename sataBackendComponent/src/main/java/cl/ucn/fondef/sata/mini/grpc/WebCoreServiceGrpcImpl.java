@@ -160,14 +160,51 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         responseObserver.onCompleted(); //Terminar el proceso
     }
 
+
     @Override
     public void getValoresGrafico(Domain.EstadoGraficoUsuarioReq estadoGraficoUsuarioReq, StreamObserver<LecturaSensoresReply> responseObserver) {
         var grpcResponse = webCoreServiceGrpcSimulacion.getValoresGrafico(estadoGraficoUsuarioReq, responseObserver);
         responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
         responseObserver.onCompleted(); //Terminar el proceso
     }
-
+    //nuevas funciones para el capstone 2022-2
     @Override
+    public void getSensores (Domain.SensoresEquipoEntityReq sensoresEquipoEntityReq, StreamObserver<SensoresEquipoEntityReply> responseObserver) {
+        var grpcResponse = webCoreServiceGrpcSimulacion.getSensores(sensoresEquipoEntityReq, responseObserver);
+        responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
+        responseObserver.onCompleted(); //Terminar el proceso
+    }
+    public void getSimulacionesEjecutadas (Domain.DatosSimulacionesEquipoMesReq datosSimulacionesEquipoMesReq, StreamObserver<SimulacionesEquipoMesReply> responseObserver) {
+        var grpcResponse = webCoreServiceGrpcSimulacion.getSimulacionesEjecutadas(datosSimulacionesEquipoMesReq, responseObserver);
+        responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
+        responseObserver.onCompleted(); //Terminar el proceso
+    }
+    public void getDatosResumen (Domain.DatosSimulacionReq datosSimulacionReq, StreamObserver<ResumenSimulacionReply> responseObserver) {
+        var grpcResponse = webCoreServiceGrpcSimulacion.getDatosResumen (datosSimulacionReq, responseObserver);
+        responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
+        responseObserver.onCompleted(); //Terminar el proceso
+    }
+    public void getMedidas  (Domain.DatosEjecucionSensorReq datosEjecucionSensorReq, StreamObserver<MedidasEjecucionSensorReply> responseObserver) {
+        var grpcResponse = webCoreServiceGrpcSimulacion.getMedidas (datosEjecucionSensorReq, responseObserver);
+        responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
+        responseObserver.onCompleted(); //Terminar el proceso
+    }
+    public void getUltimaMedida  (Domain.DatosEjecucionUltimaMedidaReq datosEjecucionUltimaMedidaReq, StreamObserver<UltimaMedidaReply> responseObserver) {
+        var grpcResponse = webCoreServiceGrpcSimulacion.getUltimaMedida (datosEjecucionUltimaMedidaReq, responseObserver);
+        responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
+        responseObserver.onCompleted(); //Terminar el proceso
+    }
+    public void getUltimasMedidas  (Domain.UltimosDatosEjecucionReq ultimosDatosEjecucionReq, StreamObserver<UltimasMedidasEjecucionReply> responseObserver) {
+        var grpcResponse = webCoreServiceGrpcSimulacion.getUltimasMedidas (ultimosDatosEjecucionReq, responseObserver);
+        responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
+        responseObserver.onCompleted(); //Terminar el proceso
+    }
+    public void getUmbralesPorSensor  (Domain.UmbralesSensorReq umbralesSensorReq, StreamObserver<UmbralesSensorReply> responseObserver) {
+        var grpcResponse = webCoreServiceGrpcSimulacion.getUmbralesPorSensor (umbralesSensorReq, responseObserver);
+        responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
+        responseObserver.onCompleted(); //Terminar el proceso
+    }
+
     // rpc uploadArchivo(stream ArchivoEntityReq)  returns (MensajeReply){}
     public StreamObserver<ArchivoEntityReq> uploadArchivo(final StreamObserver<MensajeReply> responseObserver) {
         return new StreamObserver<ArchivoEntityReq>() {

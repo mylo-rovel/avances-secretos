@@ -134,5 +134,41 @@ public final class WebCoreClientGrpcSimulacion extends WebCoreClientGrpcBase {
         var serverResponse = this.stub.getValoresGrafico(reqObject);
         return this.gson.toJson(serverResponse);
     }
-
+    public String getSimulacionesEjecutadas (long idEquipo, int mes){
+        Domain.DatosSimulacionesEquipoMesReq reqObject = Domain.DatosSimulacionesEquipoMesReq.newBuilder()
+                .setIdEquipo(idEquipo).setMes(mes).build();
+        Domain.SimulacionesEquipoMesReply serverResponse = this.stub.getSimulacionesEjecutadas (reqObject);
+        return this.gson.toJson(serverResponse);
+    }
+    public String getDatosResumen (long idSimulacion, int caudal, int temperatura, int pluviometro, int presion, int humedad){
+        Domain.DatosSimulacionReq reqObject = Domain.DatosSimulacionReq.newBuilder()
+                .setIdSimulacion (idSimulacion).setCaudal(caudal).setTemperatura(temperatura).setPluviometro(pluviometro)
+                .setPresion(presion).setHumedad(humedad). build();
+        Domain.ResumenSimulacionReply serverResponse = this.stub.getDatosResumen (reqObject);
+        return this.gson.toJson(serverResponse);
+    }
+    public String getMedidas(int idEjecucion, int idSensor) {
+        Domain.DatosEjecucionSensorReq reqObject = Domain.DatosEjecucionSensorReq.newBuilder()
+                .setIdEjecucion (idEjecucion).setIdSensor(idSensor).build();
+        Domain.MedidasEjecucionSensorReply serverResponse = this.stub.getMedidas (reqObject);
+        return this.gson.toJson(serverResponse);
+    }
+    public String getUltimaMedida (int idEjecucion, int idSensor) {
+        Domain.DatosEjecucionUltimaMedidaReq reqObject = Domain.DatosEjecucionUltimaMedidaReq.newBuilder()
+                .setIdEjecucion (idEjecucion).setIdSensor(idSensor).build();
+        Domain.UltimaMedidaReply serverResponse = this.stub.getUltimaMedida (reqObject);
+        return this.gson.toJson(serverResponse);
+    }
+    public String getUltimasMedidas (int idEjecucion, int idSensor, String  timestamp, int lastSecond, int lastEntities)  {
+        Domain.DatosEjecucionSensorReq reqObject = Domain.DatosEjecucionSensorReq.newBuilder()
+                .setIdEjecucion (idEjecucion)
+                .setIdSensor (idSensor)
+                .setTimestamp(timestamp)
+                .setLastSecond(lastSecond)
+                .setLastEntities(lastEntities)
+                .build();
+        /**/
+        Domain.MedidasEjecucionSensorReply serverResponse = this.stub.getMedidas (reqObject);
+        return this.gson.toJson(serverResponse);
+    }
 }

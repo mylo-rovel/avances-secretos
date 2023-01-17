@@ -353,7 +353,21 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
     }
 
 
-
+    @Override
+    public List<Componente> getSensoresDB(long idEquipo) {
+        //se obtienen las secuencias de la id de un equipo dado utilizando la id_equipo de componenteFisico
+        String sqlQuery = "SELECT c FROM Componente c WHERE c.idEquipo = :idEquipo";
+        return (List<Componente>) entityManager.createQuery(sqlQuery)
+                .setParameter("idEquipo", idEquipo)
+                .getResultList();
+    }
+    public List<Componente> getUmbralesPorSensorDB(long idSensor) {
+        //se obtienen las secuencias de la id de un equipo dado utilizando la id_equipo de componenteFisico
+        String sqlQuery = "SELECT c FROM Componente c WHERE c.idSensor = : idSensor";
+        return (List<Componente>) entityManager.createQuery(sqlQuery)
+                .setParameter("idSensor", idSensor)
+                .getResultList();
+    }
     /*public String uploadArchivo(ArchivosEntityReq archivosEntityReq){
 
     }*/

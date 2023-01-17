@@ -284,6 +284,16 @@ message SimulacionesReply {
   repeated SimulacionAcotada simulacion_acotada = 1;
 }
 
+message SensorAcotada {
+  int64 id = 1;
+  string nombre = 2;
+}
+
+message SensoresReply {
+  // Usado en listas desplegables de seleccion de simulacion
+  repeated SensorAcotada SensorAcotada = 1;
+}
+
 message EjecucionReply {
   // Usado como detalle de fila en el historial de ejecuciones
   int64 id = 1;
@@ -313,6 +323,7 @@ message LecturaSensoresReq {
   float caudal = 1;
   string hora = 2;
   string nombreEquipo = 3;
+  float aguaCaida = 4;
 }
 
 message EstadoGraficoUsuarioReq {
@@ -340,3 +351,105 @@ message AvisoTerminoEjecucionReq {
   string nombreEquipo = 1;
   double agua_caida = 2;
 }
+
+// inicializacion variables Capstone 2022-2
+message SensoresEquipoEntityReq{
+  int64 idEquipo =1;
+}
+message SensoresEquipoEntityReply {
+  repeated string nombreSensor = 1;
+  repeated string tipoSensor = 2;
+  int64 idEquipo = 3;
+}
+  message DatosSimulacionesEquipoMesReq{
+    optional int64 idEquipo=1;
+    optional int32 mes = 2;
+  }
+  message Simulacione{
+    optional int64 idEquipo = 1;
+    optional int32 mes = 2;
+
+  }
+message SimulacionesEquipoMesReply {
+  repeated Simulacione simulacione =1;
+}
+  message DatosSimulacionReq {
+    int64 idSimulacion=1;
+    optional int64 Caudal=2;
+    optional int64 Temperatura=3;
+    optional int64 Pluviometro=4;
+    optional int64 Presion=5;
+    optional int64 Humedad=6;
+  }
+message ResumenSimulacionReply {
+  int64 idSimulacion=1;
+  optional int64 Caudal=2;
+  optional int64 Temperatura=3;
+  optional int64 Pluviometro=4;
+  optional int64 Presion=5;
+  optional int64 Humedad=6;
+}
+message DatosEjecucionSensorReq {
+  int64 idEjecucion = 1;
+  int64 idSensor = 2;
+  string timestamp=3;
+  int64 lastSecond=4;
+  int64 lastEntities=5;
+
+}
+
+message Medida {
+  optional int64 idEjecucion = 1;
+  optional string Sensores = 2;
+}
+message MedidasEjecucionSensorReply {
+  repeated Medida medida =1;
+}
+message DatosEjecucionUltimaMedidaReq {
+  int64 idEjecucion = 1;
+  int64 idSensor = 2;
+}
+message UltimaMedidaReply {
+  int64 idEjecucion =1;
+  int64 idSensor=2;
+  string UltMedida=3;
+}
+message UltimosDatosEjecucionReq {
+  int64 idEjecucion =1;
+  int64 idSensor = 2;
+  string TimeStamp = 3;
+  optional int32 lastSecond=4;
+  optional int32 lastEntrities=5;
+}
+message UltimasMedidasEjecucionReply {
+  int64 idEjecucion =1;
+  repeated string UltMedidas=2;
+  int64 idSensor = 3;
+  string TimeStamp = 4;
+  optional int32 lastSecond=5;
+  optional int32 lastEntrities=6;
+}
+message UmbralesSensorReq {
+  int64 idSensor = 1;
+}
+
+message Umbrales {
+  int64 idSensor=1;
+  optional string sensores =2;
+}
+message UmbralesSensorReply {
+  repeated Umbrales umbrales =1;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+

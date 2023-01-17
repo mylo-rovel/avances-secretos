@@ -80,4 +80,10 @@ public interface CoreDaoSimulacion {
      * @return the string
      */
     String startSimulacion(StartSimulacionReq startSimulacionReq, HashMap<String, InformacionBoard> ejecucionesEquipo);
+
+    List<cl.ucn.fondef.sata.mini.model.Simulacion> getSimulacionesEjectuadasDB (long idEquipo, int mes);
+    List<cl.ucn.fondef.sata.mini.model.Simulacion> getDatosResumenDB (long idEquipo, long caudal, long temperatura, long pluviometro, long presion, long humedad);
+    List<cl.ucn.fondef.sata.mini.model.Simulacion> getMedidasDB (int idEjecucion, int idSensor);
+    String getUltimaMedidasDB (int idEjecucion, int idSensor);
+    List<cl.ucn.fondef.sata.mini.model.Simulacion> getUltimasMedidasDB (int idEjecucion, int idSensor, String  timestamp, int lastSecond, int lastEntrities);
 }

@@ -151,4 +151,18 @@ public final class WebCoreClientGrpcEquipo extends WebCoreClientGrpcBase {
         Domain.SecuenciasComponenteEquipoReply serverResponse = this.stub.getSecuenciasComponente(idElementoReq);
         return this.gson.toJson(serverResponse);
     }
+
+    public String getSensores(long idEquipo){
+        Domain.SensoresEquipoEntityReq reqObject = Domain.SensoresEquipoEntityReq.newBuilder()
+                .setIdEquipo(idEquipo).build();
+        Domain.SensoresEquipoEntityReply serverResponse = this.stub.getSensores(reqObject);
+        return this.gson.toJson(serverResponse);
+    }
+    public String getUmbralesPorSensor (int idSensor) {
+        Domain.UmbralesSensorReq reqObject = Domain.UmbralesSensorReq.newBuilder()
+                .setIdSensor(idSensor).build();
+        Domain.UmbralesSensorReply serverResponse = this.stub.getUmbralesPorSensor (reqObject);
+        return this.gson.toJson(serverResponse);
+    }
+
 }
