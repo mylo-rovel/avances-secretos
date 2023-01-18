@@ -130,8 +130,8 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
         Simulacion simulacionGuardar = new Simulacion();
         simulacionGuardar.setNombre(        simulacionReq.getNombre());
         simulacionGuardar.setDescripcion(   simulacionReq.getDescripcion());
-        simulacionGuardar.setIdOperador(    usuarioOperador.getId());
-        simulacionGuardar.setIdEquipo(      equipoUsado.getId());
+        simulacionGuardar.setId_operador(    usuarioOperador.getId());
+        simulacionGuardar.setId_equipo(      equipoUsado.getId());
         entityManager.persist(simulacionGuardar);
 
         long idSimulacion = simulacionGuardar.getId();
@@ -265,27 +265,28 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
         //se obtienen las secuencias de la id de un equipo dado utilizando la id_equipo de componenteFisico
         System.out.println("Aaaaaaaaaaaaaa");
         String sqlQuery = "SELECT s FROM Simulacion s WHERE " +
-                "s.idEquipo = : idEquipo AND" +
+                "s.id_equipo = : id_equipo AND" +
                 ":mes = s.mes";
         System.out.println("Bbbbbbbbbbbbbb");
         var listas = (List<Simulacion>) entityManager.createQuery(sqlQuery)
-                .setParameter("idEquipo", idEquipo)
+                .setParameter("id_equipo", idEquipo)
                 .setParameter("mes", mes)
                 .getResultList();
         System.out.println(listas);
+        System.out.println("cccccccccccccccccccccccccc");
         return listas;
     }
     public List<Simulacion> getDatosResumenDB (long idEquipo, long caudal, long temperatura, long pluviometro, long presion, long humedad) {
         //se obtienen las secuencias de la id de un equipo dado utilizando la id_equipo de componenteFisico
         String sqlQuery = "SELECT c FROM Simulacion c WHERE " +
-                "c.idEquipo = :idEquipo AND " +
+                "c.id_equipo = :id_equipo AND " +
                 "c.caudal = :caudal AND " +
                 "c.temperatura = :temperatura AND " +
                 "c.pluviometro = :pluviometro AND " +
                 "c.presion = :presion AND " +
                 "c.humedad = :humedad";
         return (List<cl.ucn.fondef.sata.mini.model.Simulacion>) entityManager.createQuery(sqlQuery)
-                .setParameter("idEquipo", idEquipo)
+                .setParameter("id_equipo", idEquipo)
                 .setParameter("caudal", caudal)
                 .setParameter("temperatura",temperatura)
                 .setParameter("pluviometro", pluviometro)
@@ -298,10 +299,10 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
     public List<Simulacion> getMedidasDB (int idEjecucion, int idSensor) {
         //se obtienen las secuencias de la id de un equipo dado utilizando la id_equipo de componenteFisico
         String sqlQuery = "SELECT s, c FROM Secuencia s, Simulacion c WHERE " +
-                "c.idEjecucion = :idEjecucion AND " +
+                "c.id_ejecucion = :id_ejecucion AND " +
                 ":idSensor = c.idSensor";
         return (List<Simulacion>) entityManager.createQuery(sqlQuery)
-                .setParameter("idEjecucion", idEjecucion)
+                .setParameter("id_ejecucion", idEjecucion)
                 .setParameter("idSensor", idSensor)
                 .getResultList();
     }
@@ -310,12 +311,12 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
     // Si el atributo está en rojo es porque no existe en la respectiva clase del paquete Model
     public String getUltimaMedidasDB (int idEjecucion, int idSensor) {
         //se obtienen las secuencias de la id de un equipo dado utilizando la id_equipo de componenteFisico
-        String sqlQuery = "SELECT s, c FROM Secuencia s, Simulacion c WHERE "+
-                "s.idEjecucion= :idEjecucion AND " +
-                ":idSensor = c.idSensor";
+        String sqlQuery = "SELECT s FROM Simulacion s WHERE "+
+                "s.id_ejecucion = :id_ejecucion AND " +
+                "s.id_sensor = :id_sensor";
         var ListaSimulacion = entityManager.createQuery(sqlQuery)
-                .setParameter("idEjecucion", idEjecucion)
-                .setParameter("idSensor", idSensor)
+                .setParameter("id_ejecucion", idEjecucion)
+                .setParameter("id_sensor", idSensor)
                 .getResultList();
         var ultimoElemento = (Simulacion) ListaSimulacion.get(ListaSimulacion.size() - 1);
         return ultimoElemento.getCaudal()+"#"+ ultimoElemento.getTemperatura()+"#"+ultimoElemento.getPluviometro()+"#"+ultimoElemento.getPresion()+"#"+ultimoElemento.getHumedad();
@@ -325,13 +326,13 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
     public List<Simulacion> getUltimasMedidasDB (int idEjecucion, int idSensor, String  timestamp, int lastSecond, int lastEntrities) {
         //se obtienen las secuencias de la id de un equipo dado utilizando la id_equipo de componenteFisico
         String sqlQuery = "SELECT c FROM Simulacion c WHERE " +
-                "c.idEjecucion = :idEjecucion AND " +
+                "c.id_ejecucion = :id_ejecucion AND " +
                 "c.idSensor = :idSensor AND " +
                 "c.timestamp = :timestamp AND " +
                 "c.lastSecond = :lastSecond AND " +
                 "c.lastEntrities = :lastEntrities";
         return (List<cl.ucn.fondef.sata.mini.model.Simulacion>) entityManager.createQuery(sqlQuery)
-                .setParameter("idEjecucion", idEjecucion)
+                .setParameter("id_ejecucion", idEjecucion)
                 .setParameter("idSensor", idSensor)
                 .setParameter("timestamp", timestamp)
                 .setParameter("lastSecond", lastSecond)

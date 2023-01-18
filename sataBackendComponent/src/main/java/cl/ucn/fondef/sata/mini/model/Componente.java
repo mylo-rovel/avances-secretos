@@ -30,7 +30,7 @@ public class Componente {
     @Getter
     @Setter
     @Column(name = "id_equipo")
-    private long idEquipo;
+    private long id_equipo;
 
     @Getter
     @Setter
