@@ -586,6 +586,7 @@ public class WebController {
         return webCoreClientGrpcSimulacion.getUltimaMedida(idEjecucion, idSensor);
     }
     // rpc getUltimasMedidas (UltimosDatosEjecucionReq) returns (UltimasMedidasEjecucionReply) {}
+<<<<<<< HEAD
     @RequestMapping(value = "api/ejecuciones/UltimasMedidas", method = RequestMethod.POST)
     public String getUltimasMedidas (@RequestBody WebReqUltimasMedidas UltimasMedidas, @RequestHeader(value="Authorization") String jwt) {
        var idEjecucion = UltimasMedidas.getId_ejecucion();
@@ -593,6 +594,15 @@ public class WebController {
        var timestamp = UltimasMedidas.getTimestamp();
        var lastSecond = UltimasMedidas.getLast_second();
        var lastEntrities = UltimasMedidas.getLast_entrities();
+=======
+    @RequestMapping(value = "api/ejecuciones/{idEjecucion}/{idSensor}/{timeStamp}/{lastSecond}/{lastEntrities}", method = RequestMethod.GET)
+    public String getUltimasMedidas (@PathVariable int idEjecucion, @PathVariable int idSensor, @PathVariable String timestamp, @PathVariable int lastSecond, @PathVariable int lastEntrities, @RequestHeader(value="Authorization") String jwt) {
+        System.out.println(idEjecucion);
+        System.out.println(idSensor);
+        System.out.println(timestamp);
+        System.out.println(lastSecond);
+        System.out.println(lastEntrities);
+>>>>>>> 67795165f222b8fb50b0d1bcc7ce886ada29aa83
         //if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
         return webCoreClientGrpcSimulacion.getUltimasMedidas(idEjecucion, idSensor, timestamp, lastSecond, lastEntrities);
     }

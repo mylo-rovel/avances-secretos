@@ -298,12 +298,21 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
     // Si el atributo está en rojo es porque no existe en la respectiva clase del paquete Model
     public List<Simulacion> getMedidasDB (int idEjecucion, int idSensor) {
         //se obtienen las secuencias de la id de un equipo dado utilizando la id_equipo de componenteFisico
+<<<<<<< HEAD
         String sqlQuery = "SELECT s FROM Simulacion s WHERE " +
                 "s.id_ejecucion = :id_ejecucion AND " +
                 ":id_sensor = s.id_sensor";
         return (List<Simulacion>) entityManager.createQuery(sqlQuery)
                 .setParameter("id_ejecucion", idEjecucion)
                 .setParameter("id_sensor", idSensor)
+=======
+        String sqlQuery = "SELECT s, c FROM Secuencia s, Simulacion c WHERE " +
+                "c.id_ejecucion = :id_ejecucion AND " +
+                ":idSensor = c.idSensor";
+        return (List<Simulacion>) entityManager.createQuery(sqlQuery)
+                .setParameter("id_ejecucion", idEjecucion)
+                .setParameter("idSensor", idSensor)
+>>>>>>> 67795165f222b8fb50b0d1bcc7ce886ada29aa83
                 .getResultList();
     }
 
@@ -327,13 +336,21 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
         //se obtienen las secuencias de la id de un equipo dado utilizando la id_equipo de componenteFisico
         String sqlQuery = "SELECT c FROM Simulacion c WHERE " +
                 "c.id_ejecucion = :id_ejecucion AND " +
+<<<<<<< HEAD
                 "c.id_sensor = :id_sensor AND " +
+=======
+                "c.idSensor = :idSensor AND " +
+>>>>>>> 67795165f222b8fb50b0d1bcc7ce886ada29aa83
                 "c.timestamp = :timestamp AND " +
                 "c.last_second = :last_second AND " +
                 "c.last_entrities = :last_entrities";
         return (List<cl.ucn.fondef.sata.mini.model.Simulacion>) entityManager.createQuery(sqlQuery)
                 .setParameter("id_ejecucion", idEjecucion)
+<<<<<<< HEAD
                 .setParameter("id_sensor", idSensor)
+=======
+                .setParameter("idSensor", idSensor)
+>>>>>>> 67795165f222b8fb50b0d1bcc7ce886ada29aa83
                 .setParameter("timestamp", timestamp)
                 .setParameter("last_second", lastSecond)
                 .setParameter("last_entrities", lastEntrities)
