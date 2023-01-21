@@ -39,7 +39,7 @@ public class WebCoreServiceGrpcSimulacion {
 
     private Equipo getEquipoAsociadoASimulacion(Domain.IdElementoConRutReq idElementoConRutReq, Simulacion simulacionGuardada) {
         Domain.IdElementoConRutReq idEquipoConRut = Domain.IdElementoConRutReq.newBuilder()
-                .setRut(idElementoConRutReq.getRut()).setId(simulacionGuardada.getIdEquipo()).build();
+                .setRut(idElementoConRutReq.getRut()).setId(simulacionGuardada.getId_equipo()).build();
         return coreDaoEquipo.getEquipo(idEquipoConRut);
     }
 
@@ -99,7 +99,7 @@ public class WebCoreServiceGrpcSimulacion {
         }
 
         for (Simulacion simulacion : listaSimuGuardadas) {
-            Domain.IdElementoConRutReq idEquipoConRut = Domain.IdElementoConRutReq.newBuilder().setRut(rutEntityReq.getRut()).setId(simulacion.getIdEquipo()).build();
+            Domain.IdElementoConRutReq idEquipoConRut = Domain.IdElementoConRutReq.newBuilder().setRut(rutEntityReq.getRut()).setId(simulacion.getId_equipo()).build();
             Equipo equipoAsociado = coreDaoEquipo.getEquipo(idEquipoConRut);
 
             Domain.SimulacionAcotada simuRetornar = Domain.SimulacionAcotada.newBuilder()
@@ -153,7 +153,7 @@ public class WebCoreServiceGrpcSimulacion {
 
         List<Domain.Secuencia> listaSecuenciasGrpc = coreDaoSimulacion.getGrpcSecuenciasSimulacion(idSimulacionReq);
         Domain.IdElementoConRutReq idSimulacionConRutReq = Domain.IdElementoConRutReq.newBuilder()
-                .setId(simulacionDB.getIdEquipo()).setRut(idEjecucionConRutReq.getRut()).build();
+                .setId(simulacionDB.getId_equipo()).setRut(idEjecucionConRutReq.getRut()).build();
         Equipo equipoDB = coreDaoEquipo.getEquipo(idSimulacionConRutReq);
 
         return Domain.EjecucionReply.newBuilder()
@@ -177,7 +177,7 @@ public class WebCoreServiceGrpcSimulacion {
             Simulacion simulacionEjecutada = coreDaoSimulacion.getSimulacionDB(idSimulacionReq);
 
             Domain.IdElementoConRutReq idSimulacionConRutReq = Domain.IdElementoConRutReq.newBuilder()
-                    .setId(simulacionEjecutada.getIdEquipo()).setRut(rutEntityReq.getRut()).build();
+                    .setId(simulacionEjecutada.getId_equipo()).setRut(rutEntityReq.getRut()).build();
             Equipo equipoUsado = coreDaoEquipo.getEquipo(idSimulacionConRutReq);
 
             Domain.EjecucionAcotada ejecucionAcotada = Domain.EjecucionAcotada.newBuilder()

@@ -135,7 +135,7 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
         componente.setEstado(     componenteRecibido.getEstado().name());
         componente.setTipo(       componenteRecibido.getTipo().name());
         componente.setTipoPlaca(  componenteRecibido.getTipoPlaca().name());
-        componente.setIdEquipo(   idEquipo);
+        componente.setId_equipo(   idEquipo);
 
         entityManager.persist(componente);
         return componente;
@@ -356,16 +356,18 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
     @Override
     public List<Componente> getSensoresDB(long idEquipo) {
         //se obtienen las secuencias de la id de un equipo dado utilizando la id_equipo de componenteFisico
-        String sqlQuery = "SELECT c FROM Componente c WHERE c.idEquipo = :idEquipo";
+        String sqlQuery = "SELECT c FROM Componente c WHERE " +
+                "c.id_equipo = :id_equipo";
         return (List<Componente>) entityManager.createQuery(sqlQuery)
-                .setParameter("idEquipo", idEquipo)
+                .setParameter("id_equipo", idEquipo)
                 .getResultList();
     }
     public List<Componente> getUmbralesPorSensorDB(long idSensor) {
         //se obtienen las secuencias de la id de un equipo dado utilizando la id_equipo de componenteFisico
-        String sqlQuery = "SELECT c FROM Componente c WHERE c.idSensor = : idSensor";
+        String sqlQuery = "SELECT s FROM Simulacion s WHERE " +
+                "s.id_sensor = : id_sensor";
         return (List<Componente>) entityManager.createQuery(sqlQuery)
-                .setParameter("idSensor", idSensor)
+                .setParameter("id_sensor", idSensor)
                 .getResultList();
     }
     /*public String uploadArchivo(ArchivosEntityReq archivosEntityReq){

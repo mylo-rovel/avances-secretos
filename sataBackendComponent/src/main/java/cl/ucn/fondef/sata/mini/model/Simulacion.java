@@ -29,12 +29,12 @@ public class Simulacion {
     @Getter
     @Setter
     @Column(name = "id_equipo")
-    private long idEquipo;
+    private long id_equipo;
 
     @Getter
     @Setter
     @Column(name = "id_operador")
-    private long idOperador;
+    private long id_operador;
 
     @Getter
     @Setter
@@ -49,42 +49,42 @@ public class Simulacion {
     @Getter
     @Setter
     @Column(name = "fecha_creacion")
-    private String fechaCreacion;
+    private String fecha_creacion;
     //
     @Getter
     @Setter
     @Column(name = "caudal")
-    private String caudal;
+    private long caudal;
 
     @Getter
     @Setter
     @Column(name = "temperatura")
-    private String temperatura;
+    private long temperatura;
 
     @Getter
     @Setter
     @Column(name = "pluviometro")
-    private String pluviometro;
+    private long pluviometro;
 
     @Getter
     @Setter
     @Column(name = "presion")
-    private String presion;
+    private long presion;
 
     @Getter
     @Setter
     @Column(name = "humedad")
-    private String humedad;
+    private long humedad;
 
     @Getter
     @Setter
-    @Column(name = "idEjecucion")
-    private int idEjecucion;
+    @Column(name = "id_ejecucion")
+    private int id_ejecucion;
 
     @Getter
     @Setter
-    @Column(name = "idSensor")
-    private int idSensor;
+    @Column(name = "id_sensor")
+    private long id_sensor;
 
     @Getter
     @Setter
@@ -98,13 +98,13 @@ public class Simulacion {
 
     @Getter
     @Setter
-    @Column(name = "lastSecond")
-    private int lastSecond;
+    @Column(name = "last_second")
+    private int last_second;
 
     @Getter
     @Setter
-    @Column(name = "lastEntrities")
-    private int lastEntrities;
+    @Column(name = "last_entrities")
+    private int last_entrities;
 
     @Getter
     @Setter

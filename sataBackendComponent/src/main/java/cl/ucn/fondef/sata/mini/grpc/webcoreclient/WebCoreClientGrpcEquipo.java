@@ -158,7 +158,7 @@ public final class WebCoreClientGrpcEquipo extends WebCoreClientGrpcBase {
         Domain.SensoresEquipoEntityReply serverResponse = this.stub.getSensores(reqObject);
         return this.gson.toJson(serverResponse);
     }
-    public String getUmbralesPorSensor (int idSensor) {
+    public String getUmbralesPorSensor (long idSensor) {
         Domain.UmbralesSensorReq reqObject = Domain.UmbralesSensorReq.newBuilder()
                 .setIdSensor(idSensor).build();
         Domain.UmbralesSensorReply serverResponse = this.stub.getUmbralesPorSensor (reqObject);
