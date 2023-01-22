@@ -5,9 +5,9 @@
 package cl.ucn.fondef.sata.mini.coredao.daointerface;
 
 import cl.ucn.fondef.sata.mini.grpc.Domain;
-import cl.ucn.fondef.sata.mini.model.Componente;
-import cl.ucn.fondef.sata.mini.model.Equipo;
+import cl.ucn.fondef.sata.mini.model.*;
 import cl.ucn.fondef.sata.mini.grpc.Domain.*;
+import cl.ucn.fondef.sata.mini.model.Componente;
 import cl.ucn.fondef.sata.mini.model.Evento;
 import cl.ucn.fondef.sata.mini.model.Pin;
 import cl.ucn.fondef.sata.mini.model.Placa;
@@ -114,4 +114,9 @@ public interface CoreDaoEquipo {
      * @return the secuencias componente
      */
     List<Secuencia> getSecuenciasComponente(IdElementoReq idElementoReq);
+
+
+    List<Componente> getSensoresDB(long idEquipo);
+
+    List<Componente> getUmbralesPorSensorDB(long idSensor);
 }

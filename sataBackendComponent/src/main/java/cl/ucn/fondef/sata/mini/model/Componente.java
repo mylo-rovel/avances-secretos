@@ -30,7 +30,7 @@ public class Componente {
     @Getter
     @Setter
     @Column(name = "id_equipo")
-    private long idEquipo;
+    private long id_equipo;
 
     @Getter
     @Setter
@@ -61,4 +61,9 @@ public class Componente {
     @Setter
     @Column(name = "tipo_placa")
     private String tipoPlaca;
+
+
+    /* ATRIBUTOS NUEVOS PARA QUE LA QUERY DE CoreDaoSimulacionImpl.java pueda compilar ----------------------------- */
+    /* ¿Por qué estos atributos están en acá en lugar de en Simulación? */
+
 }

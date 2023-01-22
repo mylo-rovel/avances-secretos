@@ -37,4 +37,6 @@ public class WebReqSimulacionReq {
     @Getter
     @Setter
     private List<WebReqSecuenciaSubEntity> listaSecuencias;
+
+
 }

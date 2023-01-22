@@ -43,4 +43,19 @@ service WebCoreCommuService {
   rpc getEquiposTrabajando(EmptyReq) returns (EquiposEntityReply){}
 
   rpc getValoresGrafico(EstadoGraficoUsuarioReq) returns (LecturaSensoresReply) {}
+
+  // Nuevas funciones de este Capstone en conjunto con los Diagramas de Secuencias
+  rpc getSensores (SensoresEquipoEntityReq) returns (SensoresEquipoEntityReply) {}
+
+  rpc getSimulacionesEjecutadas (DatosSimulacionesEquipoMesReq) returns (SimulacionesEquipoMesReply) {}
+
+  rpc getDatosResumen (DatosSimulacionReq) returns (ResumenSimulacionReply) {}
+
+  rpc getMedidas (DatosEjecucionSensorReq) returns (MedidasEjecucionSensorReply) {}
+
+  rpc getUltimaMedida (DatosEjecucionUltimaMedidaReq) returns (UltimaMedidaReply) {}
+
+  rpc getUltimasMedidas (UltimosDatosEjecucionReq) returns (UltimasMedidasEjecucionReply) {}
+
+  rpc getUmbralesPorSensor (UmbralesSensorReq) returns (UmbralesSensorReply) {}
 }
