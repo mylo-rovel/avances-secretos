@@ -347,7 +347,7 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
     }
 
     // Si el atributo está en rojo es porque no existe en la respectiva clase del paquete Model
-    public List<Simulacion> getUltimasMedidasDB (int idEjecucion, int idSensor, String  timestamp, int lastSecond, int lastEntrities) {
+    public List<Simulacion> getUltimasMedidasDB (long idEjecucion, long idSensor, String  timestamp, int lastSecond, int lastEntrities) {
         //se obtienen las secuencias de la id de un equipo dado utilizando la id_equipo de componenteFisico
         String sqlQuery = "SELECT s FROM Simulacion s WHERE " +
                 "s.id_ejecucion = :id_ejecucion AND " +

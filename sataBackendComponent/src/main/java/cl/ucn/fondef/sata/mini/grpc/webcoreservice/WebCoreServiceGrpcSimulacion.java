@@ -407,13 +407,16 @@ public class WebCoreServiceGrpcSimulacion {
 
 
     public Domain.UltimasMedidasEjecucionReply getUltimasMedidas(Domain.UltimosDatosEjecucionReq ultimosDatosEjecucionReq, StreamObserver<Domain.UltimasMedidasEjecucionReply> responseObserver) {
+        System.out.println("AAAAAAAAAA");
         List<Simulacion> listaUltimasMedidas = coreDaoSimulacion.getUltimasMedidasDB((int) ultimosDatosEjecucionReq.getIdEjecucion(), (int) ultimosDatosEjecucionReq.getIdSensor(), ultimosDatosEjecucionReq.getTimeStamp(), ultimosDatosEjecucionReq.getLastSecond(), ultimosDatosEjecucionReq.getLastEntrities());
+        System.out.println("BBBBBBBBBBB");
         Domain.UltimasMedidasEjecucionReply.Builder reply = Domain.UltimasMedidasEjecucionReply.newBuilder();
         reply.setIdEjecucion(ultimosDatosEjecucionReq.getIdEjecucion());
         reply.setIdSensor(ultimosDatosEjecucionReq.getIdSensor());
         reply.setTimeStamp(ultimosDatosEjecucionReq.getTimeStamp());
         reply.setLastSecond(ultimosDatosEjecucionReq.getLastSecond());
         reply.setLastEntrities(ultimosDatosEjecucionReq.getLastEntrities());
+        System.out.println("CCCCCCCCC");
         listaUltimasMedidas.forEach(simulacion -> {
             var ultimasmedidas = simulacion.getCaudal()+"#"+ simulacion.getTemperatura()+"#"+simulacion.getPluviometro()+"#"+simulacion.getPresion()+"#"+simulacion.getHumedad();
             reply.addUltMedidas(ultimasmedidas);

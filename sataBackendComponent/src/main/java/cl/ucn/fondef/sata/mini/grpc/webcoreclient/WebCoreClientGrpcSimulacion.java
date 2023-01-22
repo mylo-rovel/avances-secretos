@@ -160,15 +160,15 @@ public final class WebCoreClientGrpcSimulacion extends WebCoreClientGrpcBase {
         return this.gson.toJson(serverResponse);
     }
     public String getUltimasMedidas (int idEjecucion, int idSensor, String  timestamp, int lastSecond, int lastEntities)  {
-        Domain.DatosEjecucionSensorReq reqObject = Domain.DatosEjecucionSensorReq.newBuilder()
-                .setIdEjecucion (idEjecucion)
+        Domain.UltimosDatosEjecucionReq reqObject = Domain.UltimosDatosEjecucionReq.newBuilder()
+                .setIdEjecucion(idEjecucion)
                 .setIdSensor (idSensor)
-                .setTimestamp(timestamp)
+                .setTimeStamp(timestamp)
                 .setLastSecond(lastSecond)
-                .setLastEntities(lastEntities)
+                .setLastEntrities(lastEntities)
                 .build();
 
-        Domain.MedidasEjecucionSensorReply serverResponse = this.stub.getMedidas (reqObject);
+        Domain.UltimasMedidasEjecucionReply serverResponse = this.stub.getUltimasMedidas (reqObject);
         return this.gson.toJson(serverResponse);
     }
 }

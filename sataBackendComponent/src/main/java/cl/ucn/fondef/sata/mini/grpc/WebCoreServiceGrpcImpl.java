@@ -195,6 +195,7 @@ public class WebCoreServiceGrpcImpl extends WebCoreCommuServiceGrpc.WebCoreCommu
         responseObserver.onCompleted(); //Terminar el proceso
     }
     public void getUltimasMedidas  (Domain.UltimosDatosEjecucionReq ultimosDatosEjecucionReq, StreamObserver<UltimasMedidasEjecucionReply> responseObserver) {
+        
         var grpcResponse = webCoreServiceGrpcSimulacion.getUltimasMedidas (ultimosDatosEjecucionReq, responseObserver);
         responseObserver.onNext(grpcResponse); //Enviar el objeto construido al cliente
         responseObserver.onCompleted(); //Terminar el proceso
