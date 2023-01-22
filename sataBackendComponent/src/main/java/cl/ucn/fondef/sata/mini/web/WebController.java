@@ -579,33 +579,28 @@ public class WebController {
         //if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
         return webCoreClientGrpcSimulacion.getMedidas(idEjecucion, idSensor);
     }
+
     // rpc getUltimaMedida (DatosEjecucionUltimaMedidaReq) returns (UltimaMedidaReply) {}
-    @RequestMapping(value = "api/ejecuciones/ultima/{idEjecucion}/{idSensor}", method = RequestMethod.GET)
-    public String getUltimaMedida (@PathVariable int idEjecucion, @PathVariable int idSensor, @RequestHeader(value="Authorization") String jwt) {
+    @RequestMapping(value = "api/ejecuciones/ultima_medida", method = RequestMethod.POST)
+    public String getUltimaMedida (@RequestBody WebReqUltimaMedida ultimaMedidaObj, @RequestHeader(value="Authorization") String jwt) {
         //if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
+        var idEjecucion = ultimaMedidaObj.getId_ejecucion();
+        var idSensor = ultimaMedidaObj.getId_sensor();
         return webCoreClientGrpcSimulacion.getUltimaMedida(idEjecucion, idSensor);
     }
+
     // rpc getUltimasMedidas (UltimosDatosEjecucionReq) returns (UltimasMedidasEjecucionReply) {}
-<<<<<<< HEAD
     @RequestMapping(value = "api/ejecuciones/UltimasMedidas", method = RequestMethod.POST)
     public String getUltimasMedidas (@RequestBody WebReqUltimasMedidas UltimasMedidas, @RequestHeader(value="Authorization") String jwt) {
+       //if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
        var idEjecucion = UltimasMedidas.getId_ejecucion();
        var idSensor = UltimasMedidas.getId_sensor();
        var timestamp = UltimasMedidas.getTimestamp();
        var lastSecond = UltimasMedidas.getLast_second();
        var lastEntrities = UltimasMedidas.getLast_entrities();
-=======
-    @RequestMapping(value = "api/ejecuciones/{idEjecucion}/{idSensor}/{timeStamp}/{lastSecond}/{lastEntrities}", method = RequestMethod.GET)
-    public String getUltimasMedidas (@PathVariable int idEjecucion, @PathVariable int idSensor, @PathVariable String timestamp, @PathVariable int lastSecond, @PathVariable int lastEntrities, @RequestHeader(value="Authorization") String jwt) {
-        System.out.println(idEjecucion);
-        System.out.println(idSensor);
-        System.out.println(timestamp);
-        System.out.println(lastSecond);
-        System.out.println(lastEntrities);
->>>>>>> 67795165f222b8fb50b0d1bcc7ce886ada29aa83
-        //if(this.tokenEsInvalido(jwt)) { return "Error. Token invalido"; }
-        return webCoreClientGrpcSimulacion.getUltimasMedidas(idEjecucion, idSensor, timestamp, lastSecond, lastEntrities);
+       return webCoreClientGrpcSimulacion.getUltimasMedidas(idEjecucion, idSensor, timestamp, lastSecond, lastEntrities);
     }
+
     //  rpc getUmbralesPorSensor (UmbralesSensorReq) returns (UmbralesSensorReply) {}
     @RequestMapping(value = "api/equipos/sensores/umbrales/{idSensor}", method = RequestMethod.GET)
     public String getUmbralesPorSensor(@PathVariable long idSensor, @RequestHeader(value="Authorization") String jwt) {

@@ -296,64 +296,64 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
     }
 
     // Si el atributo está en rojo es porque no existe en la respectiva clase del paquete Model
-    public List<Simulacion> getMedidasDB (int idEjecucion, int idSensor) {
+    public List<Simulacion> getMedidasDB (long idEjecucion, long idSensor) {
         //se obtienen las secuencias de la id de un equipo dado utilizando la id_equipo de componenteFisico
-<<<<<<< HEAD
         String sqlQuery = "SELECT s FROM Simulacion s WHERE " +
                 "s.id_ejecucion = :id_ejecucion AND " +
-                ":id_sensor = s.id_sensor";
+                "s.id_sensor = :id_sensor";
+
+        // OJO => EL PROTOBUFF QUE ENTREGA LOS ARGUMENTOS TIENE MÁS INFORMACIÓN
+
+        //System.out.println("idEjecucion: " + idEjecucion);
+        //System.out.println("idSensor: " + idSensor);
+        //System.out.println("timestamp: " + timestamp);
+        //System.out.println("lastSecond: " + lastSecond);
+        //System.out.println("lastEntities: " + lastEntities);
+        //System.out.println("\n");
+        //System.out.println("reqObject: " + reqObject);
+
         return (List<Simulacion>) entityManager.createQuery(sqlQuery)
                 .setParameter("id_ejecucion", idEjecucion)
                 .setParameter("id_sensor", idSensor)
-=======
-        String sqlQuery = "SELECT s, c FROM Secuencia s, Simulacion c WHERE " +
-                "c.id_ejecucion = :id_ejecucion AND " +
-                ":idSensor = c.idSensor";
-        return (List<Simulacion>) entityManager.createQuery(sqlQuery)
-                .setParameter("id_ejecucion", idEjecucion)
-                .setParameter("idSensor", idSensor)
->>>>>>> 67795165f222b8fb50b0d1bcc7ce886ada29aa83
                 .getResultList();
     }
 
 
     // Si el atributo está en rojo es porque no existe en la respectiva clase del paquete Model
-    public String getUltimaMedidasDB (int idEjecucion, int idSensor) {
+    public String getUltimaMedidasDB (long idEjecucion, long idSensor) {
         //se obtienen las secuencias de la id de un equipo dado utilizando la id_equipo de componenteFisico
         String sqlQuery = "SELECT s FROM Simulacion s WHERE "+
                 "s.id_ejecucion = :id_ejecucion AND " +
                 "s.id_sensor = :id_sensor";
+
         var ListaSimulacion = entityManager.createQuery(sqlQuery)
                 .setParameter("id_ejecucion", idEjecucion)
                 .setParameter("id_sensor", idSensor)
                 .getResultList();
-        var ultimoElemento = (Simulacion) ListaSimulacion.get(ListaSimulacion.size() - 1);
+
+        var listSize = ListaSimulacion.size();
+        if (listSize == 0) {
+            return "null#null#null#null";
+        }
+        var ultimoElemento = (Simulacion) ListaSimulacion.get(listSize - 1);
         return ultimoElemento.getCaudal()+"#"+ ultimoElemento.getTemperatura()+"#"+ultimoElemento.getPluviometro()+"#"+ultimoElemento.getPresion()+"#"+ultimoElemento.getHumedad();
     }
 
     // Si el atributo está en rojo es porque no existe en la respectiva clase del paquete Model
     public List<Simulacion> getUltimasMedidasDB (int idEjecucion, int idSensor, String  timestamp, int lastSecond, int lastEntrities) {
         //se obtienen las secuencias de la id de un equipo dado utilizando la id_equipo de componenteFisico
-        String sqlQuery = "SELECT c FROM Simulacion c WHERE " +
-                "c.id_ejecucion = :id_ejecucion AND " +
-<<<<<<< HEAD
-                "c.id_sensor = :id_sensor AND " +
-=======
-                "c.idSensor = :idSensor AND " +
->>>>>>> 67795165f222b8fb50b0d1bcc7ce886ada29aa83
-                "c.timestamp = :timestamp AND " +
-                "c.last_second = :last_second AND " +
-                "c.last_entrities = :last_entrities";
+        String sqlQuery = "SELECT s FROM Simulacion s WHERE " +
+                "s.id_ejecucion = :id_ejecucion AND " +
+                "s.id_sensor = :id_sensor AND " +
+                "s.timestamp = :timestamp AND " +
+                "s.last_second = :last_second AND " +
+                "s.last_entrities = :last_entrities";
         return (List<cl.ucn.fondef.sata.mini.model.Simulacion>) entityManager.createQuery(sqlQuery)
                 .setParameter("id_ejecucion", idEjecucion)
-<<<<<<< HEAD
-                .setParameter("id_sensor", idSensor)
-=======
                 .setParameter("idSensor", idSensor)
->>>>>>> 67795165f222b8fb50b0d1bcc7ce886ada29aa83
                 .setParameter("timestamp", timestamp)
-                .setParameter("last_second", lastSecond)
-                .setParameter("last_entrities", lastEntrities)
+                .setParameter("lastSecond", lastSecond)
+                .setParameter("lastEntrities", lastEntrities)
                 .getResultList();
     }
 

@@ -386,7 +386,7 @@ public class WebCoreServiceGrpcSimulacion {
         return mediciones.getCaudal()+"#"+ mediciones.getTemperatura()+"#"+mediciones.getPluviometro()+"#"+mediciones.getPresion()+"#"+mediciones.getHumedad();
     }
     public Domain.MedidasEjecucionSensorReply getMedidas (Domain.DatosEjecucionSensorReq datosEjecucionSensorReq, StreamObserver<Domain.MedidasEjecucionSensorReply> responseObserver) {
-        List<Simulacion> listaMedidas = coreDaoSimulacion.getMedidasDB ((int) datosEjecucionSensorReq.getIdEjecucion(), (int) datosEjecucionSensorReq.getIdSensor());
+        List<Simulacion> listaMedidas = coreDaoSimulacion.getMedidasDB ( datosEjecucionSensorReq.getIdEjecucion(), datosEjecucionSensorReq.getIdSensor());
         Domain.MedidasEjecucionSensorReply.Builder reply = Domain.MedidasEjecucionSensorReply.newBuilder();
         listaMedidas.forEach(componente -> {
             Domain.Medida medidas = Domain.Medida.newBuilder().setIdEjecucion(datosEjecucionSensorReq.getIdEjecucion()).setSensores (this.getMedida(componente)).build();
@@ -397,11 +397,11 @@ public class WebCoreServiceGrpcSimulacion {
 
 
     public Domain.UltimaMedidaReply getUltimaMedida(Domain.DatosEjecucionUltimaMedidaReq datosEjecucionUltimaMedidaReq, StreamObserver<Domain.UltimaMedidaReply> responseObserver) {
-        var UltimaMedida = coreDaoSimulacion.getUltimaMedidasDB ((int) datosEjecucionUltimaMedidaReq.getIdEjecucion(), (int) datosEjecucionUltimaMedidaReq.getIdSensor());
+        var ultimaMedida = coreDaoSimulacion.getUltimaMedidasDB (datosEjecucionUltimaMedidaReq.getIdEjecucion(), datosEjecucionUltimaMedidaReq.getIdSensor());
         Domain.UltimaMedidaReply.Builder reply = Domain.UltimaMedidaReply.newBuilder();
         reply.setIdSensor(datosEjecucionUltimaMedidaReq.getIdSensor());
         reply.setIdEjecucion(datosEjecucionUltimaMedidaReq.getIdEjecucion());
-        reply.setUltMedida(UltimaMedida);
+        reply.setUltMedida(ultimaMedida);
         return reply.build();
     }
 

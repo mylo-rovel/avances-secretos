@@ -167,7 +167,7 @@ public final class WebCoreClientGrpcSimulacion extends WebCoreClientGrpcBase {
                 .setLastSecond(lastSecond)
                 .setLastEntities(lastEntities)
                 .build();
-        /**/
+
         Domain.MedidasEjecucionSensorReply serverResponse = this.stub.getMedidas (reqObject);
         return this.gson.toJson(serverResponse);
     }
