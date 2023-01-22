@@ -24,6 +24,7 @@ public class CoreBoardServiceGrpcImpl extends CoreBoardCommuServiceGrpc.CoreBoar
     @Override
     public void sendLecturasSensores(Domain.LecturaSensoresReq lecturaSensoresReq, StreamObserver<Domain.EmptyReq> responseObserver){
         log.info("\n\nCaudal recibido desde el equipo: " + lecturaSensoresReq.getNombreEquipo());
+        log.info("\n\nDatos recibidos" + lecturaSensoresReq);
         Domain.EmptyReq grpcResponse = webCoreServiceGrpcSimulacion.sendLecturasSensores(lecturaSensoresReq, responseObserver);
         responseObserver.onNext(grpcResponse);
         responseObserver.onCompleted();
