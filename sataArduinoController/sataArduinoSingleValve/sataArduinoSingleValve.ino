@@ -1,4 +1,4 @@
-#include <ArduinoJson.h>
+-#include <ArduinoJson.h>
 //---Variable global para el manejo del input JSON
 StaticJsonDocument<768> doc; 
 
