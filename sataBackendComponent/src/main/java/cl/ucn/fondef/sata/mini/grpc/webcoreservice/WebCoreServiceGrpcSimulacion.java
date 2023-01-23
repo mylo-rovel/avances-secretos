@@ -235,9 +235,20 @@ public class WebCoreServiceGrpcSimulacion {
         log.info("LEYENDO SENSORES DEL EQUIPO " + lecturaSensoresReq.getNombreEquipo() + ": "
                 + lecturaSensoresReq.getCaudal() + "#" + lecturaSensoresReq.getHora());
 
-        InformacionBoard equipoSimulando = ejecucionesEquipo.get(lecturaSensoresReq.getNombreEquipo());
-        equipoSimulando.getValoresGrafico().add(lecturaSensoresReq.getCaudal() + "#" + lecturaSensoresReq.getHora());
-        log.info("Cantidad lecturas: " + equipoSimulando.getValoresGrafico().size());
+        // CODIGO ANTIGUO => LOS DATOS SE GUARDABAN EN MEMORIA
+        //InformacionBoard equipoSimulando = ejecucionesEquipo.get(lecturaSensoresReq.getNombreEquipo());
+        //quipoSimulando.getValoresGrafico().add(lecturaSensoresReq.getCaudal() + "#" + lecturaSensoresReq.getHora());
+        //log.info("Cantidad lecturas: " + equipoSimulando.getValoresGrafico().size());
+
+        // AHORA QUEREMOS GUARDAR EN LA BASE DE DATOS
+
+        var mensajeRespuesta = coreDaoSimulacion.storeDatosLecturaArduino(
+                lecturaSensoresReq.getCaudal(),
+                lecturaSensoresReq.getTemperatura(),
+                lecturaSensoresReq.getHumedad(),
+                lecturaSensoresReq.getPresion(),
+                lecturaSensoresReq.getPluviometro()
+        );
         return Domain.EmptyReq.newBuilder().build();
     }
 

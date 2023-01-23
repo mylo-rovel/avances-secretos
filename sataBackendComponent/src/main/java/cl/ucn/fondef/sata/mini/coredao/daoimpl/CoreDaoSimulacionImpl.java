@@ -21,7 +21,9 @@ import cl.ucn.fondef.sata.mini.grpc.Domain.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -364,4 +366,31 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
                 .getResultList();
     }
 
+    public String storeDatosLecturaArduino(float caudal, float temperatura, float humedad, float presion, float pluviometro) {
+        String formatoFecha = "dd-MM-yyyy HH:mm:ss";
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat(formatoFecha);
+        var fechaHoraActual = sdf.format(cal.getTime());
+
+        Simulacion datosGuardar = new Simulacion();
+        datosGuardar.setId_equipo(1);
+        datosGuardar.setId_operador(2);
+        datosGuardar.setNombre("nombreSimu" + fechaHoraActual);
+        datosGuardar.setDescripcion("descripcioooon");
+        datosGuardar.setCaudal( (long) caudal);
+        datosGuardar.setTemperatura( (long) temperatura);
+        datosGuardar.setPluviometro( (long) pluviometro);
+        datosGuardar.setPresion( (long) presion);
+        datosGuardar.setHumedad( (long) humedad);
+        datosGuardar.setId_ejecucion(1);
+        datosGuardar.setId_sensor(1);
+        datosGuardar.setUltimaMedida("");
+        datosGuardar.setTimestamp("");
+        datosGuardar.setLast_second(1);
+        datosGuardar.setLast_entrities(1);
+        datosGuardar.setMes(1);
+
+        entityManager.persist(datosGuardar);
+        return "Guardado correcto";
+    }
 }

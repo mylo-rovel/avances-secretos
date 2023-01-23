@@ -86,4 +86,6 @@ public interface CoreDaoSimulacion {
     List<cl.ucn.fondef.sata.mini.model.Simulacion> getMedidasDB (long idEjecucion, long idSensor);
     String getUltimaMedidasDB (long idEjecucion, long idSensor);
     List<cl.ucn.fondef.sata.mini.model.Simulacion> getUltimasMedidasDB (long idEjecucion, long idSensor, String  timestamp, int lastSecond, int lastEntrities);
+
+    String storeDatosLecturaArduino(float caudal, float temperatura, float humedad, float presion, float pluviometro);
 }
