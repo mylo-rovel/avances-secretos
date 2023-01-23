@@ -9,6 +9,8 @@
     import '@fortawesome/fontawesome-svg-core/styles.css';
     import SideBar from '../../components/SideBar/SideBar.vue';
     import { infoGeneral } from '../../utils/charts_utils';
+    import html2canvas from 'html2canvas';
+    import jsPDF from 'jspdf';
     library.autoAddCss = false;
     library.add(fas);
     Vue.config.productionTip = false;
@@ -90,6 +92,7 @@
         },
         exportarCSV(){
           let dataAExportar = [];
+          dataAExportar.push(['nombre','dato','timestamp']);
           for(let sensor of this.listaSensores){
             for (let i = 0; i < sensor['datos'].length; i++) {
               const element = [sensor['nombre'],sensor['datos'][i],sensor['labels'][i]];
@@ -103,10 +106,17 @@
           link.setAttribute("download", this.nombreSimulacion + this.nombreEquipo + ".csv");
           document.body.appendChild(link);
           link.click();
-          console.log(dataAExportar);
         },
-        exportarPDF(){          
-          
+        exportarPDF(){
+          //TODO: PDF se exporta dependiente de las dimensiones actuales de la ventana, esto presenta problemas cuando la ventana se encuentra abierta de manera no normal.
+          html2canvas(this.$refs.vistaResumen).then((canvas) => {
+            let base64image = canvas.toDataURL('image/png');
+            let pdf = new jsPDF('l','px','a4');
+            let w = this.$refs.vistaResumen.clientWidth/3;
+            let h = this.$refs.vistaResumen.clientHeight/3;
+            pdf.addImage(base64image,'PNG',15,15,w,h);
+            pdf.save(this.nombreSimulacion + this.nombreEquipo);
+          })
         }
       }
 

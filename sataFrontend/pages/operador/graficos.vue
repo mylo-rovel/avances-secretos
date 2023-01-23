@@ -97,6 +97,7 @@
           const queryString = window.location.search;
           const urlParams = new URLSearchParams(queryString);
           const graphIndex = urlParams.get('g');
+          dataAExportar.push(['nombre','dato','timestamp']);
           for(let sensor of this.listaSensores){
             if(this.tiposSensores[graphIndex] == sensor['tipo']){
               for (let i = 0; i < sensor['datos'].length; i++) {
@@ -114,13 +115,14 @@
           link.click();
           console.log(dataAExportar);
         }
+
       }
     })
 
 </script>
 
 <template>
-  <section id="vistaResumen">
+  <section ref="vistaResumen">
     <SideBar/>
     <div class="container">
         <div class="row">
