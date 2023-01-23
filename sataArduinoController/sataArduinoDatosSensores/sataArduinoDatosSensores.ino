@@ -117,7 +117,7 @@ void loop ()
     String strVPluv = (String) volumenPluv;
     String strP = (String) pressure_bar;
     String strA = (String) agua_caida_L_m2;
-    Serial.print(strH + "" + strT + "" + strC + "" + strV + "" + strVPluv + "" + strP + "" + strA);
+    Serial.print(strH + "#" + strT + "#" + strC + "#" + strV + "#" + strVPluv + "#" + strP + "#" + strA);
   }
 
   delay(2000);
