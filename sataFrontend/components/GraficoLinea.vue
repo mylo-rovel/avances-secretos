@@ -30,7 +30,7 @@
       },
       dynChartOptions() {
         const chartOptions = getDefaultChartOptions();
-        //chartOptions.options = this.chartDataProps.optioncsL;
+        chartOptions.scales = this.chartDataProps.optionsL;
         return chartOptions;
       }
     },

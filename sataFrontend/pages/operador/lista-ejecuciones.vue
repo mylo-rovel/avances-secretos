@@ -119,6 +119,9 @@
               <h6>Año</h6>      
               <select class="options" v-model="filtroAnno" @change="filtrar()">
                 <option value="">Seleccione una opción</option>
+                <option>2019</option>
+                <option>2020</option>
+                <option>2021</option>
                 <option>2022</option>
               </select>
             </li>

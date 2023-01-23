@@ -9,7 +9,7 @@
     import '@fortawesome/fontawesome-svg-core/styles.css';
     import GraficoLinea from '~/components/GraficoLinea.vue';
     import SideBar from '../../components/SideBar/SideBar.vue';
-    import { infoGeneral,listaColores } from '../../utils/charts_utils'
+    import { infoGeneral, listaColores, optionsHum, optionsTemp, optionsPluv } from '../../utils/charts_utils'
     library.autoAddCss = false;
     library.add(fas);
     Vue.config.productionTip = false;
@@ -40,9 +40,16 @@
             "Temperatura",
             "Humedad"
           ],
+          listaOpciones:[
+            optionsPluv,
+            optionsTemp,
+            optionsHum
+          ]
+          ,
           idSimEjecutada:"",
           nombreEquipo: "",
           nombreSimulacion:"",
+
         };
       },
       
@@ -56,7 +63,6 @@
           this.nombrePag = this.nombresPag[graphIndex];
           this.idSimEjecutada = urlParams.get('id');
           let datasets = [];
-          
           this.listaSensores = infoGeneral['listaSensores'];
           this.nombreEquipo = infoGeneral['nombreEquipo'];
           this.nombreSimulacion = infoGeneral['nombreSimulacion'];
@@ -76,6 +82,8 @@
             }
           }
           this.chartDataProps.dataL = datasets;
+          this.chartDataProps.optionsL = this.listaOpciones[graphIndex];
+
       },
       methods: {
         getRequestConfig() {
@@ -106,7 +114,6 @@
           link.click();
           console.log(dataAExportar);
         }
-        
       }
     })
 
