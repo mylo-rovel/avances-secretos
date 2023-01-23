@@ -53,6 +53,10 @@ class SataBoardClient:
             serverResponse = self.stub.sendLecturasSensores(
             ReqResModule.LecturaSensoresReq(
                 caudal = caudalArduino,
+                temperatura= 2.2,
+                humedad = 3.3,
+                presion = 4.4,
+                pluviometro = 5.5,
                 hora = horaCaudal,
                 nombreEquipo = nombreEquipo
             ))
