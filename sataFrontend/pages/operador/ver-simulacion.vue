@@ -12,7 +12,7 @@
         setListasDesplegables, 
         getListasUsarDatosGrafico, 
         checkIfUserShouldBeHere } from '~/utils/utility_functions';
-    import { infoGeneral , listaColores, infoVivo } from '../../utils/charts_utils';
+    import { infoGeneral , listaColores, infoVivo2, optionsPluv, optionsHum, optionsTemp } from '../../utils/charts_utils';
 
     export default Vue.extend({
         name: "VerSimulacion",
@@ -48,7 +48,7 @@
         computed: mapState(["urlApi"]),
         async mounted(){
             checkIfUserShouldBeHere(["OPERADOR"]);
-            this.listaSensores = infoVivo['listaSensores'];
+            this.listaSensores = infoVivo2['listaSensores'];
             const listaSensoresPluvParcial = [];
             const listaSensoresTempParcial = [];
             const listaSensoresHumParcial = [];
@@ -99,13 +99,21 @@
             this.listaSensoresTemp = listaSensoresTempParcial;
             this.listaSensoresHum = listaSensoresHumParcial;
             this.chartDataPropsHum.dataL = datasetsHum;
+            this.chartDataPropsHum.optionsL = optionsHum;
             this.chartDataPropsPluv.dataL = datasetsPluv;
+            this.chartDataPropsPluv.optionsL = optionsPluv;
             this.chartDataPropsTemp.dataL = datasetsTemp;
-            this.intervalo = setInterval(this.getMasDatosEjecucion, 1000);
-        },
-        async beforeUnmount(){
-            clearInterval(this.intervalo);
-        },
+            this.chartDataPropsTemp.optionsL = optionsTemp;
+            this.intervalo = setInterval(
+                () => {
+                    // alert(this.intervalo);  
+                    this.getMasDatosEjecucion();
+                    if(document.title != 'Ver Simualción - Sistema de Alerta Temprana Aluvional'){
+                        this.clearCustomInterval();
+                    }
+                }, 1000);
+        }
+        ,
         methods:{
             async sendVerSimulacionReq(e){
                 e.preventDefault();
@@ -163,9 +171,11 @@
                     const randomTemp = Math.floor(Math.random() * (22 - 18) + 18);
                     element.datos.push(randomTemp);
                 }
-
-                console.log(this.listaSensores)
             },
+            clearCustomInterval() {
+                const intervalId = this.intervalo;
+                clearInterval(intervalId);
+            }
         }
     })
 </script>
@@ -179,10 +189,11 @@
                     <div class="my-4" >
                     <NuxtLink :to="'equipos-en-ejecucion'">
                         <CustomButton :text="'Volver'" :custombcolor="'#7f8a99'" :customhcolor="'#575c63'" style="width: 6em" />
-                    </NuxtLink>     
+                    </NuxtLink> 
                     </div>
                     <h2>Ver Simulación</h2>
                 </div>
+
                 <div class="row" style="justify-content:center;border-top: 1mm solid #2162ad;">
                     <h3 style="margin-top: 10px;">Temperatura</h3>
                     <div class="row" style="justify-content:center;">
