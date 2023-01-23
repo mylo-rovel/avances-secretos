@@ -329,8 +329,13 @@ message EjecucionesReply {
 
 message LecturaSensoresReq {
   float caudal = 1;
-  string hora = 2;
-  string nombreEquipo = 3;
+  float temperatura = 2;
+  float humedad = 3;
+  float presion = 4;
+  float pluviometro = 5;
+  string hora = 6;
+  string nombreEquipo = 7;
+  float aguaCaida = 8;
 }
 
 message LecturaSensoresReply {
