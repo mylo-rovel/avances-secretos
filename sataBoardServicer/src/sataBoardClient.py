@@ -45,7 +45,7 @@ class SataBoardClient:
             return None
 
 
-    def sendCaudalToCentralCore(self, caudalArduino):
+    def sendDatosToCentralCore(self, caudalArduino):
         try:
             now = datetime.now()
             horaCaudal = ":".join(str(now.time()).split(":")[0:2])
