@@ -342,6 +342,7 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
 
         var listSize = ListaSimulacion.size();
         if (listSize == 0) {
+
             return "null#null#null#null";
         }
         var ultimoElemento = (Simulacion) ListaSimulacion.get(listSize - 1);
