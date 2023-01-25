@@ -81,11 +81,11 @@ public interface CoreDaoSimulacion {
      */
     String startSimulacion(StartSimulacionReq startSimulacionReq, HashMap<String, InformacionBoard> ejecucionesEquipo);
 
-    List<cl.ucn.fondef.sata.mini.model.Simulacion> getSimulacionesEjectuadasDB (long idEquipo, int mes);
-    List<cl.ucn.fondef.sata.mini.model.Simulacion> getDatosResumenDB (long idEquipo, long caudal, long temperatura, long pluviometro, long presion, long humedad);
-    List<cl.ucn.fondef.sata.mini.model.Simulacion> getMedidasDB (long idEjecucion, long idSensor);
+    List<cl.ucn.fondef.sata.mini.model.Ejecucion> getSimulacionesEjectuadasDB (long idEquipo, int mes);
+    List<cl.ucn.fondef.sata.mini.model.Ejecucion> getDatosResumenDB (long idEquipo, long caudal, long temperatura, long pluviometro, long presion, long humedad);
+    List<cl.ucn.fondef.sata.mini.model.Ejecucion> getMedidasDB (long idEjecucion, long idSensor);
     String getUltimaMedidasDB (long idEjecucion, long idSensor);
-    List<cl.ucn.fondef.sata.mini.model.Simulacion> getUltimasMedidasDB (long idEjecucion, long idSensor, String  timestamp, int lastSecond, int lastEntrities);
+    List<cl.ucn.fondef.sata.mini.model.Ejecucion> getUltimasMedidasDB (long idEjecucion, long idSensor, String  timestamp, int lastSecond, int lastEntities);
 
     String storeDatosLecturaArduino(float caudal, float temperatura, float humedad, float presion, float pluviometro);
 }

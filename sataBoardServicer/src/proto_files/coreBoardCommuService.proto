@@ -311,7 +311,6 @@ message EjecucionReply {
   string descripcion_equipo = 5;
   string fecha_ejecucion = 6;
   repeated Secuencia secuencia = 7;
-  double agua_caida = 8;
 }
 
 message EjecucionAcotada {
@@ -320,7 +319,6 @@ message EjecucionAcotada {
   string nombre_simulacion = 2;
   string nombre_equipo = 3;
   string fecha_ejecucion = 4;
-  double agua_caida = 5;
 }
 
 message EjecucionesReply {
@@ -335,7 +333,6 @@ message LecturaSensoresReq {
   float pluviometro = 5;
   string hora = 6;
   string nombreEquipo = 7;
-  float aguaCaida = 8;
 }
 
 message LecturaSensoresReply {
@@ -355,5 +352,4 @@ message SaludoBoardReply {
 
 message AvisoTerminoEjecucionReq {
   string nombreEquipo = 1;
-  double agua_caida = 2;
 }

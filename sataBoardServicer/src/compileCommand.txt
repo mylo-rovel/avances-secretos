@@ -1,2 +1,3 @@
+Si estas en Windows:
 desde la CMD con el path en C:<PATH_DE_CADA_UNO>\avances-secretos\sataBoardServicer\src :
-python -m grpc_tools.protoc -I .\proto_files\ --python_out=. --pyi_out=. --grpc_python_out=. .\proto_files\coreBoardCommuService.proto
+    python -m grpc_tools.protoc -I .\proto_files\ --python_out=. --pyi_out=. --grpc_python_out=. .\proto_files\coreBoardCommuService.proto

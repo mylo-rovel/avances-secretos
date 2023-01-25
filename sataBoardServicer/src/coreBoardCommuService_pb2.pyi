@@ -42,12 +42,10 @@ class ArchivosEntityReply(_message.Message):
     def __init__(self, archivo: _Optional[_Union[ArchivoEntity, _Mapping]] = ...) -> None: ...
 
 class AvisoTerminoEjecucionReq(_message.Message):
-    __slots__ = ["agua_caida", "nombreEquipo"]
-    AGUA_CAIDA_FIELD_NUMBER: _ClassVar[int]
+    __slots__ = ["nombreEquipo"]
     NOMBREEQUIPO_FIELD_NUMBER: _ClassVar[int]
-    agua_caida: float
     nombreEquipo: str
-    def __init__(self, nombreEquipo: _Optional[str] = ..., agua_caida: _Optional[float] = ...) -> None: ...
+    def __init__(self, nombreEquipo: _Optional[str] = ...) -> None: ...
 
 class Componente(_message.Message):
     __slots__ = ["descripcion", "estado", "id", "nombre", "pin_componente", "tipo", "tipo_placa", "url"]
@@ -98,22 +96,19 @@ class CredencialesEntityReq(_message.Message):
     def __init__(self, email: _Optional[str] = ..., password: _Optional[str] = ...) -> None: ...
 
 class EjecucionAcotada(_message.Message):
-    __slots__ = ["agua_caida", "fecha_ejecucion", "id", "nombre_equipo", "nombre_simulacion"]
-    AGUA_CAIDA_FIELD_NUMBER: _ClassVar[int]
+    __slots__ = ["fecha_ejecucion", "id", "nombre_equipo", "nombre_simulacion"]
     FECHA_EJECUCION_FIELD_NUMBER: _ClassVar[int]
     ID_FIELD_NUMBER: _ClassVar[int]
     NOMBRE_EQUIPO_FIELD_NUMBER: _ClassVar[int]
     NOMBRE_SIMULACION_FIELD_NUMBER: _ClassVar[int]
-    agua_caida: float
     fecha_ejecucion: str
     id: int
     nombre_equipo: str
     nombre_simulacion: str
-    def __init__(self, id: _Optional[int] = ..., nombre_simulacion: _Optional[str] = ..., nombre_equipo: _Optional[str] = ..., fecha_ejecucion: _Optional[str] = ..., agua_caida: _Optional[float] = ...) -> None: ...
+    def __init__(self, id: _Optional[int] = ..., nombre_simulacion: _Optional[str] = ..., nombre_equipo: _Optional[str] = ..., fecha_ejecucion: _Optional[str] = ...) -> None: ...
 
 class EjecucionReply(_message.Message):
-    __slots__ = ["agua_caida", "descripcion", "descripcion_equipo", "fecha_ejecucion", "id", "nombre", "nombre_equipo", "secuencia"]
-    AGUA_CAIDA_FIELD_NUMBER: _ClassVar[int]
+    __slots__ = ["descripcion", "descripcion_equipo", "fecha_ejecucion", "id", "nombre", "nombre_equipo", "secuencia"]
     DESCRIPCION_EQUIPO_FIELD_NUMBER: _ClassVar[int]
     DESCRIPCION_FIELD_NUMBER: _ClassVar[int]
     FECHA_EJECUCION_FIELD_NUMBER: _ClassVar[int]
@@ -121,7 +116,6 @@ class EjecucionReply(_message.Message):
     NOMBRE_EQUIPO_FIELD_NUMBER: _ClassVar[int]
     NOMBRE_FIELD_NUMBER: _ClassVar[int]
     SECUENCIA_FIELD_NUMBER: _ClassVar[int]
-    agua_caida: float
     descripcion: str
     descripcion_equipo: str
     fecha_ejecucion: str
@@ -129,7 +123,7 @@ class EjecucionReply(_message.Message):
     nombre: str
     nombre_equipo: str
     secuencia: _containers.RepeatedCompositeFieldContainer[Secuencia]
-    def __init__(self, id: _Optional[int] = ..., nombre: _Optional[str] = ..., descripcion: _Optional[str] = ..., nombre_equipo: _Optional[str] = ..., descripcion_equipo: _Optional[str] = ..., fecha_ejecucion: _Optional[str] = ..., secuencia: _Optional[_Iterable[_Union[Secuencia, _Mapping]]] = ..., agua_caida: _Optional[float] = ...) -> None: ...
+    def __init__(self, id: _Optional[int] = ..., nombre: _Optional[str] = ..., descripcion: _Optional[str] = ..., nombre_equipo: _Optional[str] = ..., descripcion_equipo: _Optional[str] = ..., fecha_ejecucion: _Optional[str] = ..., secuencia: _Optional[_Iterable[_Union[Secuencia, _Mapping]]] = ...) -> None: ...
 
 class EjecucionesReply(_message.Message):
     __slots__ = ["ejecucion_acotada"]
@@ -222,8 +216,7 @@ class LecturaSensoresReply(_message.Message):
     def __init__(self, caudal_tiempo: _Optional[str] = ..., lista_size: _Optional[int] = ...) -> None: ...
 
 class LecturaSensoresReq(_message.Message):
-    __slots__ = ["aguaCaida", "caudal", "hora", "humedad", "nombreEquipo", "pluviometro", "presion", "temperatura"]
-    AGUACAIDA_FIELD_NUMBER: _ClassVar[int]
+    __slots__ = ["caudal", "hora", "humedad", "nombreEquipo", "pluviometro", "presion", "temperatura"]
     CAUDAL_FIELD_NUMBER: _ClassVar[int]
     HORA_FIELD_NUMBER: _ClassVar[int]
     HUMEDAD_FIELD_NUMBER: _ClassVar[int]
@@ -231,7 +224,6 @@ class LecturaSensoresReq(_message.Message):
     PLUVIOMETRO_FIELD_NUMBER: _ClassVar[int]
     PRESION_FIELD_NUMBER: _ClassVar[int]
     TEMPERATURA_FIELD_NUMBER: _ClassVar[int]
-    aguaCaida: float
     caudal: float
     hora: str
     humedad: float
@@ -239,7 +231,7 @@ class LecturaSensoresReq(_message.Message):
     pluviometro: float
     presion: float
     temperatura: float
-    def __init__(self, caudal: _Optional[float] = ..., temperatura: _Optional[float] = ..., humedad: _Optional[float] = ..., presion: _Optional[float] = ..., pluviometro: _Optional[float] = ..., hora: _Optional[str] = ..., nombreEquipo: _Optional[str] = ..., aguaCaida: _Optional[float] = ...) -> None: ...
+    def __init__(self, caudal: _Optional[float] = ..., temperatura: _Optional[float] = ..., humedad: _Optional[float] = ..., presion: _Optional[float] = ..., pluviometro: _Optional[float] = ..., hora: _Optional[str] = ..., nombreEquipo: _Optional[str] = ...) -> None: ...
 
 class MensajeReply(_message.Message):
     __slots__ = ["mensaje_texto"]

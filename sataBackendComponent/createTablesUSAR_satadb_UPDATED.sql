@@ -73,8 +73,19 @@ DROP TABLE IF EXISTS `ejecucion`;
 CREATE TABLE `ejecucion` (
   `id` bigint(20) NOT NULL,
   `id_simulacion` bigint(20) NOT NULL,
-  `agua_caida` double NOT NULL DEFAULT 0,
-  `fecha_ejecucion` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `fecha_ejecucion` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `caudal` double NOT NULL,
+  `temperatura` double NOT NULL,
+  `pluviometro` double NOT NULL,
+  `presion` double NOT NULL,
+  `humedad` double NOT NULL,
+  `id_ejecucion` bigint(20) NOT NULL,
+  `id_sensor` bigint(20) NOT NULL,
+  `ultima_medida` text NOT NULL,
+  `timestamp` text NOT NULL,
+  `last_second` int(11) NOT NULL,
+  `last_entities` int(11) NOT NULL,
+  `mes` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -325,19 +336,7 @@ CREATE TABLE `simulacion` (
   `id_operador` bigint(20) NOT NULL,
   `nombre` varchar(30) NOT NULL,
   `descripcion` varchar(255) NOT NULL,
-  `fecha_creacion` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `caudal` bigint(20) NOT NULL,
-  `temperatura` bigint(20) NOT NULL,
-  `pluviometro` bigint(20) NOT NULL,
-  `presion` bigint(20) NOT NULL,
-  `humedad` bigint(20) NOT NULL,
-  `id_ejecucion` bigint(20) NOT NULL,
-  `id_sensor` bigint(20) NOT NULL,
-  `ultima_medida` text NOT NULL,
-  `timestamp` text NOT NULL,
-  `last_second` int(11) NOT NULL,
-  `last_entrities` int(11) NOT NULL,
-  `mes` int(11) NOT NULL
+  `fecha_creacion` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------

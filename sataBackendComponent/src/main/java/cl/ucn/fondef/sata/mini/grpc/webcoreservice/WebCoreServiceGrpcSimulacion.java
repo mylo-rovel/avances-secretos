@@ -164,7 +164,6 @@ public class WebCoreServiceGrpcSimulacion {
                 .setDescripcionEquipo(equipoDB.getDescripcion())
                 .setFechaEjecucion(ejecucionDB.getFechaEjecucion())
                 .addAllSecuencia(listaSecuenciasGrpc)
-                .setAguaCaida(ejecucionDB.getAguaCaida())
                 .build();
     }
 
@@ -185,7 +184,6 @@ public class WebCoreServiceGrpcSimulacion {
                     .setNombreSimulacion(simulacionEjecutada.getNombre())
                     .setNombreEquipo(equipoUsado.getNombre())
                     .setFechaEjecucion(listaEjecuciones.get(i).getFechaEjecucion())
-                    .setAguaCaida(listaEjecuciones.get(i).getAguaCaida())
                     .build();
 
             listaAcotadaEjecuciones.addEjecucionAcotada(ejecucionAcotada);
@@ -241,7 +239,6 @@ public class WebCoreServiceGrpcSimulacion {
         //log.info("Cantidad lecturas: " + equipoSimulando.getValoresGrafico().size());
 
         // AHORA QUEREMOS GUARDAR EN LA BASE DE DATOS
-
         var mensajeRespuesta = coreDaoSimulacion.storeDatosLecturaArduino(
                 lecturaSensoresReq.getCaudal(),
                 lecturaSensoresReq.getTemperatura(),
@@ -249,6 +246,7 @@ public class WebCoreServiceGrpcSimulacion {
                 lecturaSensoresReq.getPresion(),
                 lecturaSensoresReq.getPluviometro()
         );
+        log.info(mensajeRespuesta);
         return Domain.EmptyReq.newBuilder().build();
     }
 
@@ -287,7 +285,6 @@ public class WebCoreServiceGrpcSimulacion {
             InformacionBoard entradaEquipoOLD = ejecucionesEquipo.get(equipoGuardadoDB.getNombre());
             entradaEquipoOLD.resetCoreBoardClient(saludoBoardReq.getDireccionIpEquipo());
             entradaEquipoOLD.setValoresGrafico(new ArrayList<>());
-            entradaEquipoOLD.setAguaCaidaActual(0.0);
             entradaEquipoOLD.setEstaEjecutandose(false);
         }
 
@@ -311,11 +308,10 @@ public class WebCoreServiceGrpcSimulacion {
             return Domain.EmptyReq.newBuilder().build();
         }
         InformacionBoard equipoEjecutandose = ejecucionesEquipo.get(avisoTerminoEjecucionReq.getNombreEquipo());
-        equipoEjecutandose.setAguaCaidaActual(avisoTerminoEjecucionReq.getAguaCaida());
         equipoEjecutandose.setEstaEjecutandose(false);
 
         log.info("EJECUCION FINALIZADA");
-        log.info("Equipo = " + avisoTerminoEjecucionReq.getNombreEquipo() + "   Agua caida = " + avisoTerminoEjecucionReq.getAguaCaida());
+        log.info("Equipo = " + avisoTerminoEjecucionReq.getNombreEquipo());
         return Domain.EmptyReq.newBuilder().build();
     }
 
@@ -374,7 +370,7 @@ public class WebCoreServiceGrpcSimulacion {
         return reply.build();
     }
     public Domain.SimulacionesEquipoMesReply getSimulacionesEjecutadas(Domain.DatosSimulacionesEquipoMesReq datosSimulacionesEquipoMesReq, StreamObserver<Domain.SimulacionesEquipoMesReply> responseObserver) {
-        List<Simulacion> listaSimulacionesMes = coreDaoSimulacion.getSimulacionesEjectuadasDB(datosSimulacionesEquipoMesReq.getIdEquipo(), datosSimulacionesEquipoMesReq.getMes());
+        List<Ejecucion> listaSimulacionesMes = coreDaoSimulacion.getSimulacionesEjectuadasDB(datosSimulacionesEquipoMesReq.getIdEquipo(), datosSimulacionesEquipoMesReq.getMes());
         Domain.SimulacionesEquipoMesReply.Builder reply = Domain.SimulacionesEquipoMesReply.newBuilder();
         listaSimulacionesMes.forEach(componente -> {
             Domain.Simulacione simulacione = Domain.Simulacione.newBuilder().setIdEquipo(datosSimulacionesEquipoMesReq.getIdEquipo()).setMes(datosSimulacionesEquipoMesReq.getMes()).build();
@@ -384,7 +380,7 @@ public class WebCoreServiceGrpcSimulacion {
 
     }
     public Domain.ResumenSimulacionReply getDatosResumen(Domain.DatosSimulacionReq datosSimulacionReq, StreamObserver<Domain.ResumenSimulacionReply> responseObserver) {
-        List<Simulacion> listaDatosResumen = coreDaoSimulacion.getDatosResumenDB(datosSimulacionReq.getIdSimulacion(), datosSimulacionReq.getCaudal(), datosSimulacionReq.getTemperatura(),datosSimulacionReq.getPluviometro(),  datosSimulacionReq.getPresion(),  datosSimulacionReq.getHumedad());
+        List<Ejecucion> listaDatosResumen = coreDaoSimulacion.getDatosResumenDB(datosSimulacionReq.getIdSimulacion(), datosSimulacionReq.getCaudal(), datosSimulacionReq.getTemperatura(),datosSimulacionReq.getPluviometro(),  datosSimulacionReq.getPresion(),  datosSimulacionReq.getHumedad());
         Domain.ResumenSimulacionReply.Builder reply = Domain.ResumenSimulacionReply.newBuilder();
         reply.setIdSimulacion(datosSimulacionReq.getIdSimulacion());
         reply.setCaudal(datosSimulacionReq.getCaudal());
@@ -393,11 +389,11 @@ public class WebCoreServiceGrpcSimulacion {
         reply.setHumedad(datosSimulacionReq.getHumedad());
         return reply.build();
     }
-    private String getMedida (Simulacion mediciones){
+    private String getMedida (Ejecucion mediciones){
         return mediciones.getCaudal()+"#"+ mediciones.getTemperatura()+"#"+mediciones.getPluviometro()+"#"+mediciones.getPresion()+"#"+mediciones.getHumedad();
     }
     public Domain.MedidasEjecucionSensorReply getMedidas (Domain.DatosEjecucionSensorReq datosEjecucionSensorReq, StreamObserver<Domain.MedidasEjecucionSensorReply> responseObserver) {
-        List<Simulacion> listaMedidas = coreDaoSimulacion.getMedidasDB ( datosEjecucionSensorReq.getIdEjecucion(), datosEjecucionSensorReq.getIdSensor());
+        List<Ejecucion> listaMedidas = coreDaoSimulacion.getMedidasDB ( datosEjecucionSensorReq.getIdEjecucion(), datosEjecucionSensorReq.getIdSensor());
         Domain.MedidasEjecucionSensorReply.Builder reply = Domain.MedidasEjecucionSensorReply.newBuilder();
         listaMedidas.forEach(componente -> {
             Domain.Medida medidas = Domain.Medida.newBuilder().setIdEjecucion(datosEjecucionSensorReq.getIdEjecucion()).setSensores (this.getMedida(componente)).build();
@@ -419,7 +415,7 @@ public class WebCoreServiceGrpcSimulacion {
 
     public Domain.UltimasMedidasEjecucionReply getUltimasMedidas(Domain.UltimosDatosEjecucionReq ultimosDatosEjecucionReq, StreamObserver<Domain.UltimasMedidasEjecucionReply> responseObserver) {
         System.out.println("AAAAAAAAAA");
-        List<Simulacion> listaUltimasMedidas = coreDaoSimulacion.getUltimasMedidasDB((int) ultimosDatosEjecucionReq.getIdEjecucion(), (int) ultimosDatosEjecucionReq.getIdSensor(), ultimosDatosEjecucionReq.getTimeStamp(), ultimosDatosEjecucionReq.getLastSecond(), ultimosDatosEjecucionReq.getLastEntrities());
+        List<Ejecucion> listaUltimasMedidas = coreDaoSimulacion.getUltimasMedidasDB((int) ultimosDatosEjecucionReq.getIdEjecucion(), (int) ultimosDatosEjecucionReq.getIdSensor(), ultimosDatosEjecucionReq.getTimeStamp(), ultimosDatosEjecucionReq.getLastSecond(), ultimosDatosEjecucionReq.getLastEntrities());
         System.out.println("BBBBBBBBBBB");
         Domain.UltimasMedidasEjecucionReply.Builder reply = Domain.UltimasMedidasEjecucionReply.newBuilder();
         reply.setIdEjecucion(ultimosDatosEjecucionReq.getIdEjecucion());
@@ -428,8 +424,8 @@ public class WebCoreServiceGrpcSimulacion {
         reply.setLastSecond(ultimosDatosEjecucionReq.getLastSecond());
         reply.setLastEntrities(ultimosDatosEjecucionReq.getLastEntrities());
         System.out.println("CCCCCCCCC");
-        listaUltimasMedidas.forEach(simulacion -> {
-            var ultimasmedidas = simulacion.getCaudal()+"#"+ simulacion.getTemperatura()+"#"+simulacion.getPluviometro()+"#"+simulacion.getPresion()+"#"+simulacion.getHumedad();
+        listaUltimasMedidas.forEach(ejecucion -> {
+            var ultimasmedidas = ejecucion.getCaudal()+"#"+ ejecucion.getTemperatura()+"#"+ejecucion.getPluviometro()+"#"+ejecucion.getPresion()+"#"+ejecucion.getHumedad();
             reply.addUltMedidas(ultimasmedidas);
         });
         return reply.build();
