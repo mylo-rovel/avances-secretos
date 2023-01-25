@@ -319,7 +319,6 @@ message EjecucionAcotada {
   string nombre_simulacion = 2;
   string nombre_equipo = 3;
   string fecha_ejecucion = 4;
-  double agua_caida = 5;
 }
 
 message EjecucionesReply {

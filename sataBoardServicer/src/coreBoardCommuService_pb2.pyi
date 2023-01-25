@@ -96,18 +96,16 @@ class CredencialesEntityReq(_message.Message):
     def __init__(self, email: _Optional[str] = ..., password: _Optional[str] = ...) -> None: ...
 
 class EjecucionAcotada(_message.Message):
-    __slots__ = ["agua_caida", "fecha_ejecucion", "id", "nombre_equipo", "nombre_simulacion"]
-    AGUA_CAIDA_FIELD_NUMBER: _ClassVar[int]
+    __slots__ = ["fecha_ejecucion", "id", "nombre_equipo", "nombre_simulacion"]
     FECHA_EJECUCION_FIELD_NUMBER: _ClassVar[int]
     ID_FIELD_NUMBER: _ClassVar[int]
     NOMBRE_EQUIPO_FIELD_NUMBER: _ClassVar[int]
     NOMBRE_SIMULACION_FIELD_NUMBER: _ClassVar[int]
-    agua_caida: float
     fecha_ejecucion: str
     id: int
     nombre_equipo: str
     nombre_simulacion: str
-    def __init__(self, id: _Optional[int] = ..., nombre_simulacion: _Optional[str] = ..., nombre_equipo: _Optional[str] = ..., fecha_ejecucion: _Optional[str] = ..., agua_caida: _Optional[float] = ...) -> None: ...
+    def __init__(self, id: _Optional[int] = ..., nombre_simulacion: _Optional[str] = ..., nombre_equipo: _Optional[str] = ..., fecha_ejecucion: _Optional[str] = ...) -> None: ...
 
 class EjecucionReply(_message.Message):
     __slots__ = ["descripcion", "descripcion_equipo", "fecha_ejecucion", "id", "nombre", "nombre_equipo", "secuencia"]

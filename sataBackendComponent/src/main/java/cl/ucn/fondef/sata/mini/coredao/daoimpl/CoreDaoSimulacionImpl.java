@@ -273,6 +273,11 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
 
         return "✔ Simulacion iniciada. IdEjecucion" + ejecucionNueva.getId() +" ✔";
     }
+
+
+    // ------------------------------ NEW CODE -----------------------------
+
+
     public List<Ejecucion> getSimulacionesEjectuadasDB (long idEquipo, int mes) {
         //se obtienen las secuencias de la id de un equipo dado utilizando la id_equipo de componenteFisico
         String sqlQuery = "SELECT s FROM Simulacion s WHERE " +
@@ -335,7 +340,7 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
     // Si el atributo está en rojo es porque no existe en la respectiva clase del paquete Model
     public String getUltimaMedidasDB (long idEjecucion, long idSensor) {
         //se obtienen las secuencias de la id de un equipo dado utilizando la id_equipo de componenteFisico
-        String sqlQuery = "SELECT s FROM Ejecucion s WHERE "+
+        String sqlQuery = "SELECT e FROM Ejecucion e WHERE "+
                 "e.id_ejecucion = :id_ejecucion AND " +
                 "e.id_sensor = :id_sensor";
 
@@ -354,20 +359,20 @@ public class CoreDaoSimulacionImpl implements CoreDaoSimulacion {
     }
 
     // Si el atributo está en rojo es porque no existe en la respectiva clase del paquete Model
-    public List<Ejecucion> getUltimasMedidasDB (long idEjecucion, long idSensor, String  timestamp, int lastSecond, int lastEntrities) {
+    public List<Ejecucion> getUltimasMedidasDB (long idEjecucion, long idSensor, String  timestamp, int lastSecond, int lastEntities) {
         //se obtienen las secuencias de la id de un equipo dado utilizando la id_equipo de componenteFisico
         String sqlQuery = "SELECT e FROM Ejecucion e WHERE " +
                 "e.id_ejecucion = :id_ejecucion AND " +
                 "e.id_sensor = :id_sensor AND " +
                 "e.timestamp = :timestamp AND " +
                 "e.last_second = :last_second AND " +
-                "e.last_entrities = :last_entrities";
+                "e.last_entities = :last_entities";
         return (List<cl.ucn.fondef.sata.mini.model.Ejecucion>) entityManager.createQuery(sqlQuery)
                 .setParameter("id_ejecucion", idEjecucion)
                 .setParameter("id_sensor", idSensor)
                 .setParameter("timestamp", timestamp)
                 .setParameter("last_second", lastSecond)
-                .setParameter("last_entrities", lastEntrities)
+                .setParameter("last_entities", lastEntities)
                 .getResultList();
     }
 

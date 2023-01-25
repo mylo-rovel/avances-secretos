@@ -364,10 +364,10 @@ public class CoreDaoEquipoImpl implements CoreDaoEquipo {
     }
     public List<Componente> getUmbralesPorSensorDB(long idSensor) {
         //se obtienen las secuencias de la id de un equipo dado utilizando la id_equipo de componenteFisico
-        String sqlQuery = "SELECT s FROM Simulacion s WHERE " +
-                "s.id_sensor = : id_sensor";
+        String sqlQuery = "SELECT c FROM Componente c WHERE " +
+                "c.id = : id";
         return (List<Componente>) entityManager.createQuery(sqlQuery)
-                .setParameter("id_sensor", idSensor)
+                .setParameter("id", idSensor)
                 .getResultList();
     }
     /*public String uploadArchivo(ArchivosEntityReq archivosEntityReq){
