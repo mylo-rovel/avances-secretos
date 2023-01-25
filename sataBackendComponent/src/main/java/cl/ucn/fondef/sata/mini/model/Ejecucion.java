@@ -31,11 +31,66 @@ public class Ejecucion {
 
     @Getter
     @Setter
-    @Column(name = "agua_caida")
-    private double aguaCaida;
+    @Column(name = "fecha_ejecucion")
+    private String fechaEjecucion;
+    //
+    @Getter
+    @Setter
+    @Column(name = "caudal")
+    private long caudal;
 
     @Getter
     @Setter
-    @Column(name = "fecha_ejecucion")
-    private String fechaEjecucion;
+    @Column(name = "temperatura")
+    private long temperatura;
+
+    @Getter
+    @Setter
+    @Column(name = "pluviometro")
+    private long pluviometro;
+
+    @Getter
+    @Setter
+    @Column(name = "presion")
+    private long presion;
+
+    @Getter
+    @Setter
+    @Column(name = "humedad")
+    private long humedad;
+
+    @Getter
+    @Setter
+    @Column(name = "id_ejecucion")
+    private long id_ejecucion;
+
+    @Getter
+    @Setter
+    @Column(name = "id_sensor")
+    private long id_sensor;
+
+    @Getter
+    @Setter
+    @Column(name = "ultima_medida")
+    private String UltimaMedida;
+
+    @Getter
+    @Setter
+    @Column(name = "timestamp")
+    private String timestamp;
+
+    @Getter
+    @Setter
+    @Column(name = "last_second")
+    private int last_second;
+
+    @Getter
+    @Setter
+    @Column(name = "last_entities")
+    private int last_entities;
+
+    @Getter
+    @Setter
+    @Column(name = "mes")
+    private int mes;
 }

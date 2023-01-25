@@ -86,7 +86,6 @@ CREATE TABLE ejecucion
 (
     id                  bigint(20)      NOT NULL AUTO_INCREMENT,
     id_simulacion       bigint(20)      NOT NULL,
-    agua_caida          double          NOT NULL DEFAULT '0',
     fecha_ejecucion     timestamp       NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (id_simulacion) REFERENCES simulacion (id)
